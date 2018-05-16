@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project [
+        <!ENTITY commonAntCommands SYSTEM "../one-deploy/build/common-ant.xml">
+        ]>
+<project name="tamtam-bot-api" basedir=".">
+    <property name="root.dir" value="${basedir}"/>
+    <property name="javac.target" value="8"/>
+
+    &commonAntCommands; <!-- include common ant commands -->
+
+    <typedef resource="org/jetbrains/kotlin/ant/antlib.xml" classpath="kotlinc/kotlin-ant.jar"/>
+
+    <target name="init" depends="prepare-build">
+        <path id="compile.classpath.ref">
+            <fileset dir="${build.ivy.lib}" includes="**/*.jar"/>
+            <fileset dir="lib" includes="**/*.jar"/>
+        </path>
+        <property name="compile.classpath" refid="compile.classpath.ref"/>
+    </target>
+
+    <target name="compile-classes" depends="prepare-build, init">
+        <javac destdir="${build.classes}" fork="true" srcdir="${src}" classpath="${compile.classpath}">
+            <withKotlin/>
+        </javac>
+    </target>
+
+    <target name="assemble-jar" depends="compile-classes">
+        <jar jarfile="${build.components}/${ant.project.name}-${build.number.str}.jar">
+            <manifest>
+                <attribute name="Build-By" value="${user.name}"/>
+                <attribute name="Build" value="${build.number.str}"/>
+            </manifest>
+
+            <fileset dir="${build.classes}"/>
+            <fileset dir="${src}" includes="**/*.jks"/>
+            <zipfileset dir="${basedir}" includes="build.number" prefix="${ant.project.name}"/>
+        </jar>
+    </target>
+
+    <target name="build" depends="ivy-retrieve-all, assemble-jar">
+    </target>
+
+    <target name="build-release" depends="build">
+        <copy todir="${build.deploy.lib}">
+            <fileset dir="lib" includes="*.jar" excludes="*-sources.jar" erroronmissingdir="false"/>
+            <fileset dir="${build.ivy.lib}/runtime" includes="*.jar"/>
+            <fileset dir="${build.components}" includes="*.*"/>
+        </copy>
+    </target>
+
+</project>
