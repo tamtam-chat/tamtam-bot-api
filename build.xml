@@ -38,6 +38,13 @@
         </jar>
     </target>
 
+    <target name="ivy-assemble-source-jars">
+        <mkdir dir="${ivy.deliver.source.dir}"/>
+        <jar jarfile="${ivy.deliver.source.dir}/${ant.project.name}.jar">
+            <fileset dir="${src}"/>
+        </jar>
+    </target>
+
     <target name="build" depends="ivy-retrieve-all, assemble-jar">
     </target>
 
