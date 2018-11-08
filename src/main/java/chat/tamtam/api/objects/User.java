@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author alexandrchuprin
  */
-public class TTUser implements Serializable {
+public class User implements Serializable {
     private static final String NAME = "name";
     private static final String USER_ID = "user_id";
 
@@ -16,7 +16,7 @@ public class TTUser implements Serializable {
     private final String name;
 
     @JsonCreator
-    public TTUser(@JsonProperty(USER_ID) long userId, @JsonProperty(NAME) String name) {
+    public User(@JsonProperty(USER_ID) long userId, @JsonProperty(NAME) String name) {
         this.userId = userId;
         this.name = name;
     }
@@ -34,12 +34,12 @@ public class TTUser implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TTUser)) return false;
+        if (!(o instanceof User)) return false;
 
-        TTUser ttUser = (TTUser) o;
+        User user = (User) o;
 
-        if (userId != ttUser.userId) return false;
-        return name != null ? name.equals(ttUser.name) : ttUser.name == null;
+        if (userId != user.userId) return false;
+        return name != null ? name.equals(user.name) : user.name == null;
     }
 
     @Override

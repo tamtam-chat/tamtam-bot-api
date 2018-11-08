@@ -3,24 +3,24 @@ package chat.tamtam.api.objects.attachment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import chat.tamtam.api.objects.TTUser;
+import chat.tamtam.api.objects.User;
 
 /**
  * @author alexandrchuprin
  */
-public class TTContactAttachment extends TTAttachment {
+public class ContactAttachment extends Attachment {
     private static final String VCF_INFO = "vcfInfo";
     private static final String TAM_INFO = "tamInfo";
 
     private final Payload payload;
 
     @JsonCreator
-    public TTContactAttachment(@JsonProperty(PAYLOAD) Payload payload) {
+    public ContactAttachment(@JsonProperty(PAYLOAD) Payload payload) {
         this.payload = payload;
     }
 
-    public TTContactAttachment(String vcfInfo, TTUser ttUser) {
-        payload = new Payload(vcfInfo, ttUser);
+    public ContactAttachment(String vcfInfo, User user) {
+        payload = new Payload(vcfInfo, user);
     }
 
     @Override
@@ -32,12 +32,12 @@ public class TTContactAttachment extends TTAttachment {
         @JsonProperty(VCF_INFO)
         private final String vcfInfo;
         @JsonProperty(TAM_INFO)
-        private final TTUser ttUser;
+        private final User user;
 
         @JsonCreator
-        private Payload(@JsonProperty(VCF_INFO) String vcfInfo, @JsonProperty(TAM_INFO) TTUser ttUser) {
+        private Payload(@JsonProperty(VCF_INFO) String vcfInfo, @JsonProperty(TAM_INFO) User user) {
             this.vcfInfo = vcfInfo;
-            this.ttUser = ttUser;
+            this.user = user;
         }
     }
 }

@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author alexandrchuprin
  */
-public class TTStickerAttachment extends TTAttachment {
+public class StickerAttachment extends Attachment {
     private final Payload payload;
 
-    public TTStickerAttachment(String url) {
+    public StickerAttachment(String url) {
         this.payload = new Payload(url);
     }
 
     @JsonCreator
-    protected TTStickerAttachment(@JsonProperty(PAYLOAD) Payload payload) {
+    protected StickerAttachment(@JsonProperty(PAYLOAD) Payload payload) {
         this.payload = payload;
     }
 

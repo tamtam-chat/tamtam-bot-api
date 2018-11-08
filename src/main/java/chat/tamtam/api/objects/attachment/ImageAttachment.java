@@ -6,20 +6,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author alexandrchuprin
  */
-public class TTShareAttachment extends TTAttachment {
+public class ImageAttachment extends Attachment {
+    private static final String PHOTO_ID = "photo_id";
+
     private final Payload payload;
 
-    public TTShareAttachment(String url) {
-        this.payload = new Payload(url);
+    public ImageAttachment(long photoId, String url) {
+        this.payload = new Payload(photoId, url);
     }
 
     @JsonCreator
-    public TTShareAttachment(@JsonProperty(PAYLOAD) Payload payload) {
+    protected ImageAttachment(@JsonProperty(PAYLOAD) Payload payload) {
         this.payload = payload;
     }
 
-    public String getUrl() {
+    public String getURL() {
         return payload.url;
+    }
+
+    public long getPhotoId() {
+        return payload.photoId;
     }
 
     @Override
@@ -28,11 +34,14 @@ public class TTShareAttachment extends TTAttachment {
     }
 
     private static class Payload implements TTAttachmentPayload {
+        @JsonProperty(PHOTO_ID)
+        private final long photoId;
         @JsonProperty(URL)
         private final String url;
 
         @JsonCreator
-        private Payload(@JsonProperty(URL) String url) {
+        Payload(@JsonProperty(PHOTO_ID) long photoId, @JsonProperty(URL) String url) {
+            this.photoId = photoId;
             this.url = url;
         }
     }

@@ -6,16 +6,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author alexandrchuprin
  */
-public class TTVideoAttachment extends TTAttachment {
+public class ShareAttachment extends Attachment {
     private final Payload payload;
 
-    public TTVideoAttachment(String url) {
+    public ShareAttachment(String url) {
         this.payload = new Payload(url);
     }
 
     @JsonCreator
-    public TTVideoAttachment(@JsonProperty(PAYLOAD) Payload payload) {
+    public ShareAttachment(@JsonProperty(PAYLOAD) Payload payload) {
         this.payload = payload;
+    }
+
+    public String getUrl() {
+        return payload.url;
     }
 
     @Override

@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author alexandrchuprin
  */
-public class TTAudioAttachment extends TTAttachment {
+public class FileAttachment extends Attachment {
     private final Payload payload;
 
-    public TTAudioAttachment(String url) {
+    public FileAttachment(String url) {
         this.payload = new Payload(url);
     }
 
     @JsonCreator
-    public TTAudioAttachment(@JsonProperty(PAYLOAD) Payload payload) {
+    public FileAttachment(@JsonProperty(PAYLOAD) Payload payload) {
         this.payload = payload;
     }
 
@@ -28,7 +28,7 @@ public class TTAudioAttachment extends TTAttachment {
         private final String url;
 
         @JsonCreator
-        Payload(@JsonProperty(URL) String url) {
+        private Payload(@JsonProperty(URL) String url) {
             this.url = url;
         }
     }

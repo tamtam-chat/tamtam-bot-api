@@ -13,15 +13,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = TTImageAttachment.class, name = "image"),
-        @JsonSubTypes.Type(value = TTVideoAttachment.class, name = "video"),
-        @JsonSubTypes.Type(value = TTAudioAttachment.class, name = "audio"),
-        @JsonSubTypes.Type(value = TTContactAttachment.class, name = "contact"),
-        @JsonSubTypes.Type(value = TTFileAttachment.class, name = "file"),
-        @JsonSubTypes.Type(value = TTShareAttachment.class, name = "share"),
-        @JsonSubTypes.Type(value = TTStickerAttachment.class, name = "sticker"),
+        @JsonSubTypes.Type(value = ImageAttachment.class, name = "image"),
+        @JsonSubTypes.Type(value = VideoAttachment.class, name = "video"),
+        @JsonSubTypes.Type(value = AudioAttachment.class, name = "audio"),
+        @JsonSubTypes.Type(value = ContactAttachment.class, name = "contact"),
+        @JsonSubTypes.Type(value = FileAttachment.class, name = "file"),
+        @JsonSubTypes.Type(value = ShareAttachment.class, name = "share"),
+        @JsonSubTypes.Type(value = StickerAttachment.class, name = "sticker"),
 })
-public abstract class TTAttachment implements Serializable {
+public abstract class Attachment implements Serializable {
     protected static final String PAYLOAD = "payload";
     protected static final String URL = "url";
 
