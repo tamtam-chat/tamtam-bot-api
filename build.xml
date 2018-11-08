@@ -10,14 +10,15 @@
     <property name="build.lib" value="${root.dir}/target"/>
     <property name="use.ivy" value="true"/>
 
-    &commonAntCommands; <!-- include common ant commands -->
-
     <path id="maven-ant-tasks.classpath" path="${root.dir}/lib/maven-ant-tasks-2.1.3.jar"/>
     <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
              uri="antlib:org.apache.maven.artifact.ant"
              classpathref="maven-ant-tasks.classpath"/>
 
     <artifact:pom id="mypom" file="pom.xml"/>
+    <property name="build.number.str" value="${mypom.version}"/>
+
+    &commonAntCommands; <!-- include common ant commands -->
 
     <target name="ivy-prepare-for-publish"/>
 
@@ -36,6 +37,10 @@
         <exec executable="mvn">
             <arg value="clean"/>
         </exec>
+    </target>
+
+    <target name="build-release">
+        <antcall target="build"/>
     </target>
 
     <target name="build">
