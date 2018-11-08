@@ -8,8 +8,24 @@
     <artifactId>tamtam-bot-api</artifactId>
     <version>1.0.0</version>
 
-    <name>TamTam chat SDK</name>
+    <name>TamTam chat Bot API</name>
+    <description>TamTam Bots Java API</description>
     <url>https://tamtam.chat</url>
+
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Alexander Chuprin</name>
+            <email>alexander.chuprin@corp.mail.ru</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -87,4 +103,5 @@
             </plugins>
         </pluginManagement>
     </build>
+
 </project>
