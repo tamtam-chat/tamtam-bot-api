@@ -50,6 +50,10 @@
         <antcall target="build"/>
     </target>
 
+    <target name="package-release">
+        <!-- do nothing -->
+    </target>
+
     <target name="build">
         <exec executable="mvn">
             <arg value="package"/>
