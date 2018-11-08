@@ -6,16 +6,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author alexandrchuprin
  */
-public class TTVideoAttachment extends TTAttachment {
+public class TTStickerAttachment extends TTAttachment {
     private final Payload payload;
 
-    public TTVideoAttachment(String url) {
+    public TTStickerAttachment(String url) {
         this.payload = new Payload(url);
     }
 
     @JsonCreator
-    public TTVideoAttachment(@JsonProperty(PAYLOAD) Payload payload) {
+    protected TTStickerAttachment(@JsonProperty(PAYLOAD) Payload payload) {
         this.payload = payload;
+    }
+
+    public String getURL() {
+        return payload.url;
     }
 
     @Override
@@ -23,7 +27,7 @@ public class TTVideoAttachment extends TTAttachment {
         return payload;
     }
 
-    private static class Payload implements TTAttachmentPayload {
+    private class Payload implements TTAttachmentPayload {
         @JsonProperty(URL)
         private final String url;
 

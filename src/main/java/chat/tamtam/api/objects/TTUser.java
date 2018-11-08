@@ -1,25 +1,32 @@
 package chat.tamtam.api.objects;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author alexandrchuprin
  */
-public class TTUser {
+public class TTUser implements Serializable {
+    private static final String NAME = "name";
+    private static final String USER_ID = "user_id";
+
     private final long userId;
     private final String name;
 
     @JsonCreator
-    public TTUser(@JsonProperty("user_id") long userId, @JsonProperty("name") String name) {
+    public TTUser(@JsonProperty(USER_ID) long userId, @JsonProperty(NAME) String name) {
         this.userId = userId;
         this.name = name;
     }
 
+    @JsonProperty(USER_ID)
     public long getUserId() {
         return userId;
     }
 
+    @JsonProperty(NAME)
     public String getName() {
         return name;
     }

@@ -1,5 +1,8 @@
-.idea/
 build/
-out/
-/tamtam-bot-api.iml
+deploy/
+target/
+
+.idea
+*.iml
 local.properties
+/bin/

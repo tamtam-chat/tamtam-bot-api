@@ -18,16 +18,21 @@ public class TTShareAttachment extends TTAttachment {
         this.payload = payload;
     }
 
+    public String getUrl() {
+        return payload.url;
+    }
+
     @Override
     protected TTAttachmentPayload getPayload() {
         return payload;
     }
 
-    private class Payload implements TTAttachmentPayload {
-        @JsonProperty("url")
+    private static class Payload implements TTAttachmentPayload {
+        @JsonProperty(URL)
         private final String url;
 
-        private Payload(String url) {
+        @JsonCreator
+        private Payload(@JsonProperty(URL) String url) {
             this.url = url;
         }
     }

@@ -2,20 +2,13 @@
 <ivy-module version="2.0"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-    <info organisation="ru.odnoklassniki" module="tamtam-bot-api"/>
+    <info organisation="chat.tamtam" module="tamtam-bot-api"/>
     <configurations>
-        <conf name="master" visibility="public"/>
-        <conf name="runtime" visibility="public" transitive="false"/>
-        <conf name="compile" visibility="private" transitive="false"/>
-        <conf name="sources" visibility="public"/>
+        <conf name="master"/>
+        <conf name="sources"/>
     </configurations>
     <publications>
         <artifact name="tamtam-bot-api" type="jar" conf="master"/>
         <artifact name="tamtam-bot-api" type="source" ext="jar" conf="sources"/>
     </publications>
-    <dependencies>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.2.2" conf="runtime->master,sources"/>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.2.2" conf="runtime->master,sources"/>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.2.2" conf="runtime->master,sources"/>
-    </dependencies>
 </ivy-module>

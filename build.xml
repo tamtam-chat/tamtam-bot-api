@@ -3,57 +3,46 @@
 <!DOCTYPE project [
         <!ENTITY commonAntCommands SYSTEM "../one-deploy/build/common-ant.xml">
         ]>
-<project name="tamtam-bot-api" basedir=".">
+<project name="tamtam-bot-api" default="core" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant"
+         xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <property name="root.dir" value="${basedir}"/>
     <property name="javac.target" value="8"/>
+    <property name="build.lib" value="${root.dir}/target"/>
+    <property name="use.ivy" value="true"/>
 
     &commonAntCommands; <!-- include common ant commands -->
 
-    <typedef resource="org/jetbrains/kotlin/ant/antlib.xml" classpath="kotlinc/kotlin-ant.jar"/>
+    <path id="maven-ant-tasks.classpath" path="${root.dir}/lib/maven-ant-tasks-2.1.3.jar"/>
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+             uri="antlib:org.apache.maven.artifact.ant"
+             classpathref="maven-ant-tasks.classpath"/>
 
-    <target name="init" depends="prepare-build">
-        <path id="compile.classpath.ref">
-            <fileset dir="${build.ivy.lib}" includes="**/*.jar"/>
-            <fileset dir="lib" includes="**/*.jar"/>
-        </path>
-        <property name="compile.classpath" refid="compile.classpath.ref"/>
+    <artifact:pom id="mypom" file="pom.xml"/>
+
+    <target name="ivy-prepare-for-publish"/>
+
+    <macrodef name="ivy-publish">
+        <attribute name="resolver" default="odkl-publish"/>
+        <attribute name="overwrite" default="true"/>
+        <sequential>
+            <ivy:publish resolver="@{resolver}" pubrevision="${mypom.version}" overwrite="@{overwrite}"
+                         forcedeliver="true">
+                <artifacts pattern="${build.lib}/[artifact]-${mypom.version}.[ext]"/>
+            </ivy:publish>
+        </sequential>
+    </macrodef>
+
+    <target name="clean">
+        <exec executable="mvn">
+            <arg value="clean"/>
+        </exec>
     </target>
 
-    <target name="compile-classes" depends="prepare-build, init">
-        <javac destdir="${build.classes}" fork="true" srcdir="${src}" classpath="${compile.classpath}">
-            <withKotlin/>
-        </javac>
+    <target name="build">
+        <exec executable="mvn">
+            <arg value="package"/>
+        </exec>
     </target>
 
-    <target name="assemble-jar" depends="compile-classes">
-        <jar jarfile="${build.components}/${ant.project.name}-${build.number.str}.jar">
-            <manifest>
-                <attribute name="Build-By" value="${user.name}"/>
-                <attribute name="Build" value="${build.number.str}"/>
-            </manifest>
-
-            <fileset dir="${build.classes}"/>
-            <fileset dir="${src}" includes="**/*.jks"/>
-            <zipfileset dir="${basedir}" includes="build.number" prefix="${ant.project.name}"/>
-        </jar>
-    </target>
-
-    <target name="ivy-assemble-source-jars">
-        <mkdir dir="${ivy.deliver.source.dir}"/>
-        <jar jarfile="${ivy.deliver.source.dir}/${ant.project.name}.jar">
-            <fileset dir="${src}"/>
-        </jar>
-    </target>
-
-    <target name="build" depends="ivy-retrieve-all, assemble-jar">
-    </target>
-
-    <target name="build-release" depends="build">
-        <copy todir="${build.deploy.lib}">
-            <fileset dir="lib" includes="*.jar" excludes="*-sources.jar" erroronmissingdir="false"/>
-            <fileset dir="${build.ivy.lib}/runtime" includes="*.jar"/>
-            <fileset dir="${build.components}" includes="*.*"/>
-        </copy>
-    </target>
-
+    <target name="core" depends="project-instructions"/>
 </project>

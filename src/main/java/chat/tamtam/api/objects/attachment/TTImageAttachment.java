@@ -7,15 +7,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author alexandrchuprin
  */
 public class TTImageAttachment extends TTAttachment {
+    private static final String PHOTO_ID = "photo_id";
+
     private final Payload payload;
 
-    public TTImageAttachment(String url) {
-        this.payload = new Payload(url);
+    public TTImageAttachment(long photoId, String url) {
+        this.payload = new Payload(photoId, url);
     }
 
     @JsonCreator
-    public TTImageAttachment(@JsonProperty(PAYLOAD) Payload payload) {
+    protected TTImageAttachment(@JsonProperty(PAYLOAD) Payload payload) {
         this.payload = payload;
+    }
+
+    public String getURL() {
+        return payload.url;
+    }
+
+    public long getPhotoId() {
+        return payload.photoId;
     }
 
     @Override
@@ -23,11 +33,15 @@ public class TTImageAttachment extends TTAttachment {
         return payload;
     }
 
-    private class Payload implements TTAttachmentPayload {
-        @JsonProperty("url")
+    private static class Payload implements TTAttachmentPayload {
+        @JsonProperty(PHOTO_ID)
+        private final long photoId;
+        @JsonProperty(URL)
         private final String url;
 
-        private Payload(String url) {
+        @JsonCreator
+        Payload(@JsonProperty(PHOTO_ID) long photoId, @JsonProperty(URL) String url) {
+            this.photoId = photoId;
             this.url = url;
         }
     }

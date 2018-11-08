@@ -23,11 +23,12 @@ public class TTFileAttachment extends TTAttachment {
         return payload;
     }
 
-    private class Payload implements TTAttachmentPayload {
-        @JsonProperty("url")
+    private static class Payload implements TTAttachmentPayload {
+        @JsonProperty(URL)
         private final String url;
 
-        private Payload(String url) {
+        @JsonCreator
+        private Payload(@JsonProperty(URL) String url) {
             this.url = url;
         }
     }
