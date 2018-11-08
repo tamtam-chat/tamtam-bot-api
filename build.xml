@@ -18,6 +18,13 @@
     <artifact:pom id="mypom" file="pom.xml"/>
     <property name="build.number.str" value="${mypom.version}"/>
 
+    <script language="javascript">
+        a = project.getProperty('build.number.str').split('.')
+        project.setProperty('build.number.major', a[0]);
+        project.setProperty('build.number.minor', a[1]);
+        project.setProperty('build.number.build', a[2]);
+    </script>
+
     &commonAntCommands; <!-- include common ant commands -->
 
     <target name="ivy-prepare-for-publish"/>
