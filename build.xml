@@ -53,8 +53,8 @@
         <antcall target="build"/>
     </target>
 
-    <target name="export-release">
-        <!-- do nothing -->
+    <target name="export-release" depends="ivy-publish">
+        <!-- do only ivy publish -->
     </target>
 
     <target name="build">
