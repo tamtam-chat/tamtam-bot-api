@@ -15,7 +15,7 @@ import chat.tamtam.api.objects.attachment.Attachment;
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Message implements Serializable {
     private static final String SENDER = "sender";
-    private static final String RECEPIENT = "recepient";
+    private static final String RECIPIENT = "recipient";
     private static final String MESSAGE = "message";
     private static final String TIMESTAMP = "timestamp";
     private static final String MID = "mid";
@@ -25,17 +25,17 @@ public class Message implements Serializable {
     private static final String REPLY_TO = "reply_to";
 
     private final User sender;
-    private final Recepient recipient;
+    private final Recipient recipient;
     private final TTMessagePayload message;
     private final long timestamp;
 
-    public Message(User sender, Recepient recipient, long timestamp, String messageId, long seq, String text,
+    public Message(User sender, Recipient recipient, long timestamp, String messageId, long seq, String text,
                    List<Attachment> attachments, String replyTo) {
         this(sender, recipient, new TTMessagePayload(messageId, seq, text, attachments, replyTo), timestamp);
     }
 
     @JsonCreator
-    private Message(@JsonProperty(SENDER) User sender, @JsonProperty(RECEPIENT) Recepient recipient,
+    private Message(@JsonProperty(SENDER) User sender, @JsonProperty(RECIPIENT) Recipient recipient,
                     @JsonProperty(MESSAGE) TTMessagePayload message, @JsonProperty(TIMESTAMP) long timestamp) {
         this.sender = sender;
         this.recipient = recipient;
@@ -48,8 +48,8 @@ public class Message implements Serializable {
         return sender;
     }
 
-    @JsonProperty(RECEPIENT)
-    public Recepient getRecipient() {
+    @JsonProperty(RECIPIENT)
+    public Recipient getRecipient() {
         return recipient;
     }
 
