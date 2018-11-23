@@ -7,16 +7,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author alexandrchuprin
  */
 public class FileAttachmentRequest extends AttachmentRequest {
-    private final long fileId;
+    private final Payload payload;
+
+    public FileAttachmentRequest(long fileId) {
+        this(new Payload(fileId));
+    }
 
     @JsonCreator
-    public FileAttachmentRequest(@JsonProperty(PAYLOAD) FileAttachRequestPayload payload) {
+    FileAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
         super(payload);
-        this.fileId = payload.fileId;
+        this.payload = payload;
     }
 
     public long getFileId() {
-        return fileId;
+        return payload.fileId;
     }
 
     @Override
@@ -24,7 +28,15 @@ public class FileAttachmentRequest extends AttachmentRequest {
         return mapper.map(this);
     }
 
-    public static class FileAttachRequestPayload implements AttachmentRequestPayload {
-        long fileId;
+    public static class Payload implements AttachmentRequestPayload {
+        protected static final String FILE_ID = "fileId";
+
+        @JsonProperty(FILE_ID)
+        private final long fileId;
+
+        @JsonCreator
+        public Payload(@JsonProperty(FILE_ID) long fileId) {
+            this.fileId = fileId;
+        }
     }
 }

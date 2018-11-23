@@ -11,10 +11,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author alexandrchuprin
  */
 public class PhotoAttachmentRequest extends AttachmentRequest {
-    private final PhotoAttachRequestPayload payload;
+    private final Payload payload;
+
+    public PhotoAttachmentRequest(String url) {
+        this(new Payload());
+        payload.sourceUrl = url;
+    }
 
     @JsonCreator
-    public PhotoAttachmentRequest(@JsonProperty(PAYLOAD) PhotoAttachRequestPayload payload) {
+    PhotoAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
         super(payload);
         this.payload = payload;
     }
@@ -42,7 +47,7 @@ public class PhotoAttachmentRequest extends AttachmentRequest {
         return mapper.map(this);
     }
 
-    public static class PhotoAttachRequestPayload implements AttachmentRequestPayload {
+    public static class Payload implements AttachmentRequestPayload {
         @JsonProperty("photos")
         @Nullable
         Map<String, Map<String, String>> photos;

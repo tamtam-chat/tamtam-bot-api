@@ -9,6 +9,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ContactAttachmentRequest extends AttachmentRequest {
     private final Payload payload;
 
+    public ContactAttachmentRequest(String name, Long contactId, String vcfInfo, String vcfPhone) {
+        this(new Payload());
+        payload.name = name;
+        payload.contactId = contactId;
+        payload.vcfInfo = vcfInfo;
+        payload.vcfPhone = vcfPhone;
+    }
+
     @JsonCreator
     ContactAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
         super(payload);

@@ -7,16 +7,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author alexandrchuprin
  */
 public class AudioAttachmentRequest extends AttachmentRequest {
-    private final long audioId;
+    private final Payload payload;
+
+    public AudioAttachmentRequest(long audioId) {
+        this(new Payload());
+        payload.audioId = audioId;
+    }
 
     @JsonCreator
     AudioAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
         super(payload);
-        this.audioId = payload.audioId;
+        this.payload = payload;
     }
 
     public long getAudioId() {
-        return audioId;
+        return payload.audioId;
     }
 
     @Override

@@ -7,16 +7,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author alexandrchuprin
  */
 public class VideoAttachmentRequest extends AttachmentRequest {
-    private final long videoId;
+    private final Payload payload;
+
+    public VideoAttachmentRequest(long videoId) {
+        this(new Payload());
+        payload.videoId = videoId;
+    }
 
     @JsonCreator
-    public VideoAttachmentRequest(@JsonProperty(PAYLOAD) VideoAttachRequestPayload payload) {
+    VideoAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
         super(payload);
-        this.videoId = payload.videoId;
+        this.payload = payload;
     }
 
     public long getVideoId() {
-        return videoId;
+        return payload.videoId;
     }
 
     @Override
@@ -24,7 +29,7 @@ public class VideoAttachmentRequest extends AttachmentRequest {
         return mapper.map(this);
     }
 
-    static class VideoAttachRequestPayload implements AttachmentRequestPayload {
+    static class Payload implements AttachmentRequestPayload {
         @JsonProperty("id")
         long videoId;
     }

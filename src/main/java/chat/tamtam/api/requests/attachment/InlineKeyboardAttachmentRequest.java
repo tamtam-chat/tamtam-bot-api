@@ -10,12 +10,16 @@ import chat.tamtam.api.objects.keyboard.Keyboard;
  * @author alexandrchuprin
  */
 public class InlineKeyboardAttachmentRequest extends AttachmentRequest {
-    private final Keyboard keyboard;
+    private final Payload payload;
+
+    public InlineKeyboardAttachmentRequest(Button[][] buttons) {
+        this(new Payload(buttons));
+    }
 
     @JsonCreator
-    protected InlineKeyboardAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
+    InlineKeyboardAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
         super(payload);
-        keyboard = payload.keyboard;
+        this.payload = payload;
     }
 
     @Override
@@ -24,10 +28,11 @@ public class InlineKeyboardAttachmentRequest extends AttachmentRequest {
     }
 
     public Keyboard getKeyboard() {
-        return keyboard;
+        return payload.keyboard;
     }
 
     private static class Payload implements AttachmentRequestPayload {
+        @JsonProperty
         private final Keyboard keyboard;
 
         @JsonCreator

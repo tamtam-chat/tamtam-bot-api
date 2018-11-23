@@ -7,16 +7,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author alexandrchuprin
  */
 public class StickerAttachmentRequest extends AttachmentRequest {
-    private final String code;
+    private final Payload payload;
+
+    public StickerAttachmentRequest(String stickerCode) {
+        this(new Payload());
+        payload.code = stickerCode;
+    }
 
     @JsonCreator
     StickerAttachmentRequest(@JsonProperty(PAYLOAD) Payload payload) {
         super(payload);
-        this.code = payload.code;
+        this.payload = payload;
     }
 
     public String getCode() {
-        return code;
+        return payload.code;
     }
 
     @Override
