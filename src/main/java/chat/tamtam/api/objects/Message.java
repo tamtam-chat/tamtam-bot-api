@@ -1,19 +1,17 @@
 package chat.tamtam.api.objects;
 
-import java.io.Serializable;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import chat.tamtam.api.TamTamSerializable;
 import chat.tamtam.api.objects.attachment.Attachment;
 
 /**
  * @author alexandrchuprin
  */
-@JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
-public class Message implements Serializable {
+public class Message implements TamTamSerializable {
     private static final String SENDER = "sender";
     private static final String RECIPIENT = "recipient";
     private static final String MESSAGE = "message";
@@ -75,12 +73,14 @@ public class Message implements Serializable {
         return message.messageId;
     }
 
-    private static class TTMessagePayload {
+    private static class TTMessagePayload implements TamTamSerializable {
         @JsonProperty(MID)
         private final String messageId;
         @JsonProperty(SEQ)
         private final long seq;
+        @JsonProperty(TEXT)
         private final String text;
+        @JsonProperty(ATTACHMENTS)
         private final List<Attachment> attachments;
         @JsonProperty(REPLY_TO)
         private final String replyTo;

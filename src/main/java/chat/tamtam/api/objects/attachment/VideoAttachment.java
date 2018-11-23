@@ -7,23 +7,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author alexandrchuprin
  */
 public class VideoAttachment extends Attachment {
-    private final Payload payload;
+    private final String url;
 
     public VideoAttachment(String url) {
-        this.payload = new Payload(url);
+        super(new Payload(url));
+        this.url = url;
     }
 
     @JsonCreator
     public VideoAttachment(@JsonProperty(PAYLOAD) Payload payload) {
-        this.payload = payload;
+        super(payload);
+        this.url = payload.url;
     }
 
-    @Override
-    protected TTAttachmentPayload getPayload() {
-        return payload;
+    public String getUrl() {
+        return url;
     }
 
-    private static class Payload implements TTAttachmentPayload {
+    private static class Payload implements AttachmentPayload {
         @JsonProperty(URL)
         private final String url;
 

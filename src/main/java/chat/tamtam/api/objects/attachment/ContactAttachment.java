@@ -12,23 +12,23 @@ public class ContactAttachment extends Attachment {
     private static final String VCF_INFO = "vcfInfo";
     private static final String TAM_INFO = "tamInfo";
 
-    private final Payload payload;
+    private final String vcfInfo;
+    private final User user;
 
     @JsonCreator
     public ContactAttachment(@JsonProperty(PAYLOAD) Payload payload) {
-        this.payload = payload;
+        super(payload);
+        this.vcfInfo = payload.vcfInfo;
+        this.user = payload.user;
     }
 
     public ContactAttachment(String vcfInfo, User user) {
-        payload = new Payload(vcfInfo, user);
+        super(new Payload(vcfInfo, user));
+        this.vcfInfo = vcfInfo;
+        this.user = user;
     }
 
-    @Override
-    protected TTAttachmentPayload getPayload() {
-        return payload;
-    }
-
-    private static class Payload implements TTAttachmentPayload {
+    private static class Payload implements AttachmentPayload {
         @JsonProperty(VCF_INFO)
         private final String vcfInfo;
         @JsonProperty(TAM_INFO)

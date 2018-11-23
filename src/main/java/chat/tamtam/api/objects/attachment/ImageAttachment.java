@@ -9,31 +9,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ImageAttachment extends Attachment {
     private static final String PHOTO_ID = "photo_id";
 
-    private final Payload payload;
+    private final long photoId;
+    private final String url;
 
     public ImageAttachment(long photoId, String url) {
-        this.payload = new Payload(photoId, url);
+        super(new Payload(photoId, url));
+        this.photoId = photoId;
+        this.url = url;
     }
 
     @JsonCreator
     protected ImageAttachment(@JsonProperty(PAYLOAD) Payload payload) {
-        this.payload = payload;
+        super(payload);
+        this.photoId = payload.photoId;
+        this.url = payload.url;
     }
 
     public String getURL() {
-        return payload.url;
+        return url;
     }
 
     public long getPhotoId() {
-        return payload.photoId;
+        return photoId;
     }
 
-    @Override
-    protected TTAttachmentPayload getPayload() {
-        return payload;
-    }
-
-    private static class Payload implements TTAttachmentPayload {
+    private static class Payload implements AttachmentPayload {
         @JsonProperty(PHOTO_ID)
         private final long photoId;
         @JsonProperty(URL)
