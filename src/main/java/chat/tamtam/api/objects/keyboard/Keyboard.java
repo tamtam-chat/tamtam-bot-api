@@ -14,9 +14,9 @@ public class Keyboard implements Serializable {
 
     @JsonCreator
     public Keyboard(@JsonProperty("buttons") Button[][] buttons) {
-        if (buttons == null || buttons.length == 0) {
-            throw new IllegalArgumentException("Buttons array is empty.");
-        }
+//        if (buttons == null || buttons.length == 0) {
+//            throw new IllegalArgumentException("Buttons array is empty.");
+//        }
 
         this.buttons = buttons;
     }
