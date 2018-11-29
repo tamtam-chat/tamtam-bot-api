@@ -11,6 +11,11 @@
     <name>TamTam chat Bot API</name>
     <description>TamTam Bots Java API</description>
     <url>https://tamtam.chat</url>
+    <inceptionYear>2018</inceptionYear>
+    <organization>
+        <name>Mail.Ru Group</name>
+        <url>https://corp.mail.ru</url>
+    </organization>
 
     <licenses>
         <license>
@@ -31,6 +36,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <licenses.separator>---------------------------------------------------------------------</licenses.separator>
     </properties>
 
     <dependencies>
@@ -81,6 +87,33 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.16</version>
+                <configuration>
+                    <verbose>false</verbose>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*Test.java</exclude>
+                    </excludes>
+                    <licenseName>apache_v2</licenseName>
+                    <sectionDelimiter>${licenses.separator}</sectionDelimiter>
+                    <processStartTag>${licenses.separator}</processStartTag>
+                    <processEndTag>${licenses.separator}</processEndTag>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
                     </execution>
                 </executions>
             </plugin>
