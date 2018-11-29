@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import chat.tamtam.api.TamTamSerializable;
-import chat.tamtam.api.objects.User;
 
 /**
  * @author alexandrchuprin

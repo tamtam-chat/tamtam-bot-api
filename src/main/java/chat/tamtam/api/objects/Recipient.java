@@ -20,8 +20,6 @@ package chat.tamtam.api.objects;
  * ------------------------------------------------------------------------
  */
 
-import java.io.Serializable;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonCreator;

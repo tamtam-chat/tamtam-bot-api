@@ -58,7 +58,7 @@
     </target>
 
     <target name="build">
-        <exec executable="mvn">
+        <exec executable="mvn" failonerror="true">
             <arg value="package"/>
         </exec>
     </target>
