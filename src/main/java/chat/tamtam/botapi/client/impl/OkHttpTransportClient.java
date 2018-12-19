@@ -124,6 +124,13 @@ public class OkHttpTransportClient implements TamTamTransportClient {
         }
     }
 
+    @Override
+    public Future<ClientResponse> put(String url, @Nullable byte[] requestBody) {
+        RequestBody body = requestBody == null ? NO_REQUEST_BODY : RequestBody.create(JSON, requestBody);
+        Request request = new Request.Builder().url(url).put(body).build();
+        return callAsync(request);
+    }
+
     private Future<ClientResponse> callAsync(Request request) {
         CallbackFuture future = new CallbackFuture();
         httpClient.newCall(request).enqueue(future);

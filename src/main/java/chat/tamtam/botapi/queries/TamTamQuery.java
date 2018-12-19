@@ -65,7 +65,7 @@ public class TamTamQuery<T> {
         this.method = method;
     }
 
-    public T get() throws APIException, ClientException {
+    public T execute() throws APIException, ClientException {
         try {
             ClientResponse response = call().get();
             return deserialize(response);
@@ -107,6 +107,8 @@ public class TamTamQuery<T> {
                     return transport.get(url);
                 case POST:
                     return transport.post(url, requestBody);
+                case PUT:
+                    return transport.put(url, requestBody);
                 default:
                     throw new ClientException(400, "Method " + method.name() + " is not supported.");
             }

@@ -17,6 +17,29 @@
         <url>https://corp.mail.ru</url>
     </organization>
 
+    <repositories>
+        <repository>
+            <id>internal</id>
+            <name>Internal releases</name>
+            <url>https://nexus.odkl.ru/repository/maven-releases</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>internal-snapshots</name>
+            <url>https://nexus.odkl.ru/repository/maven-snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <repository>
+            <id>nexus</id>
+            <name>internal-releases</name>
+            <url>https://nexus.odkl.ru/repository/maven-releases</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+    </distributionManagement>
+
     <licenses>
         <license>
             <name>Apache License Version 2.0</name>
