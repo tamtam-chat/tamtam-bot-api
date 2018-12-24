@@ -43,6 +43,9 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class Button implements TamTamSerializable {
+    @JsonProperty("type")
+    private String type;
+
     @JsonProperty("text")
     private final String text;
 
@@ -53,6 +56,13 @@ public class Button implements TamTamSerializable {
     public Button(@JsonProperty("text") String text, @Nullable @JsonProperty("intent") Intent intent) { 
         this.text = text;
         this.intent = intent;
+    }
+
+    /**
+    * @return type
+    **/
+    public String getType() {
+        return type;
     }
 
     /**
@@ -82,18 +92,20 @@ public class Button implements TamTamSerializable {
         }
 
         Button other = (Button) o;
-        return Objects.equals(this.text, other.text) &&
+        return Objects.equals(this.type, other.type) &&
+            Objects.equals(this.text, other.text) &&
             Objects.equals(this.intent, other.intent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(text, intent);
+        return Objects.hash(type, text, intent);
     }
 
     @Override
     public String toString() {
         return "Button{"
+            + " type='" + type + '\''
             + " text='" + text + '\''
             + " intent='" + intent + '\''
             + '}';

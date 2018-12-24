@@ -75,6 +75,7 @@ public class ChatControl implements TamTamSerializable {
     }
 
     /**
+    * Fill this if you want to change chat icon
     * @return icon
     **/
     public PhotoAttachmentRequest getIcon() {
@@ -134,6 +135,7 @@ public class ChatControl implements TamTamSerializable {
     }
 
     /**
+    * Fill this if you want to remove members from chat. Admin permissions required
     * @return removeMember
     **/
     public ChatMember getRemoveMember() {

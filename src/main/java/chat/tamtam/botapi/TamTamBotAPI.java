@@ -95,7 +95,7 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Edits message
+    * Edit message
     * Updated message should be sent as &#x60;NewMessage&#x60; in a request body. In case &#x60;attachments&#x60; field is &#x60;null&#x60;, the current message attachments won’t be changed. In case of sending an empty list in this field, all attachments will be deleted.
     * @param newMessageBody  (required)
     * @param messageId Editing message identifier (required)
@@ -115,8 +115,8 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Returns info about chat
-    * Returns &#x60;Chat&#x60; object
+    * Get chat
+    * Returns info about chat.
     * @param chatId Requested chat identifier (required)
     * @return {@link Chat}
     * @throws ClientException if fails to make API call
@@ -130,8 +130,8 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Returns information about chats that bot participated in
-    * Returns a result page and points to next data page
+    * Get all chats
+    * Returns information about chats that bot participated in: a result list and marker points to the next page.
     * @return {@link ChatList}
     */
     public GetChatsQuery getChats() { 
@@ -139,8 +139,8 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Returns messages in chat
-    * Returns results page and points to getting next data page
+    * Get messages
+    * Returns messages in chat: result page and marker referencing to the next page
     * @param chatId Chat identifier (required)
     * @return {@link MessageList}
     * @throws ClientException if fails to make API call
@@ -154,8 +154,8 @@ public class TamTamBotAPI {
     }
 
     /**
-    * List of all WebHook subscriptions
-    * In case your bot gets data via WebHook, the method returns URL list for sending notifications
+    * Get subscriptions
+    * In case your bot gets data via WebHook, the method returns list of all subscriptions.
     * @return {@link GetSubscriptionsResult}
     */
     public GetSubscriptionsQuery getSubscriptions() { 
@@ -163,7 +163,7 @@ public class TamTamBotAPI {
     }
 
     /**
-    * 
+    * Get updates
     * You can use this method for getting updates in case your bot is not subscribed to WebHook. The method based on long polling.
     * @return {@link UpdateList}
     */
@@ -172,7 +172,7 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Returns URL to upload attachment of given type
+    * Get upload URL
     * Returns the URL for the subsequent file upload.  For example, you can upload it via curl: &#x60;&#x60;&#x60; curl -i -X POST      -H \&quot;Content-Type: multipart/form-data\&quot;      -F \&quot;data&#x3D;@movie.mp4\&quot; \&quot;%UPLOAD_URL%\&quot; &#x60;&#x60;&#x60;  Two types of an upload are supported:  - single request upload (multipart request) - and resumable upload.   ##### Multipart upload  This type of upload is a simpler one but it is less reliable and agile. If a &#x60;Content-Type&#x60;: multipart/form-data header is passed in a request our service indicates upload type as a simple single request upload.  This type of an upload has some restrictions:  - Max. file size - 2 Gb  - Only one file per request can be uploaded - No possibility to restart stopped / failed upload  ##### Resumable upload If &#x60;Content-Type&#x60; header value is not equal to &#x60;multipart/form-data&#x60; our service indicated upload type as a resumable upload. With a &#x60;Content-Range&#x60; header current file chunk range and complete file size can be passed. If a network error has happened or upload was stopped you can continue to upload a file from the last successfully uploaded file chunk. You can request the last known byte of uploaded file from server and continue to upload a file.   ##### Get upload status To GET an upload status you simply need to perform HTTP-GET request to a file upload URL. Our service will respond with current upload status, complete file size and last known uploaded byte. This data can be used to complete stopped upload if something went wrong. If &#x60;REQUESTED_RANGE_NOT_SATISFIABLE&#x60; or &#x60;INTERNAL_SERVER_ERROR&#x60; status was returned it is a good point to try to restart an upload
     * @param type Uploaded file type: photo, audio, video, file (required)
     * @return {@link UploadEndpoint}
@@ -187,8 +187,8 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Returns info about current bot
-    * Current bot can be identified by access token. Method returns bots ID, name and avatar (if any).
+    * Get current bot info
+    * Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).
     * @return {@link User}
     */
     public MyInfoQuery myInfo() { 
@@ -196,7 +196,7 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Sends new message to chat
+    * Send message
     * Sends a message to a chat. Use object &#x60;NewMessage&#x60; for request body. As a result for this method new message ID returns.
     * @param newMessage  (required)
     * @return {@link SendMessageResult}
@@ -211,8 +211,8 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Subscribes bot to receive updates via WebHook
-    * After calling this method, the bot will receive notifications about new events in chat rooms at the specified URL
+    * Subscribe
+    * Subscribes bot to receive updates via WebHook. After calling this method, the bot will receive notifications about new events in chat rooms at the specified URL
     * @param subscriptionRequestBody  (required)
     * @return {@link SimpleQueryResult}
     * @throws ClientException if fails to make API call
@@ -226,8 +226,8 @@ public class TamTamBotAPI {
     }
 
     /**
-    * Unsubscribes bot from receiving updates via WebHook
-    * After calling the method, the bot stops receiving notifications about new events. Notification via the long-poll API becomes available for the bot
+    * Unsubscribe
+    * Unsubscribes bot from receiving updates via WebHook. After calling the method, the bot stops receiving notifications about new events. Notification via the long-poll API becomes available for the bot
     * @param subscriptionRequestBody  (required)
     * @return {@link SimpleQueryResult}
     * @throws ClientException if fails to make API call

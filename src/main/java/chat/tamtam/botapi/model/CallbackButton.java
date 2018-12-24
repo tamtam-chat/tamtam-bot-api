@@ -44,7 +44,7 @@ public class CallbackButton extends Button implements TamTamSerializable {
     }
 
     /**
-    * Buttom payload
+    * Button payload
     * @return payload
     **/
     public String getPayload() {

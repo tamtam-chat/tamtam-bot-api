@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonValue;
 import chat.tamtam.botapi.TamTamSerializable;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +45,16 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class AttachmentRequest implements TamTamSerializable {
+    @JsonProperty("type")
+    private String type;
+
+
+    /**
+    * @return type
+    **/
+    public String getType() {
+        return type;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -53,17 +64,20 @@ public class AttachmentRequest implements TamTamSerializable {
         if (o == null || getClass() != o.getClass()) {
           return false;
         }
-        return true;
+
+        AttachmentRequest other = (AttachmentRequest) o;
+        return Objects.equals(this.type, other.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash();
+        return Objects.hash(type);
     }
 
     @Override
     public String toString() {
         return "AttachmentRequest{"
+            + " type='" + type + '\''
             + '}';
     }
 }
