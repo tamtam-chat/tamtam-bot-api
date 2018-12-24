@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * &#x60;Update&#x60; object repsesents different types of events that happened in chat. See its inheritors
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "update_type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "update_type", visible = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = "message_created"),
   @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = "message_callback"),
@@ -42,12 +42,22 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class Update implements TamTamSerializable {
+    @JsonProperty("update_type")
+    private String updateType;
+
     @JsonProperty("timestamp")
     private final Long timestamp;
 
     @JsonCreator
     public Update(@JsonProperty("timestamp") Long timestamp) { 
         this.timestamp = timestamp;
+    }
+
+    /**
+    * @return updateType
+    **/
+    public String getUpdateType() {
+        return updateType;
     }
 
     /**
@@ -68,17 +78,19 @@ public class Update implements TamTamSerializable {
         }
 
         Update other = (Update) o;
-        return Objects.equals(this.timestamp, other.timestamp);
+        return Objects.equals(this.updateType, other.updateType) &&
+            Objects.equals(this.timestamp, other.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(timestamp);
+        return Objects.hash(updateType, timestamp);
     }
 
     @Override
     public String toString() {
         return "Update{"
+            + " updateType='" + updateType + '\''
             + " timestamp='" + timestamp + '\''
             + '}';
     }

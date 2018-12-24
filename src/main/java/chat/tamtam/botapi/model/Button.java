@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Button
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = CallbackButton.class, name = "callback"),
   @JsonSubTypes.Type(value = LinkButton.class, name = "link"),

@@ -22,10 +22,13 @@ package chat.tamtam.botapi.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import chat.tamtam.botapi.model.PhotoTokens;
+import chat.tamtam.botapi.model.PhotoToken;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import chat.tamtam.botapi.TamTamSerializable;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,10 +40,10 @@ public class PhotoAttachmentRequestPayload implements TamTamSerializable {
     private final String url;
 
     @JsonProperty("photos")
-    private final PhotoTokens photos;
+    private final Map<String, PhotoToken> photos;
 
     @JsonCreator
-    public PhotoAttachmentRequestPayload(@Nullable @JsonProperty("url") String url, @Nullable @JsonProperty("photos") PhotoTokens photos) { 
+    public PhotoAttachmentRequestPayload(@Nullable @JsonProperty("url") String url, @Nullable @JsonProperty("photos") Map<String, PhotoToken> photos) { 
         this.url = url;
         this.photos = photos;
     }
@@ -59,7 +62,7 @@ public class PhotoAttachmentRequestPayload implements TamTamSerializable {
     * @return photos
     **/
     @Nullable
-    public PhotoTokens getPhotos() {
+    public Map<String, PhotoToken> getPhotos() {
         return photos;
     }
 

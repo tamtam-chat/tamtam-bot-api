@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Request to attach some data to message
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = PhotoAttachmentRequest.class, name = "image"),
   @JsonSubTypes.Type(value = VideoAttachmentRequest.class, name = "video"),
