@@ -33,13 +33,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Error implements TamTamSerializable {
     @JsonProperty("code")
-    private final Integer code;
+    private final String code;
 
     @JsonProperty("message")
     private final String message;
 
     @JsonCreator
-    public Error(@JsonProperty("code") Integer code, @JsonProperty("message") String message) { 
+    public Error(@JsonProperty("code") String code, @JsonProperty("message") String message) { 
         this.code = code;
         this.message = message;
     }
@@ -48,7 +48,7 @@ public class Error implements TamTamSerializable {
     * Error code
     * @return code
     **/
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
