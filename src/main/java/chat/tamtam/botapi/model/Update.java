@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * &#x60;Update&#x60; object repsesents different types of events that happened in chat. See its inheritors
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "update_type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "update_type", visible = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = "message_created"),
   @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = "message_callback"),
