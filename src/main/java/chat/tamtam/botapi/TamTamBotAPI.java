@@ -26,6 +26,7 @@ import chat.tamtam.botapi.client.TamTamSerializer;
 import chat.tamtam.botapi.client.TamTamTransportClient;
 import chat.tamtam.botapi.client.impl.JacksonSerializer;
 import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 
 import chat.tamtam.botapi.queries.AnswerOnCallbackQuery;
 import chat.tamtam.botapi.model.CallbackAnswer;
@@ -84,11 +85,11 @@ public class TamTamBotAPI {
     */
     public AnswerOnCallbackQuery answerOnCallback(CallbackAnswer callbackAnswer, String callbackId) throws ClientException { 
         if (callbackId == null) {
-            throw new ClientException(400, "Missing the required parameter 'callback_id' when calling answerOnCallback");
+            throw new RequiredParameterMissingException("Missing the required parameter 'callback_id' when calling answerOnCallback");
         }
     
         if (callbackAnswer == null) {
-            throw new ClientException(400, "Missing the required request body when calling answerOnCallback");
+            throw new RequiredParameterMissingException("Missing the required request body when calling answerOnCallback");
         }
     
         return new AnswerOnCallbackQuery(client, callbackAnswer, callbackId);
@@ -104,11 +105,11 @@ public class TamTamBotAPI {
     */
     public EditMessageQuery editMessage(NewMessageBody newMessageBody, Long messageId) throws ClientException { 
         if (messageId == null) {
-            throw new ClientException(400, "Missing the required parameter 'message_id' when calling editMessage");
+            throw new RequiredParameterMissingException("Missing the required parameter 'message_id' when calling editMessage");
         }
     
         if (newMessageBody == null) {
-            throw new ClientException(400, "Missing the required request body when calling editMessage");
+            throw new RequiredParameterMissingException("Missing the required request body when calling editMessage");
         }
     
         return new EditMessageQuery(client, newMessageBody, messageId);
@@ -123,7 +124,7 @@ public class TamTamBotAPI {
     */
     public GetChatQuery getChat(Long chatId) throws ClientException { 
         if (chatId == null) {
-            throw new ClientException(400, "Missing the required parameter 'chat_id' when calling getChat");
+            throw new RequiredParameterMissingException("Missing the required parameter 'chat_id' when calling getChat");
         }
     
         return new GetChatQuery(client, chatId);
@@ -147,7 +148,7 @@ public class TamTamBotAPI {
     */
     public GetMessagesQuery getMessages(Long chatId) throws ClientException { 
         if (chatId == null) {
-            throw new ClientException(400, "Missing the required parameter 'chat_id' when calling getMessages");
+            throw new RequiredParameterMissingException("Missing the required parameter 'chat_id' when calling getMessages");
         }
     
         return new GetMessagesQuery(client, chatId);
@@ -180,7 +181,7 @@ public class TamTamBotAPI {
     */
     public GetUploadUrlQuery getUploadUrl(UploadType type) throws ClientException { 
         if (type == null) {
-            throw new ClientException(400, "Missing the required parameter 'type' when calling getUploadUrl");
+            throw new RequiredParameterMissingException("Missing the required parameter 'type' when calling getUploadUrl");
         }
     
         return new GetUploadUrlQuery(client, type);
@@ -204,7 +205,7 @@ public class TamTamBotAPI {
     */
     public SendMessageQuery sendMessage(NewMessage newMessage) throws ClientException { 
         if (newMessage == null) {
-            throw new ClientException(400, "Missing the required request body when calling sendMessage");
+            throw new RequiredParameterMissingException("Missing the required request body when calling sendMessage");
         }
     
         return new SendMessageQuery(client, newMessage);
@@ -219,7 +220,7 @@ public class TamTamBotAPI {
     */
     public SubscribeQuery subscribe(SubscriptionRequestBody subscriptionRequestBody) throws ClientException { 
         if (subscriptionRequestBody == null) {
-            throw new ClientException(400, "Missing the required request body when calling subscribe");
+            throw new RequiredParameterMissingException("Missing the required request body when calling subscribe");
         }
     
         return new SubscribeQuery(client, subscriptionRequestBody);
@@ -234,7 +235,7 @@ public class TamTamBotAPI {
     */
     public UnsubscribeQuery unsubscribe(SubscriptionRequestBody subscriptionRequestBody) throws ClientException { 
         if (subscriptionRequestBody == null) {
-            throw new ClientException(400, "Missing the required request body when calling unsubscribe");
+            throw new RequiredParameterMissingException("Missing the required request body when calling unsubscribe");
         }
     
         return new UnsubscribeQuery(client, subscriptionRequestBody);
