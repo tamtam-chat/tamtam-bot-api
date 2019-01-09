@@ -1,6 +1,4 @@
-package chat.tamtam.botapi.queries;
-
-/*-
+/*
  * ------------------------------------------------------------------------
  * TamTam chat Bot API
  * ------------------------------------------------------------------------
@@ -19,6 +17,8 @@ package chat.tamtam.botapi.queries;
  * limitations under the License.
  * ------------------------------------------------------------------------
  */
+
+package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 

@@ -1,6 +1,4 @@
-package chat.tamtam.botapi.model;
-
-/*-
+/*
  * ------------------------------------------------------------------------
  * TamTam chat Bot API
  * ------------------------------------------------------------------------
@@ -19,6 +17,8 @@ package chat.tamtam.botapi.model;
  * limitations under the License.
  * ------------------------------------------------------------------------
  */
+
+package chat.tamtam.botapi.model;
 
 import java.util.Objects;
 import java.util.Arrays;
