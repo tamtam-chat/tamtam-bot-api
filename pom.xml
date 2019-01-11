@@ -23,11 +23,6 @@
             <name>Internal releases</name>
             <url>https://nexus.odkl.ru/repository/maven-releases</url>
         </repository>
-        <repository>
-            <id>odkl-snapshots</id>
-            <name>Internal snapshots</name>
-            <url>https://nexus.odkl.ru/repository/maven-snapshots</url>
-        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -35,11 +30,6 @@
             <id>odkl-internal</id>
             <name>Internal releases</name>
             <url>https://nexus.odkl.ru/repository/maven-releases</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>odkl-snapshots</id>
-            <name>Internal snapshots</name>
-            <url>https://nexus.odkl.ru/repository/maven-snapshots</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -164,12 +154,12 @@
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-generator</artifactId>
-                        <version>0.0.5</version>
+                        <version>0.0.6</version>
                     </dependency>
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-schema</artifactId>
-                        <version>0.0.5-SNAPSHOT</version>
+                        <version>0.0.7</version>
                     </dependency>
                 </dependencies>
             </plugin>
