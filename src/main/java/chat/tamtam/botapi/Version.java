@@ -18,20 +18,15 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi.queries;
+package chat.tamtam.botapi;
 
-import chat.tamtam.botapi.client.TamTamClient;
+public class Version {
+    private static final int MAJOR = 0;
+    private static final int MINOR = 0;
+    private static final int BUILD = 5;
+    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
 
-import chat.tamtam.botapi.queries.EditMessageQuery;
-import chat.tamtam.botapi.model.NewMessageBody;
-import chat.tamtam.botapi.model.SimpleQueryResult;
-
-public class EditMessageQuery extends TamTamQuery<SimpleQueryResult> {
-    private final QueryParam<Long> messageId = new QueryParam<Long>("message_id", this).required();
-
-    public EditMessageQuery(TamTamClient client, NewMessageBody newMessageBody, Long messageId) {
-        super(client, "/messages", newMessageBody, SimpleQueryResult.class, Method.PUT);
-        this.messageId.setValue(messageId);
+    public static String get() {
+        return VERSION;
     }
-
 }

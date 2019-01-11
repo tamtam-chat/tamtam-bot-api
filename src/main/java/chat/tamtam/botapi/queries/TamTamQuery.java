@@ -31,6 +31,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.jetbrains.annotations.NotNull;
 
+import chat.tamtam.botapi.Version;
 import chat.tamtam.botapi.client.ClientResponse;
 import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.client.TamTamTransportClient;
@@ -117,6 +118,24 @@ public class TamTamQuery<T> {
         }
     }
 
+    static String substitute(String pathTemplate, Object... substitutions) {
+        StringBuilder sb = new StringBuilder();
+        int nextSubst = 0;
+        char[] chars = pathTemplate.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (c == '{') {
+                i = pathTemplate.indexOf('}', i);
+                sb.append(substitutions[nextSubst++]);
+                continue;
+            }
+
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
     private T deserialize(ClientResponse response) throws ClientException, APIException {
         String responseBody = response.getBodyAsString();
         if (response.getStatusCode() / 100 != 2) {
@@ -139,6 +158,8 @@ public class TamTamQuery<T> {
         }
 
         sb.append("access_token=").append(tamTamClient.getAccessToken());
+        sb.append('&');
+        sb.append("v=").append(Version.get());
 
         if (params == null) {
             return sb.toString();
@@ -165,6 +186,10 @@ public class TamTamQuery<T> {
         }
 
         return sb.toString();
+    }
+
+    protected enum Method {
+        GET, POST, PUT, HEAD, DELETE
     }
 
     private class FutureResult implements Future<T> {
@@ -207,9 +232,5 @@ public class TamTamQuery<T> {
                 throw new ExecutionException(e);
             }
         }
-    }
-
-    protected enum Method {
-        GET, POST, PUT, HEAD, DELETE
     }
 }

@@ -30,7 +30,7 @@ public class GetChatsQuery extends TamTamQuery<ChatList> {
     private final QueryParam<Long> marker = new QueryParam<Long>("marker", this);
 
     public GetChatsQuery(TamTamClient client) {
-        super(client, "/me/chats", null, ChatList.class, Method.GET);
+        super(client, "/chats", null, ChatList.class, Method.GET);
     }
 
     public GetChatsQuery count(Integer value) {

@@ -30,7 +30,7 @@ public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
     private final QueryParam<Integer> timeout = new QueryParam<Integer>("timeout", this);
 
     public GetUpdatesQuery(TamTamClient client) {
-        super(client, "/me/updates", null, UpdateList.class, Method.GET);
+        super(client, "/updates", null, UpdateList.class, Method.GET);
     }
 
     public GetUpdatesQuery limit(Integer value) {

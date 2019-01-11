@@ -6,7 +6,7 @@
 
     <groupId>chat.tamtam</groupId>
     <artifactId>tamtam-bot-api</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
 
     <name>TamTam chat Bot API</name>
     <description>TamTam Bots Java API</description>
@@ -138,7 +138,7 @@
                     <generateApis>true</generateApis>
                     <generateApiDocumentation>false</generateApiDocumentation>
                     <generateApiTests>false</generateApiTests>
-                    <generateSupportingFiles>false</generateSupportingFiles>
+                    <generateSupportingFiles>true</generateSupportingFiles>
                     <output>${project.basedir}</output>
                 </configuration>
                 <executions>
@@ -159,7 +159,7 @@
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-schema</artifactId>
-                        <version>0.0.2</version>
+                        <version>0.0.5-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>

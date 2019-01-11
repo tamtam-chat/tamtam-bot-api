@@ -22,16 +22,14 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.EditMessageQuery;
-import chat.tamtam.botapi.model.NewMessageBody;
+import chat.tamtam.botapi.model.ChatControl;
+import chat.tamtam.botapi.queries.SendControlQuery;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 
-public class EditMessageQuery extends TamTamQuery<SimpleQueryResult> {
-    private final QueryParam<Long> messageId = new QueryParam<Long>("message_id", this).required();
+public class SendControlQuery extends TamTamQuery<SimpleQueryResult> {
 
-    public EditMessageQuery(TamTamClient client, NewMessageBody newMessageBody, Long messageId) {
-        super(client, "/messages", newMessageBody, SimpleQueryResult.class, Method.PUT);
-        this.messageId.setValue(messageId);
+    public SendControlQuery(TamTamClient client, ChatControl chatControl, Long chatId) {
+        super(client, substitute("/chats/{chatId}/control", chatId), chatControl, SimpleQueryResult.class, Method.POST);
     }
 
 }

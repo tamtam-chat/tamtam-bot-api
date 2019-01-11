@@ -26,11 +26,9 @@ import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.queries.GetChatQuery;
 
 public class GetChatQuery extends TamTamQuery<Chat> {
-    private final QueryParam<Long> chatId = new QueryParam<Long>("chat_id", this).required();
 
     public GetChatQuery(TamTamClient client, Long chatId) {
-        super(client, "/me/chat", null, Chat.class, Method.GET);
-        this.chatId.setValue(chatId);
+        super(client, substitute("/chats/{chatId}", chatId), null, Chat.class, Method.GET);
     }
 
 }

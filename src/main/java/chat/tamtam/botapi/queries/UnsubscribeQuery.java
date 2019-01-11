@@ -29,7 +29,7 @@ import chat.tamtam.botapi.queries.UnsubscribeQuery;
 public class UnsubscribeQuery extends TamTamQuery<SimpleQueryResult> {
 
     public UnsubscribeQuery(TamTamClient client, SubscriptionRequestBody subscriptionRequestBody) {
-        super(client, "/me/unsubscribe", subscriptionRequestBody, SimpleQueryResult.class, Method.POST);
+        super(client, "/subscriptions", subscriptionRequestBody, SimpleQueryResult.class, Method.DELETE);
     }
 
 }

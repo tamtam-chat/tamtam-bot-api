@@ -29,7 +29,7 @@ import chat.tamtam.botapi.model.SubscriptionRequestBody;
 public class SubscribeQuery extends TamTamQuery<SimpleQueryResult> {
 
     public SubscribeQuery(TamTamClient client, SubscriptionRequestBody subscriptionRequestBody) {
-        super(client, "/me/subscribe", subscriptionRequestBody, SimpleQueryResult.class, Method.POST);
+        super(client, "/subscriptions", subscriptionRequestBody, SimpleQueryResult.class, Method.POST);
     }
 
 }

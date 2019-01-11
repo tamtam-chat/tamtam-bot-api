@@ -28,9 +28,11 @@ import chat.tamtam.botapi.client.impl.JacksonSerializer;
 import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 
+import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.queries.AnswerOnCallbackQuery;
 import chat.tamtam.botapi.model.CallbackAnswer;
 import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.model.ChatControl;
 import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
@@ -42,8 +44,9 @@ import chat.tamtam.botapi.queries.GetUpdatesQuery;
 import chat.tamtam.botapi.queries.GetUploadUrlQuery;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.queries.MyInfoQuery;
-import chat.tamtam.botapi.model.NewMessage;
 import chat.tamtam.botapi.model.NewMessageBody;
+import chat.tamtam.botapi.queries.SendActionQuery;
+import chat.tamtam.botapi.queries.SendControlQuery;
 import chat.tamtam.botapi.queries.SendMessageQuery;
 import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.SimpleQueryResult;
@@ -123,10 +126,6 @@ public class TamTamBotAPI {
     * @throws ClientException if fails to make API call
     */
     public GetChatQuery getChat(Long chatId) throws ClientException { 
-        if (chatId == null) {
-            throw new RequiredParameterMissingException("Missing the required parameter 'chat_id' when calling getChat");
-        }
-    
         return new GetChatQuery(client, chatId);
     }
 
@@ -197,18 +196,50 @@ public class TamTamBotAPI {
     }
 
     /**
+    * Send action
+    * Send bot action to chat
+    * @param actionRequestBody  (required)
+    * @param chatId Chat identifier (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public SendActionQuery sendAction(ActionRequestBody actionRequestBody, Long chatId) throws ClientException { 
+        if (actionRequestBody == null) {
+            throw new RequiredParameterMissingException("Missing the required request body when calling sendAction");
+        }
+    
+        return new SendActionQuery(client, actionRequestBody, chatId);
+    }
+
+    /**
+    * Control chat
+    * Send control message to chat
+    * @param chatControl  (required)
+    * @param chatId Chat identifier (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public SendControlQuery sendControl(ChatControl chatControl, Long chatId) throws ClientException { 
+        if (chatControl == null) {
+            throw new RequiredParameterMissingException("Missing the required request body when calling sendControl");
+        }
+    
+        return new SendControlQuery(client, chatControl, chatId);
+    }
+
+    /**
     * Send message
-    * Sends a message to a chat. Use object &#x60;NewMessage&#x60; for request body. As a result for this method new message ID returns.
-    * @param newMessage  (required)
+    * Sends a message to a chat. As a result for this method new message identifier returns.
+    * @param newMessageBody  (required)
     * @return {@link SendMessageResult}
     * @throws ClientException if fails to make API call
     */
-    public SendMessageQuery sendMessage(NewMessage newMessage) throws ClientException { 
-        if (newMessage == null) {
+    public SendMessageQuery sendMessage(NewMessageBody newMessageBody) throws ClientException { 
+        if (newMessageBody == null) {
             throw new RequiredParameterMissingException("Missing the required request body when calling sendMessage");
         }
     
-        return new SendMessageQuery(client, newMessage);
+        return new SendMessageQuery(client, newMessageBody);
     }
 
     /**

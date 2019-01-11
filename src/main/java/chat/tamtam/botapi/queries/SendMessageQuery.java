@@ -22,14 +22,24 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.model.NewMessage;
+import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.queries.SendMessageQuery;
 import chat.tamtam.botapi.model.SendMessageResult;
 
 public class SendMessageQuery extends TamTamQuery<SendMessageResult> {
+    private final QueryParam<Long> userId = new QueryParam<Long>("user_id", this);
+    private final QueryParam<Long> chatId = new QueryParam<Long>("chat_id", this);
 
-    public SendMessageQuery(TamTamClient client, NewMessage newMessage) {
-        super(client, "/me/messages", newMessage, SendMessageResult.class, Method.POST);
+    public SendMessageQuery(TamTamClient client, NewMessageBody newMessageBody) {
+        super(client, "/messages", newMessageBody, SendMessageResult.class, Method.POST);
     }
 
+    public SendMessageQuery userId(Long value) {
+        this.userId.setValue(value);
+        return this;
+    }
+    public SendMessageQuery chatId(Long value) {
+        this.chatId.setValue(value);
+        return this;
+    }
 }

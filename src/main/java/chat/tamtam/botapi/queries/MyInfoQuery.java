@@ -28,7 +28,7 @@ import chat.tamtam.botapi.model.User;
 public class MyInfoQuery extends TamTamQuery<User> {
 
     public MyInfoQuery(TamTamClient client) {
-        super(client, "/me/info", null, User.class, Method.GET);
+        super(client, "/me", null, User.class, Method.GET);
     }
 
 }

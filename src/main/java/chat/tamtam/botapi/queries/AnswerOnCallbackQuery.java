@@ -30,7 +30,7 @@ public class AnswerOnCallbackQuery extends TamTamQuery<SimpleQueryResult> {
     private final QueryParam<String> callbackId = new QueryParam<String>("callback_id", this).required();
 
     public AnswerOnCallbackQuery(TamTamClient client, CallbackAnswer callbackAnswer, String callbackId) {
-        super(client, "/me/answer", callbackAnswer, SimpleQueryResult.class, Method.POST);
+        super(client, "/answers", callbackAnswer, SimpleQueryResult.class, Method.POST);
         this.callbackId.setValue(callbackId);
     }
 

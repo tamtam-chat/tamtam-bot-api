@@ -30,7 +30,7 @@ public class GetUploadUrlQuery extends TamTamQuery<UploadEndpoint> {
     private final QueryParam<UploadType> type = new QueryParam<UploadType>("type", this).required();
 
     public GetUploadUrlQuery(TamTamClient client, UploadType type) {
-        super(client, "/me/upload", null, UploadEndpoint.class, Method.POST);
+        super(client, "/uploads", null, UploadEndpoint.class, Method.POST);
         this.type.setValue(type);
     }
 

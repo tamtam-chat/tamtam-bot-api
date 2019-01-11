@@ -32,7 +32,7 @@ public class GetMessagesQuery extends TamTamQuery<MessageList> {
     private final QueryParam<Integer> count = new QueryParam<Integer>("count", this);
 
     public GetMessagesQuery(TamTamClient client, Long chatId) {
-        super(client, "/me/messages", null, MessageList.class, Method.GET);
+        super(client, "/messages", null, MessageList.class, Method.GET);
         this.chatId.setValue(chatId);
     }
 

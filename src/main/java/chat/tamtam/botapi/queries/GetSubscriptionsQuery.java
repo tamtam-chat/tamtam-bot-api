@@ -28,7 +28,7 @@ import chat.tamtam.botapi.model.GetSubscriptionsResult;
 public class GetSubscriptionsQuery extends TamTamQuery<GetSubscriptionsResult> {
 
     public GetSubscriptionsQuery(TamTamClient client) {
-        super(client, "/me/subscriptions", null, GetSubscriptionsResult.class, Method.GET);
+        super(client, "/subscriptions", null, GetSubscriptionsResult.class, Method.GET);
     }
 
 }
