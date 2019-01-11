@@ -23,6 +23,11 @@
             <name>Internal releases</name>
             <url>https://nexus.odkl.ru/repository/maven-releases</url>
         </repository>
+        <repository>
+            <id>odkl-snapshots</id>
+            <name>Internal snapshots</name>
+            <url>https://nexus.odkl.ru/repository/maven-snapshots</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -30,6 +35,11 @@
             <id>odkl-internal</id>
             <name>Internal releases</name>
             <url>https://nexus.odkl.ru/repository/maven-releases</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>odkl-snapshots</id>
+            <name>Internal snapshots</name>
+            <url>https://nexus.odkl.ru/repository/maven-snapshots</url>
         </pluginRepository>
     </pluginRepositories>
 
