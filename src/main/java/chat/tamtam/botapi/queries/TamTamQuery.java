@@ -34,10 +34,14 @@ import org.jetbrains.annotations.NotNull;
 import chat.tamtam.botapi.Version;
 import chat.tamtam.botapi.client.ClientResponse;
 import chat.tamtam.botapi.client.TamTamClient;
+import chat.tamtam.botapi.client.TamTamSerializer;
 import chat.tamtam.botapi.client.TamTamTransportClient;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
+import chat.tamtam.botapi.exceptions.ExceptionMapper;
+import chat.tamtam.botapi.exceptions.ServiceNotAvailableException;
 import chat.tamtam.botapi.exceptions.TransportClientException;
+import chat.tamtam.botapi.model.Error;
 
 /**
  * @author alexandrchuprin
@@ -71,7 +75,7 @@ public class TamTamQuery<T> {
             ClientResponse response = call().get();
             return deserialize(response);
         } catch (InterruptedException e) {
-            throw new ClientException(e);
+            throw new ClientException("Current request was interrupted", e);
         } catch (ExecutionException e) {
             Throwable cause = e.getCause();
             if (cause instanceof ClientException) {
@@ -138,11 +142,21 @@ public class TamTamQuery<T> {
 
     private T deserialize(ClientResponse response) throws ClientException, APIException {
         String responseBody = response.getBodyAsString();
-        if (response.getStatusCode() / 100 != 2) {
-            throw new ClientException(response.getStatusCode(), responseBody);
+        if (response.getStatusCode() == 503) {
+            throw new ServiceNotAvailableException(responseBody);
         }
 
-        return tamTamClient.getSerializer().deserialize(responseBody, responseType);
+        TamTamSerializer serializer = tamTamClient.getSerializer();
+        if (response.getStatusCode() / 100 != 2) {
+            Error error = serializer.deserialize(responseBody, Error.class);
+            if (error == null) {
+                throw new APIException(response.getStatusCode());
+            }
+
+            throw ExceptionMapper.map(error);
+        }
+
+        return serializer.deserialize(responseBody, responseType);
     }
 
     private String buildURL() throws ClientException {

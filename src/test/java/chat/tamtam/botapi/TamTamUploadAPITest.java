@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ import static org.junit.Assert.assertThat;
 public class TamTamUploadAPITest extends TamTamIntegrationTest {
     @Test
     public void should_Upload_Image() throws Exception {
-        File file = new File(getClass().getClassLoader().getResource("logo.png").toURI());
+        File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         GetUploadUrlQuery query = botAPI.getUploadUrl(UploadType.PHOTO);
         UploadEndpoint uploadEndpoint = query.execute();
         TamTamUploadImageQuery uploadQuery = uploadAPI.uploadImage(uploadEndpoint.getUrl(), file);
@@ -42,7 +43,7 @@ public class TamTamUploadAPITest extends TamTamIntegrationTest {
         file.deleteOnExit();
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             for (int i = 0; i < 4096; i++) {
-                outputStream.write(RANDOM.nextInt(256));
+                outputStream.write(ThreadLocalRandom.current().nextInt(256));
             }
             outputStream.flush();
 

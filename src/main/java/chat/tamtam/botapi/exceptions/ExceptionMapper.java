@@ -26,9 +26,11 @@ import com.fasterxml.jackson.databind.JsonNode;
  * @author alexandrchuprin
  */
 public class ExceptionMapper {
-    public static APIException map(JsonNode error) {
-        String message = error.get("message").asText();
-        switch (error.get("code").asText()) {
+    public static APIException map(chat.tamtam.botapi.model.Error error) {
+        String message = error.getMessage();
+        switch (error.getCode()) {
+            case "attachment.not.ready":
+                return new AttachmentNotReadyException();
             case "too.many.requests":
                 return new TooManyRequestsException(message);
         }

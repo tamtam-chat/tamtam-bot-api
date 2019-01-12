@@ -31,9 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
 import chat.tamtam.botapi.client.TamTamSerializer;
-import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
-import chat.tamtam.botapi.exceptions.ExceptionMapper;
 
 /**
  * @author alexandrchuprin
@@ -67,18 +65,14 @@ public class JacksonSerializer implements TamTamSerializer {
 
     @Nullable
     @Override
-    public <T> T deserialize(String data, Class<T> responseType) throws ClientException, APIException {
-        if (data == null) {
+    public <T> T deserialize(String data, Class<T> responseType) throws ClientException {
+        if (data == null || data.isEmpty()) {
             return null;
         }
 
         try {
             ObjectReader reader = mapper.reader();
             JsonNode json = reader.readTree(data);
-            if (json.has("error")) {
-                throw ExceptionMapper.map(json);
-            }
-
             return reader.treeToValue(json, responseType);
         } catch (IOException e) {
             throw new ClientException("Failed to deserialize data: " + data, e);

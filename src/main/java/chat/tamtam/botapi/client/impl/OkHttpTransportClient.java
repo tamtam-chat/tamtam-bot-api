@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -69,6 +70,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
         this(new OkHttpClient.Builder()
                 .addInterceptor(new AddUserAgent())
                 .addInterceptor(new LoggingInterceptor())
+                .readTimeout(100, TimeUnit.SECONDS)
                 .callTimeout(100, TimeUnit.SECONDS)
                 .followRedirects(true)
                 .build());
@@ -103,6 +105,8 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     @Override
     public Future<ClientResponse> post(String url, String filename, InputStream inputStream) throws
             TransportClientException {
+        Objects.requireNonNull(filename, "Filename must not be null");
+        Objects.requireNonNull(inputStream, "inputStream must not be null");
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buffer = new byte[FOUR_KB];

@@ -22,7 +22,6 @@ package chat.tamtam.botapi.client;
 
 import org.jetbrains.annotations.Nullable;
 
-import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
 
 /**
@@ -33,5 +32,5 @@ public interface TamTamSerializer {
     byte[] serialize(@Nullable Object object) throws ClientException;
 
     @Nullable
-    <T> T deserialize(@Nullable String data, Class<T> responseType) throws APIException, ClientException;
+    <T> T deserialize(@Nullable String data, Class<T> responseType) throws ClientException;
 }
