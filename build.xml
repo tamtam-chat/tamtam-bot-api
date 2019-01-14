@@ -54,7 +54,9 @@
     </target>
 
     <target name="export-release" depends="ivy-publish">
-        <!-- do only ivy publish -->
+        <exec executable="mvn" failonerror="true">
+            <arg value="deploy"/>
+        </exec>
     </target>
 
     <target name="build">
