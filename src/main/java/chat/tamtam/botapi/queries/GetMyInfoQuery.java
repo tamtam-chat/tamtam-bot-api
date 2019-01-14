@@ -22,12 +22,12 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.MyInfoQuery;
+import chat.tamtam.botapi.queries.GetMyInfoQuery;
 import chat.tamtam.botapi.model.User;
 
-public class MyInfoQuery extends TamTamQuery<User> {
+public class GetMyInfoQuery extends TamTamQuery<User> {
 
-    public MyInfoQuery(TamTamClient client) {
+    public GetMyInfoQuery(TamTamClient client) {
         super(client, "/me", null, User.class, Method.GET);
     }
 

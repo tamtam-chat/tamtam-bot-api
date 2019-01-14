@@ -30,7 +30,7 @@ public abstract class TamTamIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        me = botAPI.myInfo().execute();
+        me = botAPI.getMyInfo().execute();
         assertThat(me, is(notNullValue()));
         LOG.info("Current bot: " + me);
     }

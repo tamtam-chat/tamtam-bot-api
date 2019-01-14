@@ -38,6 +38,9 @@ public class NewMessageBody implements TamTamSerializable {
     @JsonProperty("text")
     private final String text;
 
+    @JsonProperty("attachment")
+    private AttachmentRequest attachment;
+
     @JsonProperty("attachments")
     private final List<AttachmentRequest> attachments;
 
@@ -57,6 +60,24 @@ public class NewMessageBody implements TamTamSerializable {
     @Nullable
     public String getText() {
         return text;
+    }
+
+    public NewMessageBody attachment(AttachmentRequest attachment) {
+        this.attachment = attachment;
+        return this;
+    }
+
+    /**
+    * Single message attachment.
+    * @return attachment
+    **/
+    @Nullable
+    public AttachmentRequest getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(AttachmentRequest attachment) {
+        this.attachment = attachment;
     }
 
     /**
@@ -96,19 +117,21 @@ public class NewMessageBody implements TamTamSerializable {
 
         NewMessageBody other = (NewMessageBody) o;
         return Objects.equals(this.text, other.text) &&
+            Objects.equals(this.attachment, other.attachment) &&
             Objects.equals(this.attachments, other.attachments) &&
             Objects.equals(this.notify, other.notify);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(text, attachments, notify);
+        return Objects.hash(text, attachment, attachments, notify);
     }
 
     @Override
     public String toString() {
         return "NewMessageBody{"
             + " text='" + text + '\''
+            + " attachment='" + attachment + '\''
             + " attachments='" + attachments + '\''
             + " notify='" + notify + '\''
             + '}';

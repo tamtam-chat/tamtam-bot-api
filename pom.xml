@@ -6,7 +6,7 @@
 
     <groupId>chat.tamtam</groupId>
     <artifactId>tamtam-bot-api</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9-SNAPSHOT</version>
 
     <name>TamTam chat Bot API</name>
     <description>TamTam Bots Java API</description>
@@ -19,18 +19,19 @@
 
     <repositories>
         <repository>
-            <id>odkl-internal</id>
+            <id>nexus</id>
             <name>Internal releases</name>
-            <url>https://nexus.odkl.ru/repository/maven-releases</url>
+            <url>https://nexus.odkl.ru/repository/maven-public</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
-            <id>odkl-internal</id>
+            <id>nexus</id>
             <name>Internal releases</name>
-            <url>https://nexus.odkl.ru/repository/maven-releases</url>
+            <url>https://nexus.odkl.ru/repository/maven-public</url>
         </pluginRepository>
+
     </pluginRepositories>
 
     <distributionManagement>
@@ -165,7 +166,7 @@
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-schema</artifactId>
-                        <version>0.0.7</version>
+                        <version>0.0.8-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>

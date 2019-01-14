@@ -38,12 +38,12 @@ import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
 import chat.tamtam.botapi.queries.GetMessagesQuery;
+import chat.tamtam.botapi.queries.GetMyInfoQuery;
 import chat.tamtam.botapi.queries.GetSubscriptionsQuery;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.queries.GetUpdatesQuery;
 import chat.tamtam.botapi.queries.GetUploadUrlQuery;
 import chat.tamtam.botapi.model.MessageList;
-import chat.tamtam.botapi.queries.MyInfoQuery;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.queries.SendActionQuery;
 import chat.tamtam.botapi.queries.SendControlQuery;
@@ -154,6 +154,15 @@ public class TamTamBotAPI {
     }
 
     /**
+    * Get current bot info
+    * Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).
+    * @return {@link User}
+    */
+    public GetMyInfoQuery getMyInfo() { 
+        return new GetMyInfoQuery(client);
+    }
+
+    /**
     * Get subscriptions
     * In case your bot gets data via WebHook, the method returns list of all subscriptions.
     * @return {@link GetSubscriptionsResult}
@@ -184,15 +193,6 @@ public class TamTamBotAPI {
         }
     
         return new GetUploadUrlQuery(client, type);
-    }
-
-    /**
-    * Get current bot info
-    * Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).
-    * @return {@link User}
-    */
-    public MyInfoQuery myInfo() { 
-        return new MyInfoQuery(client);
     }
 
     /**
@@ -260,15 +260,15 @@ public class TamTamBotAPI {
     /**
     * Unsubscribe
     * Unsubscribes bot from receiving updates via WebHook. After calling the method, the bot stops receiving notifications about new events. Notification via the long-poll API becomes available for the bot
-    * @param subscriptionRequestBody  (required)
+    * @param url URL to remove from WebHook subscriptions (required)
     * @return {@link SimpleQueryResult}
     * @throws ClientException if fails to make API call
     */
-    public UnsubscribeQuery unsubscribe(SubscriptionRequestBody subscriptionRequestBody) throws ClientException { 
-        if (subscriptionRequestBody == null) {
-            throw new RequiredParameterMissingException("Missing the required request body when calling unsubscribe");
+    public UnsubscribeQuery unsubscribe(String url) throws ClientException { 
+        if (url == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'url' when calling unsubscribe");
         }
     
-        return new UnsubscribeQuery(client, subscriptionRequestBody);
+        return new UnsubscribeQuery(client, url);
     }
 }
