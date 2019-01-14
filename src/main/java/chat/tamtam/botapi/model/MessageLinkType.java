@@ -32,19 +32,17 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import chat.tamtam.botapi.TamTamEnum;
 
 /**
- * Type of chat. Dialog (one-on-one), chat or channel
+ * Type of linked message
  */
-public enum ChatType {
+public enum MessageLinkType {
     
-    DIALOG("dialog"),
+    FORWARD("forward"),
     
-    CHAT("chat"),
-    
-    CHANNEL("channel");
+    REPLY("reply");
 
     private String value;
 
-    ChatType(String value) {
+    MessageLinkType(String value) {
         this.value = value;
     }
 
@@ -59,8 +57,8 @@ public enum ChatType {
     }
 
     @JsonCreator
-    public static ChatType create(String text) {
-        return TamTamEnum.create(ChatType.class, text);
+    public static MessageLinkType create(String text) {
+        return TamTamEnum.create(MessageLinkType.class, text);
     }
 }
 

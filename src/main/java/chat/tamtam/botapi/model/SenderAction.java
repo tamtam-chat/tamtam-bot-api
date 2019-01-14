@@ -59,6 +59,11 @@ public enum SenderAction {
         return String.valueOf(value);
     }
 
+    @JsonValue
+    public String getValue() {
+        return this.value;
+    }
+
     @JsonCreator
     public static SenderAction create(String text) {
         return TamTamEnum.create(SenderAction.class, text);

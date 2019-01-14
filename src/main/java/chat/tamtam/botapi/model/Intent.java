@@ -53,6 +53,11 @@ public enum Intent {
         return String.valueOf(value);
     }
 
+    @JsonValue
+    public String getValue() {
+        return this.value;
+    }
+
     @JsonCreator
     public static Intent create(String text) {
         return TamTamEnum.create(Intent.class, text);

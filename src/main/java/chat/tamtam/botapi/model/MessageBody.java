@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import java.util.Objects;
 import java.util.Arrays;
 import chat.tamtam.botapi.model.Attachment;
+import chat.tamtam.botapi.model.LinkedMessage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -47,15 +48,19 @@ public class MessageBody implements TamTamSerializable {
     @JsonProperty("attachments")
     private final List<Attachment> attachments;
 
+    @JsonProperty("link")
+    private final LinkedMessage link;
+
     @JsonProperty("reply_to")
     private String replyTo;
 
     @JsonCreator
-    public MessageBody(@JsonProperty("mid") String mid, @JsonProperty("seq") Long seq, @Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<Attachment> attachments) { 
+    public MessageBody(@JsonProperty("mid") String mid, @JsonProperty("seq") Long seq, @Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<Attachment> attachments, @Nullable @JsonProperty("link") LinkedMessage link) { 
         this.mid = mid;
         this.seq = seq;
         this.text = text;
         this.attachments = attachments;
+        this.link = link;
     }
 
     /**
@@ -92,6 +97,15 @@ public class MessageBody implements TamTamSerializable {
         return attachments;
     }
 
+    /**
+    * Forwarder or replied message
+    * @return link
+    **/
+    @Nullable
+    public LinkedMessage getLink() {
+        return link;
+    }
+
     public MessageBody replyTo(String replyTo) {
         this.replyTo = replyTo;
         return this;
@@ -124,12 +138,13 @@ public class MessageBody implements TamTamSerializable {
             Objects.equals(this.seq, other.seq) &&
             Objects.equals(this.text, other.text) &&
             Objects.equals(this.attachments, other.attachments) &&
+            Objects.equals(this.link, other.link) &&
             Objects.equals(this.replyTo, other.replyTo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mid, seq, text, attachments, replyTo);
+        return Objects.hash(mid, seq, text, attachments, link, replyTo);
     }
 
     @Override
@@ -139,6 +154,7 @@ public class MessageBody implements TamTamSerializable {
             + " seq='" + seq + '\''
             + " text='" + text + '\''
             + " attachments='" + attachments + '\''
+            + " link='" + link + '\''
             + " replyTo='" + replyTo + '\''
             + '}';
     }

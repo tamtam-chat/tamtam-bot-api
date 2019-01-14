@@ -55,6 +55,11 @@ public enum ChatStatus {
         return String.valueOf(value);
     }
 
+    @JsonValue
+    public String getValue() {
+        return this.value;
+    }
+
     @JsonCreator
     public static ChatStatus create(String text) {
         return TamTamEnum.create(ChatStatus.class, text);
