@@ -22,51 +22,33 @@ package chat.tamtam.botapi.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import chat.tamtam.botapi.model.Message;
+import chat.tamtam.botapi.model.Update;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 import chat.tamtam.botapi.TamTamSerializable;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * &#x60;Update&#x60; object repsesents different types of events that happened in chat. See its inheritors
+ * You will get this &#x60;update&#x60; as soon as message is edited
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "update_type", visible = true)
-@JsonSubTypes({
-  @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = "message_created"),
-  @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = "message_callback"),
-  @JsonSubTypes.Type(value = MessageEditedUpdate.class, name = "message_edited"),
-  @JsonSubTypes.Type(value = MessageRemovedUpdate.class, name = "message_removed"),
-  @JsonSubTypes.Type(value = MessageRestoredUpdate.class, name = "message_restored"),
-})
-
-public class Update implements TamTamSerializable {
-    @JsonProperty("update_type")
-    private String updateType;
-
-    @JsonProperty("timestamp")
-    private final Long timestamp;
+public class MessageEditedUpdate extends Update implements TamTamSerializable {
+    @JsonProperty("message")
+    private final Message message;
 
     @JsonCreator
-    public Update(@JsonProperty("timestamp") Long timestamp) { 
-        this.timestamp = timestamp;
+    public MessageEditedUpdate(@JsonProperty("message") Message message, @JsonProperty("timestamp") Long timestamp) { 
+        super(timestamp);
+        this.message = message;
     }
 
     /**
-    * @return updateType
+    * Edited message
+    * @return message
     **/
-    public String getUpdateType() {
-        return updateType;
-    }
-
-    /**
-    * Unix-time when event occured
-    * @return timestamp
-    **/
-    public Long getTimestamp() {
-        return timestamp;
+    public Message getMessage() {
+        return message;
     }
 
     @Override
@@ -78,21 +60,20 @@ public class Update implements TamTamSerializable {
           return false;
         }
 
-        Update other = (Update) o;
-        return Objects.equals(this.updateType, other.updateType) &&
-            Objects.equals(this.timestamp, other.timestamp);
+        MessageEditedUpdate other = (MessageEditedUpdate) o;
+        return Objects.equals(this.message, other.message) &&
+            super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(updateType, timestamp);
+        return Objects.hash(message, super.hashCode());
     }
 
     @Override
     public String toString() {
-        return "Update{"
-            + " updateType='" + updateType + '\''
-            + " timestamp='" + timestamp + '\''
+        return "MessageEditedUpdate{"+ super.toString()
+            + " message='" + message + '\''
             + '}';
     }
 }
