@@ -38,10 +38,14 @@ public class User implements TamTamSerializable {
     @JsonProperty("name")
     private final String name;
 
+    @JsonProperty("username")
+    private final String username;
+
     @JsonCreator
-    public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name) { 
+    public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
         this.userId = userId;
         this.name = name;
+        this.username = username;
     }
 
     /**
@@ -60,6 +64,15 @@ public class User implements TamTamSerializable {
         return name;
     }
 
+    /**
+    * Unique user name
+    * @return username
+    **/
+    @Nullable
+    public String getUsername() {
+        return username;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -71,12 +84,13 @@ public class User implements TamTamSerializable {
 
         User other = (User) o;
         return Objects.equals(this.userId, other.userId) &&
-            Objects.equals(this.name, other.name);
+            Objects.equals(this.name, other.name) &&
+            Objects.equals(this.username, other.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, name);
+        return Objects.hash(userId, name, username);
     }
 
     @Override
@@ -84,6 +98,7 @@ public class User implements TamTamSerializable {
         return "User{"
             + " userId='" + userId + '\''
             + " name='" + name + '\''
+            + " username='" + username + '\''
             + '}';
     }
 }
