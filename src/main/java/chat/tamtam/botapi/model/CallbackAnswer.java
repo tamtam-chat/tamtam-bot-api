@@ -23,7 +23,6 @@ package chat.tamtam.botapi.model;
 import java.util.Objects;
 import java.util.Arrays;
 import chat.tamtam.botapi.model.NewMessageBody;
-import chat.tamtam.botapi.model.Recipient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -34,27 +33,35 @@ import org.jetbrains.annotations.Nullable;
  * Send this object when your bot wants to react to when a button is pressed
  */
 public class CallbackAnswer implements TamTamSerializable {
-    @JsonProperty("recipient")
-    private final Recipient recipient;
+    @JsonProperty("user_id")
+    private Long userId;
 
     @JsonProperty("message")
-    private final NewMessageBody message;
+    private NewMessageBody message;
 
     @JsonProperty("notification")
-    private final String notification;
+    private String notification;
 
-    @JsonCreator
-    public CallbackAnswer(@JsonProperty("recipient") Recipient recipient, @Nullable @JsonProperty("message") NewMessageBody message, @Nullable @JsonProperty("notification") String notification) { 
-        this.recipient = recipient;
-        this.message = message;
-        this.notification = notification;
+
+    public CallbackAnswer userId(Long userId) {
+        this.userId = userId;
+        return this;
     }
 
     /**
-    * @return recipient
+    * @return userId
     **/
-    public Recipient getRecipient() {
-        return recipient;
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public CallbackAnswer message(NewMessageBody message) {
+        this.message = message;
+        return this;
     }
 
     /**
@@ -66,6 +73,15 @@ public class CallbackAnswer implements TamTamSerializable {
         return message;
     }
 
+    public void setMessage(NewMessageBody message) {
+        this.message = message;
+    }
+
+    public CallbackAnswer notification(String notification) {
+        this.notification = notification;
+        return this;
+    }
+
     /**
     * Fill this if you just want to send one-time notification to user
     * @return notification
@@ -73,6 +89,10 @@ public class CallbackAnswer implements TamTamSerializable {
     @Nullable
     public String getNotification() {
         return notification;
+    }
+
+    public void setNotification(String notification) {
+        this.notification = notification;
     }
 
     @Override
@@ -85,20 +105,20 @@ public class CallbackAnswer implements TamTamSerializable {
         }
 
         CallbackAnswer other = (CallbackAnswer) o;
-        return Objects.equals(this.recipient, other.recipient) &&
+        return Objects.equals(this.userId, other.userId) &&
             Objects.equals(this.message, other.message) &&
             Objects.equals(this.notification, other.notification);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(recipient, message, notification);
+        return Objects.hash(userId, message, notification);
     }
 
     @Override
     public String toString() {
         return "CallbackAnswer{"
-            + " recipient='" + recipient + '\''
+            + " userId='" + userId + '\''
             + " message='" + message + '\''
             + " notification='" + notification + '\''
             + '}';
