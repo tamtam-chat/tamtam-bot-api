@@ -42,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
   @JsonSubTypes.Type(value = StickerAttachment.class, name = "sticker"),
   @JsonSubTypes.Type(value = ContactAttachment.class, name = "contact"),
   @JsonSubTypes.Type(value = InlineKeyboardAttachment.class, name = "inline_keyboard"),
+  @JsonSubTypes.Type(value = ShareAttachment.class, name = "share"),
 })
 
 public class Attachment implements TamTamSerializable {

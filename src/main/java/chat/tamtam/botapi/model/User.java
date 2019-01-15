@@ -65,7 +65,7 @@ public class User implements TamTamSerializable {
     }
 
     /**
-    * Unique user name
+    * Unique public user name. Can be &#x60;null&#x60; if user is not accessible or it is not set
     * @return username
     **/
     @Nullable
