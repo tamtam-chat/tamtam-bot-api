@@ -22,28 +22,15 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.GetUpdatesQuery;
-import chat.tamtam.botapi.model.UpdateList;
+import chat.tamtam.botapi.queries.RemoveMemberQuery;
+import chat.tamtam.botapi.model.SimpleQueryResult;
 
-public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
-    private final QueryParam<Integer> limit = new QueryParam<Integer>("limit", this);
-    private final QueryParam<Integer> timeout = new QueryParam<Integer>("timeout", this);
-    private final QueryParam<Long> marker = new QueryParam<Long>("marker", this);
+public class RemoveMemberQuery extends TamTamQuery<SimpleQueryResult> {
+    private final QueryParam<Long> userId = new QueryParam<Long>("user_id", this).required();
 
-    public GetUpdatesQuery(TamTamClient client) {
-        super(client, "/updates", null, UpdateList.class, Method.GET);
+    public RemoveMemberQuery(TamTamClient client, Long chatId, Long userId) {
+        super(client, substitute("/chats/{chatId}/members", chatId), null, SimpleQueryResult.class, Method.DELETE);
+        this.userId.setValue(userId);
     }
 
-    public GetUpdatesQuery limit(Integer value) {
-        this.limit.setValue(value);
-        return this;
-    }
-    public GetUpdatesQuery timeout(Integer value) {
-        this.timeout.setValue(value);
-        return this;
-    }
-    public GetUpdatesQuery marker(Long value) {
-        this.marker.setValue(value);
-        return this;
-    }
 }

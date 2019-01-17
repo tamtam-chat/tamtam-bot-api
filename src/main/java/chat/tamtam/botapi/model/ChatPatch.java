@@ -22,7 +22,7 @@ package chat.tamtam.botapi.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import chat.tamtam.botapi.model.UserWithPhoto;
+import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -30,34 +30,38 @@ import chat.tamtam.botapi.TamTamSerializable;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * ChatMember
+ * ChatPatch
  */
-public class ChatMember extends UserWithPhoto implements TamTamSerializable {
-    @JsonProperty("last_access_time")
-    private final Long lastAccessTime;
+public class ChatPatch implements TamTamSerializable {
+    @JsonProperty("icon")
+    private PhotoAttachmentRequest icon;
 
-    @JsonProperty("is_owner")
-    private final Boolean isOwner;
+    @JsonProperty("title")
+    private String title;
 
-    @JsonCreator
-    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("avatar_url") String avatarUrl, @JsonProperty("full_avatar_url") String fullAvatarUrl) { 
-        super(avatarUrl, fullAvatarUrl, userId, name, username);
-        this.lastAccessTime = lastAccessTime;
-        this.isOwner = isOwner;
+
+    /**
+    * @return icon
+    **/
+    public PhotoAttachmentRequest getIcon() {
+        return icon;
+    }
+
+    public ChatPatch title(String title) {
+        this.title = title;
+        return this;
     }
 
     /**
-    * @return lastAccessTime
+    * @return title
     **/
-    public Long getLastAccessTime() {
-        return lastAccessTime;
+    @Nullable
+    public String getTitle() {
+        return title;
     }
 
-    /**
-    * @return isOwner
-    **/
-    public Boolean getIsOwner() {
-        return isOwner;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
@@ -69,22 +73,21 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
           return false;
         }
 
-        ChatMember other = (ChatMember) o;
-        return Objects.equals(this.lastAccessTime, other.lastAccessTime) &&
-            Objects.equals(this.isOwner, other.isOwner) &&
-            super.equals(o);
+        ChatPatch other = (ChatPatch) o;
+        return Objects.equals(this.icon, other.icon) &&
+            Objects.equals(this.title, other.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastAccessTime, isOwner, super.hashCode());
+        return Objects.hash(icon, title);
     }
 
     @Override
     public String toString() {
-        return "ChatMember{"+ super.toString()
-            + " lastAccessTime='" + lastAccessTime + '\''
-            + " isOwner='" + isOwner + '\''
+        return "ChatPatch{"
+            + " icon='" + icon + '\''
+            + " title='" + title + '\''
             + '}';
     }
 }

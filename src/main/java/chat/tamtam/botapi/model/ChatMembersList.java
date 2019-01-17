@@ -22,42 +22,46 @@ package chat.tamtam.botapi.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import chat.tamtam.botapi.model.UserWithPhoto;
+import chat.tamtam.botapi.model.ChatMember;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.List;
 import chat.tamtam.botapi.TamTamSerializable;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * ChatMember
+ * ChatMembersList
  */
-public class ChatMember extends UserWithPhoto implements TamTamSerializable {
-    @JsonProperty("last_access_time")
-    private final Long lastAccessTime;
+public class ChatMembersList implements TamTamSerializable {
+    @JsonProperty("members")
+    private final List<ChatMember> members;
 
-    @JsonProperty("is_owner")
-    private final Boolean isOwner;
+    @JsonProperty("marker")
+    private final Long marker;
 
     @JsonCreator
-    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("avatar_url") String avatarUrl, @JsonProperty("full_avatar_url") String fullAvatarUrl) { 
-        super(avatarUrl, fullAvatarUrl, userId, name, username);
-        this.lastAccessTime = lastAccessTime;
-        this.isOwner = isOwner;
+    public ChatMembersList(@JsonProperty("members") List<ChatMember> members, @Nullable @JsonProperty("marker") Long marker) { 
+        this.members = members;
+        this.marker = marker;
     }
 
     /**
-    * @return lastAccessTime
+    * Participants in chat with time of last activity. Visible only for chat admins
+    * @return members
     **/
-    public Long getLastAccessTime() {
-        return lastAccessTime;
+    public List<ChatMember> getMembers() {
+        return members;
     }
 
     /**
-    * @return isOwner
+    * Pointer to the next data page
+    * @return marker
     **/
-    public Boolean getIsOwner() {
-        return isOwner;
+    @Nullable
+    public Long getMarker() {
+        return marker;
     }
 
     @Override
@@ -69,22 +73,21 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
           return false;
         }
 
-        ChatMember other = (ChatMember) o;
-        return Objects.equals(this.lastAccessTime, other.lastAccessTime) &&
-            Objects.equals(this.isOwner, other.isOwner) &&
-            super.equals(o);
+        ChatMembersList other = (ChatMembersList) o;
+        return Objects.equals(this.members, other.members) &&
+            Objects.equals(this.marker, other.marker);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastAccessTime, isOwner, super.hashCode());
+        return Objects.hash(members, marker);
     }
 
     @Override
     public String toString() {
-        return "ChatMember{"+ super.toString()
-            + " lastAccessTime='" + lastAccessTime + '\''
-            + " isOwner='" + isOwner + '\''
+        return "ChatMembersList{"
+            + " members='" + members + '\''
+            + " marker='" + marker + '\''
             + '}';
     }
 }

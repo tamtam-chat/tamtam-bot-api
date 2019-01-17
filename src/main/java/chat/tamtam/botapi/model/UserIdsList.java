@@ -22,42 +22,31 @@ package chat.tamtam.botapi.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import chat.tamtam.botapi.model.UserWithPhoto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.List;
 import chat.tamtam.botapi.TamTamSerializable;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * ChatMember
+ * UserIdsList
  */
-public class ChatMember extends UserWithPhoto implements TamTamSerializable {
-    @JsonProperty("last_access_time")
-    private final Long lastAccessTime;
-
-    @JsonProperty("is_owner")
-    private final Boolean isOwner;
+public class UserIdsList implements TamTamSerializable {
+    @JsonProperty("user_ids")
+    private final List<Long> userIds;
 
     @JsonCreator
-    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("avatar_url") String avatarUrl, @JsonProperty("full_avatar_url") String fullAvatarUrl) { 
-        super(avatarUrl, fullAvatarUrl, userId, name, username);
-        this.lastAccessTime = lastAccessTime;
-        this.isOwner = isOwner;
+    public UserIdsList(@JsonProperty("user_ids") List<Long> userIds) { 
+        this.userIds = userIds;
     }
 
     /**
-    * @return lastAccessTime
+    * @return userIds
     **/
-    public Long getLastAccessTime() {
-        return lastAccessTime;
-    }
-
-    /**
-    * @return isOwner
-    **/
-    public Boolean getIsOwner() {
-        return isOwner;
+    public List<Long> getUserIds() {
+        return userIds;
     }
 
     @Override
@@ -69,22 +58,19 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
           return false;
         }
 
-        ChatMember other = (ChatMember) o;
-        return Objects.equals(this.lastAccessTime, other.lastAccessTime) &&
-            Objects.equals(this.isOwner, other.isOwner) &&
-            super.equals(o);
+        UserIdsList other = (UserIdsList) o;
+        return Objects.equals(this.userIds, other.userIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastAccessTime, isOwner, super.hashCode());
+        return Objects.hash(userIds);
     }
 
     @Override
     public String toString() {
-        return "ChatMember{"+ super.toString()
-            + " lastAccessTime='" + lastAccessTime + '\''
-            + " isOwner='" + isOwner + '\''
+        return "UserIdsList{"
+            + " userIds='" + userIds + '\''
             + '}';
     }
 }

@@ -41,4 +41,8 @@ public interface TamTamTransportClient {
     Future<ClientResponse> post(String url, String filename, InputStream inputStream) throws TransportClientException;
 
     Future<ClientResponse> put(String url, @Nullable byte[] requestBody) throws TransportClientException;
+
+    Future<ClientResponse> delete(String url) throws TransportClientException;
+
+    Future<ClientResponse> patch(String url, @Nullable byte[] requestBody) throws TransportClientException;
 }

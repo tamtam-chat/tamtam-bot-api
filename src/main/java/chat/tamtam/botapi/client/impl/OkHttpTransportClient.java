@@ -83,14 +83,12 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     @Override
     public Future<ClientResponse> get(String url) {
         Request request = new Request.Builder().url(url).build();
-        return callAsync(request);
+        return newCall(request);
     }
 
     @Override
     public Future<ClientResponse> post(String url, @Nullable byte[] body) {
-        RequestBody requestBody = body == null ? NO_REQUEST_BODY : RequestBody.create(JSON, body);
-        Request request = new Request.Builder().url(url).post(requestBody).build();
-        return callAsync(request);
+        return newCall(new Request.Builder().url(url).post(wrapBody(body)).build());
     }
 
     @Override
@@ -122,7 +120,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
                     .build();
 
             Request request = new Request.Builder().url(url).post(body).build();
-            return callAsync(request);
+            return newCall(request);
         } catch (IOException e) {
             throw new TransportClientException(e);
         } finally {
@@ -136,15 +134,21 @@ public class OkHttpTransportClient implements TamTamTransportClient {
 
     @Override
     public Future<ClientResponse> put(String url, @Nullable byte[] requestBody) {
-        RequestBody body = requestBody == null ? NO_REQUEST_BODY : RequestBody.create(JSON, requestBody);
-        Request request = new Request.Builder().url(url).put(body).build();
-        return callAsync(request);
+        return newCall(new Request.Builder().url(url).put(wrapBody(requestBody)).build());
     }
 
-    private Future<ClientResponse> callAsync(Request request) {
-        CallbackFuture future = new CallbackFuture();
-        httpClient.newCall(request).enqueue(future);
-        return future;
+    @Override
+    public Future<ClientResponse> delete(String url) throws TransportClientException {
+        return newCall(new Request.Builder().url(url).delete().build());
+    }
+
+    @Override
+    public Future<ClientResponse> patch(String url, @Nullable byte[] requestBody) throws TransportClientException {
+        return newCall(new Request.Builder().url(url).patch(wrapBody(requestBody)).build());
+    }
+
+    private static RequestBody wrapBody(@Nullable byte[] requestBody) {
+        return requestBody == null ? NO_REQUEST_BODY : RequestBody.create(JSON, requestBody);
     }
 
     private static ClientResponse toClientResponse(Response response) throws IOException {
@@ -158,6 +162,12 @@ public class OkHttpTransportClient implements TamTamTransportClient {
         }
 
         return new ClientResponse(statusCode, body, headers);
+    }
+
+    private Future<ClientResponse> newCall(Request request) {
+        CallbackFuture future = new CallbackFuture();
+        httpClient.newCall(request).enqueue(future);
+        return future;
     }
 
     private static class AddUserAgent implements Interceptor {

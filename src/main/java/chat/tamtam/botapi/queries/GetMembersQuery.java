@@ -22,28 +22,23 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.GetUpdatesQuery;
-import chat.tamtam.botapi.model.UpdateList;
+import chat.tamtam.botapi.model.ChatMembersList;
+import chat.tamtam.botapi.queries.GetMembersQuery;
 
-public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
-    private final QueryParam<Integer> limit = new QueryParam<Integer>("limit", this);
-    private final QueryParam<Integer> timeout = new QueryParam<Integer>("timeout", this);
+public class GetMembersQuery extends TamTamQuery<ChatMembersList> {
     private final QueryParam<Long> marker = new QueryParam<Long>("marker", this);
+    private final QueryParam<Integer> count = new QueryParam<Integer>("count", this);
 
-    public GetUpdatesQuery(TamTamClient client) {
-        super(client, "/updates", null, UpdateList.class, Method.GET);
+    public GetMembersQuery(TamTamClient client, Long chatId) {
+        super(client, substitute("/chats/{chatId}/members", chatId), null, ChatMembersList.class, Method.GET);
     }
 
-    public GetUpdatesQuery limit(Integer value) {
-        this.limit.setValue(value);
-        return this;
-    }
-    public GetUpdatesQuery timeout(Integer value) {
-        this.timeout.setValue(value);
-        return this;
-    }
-    public GetUpdatesQuery marker(Long value) {
+    public GetMembersQuery marker(Long value) {
         this.marker.setValue(value);
+        return this;
+    }
+    public GetMembersQuery count(Integer value) {
+        this.count.setValue(value);
         return this;
     }
 }

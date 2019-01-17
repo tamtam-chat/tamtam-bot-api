@@ -29,7 +29,7 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 public class SendActionQuery extends TamTamQuery<SimpleQueryResult> {
 
     public SendActionQuery(TamTamClient client, ActionRequestBody actionRequestBody, Long chatId) {
-        super(client, substitute("/chats/{chatId}/action", chatId), actionRequestBody, SimpleQueryResult.class, Method.POST);
+        super(client, substitute("/chats/{chatId}/actions", chatId), actionRequestBody, SimpleQueryResult.class, Method.POST);
     }
 
 }

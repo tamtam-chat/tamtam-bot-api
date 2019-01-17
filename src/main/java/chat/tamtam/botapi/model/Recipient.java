@@ -22,6 +22,7 @@ package chat.tamtam.botapi.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import chat.tamtam.botapi.model.ChatType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -35,12 +36,16 @@ public class Recipient implements TamTamSerializable {
     @JsonProperty("chat_id")
     private final Long chatId;
 
+    @JsonProperty("chat_type")
+    private final ChatType chatType;
+
     @JsonProperty("user_id")
     private final Long userId;
 
     @JsonCreator
-    public Recipient(@Nullable @JsonProperty("chat_id") Long chatId, @Nullable @JsonProperty("user_id") Long userId) { 
+    public Recipient(@Nullable @JsonProperty("chat_id") Long chatId, @JsonProperty("chat_type") ChatType chatType, @Nullable @JsonProperty("user_id") Long userId) { 
         this.chatId = chatId;
+        this.chatType = chatType;
         this.userId = userId;
     }
 
@@ -51,6 +56,14 @@ public class Recipient implements TamTamSerializable {
     @Nullable
     public Long getChatId() {
         return chatId;
+    }
+
+    /**
+    * Chat type
+    * @return chatType
+    **/
+    public ChatType getChatType() {
+        return chatType;
     }
 
     /**
@@ -73,18 +86,20 @@ public class Recipient implements TamTamSerializable {
 
         Recipient other = (Recipient) o;
         return Objects.equals(this.chatId, other.chatId) &&
+            Objects.equals(this.chatType, other.chatType) &&
             Objects.equals(this.userId, other.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(chatId, userId);
+        return Objects.hash(chatId, chatType, userId);
     }
 
     @Override
     public String toString() {
         return "Recipient{"
             + " chatId='" + chatId + '\''
+            + " chatType='" + chatType + '\''
             + " userId='" + userId + '\''
             + '}';
     }

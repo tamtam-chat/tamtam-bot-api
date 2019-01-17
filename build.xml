@@ -65,5 +65,12 @@
         </exec>
     </target>
 
+    <target name="ivy-publish-local" depends="ivy-resolve, ivy-prepare-for-publish">
+        <exec executable="mvn">
+            <arg value="install"/>
+        </exec>
+        <ivy-publish resolver="local"/>
+    </target>
+
     <target name="core" depends="project-instructions"/>
 </project>

@@ -104,6 +104,14 @@ public class TamTamBotAPITest extends TamTamIntegrationTest {
         sendMessageAndCheck(chatId, Collections.singletonList(fileAttach));
     }
 
+    @Test
+    public void should_Upload_Image_By_Url() throws Exception {
+        Long chatId = chat.getChatId();
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload("https://chart.googleapis.com/chart?cht=p&chd=t:60,40&chs=600x400&chl=Hello%7CWorld", null);
+        AttachmentRequest photoAttach = new PhotoAttachmentRequest(payload);
+        sendMessageAndCheck(chatId, Collections.singletonList(photoAttach));
+    }
+
     private static String fixUrl(String url) {
         if (url.startsWith("http")) {
             return url;

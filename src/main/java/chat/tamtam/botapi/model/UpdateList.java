@@ -38,9 +38,13 @@ public class UpdateList implements TamTamSerializable {
     @JsonProperty("updates")
     private final List<Update> updates;
 
+    @JsonProperty("marker")
+    private final Long marker;
+
     @JsonCreator
-    public UpdateList(@JsonProperty("updates") List<Update> updates) { 
+    public UpdateList(@JsonProperty("updates") List<Update> updates, @Nullable @JsonProperty("marker") Long marker) { 
         this.updates = updates;
+        this.marker = marker;
     }
 
     /**
@@ -49,6 +53,15 @@ public class UpdateList implements TamTamSerializable {
     **/
     public List<Update> getUpdates() {
         return updates;
+    }
+
+    /**
+    * Pointer to the next data page
+    * @return marker
+    **/
+    @Nullable
+    public Long getMarker() {
+        return marker;
     }
 
     @Override
@@ -61,18 +74,20 @@ public class UpdateList implements TamTamSerializable {
         }
 
         UpdateList other = (UpdateList) o;
-        return Objects.equals(this.updates, other.updates);
+        return Objects.equals(this.updates, other.updates) &&
+            Objects.equals(this.marker, other.marker);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(updates);
+        return Objects.hash(updates, marker);
     }
 
     @Override
     public String toString() {
         return "UpdateList{"
             + " updates='" + updates + '\''
+            + " marker='" + marker + '\''
             + '}';
     }
 }

@@ -114,6 +114,10 @@ public class TamTamQuery<T> {
                     return transport.post(url, requestBody);
                 case PUT:
                     return transport.put(url, requestBody);
+                case DELETE:
+                    return transport.delete(url);
+                case PATCH:
+                    return transport.patch(url, requestBody);
                 default:
                     throw new ClientException(400, "Method " + method.name() + " is not supported.");
             }
@@ -203,7 +207,7 @@ public class TamTamQuery<T> {
     }
 
     protected enum Method {
-        GET, POST, PUT, HEAD, DELETE
+        GET, POST, PUT, HEAD, DELETE, PATCH
     }
 
     private class FutureResult implements Future<T> {

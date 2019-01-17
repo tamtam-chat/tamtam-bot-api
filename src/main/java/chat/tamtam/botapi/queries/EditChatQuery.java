@@ -22,28 +22,14 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.GetUpdatesQuery;
-import chat.tamtam.botapi.model.UpdateList;
+import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.model.ChatPatch;
+import chat.tamtam.botapi.queries.EditChatQuery;
 
-public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
-    private final QueryParam<Integer> limit = new QueryParam<Integer>("limit", this);
-    private final QueryParam<Integer> timeout = new QueryParam<Integer>("timeout", this);
-    private final QueryParam<Long> marker = new QueryParam<Long>("marker", this);
+public class EditChatQuery extends TamTamQuery<Chat> {
 
-    public GetUpdatesQuery(TamTamClient client) {
-        super(client, "/updates", null, UpdateList.class, Method.GET);
+    public EditChatQuery(TamTamClient client, ChatPatch chatPatch, Long chatId) {
+        super(client, substitute("/chats/{chatId}", chatId), chatPatch, Chat.class, Method.PATCH);
     }
 
-    public GetUpdatesQuery limit(Integer value) {
-        this.limit.setValue(value);
-        return this;
-    }
-    public GetUpdatesQuery timeout(Integer value) {
-        this.timeout.setValue(value);
-        return this;
-    }
-    public GetUpdatesQuery marker(Long value) {
-        this.marker.setValue(value);
-        return this;
-    }
 }

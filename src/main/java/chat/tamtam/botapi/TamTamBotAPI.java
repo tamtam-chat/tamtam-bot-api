@@ -29,24 +29,29 @@ import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 
 import chat.tamtam.botapi.model.ActionRequestBody;
+import chat.tamtam.botapi.queries.AddMembersQuery;
 import chat.tamtam.botapi.queries.AnswerOnCallbackQuery;
 import chat.tamtam.botapi.model.CallbackAnswer;
 import chat.tamtam.botapi.model.Chat;
-import chat.tamtam.botapi.model.ChatControl;
 import chat.tamtam.botapi.model.ChatList;
+import chat.tamtam.botapi.model.ChatMembersList;
+import chat.tamtam.botapi.model.ChatPatch;
+import chat.tamtam.botapi.queries.EditChatQuery;
 import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
+import chat.tamtam.botapi.queries.GetMembersQuery;
 import chat.tamtam.botapi.queries.GetMessagesQuery;
 import chat.tamtam.botapi.queries.GetMyInfoQuery;
 import chat.tamtam.botapi.queries.GetSubscriptionsQuery;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.queries.GetUpdatesQuery;
 import chat.tamtam.botapi.queries.GetUploadUrlQuery;
+import chat.tamtam.botapi.queries.LeaveChatQuery;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
+import chat.tamtam.botapi.queries.RemoveMemberQuery;
 import chat.tamtam.botapi.queries.SendActionQuery;
-import chat.tamtam.botapi.queries.SendControlQuery;
 import chat.tamtam.botapi.queries.SendMessageQuery;
 import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.SimpleQueryResult;
@@ -57,6 +62,7 @@ import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.User;
+import chat.tamtam.botapi.model.UserIdsList;
 
 import java.util.Objects;
 
@@ -79,6 +85,22 @@ public class TamTamBotAPI {
     }
 
     /**
+    * Add members
+    * Adds members to chat. Admin permissions in chat is required.
+    * @param userIdsList  (required)
+    * @param chatId Chat identifier (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public AddMembersQuery addMembers(UserIdsList userIdsList, Long chatId) throws ClientException { 
+        if (userIdsList == null) {
+            throw new RequiredParameterMissingException("Missing the required request body when calling addMembers");
+        }
+    
+        return new AddMembersQuery(client, userIdsList, chatId);
+    }
+
+    /**
     * Answer on callback
     * This method should be called to send an answer after a user has clicked the button. The answer may be an updated message or a one-time user notification.
     * @param callbackAnswer  (required)
@@ -96,6 +118,22 @@ public class TamTamBotAPI {
         }
     
         return new AnswerOnCallbackQuery(client, callbackAnswer, callbackId);
+    }
+
+    /**
+    * Edit chat info
+    * Edits chat info: title, icon, etc…
+    * @param chatPatch  (required)
+    * @param chatId Chat identifier (required)
+    * @return {@link Chat}
+    * @throws ClientException if fails to make API call
+    */
+    public EditChatQuery editChat(ChatPatch chatPatch, Long chatId) throws ClientException { 
+        if (chatPatch == null) {
+            throw new RequiredParameterMissingException("Missing the required request body when calling editChat");
+        }
+    
+        return new EditChatQuery(client, chatPatch, chatId);
     }
 
     /**
@@ -136,6 +174,17 @@ public class TamTamBotAPI {
     */
     public GetChatsQuery getChats() { 
         return new GetChatsQuery(client);
+    }
+
+    /**
+    * Get members
+    * Returns users participated in chat.
+    * @param chatId Chat identifier (required)
+    * @return {@link ChatMembersList}
+    * @throws ClientException if fails to make API call
+    */
+    public GetMembersQuery getMembers(Long chatId) throws ClientException { 
+        return new GetMembersQuery(client, chatId);
     }
 
     /**
@@ -196,6 +245,33 @@ public class TamTamBotAPI {
     }
 
     /**
+    * Leave chat
+    * Removes bot from chat members
+    * @param chatId Chat identifier (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public LeaveChatQuery leaveChat(Long chatId) throws ClientException { 
+        return new LeaveChatQuery(client, chatId);
+    }
+
+    /**
+    * Remove member
+    * Removes member from chat. Admin permissions in chat is required.
+    * @param chatId Chat identifier (required)
+    * @param userId User id to remove from chat (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public RemoveMemberQuery removeMember(Long chatId, Long userId) throws ClientException { 
+        if (userId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'user_id' when calling removeMember");
+        }
+    
+        return new RemoveMemberQuery(client, chatId, userId);
+    }
+
+    /**
     * Send action
     * Send bot action to chat
     * @param actionRequestBody  (required)
@@ -209,22 +285,6 @@ public class TamTamBotAPI {
         }
     
         return new SendActionQuery(client, actionRequestBody, chatId);
-    }
-
-    /**
-    * Control chat
-    * Send control message to chat
-    * @param chatControl  (required)
-    * @param chatId Chat identifier (required)
-    * @return {@link SimpleQueryResult}
-    * @throws ClientException if fails to make API call
-    */
-    public SendControlQuery sendControl(ChatControl chatControl, Long chatId) throws ClientException { 
-        if (chatControl == null) {
-            throw new RequiredParameterMissingException("Missing the required request body when calling sendControl");
-        }
-    
-        return new SendControlQuery(client, chatControl, chatId);
     }
 
     /**
