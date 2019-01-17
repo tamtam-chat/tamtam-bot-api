@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * This is information you will recieve as soon as audio/video is uploaded
  */
 public class UploadedInfo implements TamTamSerializable {
-    @JsonProperty("id")
+  
     private final Long id;
 
     @JsonCreator
@@ -43,6 +43,7 @@ public class UploadedInfo implements TamTamSerializable {
     /**
     * @return id
     **/
+    @JsonProperty("id")
     public Long getId() {
         return id;
     }

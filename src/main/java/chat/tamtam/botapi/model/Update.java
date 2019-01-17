@@ -43,10 +43,8 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class Update implements TamTamSerializable {
-    @JsonProperty("update_type")
+  
     private String updateType;
-
-    @JsonProperty("timestamp")
     private final Long timestamp;
 
     @JsonCreator
@@ -57,6 +55,7 @@ public class Update implements TamTamSerializable {
     /**
     * @return updateType
     **/
+    @JsonProperty("update_type")
     public String getUpdateType() {
         return updateType;
     }
@@ -65,6 +64,7 @@ public class Update implements TamTamSerializable {
     * Unix-time when event occured
     * @return timestamp
     **/
+    @JsonProperty("timestamp")
     public Long getTimestamp() {
         return timestamp;
     }

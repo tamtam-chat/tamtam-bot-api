@@ -36,22 +36,12 @@ import org.jetbrains.annotations.Nullable;
  * Schema representing body of message
  */
 public class MessageBody implements TamTamSerializable {
-    @JsonProperty("mid")
+  
     private final String mid;
-
-    @JsonProperty("seq")
     private final Long seq;
-
-    @JsonProperty("text")
     private final String text;
-
-    @JsonProperty("attachments")
     private final List<Attachment> attachments;
-
-    @JsonProperty("link")
     private final LinkedMessage link;
-
-    @JsonProperty("reply_to")
     private String replyTo;
 
     @JsonCreator
@@ -67,6 +57,7 @@ public class MessageBody implements TamTamSerializable {
     * Unique identifier of message
     * @return mid
     **/
+    @JsonProperty("mid")
     public String getMid() {
         return mid;
     }
@@ -75,6 +66,7 @@ public class MessageBody implements TamTamSerializable {
     * Sequence identifier of message in chat
     * @return seq
     **/
+    @JsonProperty("seq")
     public Long getSeq() {
         return seq;
     }
@@ -84,6 +76,7 @@ public class MessageBody implements TamTamSerializable {
     * @return text
     **/
     @Nullable
+    @JsonProperty("text")
     public String getText() {
         return text;
     }
@@ -93,6 +86,7 @@ public class MessageBody implements TamTamSerializable {
     * @return attachments
     **/
     @Nullable
+    @JsonProperty("attachments")
     public List<Attachment> getAttachments() {
         return attachments;
     }
@@ -102,6 +96,7 @@ public class MessageBody implements TamTamSerializable {
     * @return link
     **/
     @Nullable
+    @JsonProperty("link")
     public LinkedMessage getLink() {
         return link;
     }
@@ -116,6 +111,7 @@ public class MessageBody implements TamTamSerializable {
     * @return replyTo
     **/
     @Nullable
+    @JsonProperty("reply_to")
     public String getReplyTo() {
         return replyTo;
     }

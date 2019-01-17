@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * Image attachment
  */
 public class PhotoAttachment extends Attachment implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final PhotoAttachmentPayload payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class PhotoAttachment extends Attachment implements TamTamSerializable {
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public PhotoAttachmentPayload getPayload() {
         return payload;
     }

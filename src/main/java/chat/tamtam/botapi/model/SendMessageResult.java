@@ -32,13 +32,9 @@ import org.jetbrains.annotations.Nullable;
  * SendMessageResult
  */
 public class SendMessageResult implements TamTamSerializable {
-    @JsonProperty("chat_id")
+  
     private final Long chatId;
-
-    @JsonProperty("recipient_id")
     private final Long recipientId;
-
-    @JsonProperty("message_id")
     private final String messageId;
 
     @JsonCreator
@@ -52,6 +48,7 @@ public class SendMessageResult implements TamTamSerializable {
     * Identifier of chat message was created in
     * @return chatId
     **/
+    @JsonProperty("chat_id")
     public Long getChatId() {
         return chatId;
     }
@@ -61,6 +58,7 @@ public class SendMessageResult implements TamTamSerializable {
     * @return recipientId
     **/
     @Nullable
+    @JsonProperty("recipient_id")
     public Long getRecipientId() {
         return recipientId;
     }
@@ -69,6 +67,7 @@ public class SendMessageResult implements TamTamSerializable {
     * Unique identifier of created message
     * @return messageId
     **/
+    @JsonProperty("message_id")
     public String getMessageId() {
         return messageId;
     }

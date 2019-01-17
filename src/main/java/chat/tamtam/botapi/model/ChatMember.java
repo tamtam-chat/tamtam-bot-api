@@ -33,10 +33,8 @@ import org.jetbrains.annotations.Nullable;
  * ChatMember
  */
 public class ChatMember extends UserWithPhoto implements TamTamSerializable {
-    @JsonProperty("last_access_time")
+  
     private final Long lastAccessTime;
-
-    @JsonProperty("is_owner")
     private final Boolean isOwner;
 
     @JsonCreator
@@ -49,6 +47,7 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
     /**
     * @return lastAccessTime
     **/
+    @JsonProperty("last_access_time")
     public Long getLastAccessTime() {
         return lastAccessTime;
     }
@@ -56,6 +55,7 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
     /**
     * @return isOwner
     **/
+    @JsonProperty("is_owner")
     public Boolean getIsOwner() {
         return isOwner;
     }

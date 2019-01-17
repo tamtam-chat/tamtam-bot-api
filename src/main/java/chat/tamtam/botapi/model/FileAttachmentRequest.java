@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * Request to attach file to message. MUST be the only attachment in message
  */
 public class FileAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final UploadedFileInfo payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class FileAttachmentRequest extends AttachmentRequest implements TamTamSe
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public UploadedFileInfo getPayload() {
         return payload;
     }

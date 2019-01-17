@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * UserIdsList
  */
 public class UserIdsList implements TamTamSerializable {
-    @JsonProperty("user_ids")
+  
     private final List<Long> userIds;
 
     @JsonCreator
@@ -45,6 +45,7 @@ public class UserIdsList implements TamTamSerializable {
     /**
     * @return userIds
     **/
+    @JsonProperty("user_ids")
     public List<Long> getUserIds() {
         return userIds;
     }

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * StickerAttachment
  */
 public class StickerAttachment extends Attachment implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final AttachmentPayload payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public AttachmentPayload getPayload() {
         return payload;
     }

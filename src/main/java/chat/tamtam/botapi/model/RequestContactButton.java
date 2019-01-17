@@ -33,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
  * After pressing this type of button client sends new message with attachment of curent user contact
  */
 public class RequestContactButton extends Button implements TamTamSerializable {
+  
+
     @JsonCreator
     public RequestContactButton(@JsonProperty("text") String text, @Nullable @JsonProperty("intent") Intent intent) { 
         super(text, intent);

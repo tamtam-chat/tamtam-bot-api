@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * Request to attach keyboard to message
  */
 public class InlineKeyboardAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final InlineKeyboardAttachmentRequestPayload payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class InlineKeyboardAttachmentRequest extends AttachmentRequest implement
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public InlineKeyboardAttachmentRequestPayload getPayload() {
         return payload;
     }

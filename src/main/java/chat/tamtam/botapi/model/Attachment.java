@@ -46,13 +46,13 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class Attachment implements TamTamSerializable {
-    @JsonProperty("type")
+  
     private String type;
-
 
     /**
     * @return type
     **/
+    @JsonProperty("type")
     public String getType() {
         return type;
     }

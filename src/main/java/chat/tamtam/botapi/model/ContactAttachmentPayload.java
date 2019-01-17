@@ -33,10 +33,8 @@ import org.jetbrains.annotations.Nullable;
  * ContactAttachmentPayload
  */
 public class ContactAttachmentPayload implements TamTamSerializable {
-    @JsonProperty("vcfInfo")
+  
     private final String vcfInfo;
-
-    @JsonProperty("tamInfo")
     private final User tamInfo;
 
     @JsonCreator
@@ -50,6 +48,7 @@ public class ContactAttachmentPayload implements TamTamSerializable {
     * @return vcfInfo
     **/
     @Nullable
+    @JsonProperty("vcfInfo")
     public String getVcfInfo() {
         return vcfInfo;
     }
@@ -59,6 +58,7 @@ public class ContactAttachmentPayload implements TamTamSerializable {
     * @return tamInfo
     **/
     @Nullable
+    @JsonProperty("tamInfo")
     public User getTamInfo() {
         return tamInfo;
     }

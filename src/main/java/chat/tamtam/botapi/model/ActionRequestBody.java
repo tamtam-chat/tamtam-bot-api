@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
  * ActionRequestBody
  */
 public class ActionRequestBody implements TamTamSerializable {
-    @JsonProperty("action")
+  
     private final SenderAction action;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class ActionRequestBody implements TamTamSerializable {
     /**
     * @return action
     **/
+    @JsonProperty("action")
     public SenderAction getAction() {
         return action;
     }

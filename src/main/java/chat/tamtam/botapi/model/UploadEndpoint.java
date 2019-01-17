@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * Endpoint you should upload to your binaries
  */
 public class UploadEndpoint implements TamTamSerializable {
-    @JsonProperty("url")
+  
     private final String url;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class UploadEndpoint implements TamTamSerializable {
     * URL to upload
     * @return url
     **/
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }

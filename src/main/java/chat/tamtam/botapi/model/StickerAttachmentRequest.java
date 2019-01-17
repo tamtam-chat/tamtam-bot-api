@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * Request to attach sticker. MUST be the only attachment request in message
  */
 public class StickerAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final StickerAttachmentRequestPayload payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class StickerAttachmentRequest extends AttachmentRequest implements TamTa
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public StickerAttachmentRequestPayload getPayload() {
         return payload;
     }

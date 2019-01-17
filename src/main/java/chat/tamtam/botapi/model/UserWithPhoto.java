@@ -33,10 +33,8 @@ import org.jetbrains.annotations.Nullable;
  * UserWithPhoto
  */
 public class UserWithPhoto extends User implements TamTamSerializable {
-    @JsonProperty("avatar_url")
+  
     private final String avatarUrl;
-
-    @JsonProperty("full_avatar_url")
     private final String fullAvatarUrl;
 
     @JsonCreator
@@ -50,6 +48,7 @@ public class UserWithPhoto extends User implements TamTamSerializable {
     * URL of avatar
     * @return avatarUrl
     **/
+    @JsonProperty("avatar_url")
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -58,6 +57,7 @@ public class UserWithPhoto extends User implements TamTamSerializable {
     * URL of avatar of a bigger size
     * @return fullAvatarUrl
     **/
+    @JsonProperty("full_avatar_url")
     public String getFullAvatarUrl() {
         return fullAvatarUrl;
     }

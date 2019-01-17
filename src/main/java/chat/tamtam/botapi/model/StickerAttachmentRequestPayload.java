@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * StickerAttachmentRequestPayload
  */
 public class StickerAttachmentRequestPayload implements TamTamSerializable {
-    @JsonProperty("code")
+  
     private final String code;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class StickerAttachmentRequestPayload implements TamTamSerializable {
     * Sticker code
     * @return code
     **/
+    @JsonProperty("code")
     public String getCode() {
         return code;
     }

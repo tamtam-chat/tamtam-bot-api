@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * This is information you will recieve as soon as a file is uploaded
  */
 public class UploadedFileInfo implements TamTamSerializable {
-    @JsonProperty("fileId")
+  
     private final Long fileId;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class UploadedFileInfo implements TamTamSerializable {
     * Unique file identifier
     * @return fileId
     **/
+    @JsonProperty("fileId")
     public Long getFileId() {
         return fileId;
     }

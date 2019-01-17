@@ -35,10 +35,8 @@ import org.jetbrains.annotations.Nullable;
  * List of all updates in chats your bot participated in
  */
 public class UpdateList implements TamTamSerializable {
-    @JsonProperty("updates")
+  
     private final List<Update> updates;
-
-    @JsonProperty("marker")
     private final Long marker;
 
     @JsonCreator
@@ -51,6 +49,7 @@ public class UpdateList implements TamTamSerializable {
     * Page of updates
     * @return updates
     **/
+    @JsonProperty("updates")
     public List<Update> getUpdates() {
         return updates;
     }
@@ -60,6 +59,7 @@ public class UpdateList implements TamTamSerializable {
     * @return marker
     **/
     @Nullable
+    @JsonProperty("marker")
     public Long getMarker() {
         return marker;
     }

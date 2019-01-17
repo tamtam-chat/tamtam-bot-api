@@ -35,16 +35,10 @@ import org.jetbrains.annotations.Nullable;
  * Message in chat
  */
 public class Message implements TamTamSerializable {
-    @JsonProperty("sender")
+  
     private final User sender;
-
-    @JsonProperty("recipient")
     private final Recipient recipient;
-
-    @JsonProperty("timestamp")
     private final Long timestamp;
-
-    @JsonProperty("message")
     private final MessageBody message;
 
     @JsonCreator
@@ -59,6 +53,7 @@ public class Message implements TamTamSerializable {
     * User that sent this message
     * @return sender
     **/
+    @JsonProperty("sender")
     public User getSender() {
         return sender;
     }
@@ -67,6 +62,7 @@ public class Message implements TamTamSerializable {
     * Message recipient. Could be user or chat
     * @return recipient
     **/
+    @JsonProperty("recipient")
     public Recipient getRecipient() {
         return recipient;
     }
@@ -75,6 +71,7 @@ public class Message implements TamTamSerializable {
     * Unix-time when message was created
     * @return timestamp
     **/
+    @JsonProperty("timestamp")
     public Long getTimestamp() {
         return timestamp;
     }
@@ -83,6 +80,7 @@ public class Message implements TamTamSerializable {
     * Body of created message. Text+attachments.
     * @return message
     **/
+    @JsonProperty("message")
     public MessageBody getMessage() {
         return message;
     }

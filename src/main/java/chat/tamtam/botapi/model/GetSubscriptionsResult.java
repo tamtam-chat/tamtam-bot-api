@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * List of all WebHook subscriptions
  */
 public class GetSubscriptionsResult implements TamTamSerializable {
-    @JsonProperty("subscriptions")
+  
     private final List<Subscription> subscriptions;
 
     @JsonCreator
@@ -47,6 +47,7 @@ public class GetSubscriptionsResult implements TamTamSerializable {
     * Current suscriptions
     * @return subscriptions
     **/
+    @JsonProperty("subscriptions")
     public List<Subscription> getSubscriptions() {
         return subscriptions;
     }

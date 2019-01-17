@@ -33,15 +33,10 @@ import org.jetbrains.annotations.Nullable;
  * Send this object when your bot wants to react to when a button is pressed
  */
 public class CallbackAnswer implements TamTamSerializable {
-    @JsonProperty("user_id")
+  
     private Long userId;
-
-    @JsonProperty("message")
     private NewMessageBody message;
-
-    @JsonProperty("notification")
     private String notification;
-
 
     public CallbackAnswer userId(Long userId) {
         this.userId = userId;
@@ -51,6 +46,7 @@ public class CallbackAnswer implements TamTamSerializable {
     /**
     * @return userId
     **/
+    @JsonProperty("user_id")
     public Long getUserId() {
         return userId;
     }
@@ -69,6 +65,7 @@ public class CallbackAnswer implements TamTamSerializable {
     * @return message
     **/
     @Nullable
+    @JsonProperty("message")
     public NewMessageBody getMessage() {
         return message;
     }
@@ -87,6 +84,7 @@ public class CallbackAnswer implements TamTamSerializable {
     * @return notification
     **/
     @Nullable
+    @JsonProperty("notification")
     public String getNotification() {
         return notification;
     }

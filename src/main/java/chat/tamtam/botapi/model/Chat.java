@@ -38,31 +38,15 @@ import org.jetbrains.annotations.Nullable;
  * Chat
  */
 public class Chat implements TamTamSerializable {
-    @JsonProperty("chat_id")
+  
     private final Long chatId;
-
-    @JsonProperty("type")
     private final ChatType type;
-
-    @JsonProperty("status")
     private final ChatStatus status;
-
-    @JsonProperty("title")
     private final String title;
-
-    @JsonProperty("icon")
     private final Image icon;
-
-    @JsonProperty("last_event_time")
     private final Long lastEventTime;
-
-    @JsonProperty("participants_count")
     private final Integer participantsCount;
-
-    @JsonProperty("owner_id")
     private Long ownerId;
-
-    @JsonProperty("participants")
     private Map<String, Long> participants;
 
     @JsonCreator
@@ -80,6 +64,7 @@ public class Chat implements TamTamSerializable {
     * Chats identifier
     * @return chatId
     **/
+    @JsonProperty("chat_id")
     public Long getChatId() {
         return chatId;
     }
@@ -88,6 +73,7 @@ public class Chat implements TamTamSerializable {
     * Type of chat. One of: dialog, chat, channel
     * @return type
     **/
+    @JsonProperty("type")
     public ChatType getType() {
         return type;
     }
@@ -96,6 +82,7 @@ public class Chat implements TamTamSerializable {
     * Status of chat. One of: ACTIVE, REMOVED, LEFT of CLOSED
     * @return status
     **/
+    @JsonProperty("status")
     public ChatStatus getStatus() {
         return status;
     }
@@ -104,6 +91,7 @@ public class Chat implements TamTamSerializable {
     * Visible title of chat
     * @return title
     **/
+    @JsonProperty("title")
     public String getTitle() {
         return title;
     }
@@ -113,6 +101,7 @@ public class Chat implements TamTamSerializable {
     * @return icon
     **/
     @Nullable
+    @JsonProperty("icon")
     public Image getIcon() {
         return icon;
     }
@@ -121,6 +110,7 @@ public class Chat implements TamTamSerializable {
     * Time of last event occured in chat
     * @return lastEventTime
     **/
+    @JsonProperty("last_event_time")
     public Long getLastEventTime() {
         return lastEventTime;
     }
@@ -129,6 +119,7 @@ public class Chat implements TamTamSerializable {
     * Number of people in chat. Always 2 for &#x60;dialog&#x60; chat type
     * @return participantsCount
     **/
+    @JsonProperty("participants_count")
     public Integer getParticipantsCount() {
         return participantsCount;
     }
@@ -143,6 +134,7 @@ public class Chat implements TamTamSerializable {
     * @return ownerId
     **/
     @Nullable
+    @JsonProperty("owner_id")
     public Long getOwnerId() {
         return ownerId;
     }
@@ -170,6 +162,7 @@ public class Chat implements TamTamSerializable {
     * @return participants
     **/
     @Nullable
+    @JsonProperty("participants")
     public Map<String, Long> getParticipants() {
         return participants;
     }

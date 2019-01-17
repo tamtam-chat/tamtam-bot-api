@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  * This is information you will recieve as soon as an image uploaded
  */
 public class PhotoTokens implements TamTamSerializable {
-    @JsonProperty("photos")
+  
     private final Map<String, PhotoToken> photos;
 
     @JsonCreator
@@ -47,6 +47,7 @@ public class PhotoTokens implements TamTamSerializable {
     /**
     * @return photos
     **/
+    @JsonProperty("photos")
     public Map<String, PhotoToken> getPhotos() {
         return photos;
     }

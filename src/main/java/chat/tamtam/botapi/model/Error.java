@@ -32,13 +32,9 @@ import org.jetbrains.annotations.Nullable;
  * Server returns this if there was an exception to your request
  */
 public class Error implements TamTamSerializable {
-    @JsonProperty("error")
+  
     private String error;
-
-    @JsonProperty("code")
     private final String code;
-
-    @JsonProperty("message")
     private final String message;
 
     @JsonCreator
@@ -51,6 +47,7 @@ public class Error implements TamTamSerializable {
     * Error
     * @return error
     **/
+    @JsonProperty("error")
     public String getError() {
         return error;
     }
@@ -59,6 +56,7 @@ public class Error implements TamTamSerializable {
     * Error code
     * @return code
     **/
+    @JsonProperty("code")
     public String getCode() {
         return code;
     }
@@ -67,6 +65,7 @@ public class Error implements TamTamSerializable {
     * Human-readable description
     * @return message
     **/
+    @JsonProperty("message")
     public String getMessage() {
         return message;
     }

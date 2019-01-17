@@ -35,16 +35,10 @@ import org.jetbrains.annotations.Nullable;
  * NewMessageBody
  */
 public class NewMessageBody implements TamTamSerializable {
-    @JsonProperty("text")
+  
     private final String text;
-
-    @JsonProperty("attachment")
     private AttachmentRequest attachment;
-
-    @JsonProperty("attachments")
     private final List<AttachmentRequest> attachments;
-
-    @JsonProperty("notify")
     private Boolean notify;
 
     @JsonCreator
@@ -58,6 +52,7 @@ public class NewMessageBody implements TamTamSerializable {
     * @return text
     **/
     @Nullable
+    @JsonProperty("text")
     public String getText() {
         return text;
     }
@@ -72,6 +67,7 @@ public class NewMessageBody implements TamTamSerializable {
     * @return attachment
     **/
     @Nullable
+    @JsonProperty("attachment")
     public AttachmentRequest getAttachment() {
         return attachment;
     }
@@ -85,6 +81,7 @@ public class NewMessageBody implements TamTamSerializable {
     * @return attachments
     **/
     @Nullable
+    @JsonProperty("attachments")
     public List<AttachmentRequest> getAttachments() {
         return attachments;
     }
@@ -98,6 +95,7 @@ public class NewMessageBody implements TamTamSerializable {
     * If false, chat participants wouldn&#39;t be notified
     * @return notify
     **/
+    @JsonProperty("notify")
     public Boolean getNotify() {
         return notify;
     }

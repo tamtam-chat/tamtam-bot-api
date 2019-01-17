@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * ContactAttachment
  */
 public class ContactAttachment extends Attachment implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final ContactAttachmentPayload payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class ContactAttachment extends Attachment implements TamTamSerializable 
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public ContactAttachmentPayload getPayload() {
         return payload;
     }

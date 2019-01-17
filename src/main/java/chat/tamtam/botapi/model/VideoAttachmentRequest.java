@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * Request to attach video to message
  */
 public class VideoAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final UploadedInfo payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class VideoAttachmentRequest extends AttachmentRequest implements TamTamS
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public UploadedInfo getPayload() {
         return payload;
     }

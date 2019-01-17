@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * Generic schema describing image object
  */
 public class Image implements TamTamSerializable {
-    @JsonProperty("url")
+  
     private final String url;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class Image implements TamTamSerializable {
     * URL of image
     * @return url
     **/
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }

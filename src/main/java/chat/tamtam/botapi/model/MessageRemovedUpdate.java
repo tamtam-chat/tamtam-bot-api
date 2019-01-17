@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
  * You will get this &#x60;update&#x60; as soon as message is removed
  */
 public class MessageRemovedUpdate extends Update implements TamTamSerializable {
-    @JsonProperty("message_id")
+  
     private final String messageId;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
     * Identifier of removed message
     * @return messageId
     **/
+    @JsonProperty("message_id")
     public String getMessageId() {
         return messageId;
     }

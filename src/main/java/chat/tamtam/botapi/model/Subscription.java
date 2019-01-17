@@ -32,10 +32,8 @@ import org.jetbrains.annotations.Nullable;
  * Schema to describe WebHook subscription
  */
 public class Subscription implements TamTamSerializable {
-    @JsonProperty("url")
+  
     private final String url;
-
-    @JsonProperty("time")
     private final Long time;
 
     @JsonCreator
@@ -48,6 +46,7 @@ public class Subscription implements TamTamSerializable {
     * WebHook URL
     * @return url
     **/
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }
@@ -56,6 +55,7 @@ public class Subscription implements TamTamSerializable {
     * Unix-time when subscription was created
     * @return time
     **/
+    @JsonProperty("time")
     public Long getTime() {
         return time;
     }

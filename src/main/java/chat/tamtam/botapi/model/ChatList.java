@@ -35,10 +35,8 @@ import org.jetbrains.annotations.Nullable;
  * ChatList
  */
 public class ChatList implements TamTamSerializable {
-    @JsonProperty("chats")
+  
     private final List<Chat> chats;
-
-    @JsonProperty("marker")
     private final Long marker;
 
     @JsonCreator
@@ -51,6 +49,7 @@ public class ChatList implements TamTamSerializable {
     * List of requested chats
     * @return chats
     **/
+    @JsonProperty("chats")
     public List<Chat> getChats() {
         return chats;
     }
@@ -60,6 +59,7 @@ public class ChatList implements TamTamSerializable {
     * @return marker
     **/
     @Nullable
+    @JsonProperty("marker")
     public Long getMarker() {
         return marker;
     }

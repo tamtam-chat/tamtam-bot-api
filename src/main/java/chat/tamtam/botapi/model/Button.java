@@ -43,13 +43,9 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class Button implements TamTamSerializable {
-    @JsonProperty("type")
+  
     private String type;
-
-    @JsonProperty("text")
     private final String text;
-
-    @JsonProperty("intent")
     private final Intent intent;
 
     @JsonCreator
@@ -61,6 +57,7 @@ public class Button implements TamTamSerializable {
     /**
     * @return type
     **/
+    @JsonProperty("type")
     public String getType() {
         return type;
     }
@@ -69,6 +66,7 @@ public class Button implements TamTamSerializable {
     * Visible text of button
     * @return text
     **/
+    @JsonProperty("text")
     public String getText() {
         return text;
     }
@@ -78,6 +76,7 @@ public class Button implements TamTamSerializable {
     * @return intent
     **/
     @Nullable
+    @JsonProperty("intent")
     public Intent getIntent() {
         return intent;
     }

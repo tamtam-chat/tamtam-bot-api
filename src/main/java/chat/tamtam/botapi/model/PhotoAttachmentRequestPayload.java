@@ -36,10 +36,8 @@ import org.jetbrains.annotations.Nullable;
  * Request to attach image
  */
 public class PhotoAttachmentRequestPayload implements TamTamSerializable {
-    @JsonProperty("url")
+  
     private final String url;
-
-    @JsonProperty("photos")
     private final Map<String, PhotoToken> photos;
 
     @JsonCreator
@@ -53,6 +51,7 @@ public class PhotoAttachmentRequestPayload implements TamTamSerializable {
     * @return url
     **/
     @Nullable
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }
@@ -62,6 +61,7 @@ public class PhotoAttachmentRequestPayload implements TamTamSerializable {
     * @return photos
     **/
     @Nullable
+    @JsonProperty("photos")
     public Map<String, PhotoToken> getPhotos() {
         return photos;
     }

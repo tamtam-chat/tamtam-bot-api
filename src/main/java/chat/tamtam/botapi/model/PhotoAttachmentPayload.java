@@ -32,10 +32,8 @@ import org.jetbrains.annotations.Nullable;
  * PhotoAttachmentPayload
  */
 public class PhotoAttachmentPayload implements TamTamSerializable {
-    @JsonProperty("photo_id")
+  
     private final Long photoId;
-
-    @JsonProperty("url")
     private final String url;
 
     @JsonCreator
@@ -48,6 +46,7 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
     * Unique identifier of this image
     * @return photoId
     **/
+    @JsonProperty("photo_id")
     public Long getPhotoId() {
         return photoId;
     }
@@ -56,6 +55,7 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
     * Image URL
     * @return url
     **/
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }

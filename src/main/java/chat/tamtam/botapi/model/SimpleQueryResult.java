@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * Simple response to request
  */
 public class SimpleQueryResult implements TamTamSerializable {
-    @JsonProperty("success")
+  
     private final Boolean success;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class SimpleQueryResult implements TamTamSerializable {
     * &#x60;true&#x60; if request was successful. &#x60;false&#x60; otherwise
     * @return success
     **/
+    @JsonProperty("success")
     public Boolean getSuccess() {
         return success;
     }

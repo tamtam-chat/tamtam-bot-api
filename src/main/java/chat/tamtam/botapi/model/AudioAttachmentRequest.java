@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * Request to attach audio to message. MUST be the only attachment in message
  */
 public class AudioAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final UploadedInfo payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class AudioAttachmentRequest extends AttachmentRequest implements TamTamS
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public UploadedInfo getPayload() {
         return payload;
     }

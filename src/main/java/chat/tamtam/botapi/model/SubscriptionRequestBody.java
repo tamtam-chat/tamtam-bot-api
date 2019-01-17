@@ -32,10 +32,8 @@ import org.jetbrains.annotations.Nullable;
  * Request to set up WebHook subscription
  */
 public class SubscriptionRequestBody implements TamTamSerializable {
-    @JsonProperty("url")
+  
     private final String url;
-
-    @JsonProperty("filter")
     private String filter;
 
     @JsonCreator
@@ -47,6 +45,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
     * URL of HTTP(S)-endpoint of your bot
     * @return url
     **/
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }
@@ -59,6 +58,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
     /**
     * @return filter
     **/
+    @JsonProperty("filter")
     public String getFilter() {
         return filter;
     }

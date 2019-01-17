@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * You will get this &#x60;update&#x60; as soon as message is created
  */
 public class MessageCreatedUpdate extends Update implements TamTamSerializable {
-    @JsonProperty("message")
+  
     private final Message message;
 
     @JsonCreator
@@ -47,6 +47,7 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
     * Newly created message
     * @return message
     **/
+    @JsonProperty("message")
     public Message getMessage() {
         return message;
     }

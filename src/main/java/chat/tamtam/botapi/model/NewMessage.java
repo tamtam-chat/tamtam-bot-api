@@ -34,10 +34,8 @@ import org.jetbrains.annotations.Nullable;
  * New message. Could be &#x60;control&#x60;, &#x60;sender_action&#x60; or real &#x60;message&#x60;
  */
 public class NewMessage implements TamTamSerializable {
-    @JsonProperty("recipient")
+  
     private final Recipient recipient;
-
-    @JsonProperty("message")
     private NewMessageBody message;
 
     @JsonCreator
@@ -49,6 +47,7 @@ public class NewMessage implements TamTamSerializable {
     * Message recipient. User or chat
     * @return recipient
     **/
+    @JsonProperty("recipient")
     public Recipient getRecipient() {
         return recipient;
     }
@@ -63,6 +62,7 @@ public class NewMessage implements TamTamSerializable {
     * @return message
     **/
     @Nullable
+    @JsonProperty("message")
     public NewMessageBody getMessage() {
         return message;
     }

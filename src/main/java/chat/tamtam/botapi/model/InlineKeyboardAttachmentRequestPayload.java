@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * InlineKeyboardAttachmentRequestPayload
  */
 public class InlineKeyboardAttachmentRequestPayload implements TamTamSerializable {
-    @JsonProperty("buttons")
+  
     private final List<List<Button>> buttons;
 
     @JsonCreator
@@ -47,6 +47,7 @@ public class InlineKeyboardAttachmentRequestPayload implements TamTamSerializabl
     * Two-dimensional array of buttons
     * @return buttons
     **/
+    @JsonProperty("buttons")
     public List<List<Button>> getButtons() {
         return buttons;
     }

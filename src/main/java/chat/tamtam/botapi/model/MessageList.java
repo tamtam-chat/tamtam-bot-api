@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * Paginated list of messages
  */
 public class MessageList implements TamTamSerializable {
-    @JsonProperty("messages")
+  
     private final List<Message> messages;
 
     @JsonCreator
@@ -47,6 +47,7 @@ public class MessageList implements TamTamSerializable {
     * List of messages
     * @return messages
     **/
+    @JsonProperty("messages")
     public List<Message> getMessages() {
         return messages;
     }

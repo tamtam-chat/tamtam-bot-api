@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * After pressing this type of button user follows the link it contains
  */
 public class LinkButton extends Button implements TamTamSerializable {
-    @JsonProperty("url")
+  
     private final String url;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class LinkButton extends Button implements TamTamSerializable {
     /**
     * @return url
     **/
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }

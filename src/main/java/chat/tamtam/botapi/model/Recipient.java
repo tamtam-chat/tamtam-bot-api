@@ -33,13 +33,9 @@ import org.jetbrains.annotations.Nullable;
  * New message recepient. Could be user or chat
  */
 public class Recipient implements TamTamSerializable {
-    @JsonProperty("chat_id")
+  
     private final Long chatId;
-
-    @JsonProperty("chat_type")
     private final ChatType chatType;
-
-    @JsonProperty("user_id")
     private final Long userId;
 
     @JsonCreator
@@ -54,6 +50,7 @@ public class Recipient implements TamTamSerializable {
     * @return chatId
     **/
     @Nullable
+    @JsonProperty("chat_id")
     public Long getChatId() {
         return chatId;
     }
@@ -62,6 +59,7 @@ public class Recipient implements TamTamSerializable {
     * Chat type
     * @return chatType
     **/
+    @JsonProperty("chat_type")
     public ChatType getChatType() {
         return chatType;
     }
@@ -71,6 +69,7 @@ public class Recipient implements TamTamSerializable {
     * @return userId
     **/
     @Nullable
+    @JsonProperty("user_id")
     public Long getUserId() {
         return userId;
     }

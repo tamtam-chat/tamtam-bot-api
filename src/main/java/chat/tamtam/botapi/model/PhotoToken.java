@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * PhotoToken
  */
 public class PhotoToken implements TamTamSerializable {
-    @JsonProperty("token")
+  
     private final String token;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class PhotoToken implements TamTamSerializable {
     * Encoded information of uploaded image
     * @return token
     **/
+    @JsonProperty("token")
     public String getToken() {
         return token;
     }

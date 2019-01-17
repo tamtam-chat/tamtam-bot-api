@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * After pressing this type of button client sends to server payload it contains
  */
 public class CallbackButton extends Button implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final String payload;
 
     @JsonCreator
@@ -47,6 +47,7 @@ public class CallbackButton extends Button implements TamTamSerializable {
     * Button payload
     * @return payload
     **/
+    @JsonProperty("payload")
     public String getPayload() {
         return payload;
     }

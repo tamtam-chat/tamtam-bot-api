@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * You will get this &#x60;update&#x60; as soon as user presses button
  */
 public class MessageCallbackUpdate extends Update implements TamTamSerializable {
-    @JsonProperty("callback")
+  
     private final Callback callback;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
     /**
     * @return callback
     **/
+    @JsonProperty("callback")
     public Callback getCallback() {
         return callback;
     }

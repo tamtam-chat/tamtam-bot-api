@@ -33,16 +33,10 @@ import org.jetbrains.annotations.Nullable;
  * Object sent to bot when user presses button
  */
 public class Callback implements TamTamSerializable {
-    @JsonProperty("timestamp")
+  
     private final Long timestamp;
-
-    @JsonProperty("callback_id")
     private final String callbackId;
-
-    @JsonProperty("payload")
     private final String payload;
-
-    @JsonProperty("user")
     private final User user;
 
     @JsonCreator
@@ -57,6 +51,7 @@ public class Callback implements TamTamSerializable {
     * Unix-time when user pressed the button
     * @return timestamp
     **/
+    @JsonProperty("timestamp")
     public Long getTimestamp() {
         return timestamp;
     }
@@ -65,6 +60,7 @@ public class Callback implements TamTamSerializable {
     * Current keyboard identifier
     * @return callbackId
     **/
+    @JsonProperty("callback_id")
     public String getCallbackId() {
         return callbackId;
     }
@@ -73,6 +69,7 @@ public class Callback implements TamTamSerializable {
     * Button payload
     * @return payload
     **/
+    @JsonProperty("payload")
     public String getPayload() {
         return payload;
     }
@@ -81,6 +78,7 @@ public class Callback implements TamTamSerializable {
     * User pressed the button
     * @return user
     **/
+    @JsonProperty("user")
     public User getUser() {
         return user;
     }

@@ -34,10 +34,8 @@ import org.jetbrains.annotations.Nullable;
  * LinkedMessage
  */
 public class LinkedMessage implements TamTamSerializable {
-    @JsonProperty("type")
+  
     private final MessageLinkType type;
-
-    @JsonProperty("message")
     private final Message message;
 
     @JsonCreator
@@ -50,6 +48,7 @@ public class LinkedMessage implements TamTamSerializable {
     * Type of linked message
     * @return type
     **/
+    @JsonProperty("type")
     public MessageLinkType getType() {
         return type;
     }
@@ -57,6 +56,7 @@ public class LinkedMessage implements TamTamSerializable {
     /**
     * @return message
     **/
+    @JsonProperty("message")
     public Message getMessage() {
         return message;
     }

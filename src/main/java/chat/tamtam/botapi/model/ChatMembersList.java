@@ -35,10 +35,8 @@ import org.jetbrains.annotations.Nullable;
  * ChatMembersList
  */
 public class ChatMembersList implements TamTamSerializable {
-    @JsonProperty("members")
+  
     private final List<ChatMember> members;
-
-    @JsonProperty("marker")
     private final Long marker;
 
     @JsonCreator
@@ -51,6 +49,7 @@ public class ChatMembersList implements TamTamSerializable {
     * Participants in chat with time of last activity. Visible only for chat admins
     * @return members
     **/
+    @JsonProperty("members")
     public List<ChatMember> getMembers() {
         return members;
     }
@@ -60,6 +59,7 @@ public class ChatMembersList implements TamTamSerializable {
     * @return marker
     **/
     @Nullable
+    @JsonProperty("marker")
     public Long getMarker() {
         return marker;
     }

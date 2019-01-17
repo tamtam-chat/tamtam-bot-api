@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * Request to attach contact card to message. MUST be the only attachment in message
  */
 public class ContactAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
-    @JsonProperty("payload")
+  
     private final ContactAttachmentRequestPayload payload;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class ContactAttachmentRequest extends AttachmentRequest implements TamTa
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public ContactAttachmentRequestPayload getPayload() {
         return payload;
     }

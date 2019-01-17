@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * AttachmentPayload
  */
 public class AttachmentPayload implements TamTamSerializable {
-    @JsonProperty("url")
+  
     private final String url;
 
     @JsonCreator
@@ -44,6 +44,7 @@ public class AttachmentPayload implements TamTamSerializable {
     * Media attachment URL
     * @return url
     **/
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }

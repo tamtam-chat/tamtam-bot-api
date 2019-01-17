@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * Keyboard is two-dimension array of buttons
  */
 public class Keyboard implements TamTamSerializable {
-    @JsonProperty("buttons")
+  
     private final List<List<Button>> buttons;
 
     @JsonCreator
@@ -46,6 +46,7 @@ public class Keyboard implements TamTamSerializable {
     /**
     * @return buttons
     **/
+    @JsonProperty("buttons")
     public List<List<Button>> getButtons() {
         return buttons;
     }

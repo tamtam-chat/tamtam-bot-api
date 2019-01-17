@@ -32,13 +32,9 @@ import org.jetbrains.annotations.Nullable;
  * User
  */
 public class User implements TamTamSerializable {
-    @JsonProperty("user_id")
+  
     private final Long userId;
-
-    @JsonProperty("name")
     private final String name;
-
-    @JsonProperty("username")
     private final String username;
 
     @JsonCreator
@@ -52,6 +48,7 @@ public class User implements TamTamSerializable {
     * Users identifier
     * @return userId
     **/
+    @JsonProperty("user_id")
     public Long getUserId() {
         return userId;
     }
@@ -60,6 +57,7 @@ public class User implements TamTamSerializable {
     * Users visible name
     * @return name
     **/
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
@@ -69,6 +67,7 @@ public class User implements TamTamSerializable {
     * @return username
     **/
     @Nullable
+    @JsonProperty("username")
     public String getUsername() {
         return username;
     }

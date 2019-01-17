@@ -34,10 +34,8 @@ import org.jetbrains.annotations.Nullable;
  * Buttons in messages
  */
 public class InlineKeyboardAttachment extends Attachment implements TamTamSerializable {
-    @JsonProperty("callback_id")
+  
     private final String callbackId;
-
-    @JsonProperty("payload")
     private final Keyboard payload;
 
     @JsonCreator
@@ -51,6 +49,7 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
     * Unique identifier of keyboard
     * @return callbackId
     **/
+    @JsonProperty("callback_id")
     public String getCallbackId() {
         return callbackId;
     }
@@ -58,6 +57,7 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
     /**
     * @return payload
     **/
+    @JsonProperty("payload")
     public Keyboard getPayload() {
         return payload;
     }
