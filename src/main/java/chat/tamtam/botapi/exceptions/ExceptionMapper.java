@@ -20,8 +20,6 @@
 
 package chat.tamtam.botapi.exceptions;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 /**
  * @author alexandrchuprin
  */

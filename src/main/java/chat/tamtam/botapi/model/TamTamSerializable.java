@@ -18,7 +18,7 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.model;
 
 import java.io.Serializable;
 

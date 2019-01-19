@@ -22,6 +22,9 @@ package chat.tamtam.botapi.client;
 
 import java.util.Objects;
 
+import chat.tamtam.botapi.client.impl.JacksonSerializer;
+import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
+
 /**
  * @author alexandrchuprin
  */
@@ -38,6 +41,13 @@ public class TamTamClient {
         this.accessToken = Objects.requireNonNull(accessToken, "accessToken");
         this.transport = Objects.requireNonNull(transport, "transport");
         this.serializer = Objects.requireNonNull(serializer, "serializer");
+    }
+
+    public static TamTamClient create(String accessToken) {
+        Objects.requireNonNull(accessToken, "No access token given. Get it using https://tt.me/primebot");
+        OkHttpTransportClient transport = new OkHttpTransportClient();
+        JacksonSerializer serializer = new JacksonSerializer();
+        return new TamTamClient(accessToken, transport, serializer);
     }
 
     public String getEndpoint() {

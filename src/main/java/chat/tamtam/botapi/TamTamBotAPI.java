@@ -1,5 +1,3 @@
-package chat.tamtam.botapi;
-
 /*
  * ------------------------------------------------------------------------
  * TamTam chat Bot API
@@ -19,6 +17,8 @@ package chat.tamtam.botapi;
  * limitations under the License.
  * ------------------------------------------------------------------------
  */
+
+package chat.tamtam.botapi;
 
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.client.TamTamClient;
@@ -78,10 +78,7 @@ public class TamTamBotAPI {
     }
 
     public static TamTamBotAPI create(String accessToken) {
-        Objects.requireNonNull(accessToken, "No access token given. Get it using https://tt.me/primebot");
-        OkHttpTransportClient transport = new OkHttpTransportClient();
-        JacksonSerializer serializer = new JacksonSerializer();
-        return new TamTamBotAPI(accessToken, transport, serializer);
+        return new TamTamBotAPI(TamTamClient.create(accessToken));
     }
 
     /**

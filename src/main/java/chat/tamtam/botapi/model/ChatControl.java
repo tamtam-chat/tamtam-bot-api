@@ -21,16 +21,11 @@
 package chat.tamtam.botapi.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.ChatMember;
-import chat.tamtam.botapi.model.PhotoAttachmentRequest;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.ArrayList;
 import java.util.List;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Part of NewMessage if your want to control your chat
