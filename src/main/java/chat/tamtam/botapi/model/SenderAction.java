@@ -20,16 +20,10 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+
 import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamEnum;
 
 /**
  * Different actions to send to chat members
@@ -37,15 +31,10 @@ import chat.tamtam.botapi.TamTamEnum;
 public enum SenderAction {
     
     TYPING_ON("typing_on"),
-    
     TYPING_OFF("typing_off"),
-    
     SENDING_PHOTO("sending_photo"),
-    
     SENDING_VIDEO("sending_video"),
-    
     SENDING_AUDIO("sending_audio"),
-    
     MARK_SEEN("mark_seen");
 
     private String value;

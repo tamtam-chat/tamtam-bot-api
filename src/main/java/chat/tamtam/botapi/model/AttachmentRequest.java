@@ -20,20 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import java.util.Objects;
+
 
 /**
  * Request to attach some data to message
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = PhotoAttachmentRequest.class, name = "image"),
   @JsonSubTypes.Type(value = VideoAttachmentRequest.class, name = "video"),
@@ -45,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class AttachmentRequest implements TamTamSerializable {
-  
+
     private String type;
 
     /**
@@ -71,7 +67,9 @@ public class AttachmentRequest implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type);
+        int result = 1;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
     }
 
     @Override

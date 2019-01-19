@@ -20,21 +20,17 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.NewMessageBody;
-import chat.tamtam.botapi.model.Recipient;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * New message. Could be &#x60;control&#x60;, &#x60;sender_action&#x60; or real &#x60;message&#x60;
  */
 public class NewMessage implements TamTamSerializable {
-  
+
     private final Recipient recipient;
     private NewMessageBody message;
 
@@ -87,7 +83,10 @@ public class NewMessage implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(recipient, message);
+        int result = 1;
+        result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        return result;
     }
 
     @Override

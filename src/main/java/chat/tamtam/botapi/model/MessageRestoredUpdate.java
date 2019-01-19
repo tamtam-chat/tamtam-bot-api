@@ -20,20 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.Update;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * You will get this &#x60;update&#x60; as soon as message is restored
  */
 public class MessageRestoredUpdate extends Update implements TamTamSerializable {
-  
+
     private final String messageId;
 
     @JsonCreator
@@ -67,7 +63,9 @@ public class MessageRestoredUpdate extends Update implements TamTamSerializable 
 
     @Override
     public int hashCode() {
-        return Objects.hash(messageId, super.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + (messageId != null ? messageId.hashCode() : 0);
+        return result;
     }
 
     @Override

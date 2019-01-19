@@ -20,19 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * Schema to describe WebHook subscription
  */
 public class Subscription implements TamTamSerializable {
-  
+
     private final String url;
     private final Long time;
 
@@ -76,7 +73,10 @@ public class Subscription implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, time);
+        int result = 1;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        return result;
     }
 
     @Override

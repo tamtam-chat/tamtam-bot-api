@@ -20,19 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * This is information you will recieve as soon as a file is uploaded
  */
 public class UploadedFileInfo implements TamTamSerializable {
-  
+
     private final Long fileId;
 
     @JsonCreator
@@ -64,7 +61,9 @@ public class UploadedFileInfo implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(fileId);
+        int result = 1;
+        result = 31 * result + (fileId != null ? fileId.hashCode() : 0);
+        return result;
     }
 
     @Override

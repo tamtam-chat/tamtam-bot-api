@@ -20,20 +20,17 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import java.util.Objects;
+
 
 /**
  * &#x60;Update&#x60; object repsesents different types of events that happened in chat. See its inheritors
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "update_type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "update_type", visible = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = "message_created"),
   @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = "message_callback"),
@@ -43,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class Update implements TamTamSerializable {
-  
+
     private String updateType;
     private final Long timestamp;
 
@@ -85,7 +82,10 @@ public class Update implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(updateType, timestamp);
+        int result = 1;
+        result = 31 * result + (updateType != null ? updateType.hashCode() : 0);
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        return result;
     }
 
     @Override

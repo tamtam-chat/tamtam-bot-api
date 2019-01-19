@@ -20,20 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.NewMessageBody;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Send this object when your bot wants to react to when a button is pressed
  */
 public class CallbackAnswer implements TamTamSerializable {
-  
+
     private Long userId;
     private NewMessageBody message;
     private String notification;
@@ -110,7 +106,11 @@ public class CallbackAnswer implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, message, notification);
+        int result = 1;
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (notification != null ? notification.hashCode() : 0);
+        return result;
     }
 
     @Override

@@ -20,19 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * Endpoint you should upload to your binaries
  */
 public class UploadEndpoint implements TamTamSerializable {
-  
+
     private final String url;
 
     @JsonCreator
@@ -64,7 +61,9 @@ public class UploadEndpoint implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(url);
+        int result = 1;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        return result;
     }
 
     @Override

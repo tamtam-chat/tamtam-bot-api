@@ -20,25 +20,20 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.ChatStatus;
-import chat.tamtam.botapi.model.ChatType;
-import chat.tamtam.botapi.model.Image;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import chat.tamtam.botapi.TamTamSerializable;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Chat
  */
 public class Chat implements TamTamSerializable {
-  
+
     private final Long chatId;
     private final ChatType type;
     private final ChatStatus status;
@@ -194,7 +189,17 @@ public class Chat implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(chatId, type, status, title, icon, lastEventTime, participantsCount, ownerId, participants);
+        int result = 1;
+        result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (icon != null ? icon.hashCode() : 0);
+        result = 31 * result + (lastEventTime != null ? lastEventTime.hashCode() : 0);
+        result = 31 * result + (participantsCount != null ? participantsCount.hashCode() : 0);
+        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
+        result = 31 * result + (participants != null ? participants.hashCode() : 0);
+        return result;
     }
 
     @Override

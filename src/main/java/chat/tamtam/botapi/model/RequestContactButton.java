@@ -20,20 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.Button;
-import chat.tamtam.botapi.model.Intent;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import chat.tamtam.botapi.TamTamSerializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * After pressing this type of button client sends new message with attachment of curent user contact
  */
 public class RequestContactButton extends Button implements TamTamSerializable {
-  
+
 
     @JsonCreator
     public RequestContactButton(@JsonProperty("text") String text, @Nullable @JsonProperty("intent") Intent intent) { 
@@ -49,11 +45,6 @@ public class RequestContactButton extends Button implements TamTamSerializable {
           return false;
         }
         return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode());
     }
 
     @Override

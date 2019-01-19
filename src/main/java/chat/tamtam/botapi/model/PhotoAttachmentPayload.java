@@ -20,19 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * PhotoAttachmentPayload
  */
 public class PhotoAttachmentPayload implements TamTamSerializable {
-  
+
     private final Long photoId;
     private final String url;
 
@@ -76,7 +73,10 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(photoId, url);
+        int result = 1;
+        result = 31 * result + (photoId != null ? photoId.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        return result;
     }
 
     @Override

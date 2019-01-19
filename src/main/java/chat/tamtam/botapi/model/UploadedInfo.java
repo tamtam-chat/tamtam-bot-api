@@ -20,19 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * This is information you will recieve as soon as audio/video is uploaded
  */
 public class UploadedInfo implements TamTamSerializable {
-  
+
     private final Long id;
 
     @JsonCreator
@@ -63,7 +60,9 @@ public class UploadedInfo implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        int result = 1;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        return result;
     }
 
     @Override

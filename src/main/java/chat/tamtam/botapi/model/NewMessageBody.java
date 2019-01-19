@@ -20,22 +20,19 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.AttachmentRequest;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
-import chat.tamtam.botapi.TamTamSerializable;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * NewMessageBody
  */
 public class NewMessageBody implements TamTamSerializable {
-  
+
     private final String text;
     private AttachmentRequest attachment;
     private final List<AttachmentRequest> attachments;
@@ -122,7 +119,12 @@ public class NewMessageBody implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(text, attachment, attachments, notify);
+        int result = 1;
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (attachment != null ? attachment.hashCode() : 0);
+        result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
+        result = 31 * result + (notify != null ? notify.hashCode() : 0);
+        return result;
     }
 
     @Override

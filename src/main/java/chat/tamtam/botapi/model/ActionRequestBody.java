@@ -20,20 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.SenderAction;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * ActionRequestBody
  */
 public class ActionRequestBody implements TamTamSerializable {
-  
+
     private final SenderAction action;
 
     @JsonCreator
@@ -64,7 +60,9 @@ public class ActionRequestBody implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(action);
+        int result = 1;
+        result = 31 * result + (action != null ? action.hashCode() : 0);
+        return result;
     }
 
     @Override

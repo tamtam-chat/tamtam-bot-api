@@ -20,21 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.Attachment;
-import chat.tamtam.botapi.model.Keyboard;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * Buttons in messages
  */
 public class InlineKeyboardAttachment extends Attachment implements TamTamSerializable {
-  
+
     private final String callbackId;
     private final Keyboard payload;
 
@@ -79,7 +74,10 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
 
     @Override
     public int hashCode() {
-        return Objects.hash(callbackId, payload, super.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + (callbackId != null ? callbackId.hashCode() : 0);
+        result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        return result;
     }
 
     @Override

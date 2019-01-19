@@ -20,21 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.Callback;
-import chat.tamtam.botapi.model.Update;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * You will get this &#x60;update&#x60; as soon as user presses button
  */
 public class MessageCallbackUpdate extends Update implements TamTamSerializable {
-  
+
     private final Callback callback;
 
     @JsonCreator
@@ -67,7 +62,9 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
 
     @Override
     public int hashCode() {
-        return Objects.hash(callback, super.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + (callback != null ? callback.hashCode() : 0);
+        return result;
     }
 
     @Override

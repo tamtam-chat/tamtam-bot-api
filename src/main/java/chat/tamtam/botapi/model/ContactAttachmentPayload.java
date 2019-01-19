@@ -20,20 +20,17 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.User;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * ContactAttachmentPayload
  */
 public class ContactAttachmentPayload implements TamTamSerializable {
-  
+
     private final String vcfInfo;
     private final User tamInfo;
 
@@ -79,7 +76,10 @@ public class ContactAttachmentPayload implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(vcfInfo, tamInfo);
+        int result = 1;
+        result = 31 * result + (vcfInfo != null ? vcfInfo.hashCode() : 0);
+        result = 31 * result + (tamInfo != null ? tamInfo.hashCode() : 0);
+        return result;
     }
 
     @Override

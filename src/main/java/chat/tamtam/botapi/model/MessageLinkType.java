@@ -20,16 +20,10 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+
 import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamEnum;
 
 /**
  * Type of linked message
@@ -37,7 +31,6 @@ import chat.tamtam.botapi.TamTamEnum;
 public enum MessageLinkType {
     
     FORWARD("forward"),
-    
     REPLY("reply");
 
     private String value;

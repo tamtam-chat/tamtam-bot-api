@@ -20,19 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * Server returns this if there was an exception to your request
  */
 public class Error implements TamTamSerializable {
-  
+
     private String error;
     private final String code;
     private final String message;
@@ -87,7 +84,11 @@ public class Error implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(error, code, message);
+        int result = 1;
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (code != null ? code.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        return result;
     }
 
     @Override

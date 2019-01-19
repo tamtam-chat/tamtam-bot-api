@@ -20,20 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.User;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * Object sent to bot when user presses button
  */
 public class Callback implements TamTamSerializable {
-  
+
     private final Long timestamp;
     private final String callbackId;
     private final String payload;
@@ -101,7 +97,12 @@ public class Callback implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(timestamp, callbackId, payload, user);
+        int result = 1;
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        result = 31 * result + (callbackId != null ? callbackId.hashCode() : 0);
+        result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        return result;
     }
 
     @Override

@@ -20,22 +20,19 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.Update;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
-import chat.tamtam.botapi.TamTamSerializable;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * List of all updates in chats your bot participated in
  */
 public class UpdateList implements TamTamSerializable {
-  
+
     private final List<Update> updates;
     private final Long marker;
 
@@ -80,7 +77,10 @@ public class UpdateList implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(updates, marker);
+        int result = 1;
+        result = 31 * result + (updates != null ? updates.hashCode() : 0);
+        result = 31 * result + (marker != null ? marker.hashCode() : 0);
+        return result;
     }
 
     @Override

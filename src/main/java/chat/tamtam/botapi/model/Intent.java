@@ -20,16 +20,10 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+
 import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamEnum;
 
 /**
  * Intent of button
@@ -37,9 +31,7 @@ import chat.tamtam.botapi.TamTamEnum;
 public enum Intent {
     
     POSITIVE("positive"),
-    
     NEGATIVE("negative"),
-    
     DEFAULT("default");
 
     private String value;

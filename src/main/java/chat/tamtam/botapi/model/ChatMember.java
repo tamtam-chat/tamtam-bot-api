@@ -20,20 +20,17 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.UserWithPhoto;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * ChatMember
  */
 public class ChatMember extends UserWithPhoto implements TamTamSerializable {
-  
+
     private final Long lastAccessTime;
     private final Boolean isOwner;
 
@@ -77,7 +74,10 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastAccessTime, isOwner, super.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + (lastAccessTime != null ? lastAccessTime.hashCode() : 0);
+        result = 31 * result + (isOwner != null ? isOwner.hashCode() : 0);
+        return result;
     }
 
     @Override

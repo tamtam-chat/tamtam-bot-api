@@ -20,21 +20,17 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.Button;
-import chat.tamtam.botapi.model.Intent;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * After pressing this type of button user follows the link it contains
  */
 public class LinkButton extends Button implements TamTamSerializable {
-  
+
     private final String url;
 
     @JsonCreator
@@ -67,7 +63,9 @@ public class LinkButton extends Button implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, super.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        return result;
     }
 
     @Override

@@ -20,22 +20,16 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.MessageBody;
-import chat.tamtam.botapi.model.Recipient;
-import chat.tamtam.botapi.model.User;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
+
 
 /**
  * Message in chat
  */
 public class Message implements TamTamSerializable {
-  
+
     private final User sender;
     private final Recipient recipient;
     private final Long timestamp;
@@ -103,7 +97,12 @@ public class Message implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(sender, recipient, timestamp, message);
+        int result = 1;
+        result = 31 * result + (sender != null ? sender.hashCode() : 0);
+        result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        return result;
     }
 
     @Override

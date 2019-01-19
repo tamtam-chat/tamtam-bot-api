@@ -20,21 +20,18 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.Intent;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonValue;
-import chat.tamtam.botapi.TamTamSerializable;
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Button
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = CallbackButton.class, name = "callback"),
   @JsonSubTypes.Type(value = LinkButton.class, name = "link"),
@@ -43,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 })
 
 public class Button implements TamTamSerializable {
-  
+
     private String type;
     private final String text;
     private final Intent intent;
@@ -98,7 +95,11 @@ public class Button implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, text, intent);
+        int result = 1;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (intent != null ? intent.hashCode() : 0);
+        return result;
     }
 
     @Override

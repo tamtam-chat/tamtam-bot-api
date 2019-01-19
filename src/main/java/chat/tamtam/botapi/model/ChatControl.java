@@ -143,24 +143,26 @@ public class ChatControl implements TamTamSerializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-          return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-          return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof ChatControl)) return false;
 
-        ChatControl other = (ChatControl) o;
-        return Objects.equals(this.title, other.title) &&
-            Objects.equals(this.icon, other.icon) &&
-            Objects.equals(this.leave, other.leave) &&
-            Objects.equals(this.addMembers, other.addMembers) &&
-            Objects.equals(this.removeMember, other.removeMember);
+        ChatControl that = (ChatControl) o;
+
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (icon != null ? !icon.equals(that.icon) : that.icon != null) return false;
+        if (leave != null ? !leave.equals(that.leave) : that.leave != null) return false;
+        if (addMembers != null ? !addMembers.equals(that.addMembers) : that.addMembers != null) return false;
+        return removeMember != null ? removeMember.equals(that.removeMember) : that.removeMember == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, icon, leave, addMembers, removeMember);
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (icon != null ? icon.hashCode() : 0);
+        result = 31 * result + (leave != null ? leave.hashCode() : 0);
+        result = 31 * result + (addMembers != null ? addMembers.hashCode() : 0);
+        result = 31 * result + (removeMember != null ? removeMember.hashCode() : 0);
+        return result;
     }
 
     @Override

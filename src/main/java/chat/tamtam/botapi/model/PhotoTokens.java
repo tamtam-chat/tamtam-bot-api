@@ -20,23 +20,19 @@
 
 package chat.tamtam.botapi.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import chat.tamtam.botapi.model.PhotoToken;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import chat.tamtam.botapi.TamTamSerializable;
-import org.jetbrains.annotations.Nullable;
+import java.util.Objects;
+
 
 /**
  * This is information you will recieve as soon as an image uploaded
  */
 public class PhotoTokens implements TamTamSerializable {
-  
+
     private final Map<String, PhotoToken> photos;
 
     @JsonCreator
@@ -67,7 +63,9 @@ public class PhotoTokens implements TamTamSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(photos);
+        int result = 1;
+        result = 31 * result + (photos != null ? photos.hashCode() : 0);
+        return result;
     }
 
     @Override
