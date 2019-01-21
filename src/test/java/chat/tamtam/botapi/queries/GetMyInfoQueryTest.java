@@ -18,21 +18,22 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi.exceptions;
+package chat.tamtam.botapi.queries;
 
-/**
- * @author alexandrchuprin
- */
-public class ExceptionMapper {
-    public static APIException map(chat.tamtam.botapi.model.Error error) {
-        String message = error.getMessage();
-        switch (error.getCode()) {
-            case "attachment.not.ready":
-                return new AttachmentNotReadyException();
-            case "too.many.requests":
-                return new TooManyRequestsException(message);
-        }
+import org.junit.Test;
 
-        return new APIException(error.getCode(), message);
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
+import chat.tamtam.botapi.model.User;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+public class GetMyInfoQueryTest extends QueryTest {
+
+    @Test
+    public void getMyInfoTest() throws Exception {
+        User response = api.getMyInfo().execute();
+        assertThat(response.getUserId(), is(1L));
     }
+
 }

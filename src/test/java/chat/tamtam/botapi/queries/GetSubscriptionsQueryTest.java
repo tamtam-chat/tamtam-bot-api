@@ -20,18 +20,27 @@
 
 package chat.tamtam.botapi.queries;
 
-import chat.tamtam.botapi.client.TamTamClient;
+import chat.tamtam.botapi.queries.GetSubscriptionsQuery;
+import chat.tamtam.botapi.model.GetSubscriptionsResult;
+import org.junit.Test;
+import org.junit.Ignore;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import chat.tamtam.botapi.queries.RemoveMembersQuery;
-import chat.tamtam.botapi.model.UserIdsList;
+import java.util.Map;
 
-public class RemoveMembersQuery extends TamTamQuery<UserIdsList> {
-    private final QueryParam<List<Long>> userIds = new QueryParam<List<Long>>("user_ids", this).required();
-
-    public RemoveMembersQuery(TamTamClient client, Long chatId, List<Long> userIds) {
-        super(client, substitute("/chats/{chatId}/members", chatId), null, UserIdsList.class, Method.DELETE);
-        this.userIds.setValue(userIds);
+public class GetSubscriptionsQueryTest extends QueryTest {
+    
+    @Test
+    public void getSubscriptionsTest() throws Exception {
+        GetSubscriptionsResult response = api.getSubscriptions().execute();
+        assertThat(response.getSubscriptions().size(), is(greaterThan(0)));
     }
-
+    
 }

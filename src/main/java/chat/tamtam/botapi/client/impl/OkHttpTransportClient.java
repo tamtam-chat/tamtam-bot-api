@@ -20,11 +20,7 @@
 
 package chat.tamtam.botapi.client.impl;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
@@ -61,7 +57,6 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     private static final String USER_AGENT = "TamTam Java Client/0.0.1";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType BINARY_CONTENT_TYPE = MediaType.parse("application/octet-stream");
-    private static final int TWO_MB = 2 * 1024 * 1024;
     private static final int FOUR_KB = 4 * 1024;
 
     private final OkHttpClient httpClient;
@@ -89,15 +84,6 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     @Override
     public Future<ClientResponse> post(String url, @Nullable byte[] body) {
         return newCall(new Request.Builder().url(url).post(wrapBody(body)).build());
-    }
-
-    @Override
-    public Future<ClientResponse> post(String url, File file) throws TransportClientException {
-        try {
-            return post(url, file.getName(), new BufferedInputStream(new FileInputStream(file), TWO_MB));
-        } catch (FileNotFoundException e) {
-            throw new TransportClientException(e);
-        }
     }
 
     @Override
@@ -204,7 +190,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
         }
 
         public void onFailure(Call call, IOException e) {
-            super.completeExceptionally(e);
+            super.completeExceptionally(new TransportClientException(e));
         }
     }
 }

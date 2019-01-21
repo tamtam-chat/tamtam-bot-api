@@ -20,16 +20,26 @@
 
 package chat.tamtam.botapi.queries;
 
-import chat.tamtam.botapi.client.TamTamClient;
+import org.junit.Test;
 
-import chat.tamtam.botapi.model.ChatControl;
-import chat.tamtam.botapi.queries.SendControlQuery;
-import chat.tamtam.botapi.model.SimpleQueryResult;
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
+import chat.tamtam.botapi.model.UploadEndpoint;
+import chat.tamtam.botapi.model.UploadType;
 
-public class SendControlQuery extends TamTamQuery<SimpleQueryResult> {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
-    public SendControlQuery(TamTamClient client, ChatControl chatControl, Long chatId) {
-        super(client, substitute("/chats/{chatId}/control", chatId), chatControl, SimpleQueryResult.class, Method.POST);
+public class GetUploadUrlQueryTest extends QueryTest {
+
+    @Test
+    public void getUploadUrlTest() throws Exception {
+        UploadEndpoint response = api.getUploadUrl(UploadType.FILE).execute();
+        assertThat(response.getUrl(), is(notNullValue()));
     }
 
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrowException() throws Exception {
+        api.getUploadUrl(null).execute();
+    }
 }

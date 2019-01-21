@@ -31,4 +31,12 @@ public class APIException extends Exception {
     public APIException(int statusCode) {
         super("Unexpected server error: " + statusCode);
     }
+
+    public APIException(int statusCode, String responseBody) {
+        super("Server error " + statusCode + ": " + responseBody);
+    }
+
+    public APIException(String errorCode, String message) {
+        super("API exception " + errorCode + ": " + message);
+    }
 }

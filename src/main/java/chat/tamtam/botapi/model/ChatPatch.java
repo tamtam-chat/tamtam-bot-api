@@ -33,12 +33,22 @@ public class ChatPatch implements TamTamSerializable {
     private PhotoAttachmentRequest icon;
     private String title;
 
+    public ChatPatch icon(PhotoAttachmentRequest icon) {
+        this.icon = icon;
+        return this;
+    }
+
     /**
     * @return icon
     **/
+    @Nullable
     @JsonProperty("icon")
     public PhotoAttachmentRequest getIcon() {
         return icon;
+    }
+
+    public void setIcon(PhotoAttachmentRequest icon) {
+        this.icon = icon;
     }
 
     public ChatPatch title(String title) {

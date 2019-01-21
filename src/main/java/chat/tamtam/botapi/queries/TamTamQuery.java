@@ -39,6 +39,7 @@ import chat.tamtam.botapi.client.TamTamTransportClient;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.exceptions.ExceptionMapper;
+import chat.tamtam.botapi.exceptions.SerializationException;
 import chat.tamtam.botapi.exceptions.ServiceNotAvailableException;
 import chat.tamtam.botapi.exceptions.TransportClientException;
 import chat.tamtam.botapi.model.Error;
@@ -152,12 +153,16 @@ public class TamTamQuery<T> {
 
         TamTamSerializer serializer = tamTamClient.getSerializer();
         if (response.getStatusCode() / 100 != 2) {
-            Error error = serializer.deserialize(responseBody, Error.class);
-            if (error == null) {
-                throw new APIException(response.getStatusCode());
-            }
+            try {
+                Error error = serializer.deserialize(responseBody, Error.class);
+                if (error == null) {
+                    throw new APIException(response.getStatusCode());
+                }
 
-            throw ExceptionMapper.map(error);
+                throw ExceptionMapper.map(error);
+            } catch (SerializationException e) {
+                throw new APIException(response.getStatusCode(), responseBody);
+            }
         }
 
         return serializer.deserialize(responseBody, responseType);
@@ -238,6 +243,8 @@ public class TamTamQuery<T> {
                 return deserialize(delegate.get());
             } catch (ClientException | APIException e) {
                 throw new ExecutionException(e);
+            } catch (ExecutionException e) {
+                throw unwrap(e);
             }
         }
 
@@ -248,7 +255,22 @@ public class TamTamQuery<T> {
                 return deserialize(delegate.get(timeout, unit));
             } catch (ClientException | APIException e) {
                 throw new ExecutionException(e);
+            } catch (ExecutionException e) {
+                throw unwrap(e);
             }
+        }
+
+        private ExecutionException unwrap(ExecutionException e) {
+            Throwable cause = e.getCause();
+            if (cause == null) {
+                return e;
+            }
+
+            if (cause instanceof TransportClientException) {
+                return new ExecutionException(new ClientException(cause));
+            }
+
+            return e;
         }
     }
 }

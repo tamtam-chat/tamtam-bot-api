@@ -22,15 +22,15 @@ package chat.tamtam.botapi.client;
 
 import org.jetbrains.annotations.Nullable;
 
-import chat.tamtam.botapi.exceptions.ClientException;
+import chat.tamtam.botapi.exceptions.SerializationException;
 
 /**
  * @author alexandrchuprin
  */
 public interface TamTamSerializer {
     @Nullable
-    byte[] serialize(@Nullable Object object) throws ClientException;
+    byte[] serialize(@Nullable Object object) throws SerializationException;
 
     @Nullable
-    <T> T deserialize(@Nullable String data, Class<T> responseType) throws ClientException;
+    <T> T deserialize(@Nullable String data, Class<T> responseType) throws SerializationException;
 }
