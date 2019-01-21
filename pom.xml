@@ -218,9 +218,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludedGroups>chat.tamtam.botapi.IntegrationTest</excludedGroups>
-                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
