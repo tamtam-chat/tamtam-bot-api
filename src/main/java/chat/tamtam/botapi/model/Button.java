@@ -38,7 +38,6 @@ import org.jetbrains.annotations.Nullable;
   @JsonSubTypes.Type(value = RequestGeoLocationButton.class, name = "request_geo_location"),
   @JsonSubTypes.Type(value = RequestContactButton.class, name = "request_contact"),
 })
-
 public class Button implements TamTamSerializable {
 
     private String type;

@@ -22,12 +22,14 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Request to attach video to message
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class VideoAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
     private final UploadedInfo payload;

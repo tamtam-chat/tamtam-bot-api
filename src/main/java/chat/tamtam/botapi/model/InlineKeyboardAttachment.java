@@ -22,12 +22,14 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Buttons in messages
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class InlineKeyboardAttachment extends Attachment implements TamTamSerializable {
 
     private final String callbackId;

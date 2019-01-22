@@ -22,12 +22,14 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Request to attach keyboard to message
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class InlineKeyboardAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
     private final InlineKeyboardAttachmentRequestPayload payload;

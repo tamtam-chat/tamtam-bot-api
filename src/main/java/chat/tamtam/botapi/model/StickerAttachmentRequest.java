@@ -22,12 +22,14 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Request to attach sticker. MUST be the only attachment request in message
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class StickerAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
     private final StickerAttachmentRequestPayload payload;

@@ -22,12 +22,14 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Request to attach contact card to message. MUST be the only attachment in message
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class ContactAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
     private final ContactAttachmentRequestPayload payload;

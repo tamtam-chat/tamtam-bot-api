@@ -40,7 +40,6 @@ import java.util.Objects;
   @JsonSubTypes.Type(value = InlineKeyboardAttachment.class, name = "inline_keyboard"),
   @JsonSubTypes.Type(value = ShareAttachment.class, name = "share"),
 })
-
 public class Attachment implements TamTamSerializable {
 
     private String type;

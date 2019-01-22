@@ -22,12 +22,14 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Request to attach file to message. MUST be the only attachment in message
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class FileAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
     private final UploadedFileInfo payload;

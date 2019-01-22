@@ -22,6 +22,7 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * After pressing this type of button client sends to server payload it contains
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class CallbackButton extends Button implements TamTamSerializable {
 
     private final String payload;

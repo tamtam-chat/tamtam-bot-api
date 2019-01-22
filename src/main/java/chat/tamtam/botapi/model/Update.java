@@ -38,7 +38,6 @@ import java.util.Objects;
   @JsonSubTypes.Type(value = MessageRemovedUpdate.class, name = "message_removed"),
   @JsonSubTypes.Type(value = MessageRestoredUpdate.class, name = "message_restored"),
 })
-
 public class Update implements TamTamSerializable {
 
     private String updateType;
