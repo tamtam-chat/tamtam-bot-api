@@ -81,7 +81,7 @@ public class TamTamBotAPI {
 
     /**
     * Add members
-    * Adds members to chat. Admin permissions in chat is required.
+    * Adds members to chat. Additional permissions may require.
     * @param userIdsList  (required)
     * @param chatId Chat identifier (required)
     * @return {@link SimpleQueryResult}
@@ -207,7 +207,7 @@ public class TamTamBotAPI {
 
     /**
     * Get messages
-    * Returns messages in chat: result page and marker referencing to the next page
+    * Returns messages in chat: result page and marker referencing to the next page. Messages traversed in reverse direction so the latest message in chat will be first in result array. Therefore if you use &#x60;from&#x60; and &#x60;to&#x60; parameters, &#x60;to&#x60; must be **less than** &#x60;from&#x60;
     * @param chatId Chat identifier (required)
     * @return {@link MessageList}
     * @throws ClientException if fails to make API call
@@ -285,7 +285,7 @@ public class TamTamBotAPI {
 
     /**
     * Remove member
-    * Removes member from chat. Admin permissions in chat is required.
+    * Removes member from chat. Additional permissions may require.
     * @param chatId Chat identifier (required)
     * @param userId User id to remove from chat (required)
     * @return {@link SimpleQueryResult}

@@ -32,6 +32,8 @@ import org.jetbrains.annotations.Nullable;
 public class NewMessage implements TamTamSerializable {
 
     private final Recipient recipient;
+    private SenderAction senderAction;
+    private ChatControl chatControl;
     private NewMessageBody message;
 
     @JsonCreator
@@ -46,6 +48,44 @@ public class NewMessage implements TamTamSerializable {
     @JsonProperty("recipient")
     public Recipient getRecipient() {
         return recipient;
+    }
+
+    public NewMessage senderAction(SenderAction senderAction) {
+        this.senderAction = senderAction;
+        return this;
+    }
+
+    /**
+    * Action to send to chat. For example: &#x60;typing&#x60; or &#x60;sending photo&#x60;. See &#x60;SenderAction&#x60; for full information
+    * @return senderAction
+    **/
+    @Nullable
+    @JsonProperty("sender_action")
+    public SenderAction getSenderAction() {
+        return senderAction;
+    }
+
+    public void setSenderAction(SenderAction senderAction) {
+        this.senderAction = senderAction;
+    }
+
+    public NewMessage chatControl(ChatControl chatControl) {
+        this.chatControl = chatControl;
+        return this;
+    }
+
+    /**
+    * Control message to chat. For example: to set icon or title of chat. See &#x60;ChatControl&#x60; description for full information
+    * @return chatControl
+    **/
+    @Nullable
+    @JsonProperty("chat_control")
+    public ChatControl getChatControl() {
+        return chatControl;
+    }
+
+    public void setChatControl(ChatControl chatControl) {
+        this.chatControl = chatControl;
     }
 
     public NewMessage message(NewMessageBody message) {
@@ -78,6 +118,8 @@ public class NewMessage implements TamTamSerializable {
 
         NewMessage other = (NewMessage) o;
         return Objects.equals(this.recipient, other.recipient) &&
+            Objects.equals(this.senderAction, other.senderAction) &&
+            Objects.equals(this.chatControl, other.chatControl) &&
             Objects.equals(this.message, other.message);
     }
 
@@ -85,6 +127,8 @@ public class NewMessage implements TamTamSerializable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
+        result = 31 * result + (senderAction != null ? senderAction.hashCode() : 0);
+        result = 31 * result + (chatControl != null ? chatControl.hashCode() : 0);
         result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
     }
@@ -93,6 +137,8 @@ public class NewMessage implements TamTamSerializable {
     public String toString() {
         return "NewMessage{"
             + " recipient='" + recipient + '\''
+            + " senderAction='" + senderAction + '\''
+            + " chatControl='" + chatControl + '\''
             + " message='" + message + '\''
             + '}';
     }
