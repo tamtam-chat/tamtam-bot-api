@@ -6,7 +6,7 @@
 
     <groupId>chat.tamtam</groupId>
     <artifactId>tamtam-bot-api</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.9</version>
 
     <name>TamTam chat Bot API</name>
     <description>TamTam Bots Java API</description>
@@ -167,12 +167,12 @@
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-generator</artifactId>
-                        <version>0.0.7-SNAPSHOT</version>
+                        <version>0.0.7</version>
                     </dependency>
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-schema</artifactId>
-                        <version>0.0.8-SNAPSHOT</version>
+                        <version>0.0.8</version>
                     </dependency>
                 </dependencies>
             </plugin>
