@@ -6,3 +6,4 @@ target/
 *.iml
 local.properties
 /bin/
+out
