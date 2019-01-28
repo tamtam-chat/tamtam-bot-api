@@ -98,7 +98,7 @@ No logging is performed by default. This project uses SLF4J, so you should bring
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-log4j12</artifactId>
-    <version>1.7.12</version>
+    <version>1.7.25</version>
 </dependency>
 ```
 
