@@ -1,5 +1,11 @@
-### ⚠️ Consider that project is [public](https://github.com/tamtam-chat/tamtam-bot-api).
-All changes should be pushed to Github through the `master-github` branch.
+# ⚠️ This project is [public](https://github.com/tamtam-chat/tamtam-bot-api).
+All code under the `project` directory is public. So be careful modifing it.
+
+Actually it was added as subtree (`git subtree add --prefix=project github/master`).
+
+To push changes to GitHub use `git subtree push -P project github master`.
+
+To generate client's code, run `mvn clean compile` in root directory. It will generate files in `project` directory.
 
 # TamTam Bot API Java client
 
@@ -22,4 +28,4 @@ If you want to modify implementation you should consider to modify [generator](h
 ## Usage
 As soon as you made changes in specification you can generate files using `mvn compile`.
 
-⚠️ Pay attention that no changes in VCS is made during build process. You should manually add generated files to Git index, commit it, sync with `master-github` branch and push.
+⚠️ Pay attention that no changes in VCS is made during build process. You should manually add generated files to Git index and commit it.

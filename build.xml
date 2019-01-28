@@ -7,14 +7,14 @@
          xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <property name="root.dir" value="${basedir}"/>
     <property name="javac.target" value="8"/>
-    <property name="build.lib" value="${root.dir}/target"/>
+    <property name="build.lib" value="${root.dir}/project/target"/>
 
     <path id="maven-ant-tasks.classpath" path="${root.dir}/lib/maven-ant-tasks-2.1.3.jar"/>
     <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
              uri="antlib:org.apache.maven.artifact.ant"
              classpathref="maven-ant-tasks.classpath"/>
 
-    <artifact:pom id="mypom" file="pom.xml"/>
+    <artifact:pom id="mypom" file="project/pom.xml"/>
     <property name="build.number.str" value="${mypom.version}"/>
 
     <script language="javascript">
@@ -43,6 +43,11 @@
         <exec executable="mvn">
             <arg value="clean"/>
         </exec>
+        <exec executable="mvn">
+            <arg value="-f"/>
+            <arg value="project/pom.xml"/>
+            <arg value="clean"/>
+        </exec>
     </target>
 
     <target name="build-release">
@@ -55,7 +60,13 @@
 
     <target name="export-release" depends="ivy-publish">
         <exec executable="mvn" failonerror="true">
-            <arg value="deploy"/>
+            <arg value="-f"/>
+            <arg value="project/pom.xml"/>
+            <arg value="jar:jar"/>
+            <arg value="deploy:deploy"/>
+            <arg value="-DaltDeploymentRepository=nexus::default::https://nexus.odkl.ru/repository/maven-releases"/>
+            <arg value="-DaltReleaseDeploymentRepository=nexus::default::https://nexus.odkl.ru/repository/maven-releases"/>
+            <arg value="-DaltSnapshotDeploymentRepository=nexus::default::https://nexus.odkl.ru/repository/maven-snapshots"/>
         </exec>
     </target>
 
@@ -63,10 +74,18 @@
         <exec executable="mvn" failonerror="true">
             <arg value="package"/>
         </exec>
+
+        <exec executable="mvn" failonerror="true">
+            <arg value="-f"/>
+            <arg value="project/pom.xml"/>
+            <arg value="package"/>
+        </exec>
     </target>
 
     <target name="ivy-publish-local" depends="ivy-resolve, ivy-prepare-for-publish">
         <exec executable="mvn">
+            <arg value="-f"/>
+            <arg value="project/pom.xml"/>
             <arg value="install"/>
         </exec>
         <ivy-publish resolver="local"/>
