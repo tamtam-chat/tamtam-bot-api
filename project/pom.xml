@@ -33,6 +33,7 @@
     </developers>
 
     <scm>
+        <url>https://github.com/tamtam-chat/tamtam-bot-api</url>
         <developerConnection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api</developerConnection>
     </scm>
 
