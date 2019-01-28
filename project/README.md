@@ -1,3 +1,5 @@
+[![travis](https://img.shields.io/travis/com/tamtam-chat/tamtam-bot-api.svg)](https://travis-ci.org/tamtam-chat/tamtam-bot-api)
+
 # TamTam Bot API Java Client
 This is Java client for TamTam Bot API. It gives you full access to API in your Java code.
 
