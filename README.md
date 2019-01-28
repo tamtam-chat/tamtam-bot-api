@@ -34,7 +34,7 @@ TamTamBotAPI api = TamTamBotAPI.create("%ACCESS_TOKEN%);
 ```
 
 It will create client with default Jackson-based serializer and OkHttp-based HTTP client.
-If you want to use your own implementation you can implement `TamTamTransportClient` and `TamTamSerializer` and initialize `TamTamClient` with them:
+If you want to use your own implementation you can implement `TamTamTransportClient` and `TamTamSerializer` and initialize `TamTamClient` with it:
 
 ```java
 TamTamTransportClient transportClient = …;
@@ -82,14 +82,14 @@ UploadedFileInfo uploadedInfo = uploadAPI.uploadFile(uploadUrl, new File("%FILE_
 ```
 
 ### Important notice:
-It may took a time to process you file (audio/video or binary file) on server. While file is not processed you can't attach it and will get `AttachmentNotReadyException` when calling `sendMessage` method. Try again until you'll get successful result.
+It may take a time for server to process you file (audio/video or binary file). While file is not processed you can't attach it and will get `AttachmentNotReadyException` when calling `sendMessage` method. Try again until you'll get successful result.
 
 ## Handling exceptions
 All methods can throw two type of exceptions:
 
 1. ClientException: general exception type wrapping all kinds of IO/serialization exceptions.
 
-2. APIException: exception you will get when API was used incorrectly. Some arguments were missed or access to requested resource was denied, for example.
+2. APIException: exception you will get if API was used incorrectly. For example, some arguments are missing or access to requested resource is denied.
 
 ## Logging
 No logging is performed by default. This project uses SLF4J, so you should bring adapter for logging framework you prefer. For example, add slf4j-log4j12 as dependency:
@@ -102,6 +102,11 @@ No logging is performed by default. This project uses SLF4J, so you should bring
 </dependency>
 ```
 
+# Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
 
 # License
 This project is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
