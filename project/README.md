@@ -10,7 +10,7 @@ Minimum required version of Java is 8.
 
 To use TamTam Bot API you should obtain `ACCESS_TOKEN` for each bot you create.
 
-Speak to [@PrimeBot](http://tt.me/primebot). It will helps you.
+Speak to [@PrimeBot](http://tt.me/primebot). It will helps you to create your first bot.
 
 # Dependencies
 - [Jackson 2.9.8](https://github.com/FasterXML/jackson)
