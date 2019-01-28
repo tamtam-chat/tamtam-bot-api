@@ -3,9 +3,19 @@ All code under the `project` directory is public. So be careful modifing it.
 
 Actually it was added as subtree (`git subtree add --prefix=project github/master`).
 
-To push changes to GitHub use `git subtree push -P project github master`.
+To push changes to GitHub use:
+```
+git subtree push -P project github master
+```
 
 To generate client's code, run `mvn clean compile` in root directory. It will generate files in `project` directory.
+
+To pull changes made in github repository run:
+
+```
+git fetch github
+git subtree merge -P project github/master
+```
 
 # TamTam Bot API Java client
 
