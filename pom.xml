@@ -8,9 +8,9 @@
     <artifactId>tamtam-bot-api</artifactId>
     <version>0.1.0</version>
 
-    <name>TamTam chat Bot API</name>
-    <description>TamTam Bots Java API</description>
-    <url>https://tamtam.chat</url>
+    <name>TamTam Bot API Java Client</name>
+    <description>Java library to build bots for TamTam messenger</description>
+    <url>https://dev.tamtam.chat</url>
     <inceptionYear>2018</inceptionYear>
     <organization>
         <name>Mail.Ru Group</name>
@@ -29,12 +29,15 @@
         <developer>
             <name>Alexander Chuprin</name>
             <email>alexander.chuprin@corp.mail.ru</email>
+            <organization>Mail.Ru</organization>
+            <organizationUrl>https://corp.mail.ru</organizationUrl>
         </developer>
     </developers>
 
     <scm>
         <url>https://github.com/tamtam-chat/tamtam-bot-api</url>
-        <developerConnection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api</developerConnection>
+        <connection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api.git</connection>
+        <developerConnection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api.git</developerConnection>
     </scm>
 
     <properties>
@@ -106,6 +109,43 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -120,6 +160,17 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -163,4 +214,11 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
