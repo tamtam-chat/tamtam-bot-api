@@ -2,5 +2,6 @@ language: java
 dist: trusty
 jdk:
   - oraclejdk8
-  - openjdk8
 install: mvn install -B -V
+after_success:
+  - mvn clean test jacoco:report coveralls:report -Dcoveralls.token=$COVERALLS_TOKEN
