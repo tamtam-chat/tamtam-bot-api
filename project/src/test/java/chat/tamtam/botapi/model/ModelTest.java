@@ -23,7 +23,7 @@ public class ModelTest {
     @Test
     public void name() throws Exception {
         for (Class aClass : getClasses("chat.tamtam.botapi.model")) {
-            if (aClass.equals(this.getClass())) {
+            if (aClass.getName().endsWith("Test")) {
                 continue;
             }
 
