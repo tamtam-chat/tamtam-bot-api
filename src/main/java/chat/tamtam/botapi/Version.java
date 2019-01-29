@@ -26,6 +26,9 @@ public class Version {
     private static final int BUILD = 0;
     private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
 
+    private Version() {
+    }
+
     public static String get() {
         return VERSION;
     }
