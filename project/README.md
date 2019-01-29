@@ -1,4 +1,5 @@
 [![travis](https://img.shields.io/travis/com/tamtam-chat/tamtam-bot-api.svg)](https://travis-ci.org/tamtam-chat/tamtam-bot-api)
+[![Coverage Status](https://coveralls.io/repos/github/tamtam-chat/tamtam-bot-api/badge.svg?branch=master)](https://coveralls.io/github/tamtam-chat/tamtam-bot-api?branch=master)
 
 # TamTam Bot API Java Client
 This is Java client for TamTam Bot API. It gives you full access to API in your Java code.
