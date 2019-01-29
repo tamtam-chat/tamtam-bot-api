@@ -3,7 +3,7 @@
 # TamTam Bot API Java Client
 This is Java client for TamTam Bot API. It gives you full access to API in your Java code.
 
-Library has been built based on [TamTam Bot API Schema](https://github.com/tamtam-chat/tamtam-bot-api-schema) which is OpenAPI-compliant.
+Library has been built based on [TamTam Bot API Schema](https://github.com/tamtam-chat/tamtam-bot-api-schema) that is OpenAPI-compliant.
 
 Full documentation of API can be found [here](https://dev.tamtam.chat).
 
@@ -46,7 +46,7 @@ TamTamBotAPI botAPI = new TamTamBotAPI(client);
 ```
 
 ## Making requests
-`TamTamBotAPI` provides access to all methods supported by the API. All methods return `TamTamQuery` object which can be executed **synchronous** or **asynchronous**.
+`TamTamBotAPI` provides access to all methods supported by the API. All methods return `TamTamQuery` object that can be executed **synchronous** or **asynchronous**.
  
 For example:
 
