@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Message in chat
@@ -33,6 +34,7 @@ public class Message implements TamTamSerializable {
     private final User sender;
     private final Recipient recipient;
     private final Long timestamp;
+    private LinkedMessage link;
     private final MessageBody message;
 
     @JsonCreator
@@ -70,6 +72,25 @@ public class Message implements TamTamSerializable {
         return timestamp;
     }
 
+    public Message link(LinkedMessage link) {
+        this.link = link;
+        return this;
+    }
+
+    /**
+    * Forwarder or replied message
+    * @return link
+    **/
+    @Nullable
+    @JsonProperty("link")
+    public LinkedMessage getLink() {
+        return link;
+    }
+
+    public void setLink(LinkedMessage link) {
+        this.link = link;
+    }
+
     /**
     * Body of created message. Text+attachments.
     * @return message
@@ -92,6 +113,7 @@ public class Message implements TamTamSerializable {
         return Objects.equals(this.sender, other.sender) &&
             Objects.equals(this.recipient, other.recipient) &&
             Objects.equals(this.timestamp, other.timestamp) &&
+            Objects.equals(this.link, other.link) &&
             Objects.equals(this.message, other.message);
     }
 
@@ -101,6 +123,7 @@ public class Message implements TamTamSerializable {
         result = 31 * result + (sender != null ? sender.hashCode() : 0);
         result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
     }
@@ -111,6 +134,7 @@ public class Message implements TamTamSerializable {
             + " sender='" + sender + '\''
             + " recipient='" + recipient + '\''
             + " timestamp='" + timestamp + '\''
+            + " link='" + link + '\''
             + " message='" + message + '\''
             + '}';
     }

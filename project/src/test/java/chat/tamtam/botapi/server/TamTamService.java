@@ -253,7 +253,7 @@ public class TamTamService {
                 ? Stream.generate(this::newAttachment).limit(3).collect(Collectors.toList())
                 : null;
 
-        MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments, null);
+        MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);
         return new Message(sender, recipient, System.currentTimeMillis(), body);
     }
 

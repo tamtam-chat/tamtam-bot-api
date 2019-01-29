@@ -27,14 +27,6 @@ public class ModelTest {
                 continue;
             }
 
-            if (Update.class.isAssignableFrom(aClass)) {
-                continue;
-            }
-
-            if (aClass.equals(MessageBody.class) || aClass.equals(Message.class) || aClass.equals(LinkedMessage.class) || aClass.equals(MessageList.class)) {
-                continue;
-            }
-
             if (aClass.isInterface()) {
                 continue;
             }

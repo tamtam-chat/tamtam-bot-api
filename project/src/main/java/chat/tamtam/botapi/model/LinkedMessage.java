@@ -31,11 +31,15 @@ import java.util.Objects;
 public class LinkedMessage implements TamTamSerializable {
 
     private final MessageLinkType type;
-    private final Message message;
+    private final User sender;
+    private final Long chatId;
+    private final MessageBody message;
 
     @JsonCreator
-    public LinkedMessage(@JsonProperty("type") MessageLinkType type, @JsonProperty("message") Message message) { 
+    public LinkedMessage(@JsonProperty("type") MessageLinkType type, @JsonProperty("sender") User sender, @JsonProperty("chat_id") Long chatId, @JsonProperty("message") MessageBody message) { 
         this.type = type;
+        this.sender = sender;
+        this.chatId = chatId;
         this.message = message;
     }
 
@@ -49,10 +53,28 @@ public class LinkedMessage implements TamTamSerializable {
     }
 
     /**
+    * User that sent this message
+    * @return sender
+    **/
+    @JsonProperty("sender")
+    public User getSender() {
+        return sender;
+    }
+
+    /**
+    * Chat identifier
+    * @return chatId
+    **/
+    @JsonProperty("chat_id")
+    public Long getChatId() {
+        return chatId;
+    }
+
+    /**
     * @return message
     **/
     @JsonProperty("message")
-    public Message getMessage() {
+    public MessageBody getMessage() {
         return message;
     }
 
@@ -67,6 +89,8 @@ public class LinkedMessage implements TamTamSerializable {
 
         LinkedMessage other = (LinkedMessage) o;
         return Objects.equals(this.type, other.type) &&
+            Objects.equals(this.sender, other.sender) &&
+            Objects.equals(this.chatId, other.chatId) &&
             Objects.equals(this.message, other.message);
     }
 
@@ -74,6 +98,8 @@ public class LinkedMessage implements TamTamSerializable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (sender != null ? sender.hashCode() : 0);
+        result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
         result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
     }
@@ -82,6 +108,8 @@ public class LinkedMessage implements TamTamSerializable {
     public String toString() {
         return "LinkedMessage{"
             + " type='" + type + '\''
+            + " sender='" + sender + '\''
+            + " chatId='" + chatId + '\''
             + " message='" + message + '\''
             + '}';
     }
