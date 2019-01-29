@@ -37,16 +37,14 @@ public class MessageBody implements TamTamSerializable {
     private final Long seq;
     private final String text;
     private final List<Attachment> attachments;
-    private final LinkedMessage link;
     private String replyTo;
 
     @JsonCreator
-    public MessageBody(@JsonProperty("mid") String mid, @JsonProperty("seq") Long seq, @Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<Attachment> attachments, @Nullable @JsonProperty("link") LinkedMessage link) { 
+    public MessageBody(@JsonProperty("mid") String mid, @JsonProperty("seq") Long seq, @Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<Attachment> attachments) { 
         this.mid = mid;
         this.seq = seq;
         this.text = text;
         this.attachments = attachments;
-        this.link = link;
     }
 
     /**
@@ -87,16 +85,6 @@ public class MessageBody implements TamTamSerializable {
         return attachments;
     }
 
-    /**
-    * Forwarder or replied message
-    * @return link
-    **/
-    @Nullable
-    @JsonProperty("link")
-    public LinkedMessage getLink() {
-        return link;
-    }
-
     public MessageBody replyTo(String replyTo) {
         this.replyTo = replyTo;
         return this;
@@ -130,7 +118,6 @@ public class MessageBody implements TamTamSerializable {
             Objects.equals(this.seq, other.seq) &&
             Objects.equals(this.text, other.text) &&
             Objects.equals(this.attachments, other.attachments) &&
-            Objects.equals(this.link, other.link) &&
             Objects.equals(this.replyTo, other.replyTo);
     }
 
@@ -141,7 +128,6 @@ public class MessageBody implements TamTamSerializable {
         result = 31 * result + (seq != null ? seq.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
-        result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (replyTo != null ? replyTo.hashCode() : 0);
         return result;
     }
@@ -153,7 +139,6 @@ public class MessageBody implements TamTamSerializable {
             + " seq='" + seq + '\''
             + " text='" + text + '\''
             + " attachments='" + attachments + '\''
-            + " link='" + link + '\''
             + " replyTo='" + replyTo + '\''
             + '}';
     }
