@@ -37,6 +37,10 @@ import java.util.Objects;
   @JsonSubTypes.Type(value = MessageEditedUpdate.class, name = "message_edited"),
   @JsonSubTypes.Type(value = MessageRemovedUpdate.class, name = "message_removed"),
   @JsonSubTypes.Type(value = MessageRestoredUpdate.class, name = "message_restored"),
+  @JsonSubTypes.Type(value = BotAddedToChatUpdate.class, name = "bot_added"),
+  @JsonSubTypes.Type(value = BotRemovedFromChatUpdate.class, name = "bot_removed"),
+  @JsonSubTypes.Type(value = UserAddedToChatUpdate.class, name = "user_added"),
+  @JsonSubTypes.Type(value = UserRemovedFromChatUpdate.class, name = "user_removed"),
 })
 public class Update implements TamTamSerializable {
 

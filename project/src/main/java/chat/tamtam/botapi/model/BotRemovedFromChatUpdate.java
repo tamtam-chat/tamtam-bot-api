@@ -22,47 +22,28 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
- * LinkedMessage
+ * You will receive this update when bot has been removed from chat
  */
-public class LinkedMessage implements TamTamSerializable {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
+public class BotRemovedFromChatUpdate extends Update implements TamTamSerializable {
 
-    private final MessageLinkType type;
-    private final User sender;
     private final Long chatId;
-    private final MessageBody message;
+    private final Long userId;
 
     @JsonCreator
-    public LinkedMessage(@JsonProperty("type") MessageLinkType type, @JsonProperty("sender") User sender, @JsonProperty("chat_id") Long chatId, @JsonProperty("message") MessageBody message) { 
-        this.type = type;
-        this.sender = sender;
+    public BotRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user_id") Long userId, @JsonProperty("timestamp") Long timestamp) { 
+        super(timestamp);
         this.chatId = chatId;
-        this.message = message;
+        this.userId = userId;
     }
 
     /**
-    * Type of linked message
-    * @return type
-    **/
-    @JsonProperty("type")
-    public MessageLinkType getType() {
-        return type;
-    }
-
-    /**
-    * User sent this message
-    * @return sender
-    **/
-    @JsonProperty("sender")
-    public User getSender() {
-        return sender;
-    }
-
-    /**
-    * Chat where message was originally posted
+    * Chat identifier bot removed from
     * @return chatId
     **/
     @JsonProperty("chat_id")
@@ -71,11 +52,12 @@ public class LinkedMessage implements TamTamSerializable {
     }
 
     /**
-    * @return message
+    * User id who removed bot from chat
+    * @return userId
     **/
-    @JsonProperty("message")
-    public MessageBody getMessage() {
-        return message;
+    @JsonProperty("user_id")
+    public Long getUserId() {
+        return userId;
     }
 
     @Override
@@ -87,30 +69,25 @@ public class LinkedMessage implements TamTamSerializable {
           return false;
         }
 
-        LinkedMessage other = (LinkedMessage) o;
-        return Objects.equals(this.type, other.type) &&
-            Objects.equals(this.sender, other.sender) &&
-            Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.message, other.message);
+        BotRemovedFromChatUpdate other = (BotRemovedFromChatUpdate) o;
+        return Objects.equals(this.chatId, other.chatId) &&
+            Objects.equals(this.userId, other.userId) &&
+            super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        int result = 1;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (sender != null ? sender.hashCode() : 0);
+        int result = super.hashCode();
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "LinkedMessage{"
-            + " type='" + type + '\''
-            + " sender='" + sender + '\''
+        return "BotRemovedFromChatUpdate{"+ super.toString()
             + " chatId='" + chatId + '\''
-            + " message='" + message + '\''
+            + " userId='" + userId + '\''
             + '}';
     }
 }
