@@ -1,4 +1,4 @@
-[![travis](https://img.shields.io/travis/com/tamtam-chat/tamtam-bot-api.svg)](https://travis-ci.org/tamtam-chat/tamtam-bot-api)
+[![Maven](https://maven-badges.herokuapp.com/maven-central/chat.tamtam/tamtam-bot-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/chat.tamtam/tamtam-bot-api) [![travis](https://img.shields.io/travis/com/tamtam-chat/tamtam-bot-api.svg)](https://travis-ci.org/tamtam-chat/tamtam-bot-api)
 [![Coverage Status](https://coveralls.io/repos/github/tamtam-chat/tamtam-bot-api/badge.svg?branch=master)](https://coveralls.io/github/tamtam-chat/tamtam-bot-api?branch=master)
 
 # TamTam Bot API Java Client
