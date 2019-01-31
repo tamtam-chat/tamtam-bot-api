@@ -54,8 +54,8 @@ public class NewMessageBody implements TamTamSerializable {
         return text;
     }
 
-    public NewMessageBody attachment(AttachmentRequest attachment) {
-        this.attachment = attachment;
+    public NewMessageBody attachment(@Nullable AttachmentRequest attachment) {
+        this.setAttachment(attachment);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class NewMessageBody implements TamTamSerializable {
         return attachment;
     }
 
-    public void setAttachment(AttachmentRequest attachment) {
+    public void setAttachment(@Nullable AttachmentRequest attachment) {
         this.attachment = attachment;
     }
 
@@ -84,7 +84,7 @@ public class NewMessageBody implements TamTamSerializable {
     }
 
     public NewMessageBody notify(Boolean notify) {
-        this.notify = notify;
+        this.setNotify(notify);
         return this;
     }
 

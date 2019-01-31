@@ -108,7 +108,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
             Request request = new Request.Builder().url(url).post(body).build();
             return newCall(request);
         } catch (IOException e) {
-            throw new TransportClientException(e);
+            throw new TransportClientException("Failed to execute POST request", e);
         } finally {
             try {
                 inputStream.close();

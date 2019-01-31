@@ -33,8 +33,8 @@ public class ChatPatch implements TamTamSerializable {
     private PhotoAttachmentRequest icon;
     private String title;
 
-    public ChatPatch icon(PhotoAttachmentRequest icon) {
-        this.icon = icon;
+    public ChatPatch icon(@Nullable PhotoAttachmentRequest icon) {
+        this.setIcon(icon);
         return this;
     }
 
@@ -47,12 +47,12 @@ public class ChatPatch implements TamTamSerializable {
         return icon;
     }
 
-    public void setIcon(PhotoAttachmentRequest icon) {
+    public void setIcon(@Nullable PhotoAttachmentRequest icon) {
         this.icon = icon;
     }
 
-    public ChatPatch title(String title) {
-        this.title = title;
+    public ChatPatch title(@Nullable String title) {
+        this.setTitle(title);
         return this;
     }
 
@@ -65,7 +65,7 @@ public class ChatPatch implements TamTamSerializable {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@Nullable String title) {
         this.title = title;
     }
 

@@ -22,6 +22,7 @@ package chat.tamtam.botapi.queries;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -39,6 +40,7 @@ import chat.tamtam.botapi.client.TamTamTransportClient;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.exceptions.ExceptionMapper;
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.exceptions.SerializationException;
 import chat.tamtam.botapi.exceptions.ServiceNotAvailableException;
 import chat.tamtam.botapi.exceptions.TransportClientException;
@@ -78,15 +80,7 @@ public class TamTamQuery<T> {
         } catch (InterruptedException e) {
             throw new ClientException("Current request was interrupted", e);
         } catch (ExecutionException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof ClientException) {
-                throw (ClientException) cause;
-            }
-            if (cause instanceof APIException) {
-                throw (APIException) cause;
-            }
-
-            throw new ClientException("Request " + url + " failed", cause);
+            throw new ClientException("Request " + url + " failed", e.getCause());
         }
     }
 
@@ -168,7 +162,7 @@ public class TamTamQuery<T> {
         return serializer.deserialize(responseBody, responseType);
     }
 
-    private String buildURL() throws ClientException {
+    String buildURL() throws ClientException {
         StringBuilder sb = new StringBuilder(url);
         if (!url.regionMatches(true, 0, "http", 0, 4)) {
             sb.insert(0, tamTamClient.getEndpoint());
@@ -192,7 +186,7 @@ public class TamTamQuery<T> {
             String name = param.getName();
             if (param.getValue() == null) {
                 if (param.isRequired()) {
-                    throw new IllegalArgumentException("Required param " + name + " is missing.");
+                    throw new RequiredParameterMissingException("Required param " + name + " is missing.");
                 }
 
                 continue;
@@ -202,7 +196,8 @@ public class TamTamQuery<T> {
             sb.append(name);
             sb.append('=');
             try {
-                sb.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                String paramValue = String.valueOf(param.getValue());
+                sb.append(encodeParam(paramValue));
             } catch (UnsupportedEncodingException e) {
                 throw new ClientException(e);
             }
@@ -211,8 +206,12 @@ public class TamTamQuery<T> {
         return sb.toString();
     }
 
+    protected String encodeParam(String paramValue) throws UnsupportedEncodingException {
+        return URLEncoder.encode(paramValue, StandardCharsets.UTF_8.name());
+    }
+
     protected enum Method {
-        GET, POST, PUT, HEAD, DELETE, PATCH
+        GET, POST, PUT, HEAD, DELETE, PATCH, OPTIONS
     }
 
     private class FutureResult implements Future<T> {

@@ -25,6 +25,8 @@ import org.junit.Test;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SimpleQueryResult;
+import chat.tamtam.botapi.model.StickerAttachmentRequest;
+import chat.tamtam.botapi.model.StickerAttachmentRequestPayload;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,7 +35,8 @@ public class EditMessageQueryTest extends QueryTest {
 
     @Test
     public void editMessageTest() throws Exception {
-        NewMessageBody newMessageBody = new NewMessageBody("edited", null);
+        NewMessageBody newMessageBody = new NewMessageBody("edited", null)
+                .attachment(new StickerAttachmentRequest(new StickerAttachmentRequestPayload("code")));
         Long messageId = 1L;
         SimpleQueryResult response = api.editMessage(newMessageBody, messageId).execute();
         assertThat(response.getSuccess(), is(true));

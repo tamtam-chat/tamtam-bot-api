@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Different actions to send to chat members
  */
-public enum SenderAction {
+public enum SenderAction implements TamTamEnum {
     
     TYPING_ON("typing_on"),
     TYPING_OFF("typing_off"),

@@ -58,10 +58,15 @@ public class SendMessageQueryTest extends QueryTest {
 
     @Test
     public void sendMessageTest() throws Exception {
-        NewMessageBody newMessageBody = new NewMessageBody("text", createAttachmentRequests());
+        NewMessageBody newMessageBody = new NewMessageBody("text", createAttachmentRequests())
+                .notify(true);
+
         Long chatId = 1L;
         SendMessageResult response = api.sendMessage(newMessageBody).chatId(chatId).execute();
         assertThat(response.getMessageId(), is(notNullValue()));
+
+        SendMessageResult response2 = api.sendMessage(newMessageBody).userId(2L).execute();
+        assertThat(response2.getRecipientId(), is(notNullValue()));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

@@ -48,7 +48,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
     }
 
     public SubscriptionRequestBody filter(String filter) {
-        this.filter = filter;
+        this.setFilter(filter);
         return this;
     }
 

@@ -35,7 +35,7 @@ public class CallbackAnswer implements TamTamSerializable {
     private String notification;
 
     public CallbackAnswer userId(Long userId) {
-        this.userId = userId;
+        this.setUserId(userId);
         return this;
     }
 
@@ -51,8 +51,8 @@ public class CallbackAnswer implements TamTamSerializable {
         this.userId = userId;
     }
 
-    public CallbackAnswer message(NewMessageBody message) {
-        this.message = message;
+    public CallbackAnswer message(@Nullable NewMessageBody message) {
+        this.setMessage(message);
         return this;
     }
 
@@ -66,12 +66,12 @@ public class CallbackAnswer implements TamTamSerializable {
         return message;
     }
 
-    public void setMessage(NewMessageBody message) {
+    public void setMessage(@Nullable NewMessageBody message) {
         this.message = message;
     }
 
-    public CallbackAnswer notification(String notification) {
-        this.notification = notification;
+    public CallbackAnswer notification(@Nullable String notification) {
+        this.setNotification(notification);
         return this;
     }
 
@@ -85,7 +85,7 @@ public class CallbackAnswer implements TamTamSerializable {
         return notification;
     }
 
-    public void setNotification(String notification) {
+    public void setNotification(@Nullable String notification) {
         this.notification = notification;
     }
 

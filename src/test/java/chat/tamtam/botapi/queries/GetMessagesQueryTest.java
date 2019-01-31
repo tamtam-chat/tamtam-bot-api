@@ -20,14 +20,18 @@
 
 package chat.tamtam.botapi.queries;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.junit.Test;
 
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
+import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageList;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -36,11 +40,19 @@ public class GetMessagesQueryTest extends QueryTest {
 
     @Test
     public void getMessagesTest() throws Exception {
-        ChatList chatList = new GetChatsQuery(client).count(Integer.MAX_VALUE).execute();
+        ChatList chatList = api.getChats().count(Integer.MAX_VALUE).execute();
         for (Chat chat : chatList.getChats()){
             Long chatId = chat.getChatId();
-            MessageList response = api.getMessages(chatId).execute();
+            MessageList response = api.getMessages(chatId)
+                    .count(ThreadLocalRandom.current().nextInt())
+                    .from(ThreadLocalRandom.current().nextLong())
+                    .to(ThreadLocalRandom.current().nextLong())
+                    .execute();
+
             assertThat(response.getMessages().size(), is(greaterThan(0)));
+            for (Message message : response.getMessages()) {
+                assertThat(message.getMessage().getReplyTo(), is(notNullValue()));
+            }
         }
     }
 

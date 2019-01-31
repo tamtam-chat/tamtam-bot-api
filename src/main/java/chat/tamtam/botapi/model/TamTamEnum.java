@@ -24,6 +24,8 @@ package chat.tamtam.botapi.model;
  * @author alexandrchuprin
  */
 public interface TamTamEnum {
+    String getValue();
+
     static <T extends Enum<T>> T create(Class<T> enumClass, String value) {
         return value == null ? null : Enum.valueOf(enumClass, value.toUpperCase());
     }

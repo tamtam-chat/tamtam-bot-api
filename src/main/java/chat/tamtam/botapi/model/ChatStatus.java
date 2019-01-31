@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Chat status for current bot
  */
-public enum ChatStatus {
+public enum ChatStatus implements TamTamEnum {
     
     ACTIVE("ACTIVE"),
     REMOVED("REMOVED"),

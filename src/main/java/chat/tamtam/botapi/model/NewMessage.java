@@ -50,8 +50,8 @@ public class NewMessage implements TamTamSerializable {
         return recipient;
     }
 
-    public NewMessage senderAction(SenderAction senderAction) {
-        this.senderAction = senderAction;
+    public NewMessage senderAction(@Nullable SenderAction senderAction) {
+        this.setSenderAction(senderAction);
         return this;
     }
 
@@ -65,12 +65,12 @@ public class NewMessage implements TamTamSerializable {
         return senderAction;
     }
 
-    public void setSenderAction(SenderAction senderAction) {
+    public void setSenderAction(@Nullable SenderAction senderAction) {
         this.senderAction = senderAction;
     }
 
-    public NewMessage chatControl(ChatControl chatControl) {
-        this.chatControl = chatControl;
+    public NewMessage chatControl(@Nullable ChatControl chatControl) {
+        this.setChatControl(chatControl);
         return this;
     }
 
@@ -84,12 +84,12 @@ public class NewMessage implements TamTamSerializable {
         return chatControl;
     }
 
-    public void setChatControl(ChatControl chatControl) {
+    public void setChatControl(@Nullable ChatControl chatControl) {
         this.chatControl = chatControl;
     }
 
-    public NewMessage message(NewMessageBody message) {
-        this.message = message;
+    public NewMessage message(@Nullable NewMessageBody message) {
+        this.setMessage(message);
         return this;
     }
 
@@ -103,7 +103,7 @@ public class NewMessage implements TamTamSerializable {
         return message;
     }
 
-    public void setMessage(NewMessageBody message) {
+    public void setMessage(@Nullable NewMessageBody message) {
         this.message = message;
     }
 

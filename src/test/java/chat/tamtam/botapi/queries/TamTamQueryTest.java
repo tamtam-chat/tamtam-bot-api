@@ -1,22 +1,39 @@
 package chat.tamtam.botapi.queries;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import chat.tamtam.botapi.client.ClientResponse;
 import chat.tamtam.botapi.client.TamTamClient;
+import chat.tamtam.botapi.client.TamTamSerializer;
+import chat.tamtam.botapi.client.TamTamTransportClient;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
 import chat.tamtam.botapi.exceptions.ClientException;
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.exceptions.ServiceNotAvailableException;
 import chat.tamtam.botapi.exceptions.TooManyRequestsException;
+import chat.tamtam.botapi.exceptions.TransportClientException;
 import chat.tamtam.botapi.model.User;
+import chat.tamtam.botapi.server.TamTamService;
+import okhttp3.HttpUrl;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static spark.Spark.get;
 import static spark.Spark.halt;
 
@@ -32,6 +49,34 @@ public class TamTamQueryTest extends QueryTest {
 
     private static final chat.tamtam.botapi.model.Error ATTACH_NOT_REQDY_ERROR
             = new chat.tamtam.botapi.model.Error("attachment.not.ready", "error");
+
+    private static final Future<ClientResponse> INTERRUPTING_FUTURE = new Future<ClientResponse>() {
+        @Override
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            return false;
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return false;
+        }
+
+        @Override
+        public boolean isDone() {
+            return false;
+        }
+
+        @Override
+        public ClientResponse get() throws InterruptedException, ExecutionException {
+            throw new InterruptedException("test interruption");
+        }
+
+        @Override
+        public ClientResponse get(long timeout, @NotNull TimeUnit unit) throws InterruptedException,
+                ExecutionException, TimeoutException {
+            throw new InterruptedException("test interruption");
+        }
+    };
 
     @BeforeClass
     public static void before() {
@@ -101,5 +146,63 @@ public class TamTamQueryTest extends QueryTest {
         } catch (ExecutionException e) {
             throw e.getCause();
         }
+    }
+
+    @Test(expected = ClientException.class)
+    public void shouldThrowExceptionOnUnsupportedMethodCall() throws Exception {
+        new TamTamQuery<>(client, "/me", User.class, TamTamQuery.Method.OPTIONS).execute();
+    }
+
+    @Test(expected = ClientException.class)
+    public void shouldWrapTransportException() throws Exception {
+        TamTamTransportClient transport = mock(TamTamTransportClient.class);
+        TamTamSerializer serializer = mock(TamTamSerializer.class);
+        when(transport.post(anyString(), any())).thenThrow(new TransportClientException("test exception"));
+        TamTamClient clientMock = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer);
+        new TamTamQuery<>(clientMock, "/me", User.class, TamTamQuery.Method.POST).execute();
+    }
+
+    @Test
+    public void shouldAppendParamsToUrlIfItAlreadyHasParams() throws Exception {
+        TamTamQuery<User> query = new TamTamQuery<>(client, "/me?param=value", User.class, TamTamQuery.Method.GET);
+        String param2Name = "param2";
+        String param2Value = "value2";
+        QueryParam<String> param2 = new QueryParam<>(param2Name, query);
+        param2.setValue(param2Value);
+        String url = query.buildURL();
+        HttpUrl parsed = HttpUrl.parse(url);
+        assertThat(parsed.queryParameter("param"), is("value"));
+        assertThat(parsed.queryParameter(param2Name), is(param2Value));
+    }
+
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrowExceptionIfParamIsMissing() throws Exception {
+        TamTamQuery<User> query = new TamTamQuery<>(client, "/me", User.class, TamTamQuery.Method.GET);
+        String param2Name = "param2";
+        new QueryParam<String>(param2Name, query).required();
+        query.buildURL();
+    }
+
+    @Test(expected = ClientException.class)
+    public void shouldWrapInterruptedException() throws Exception {
+        TamTamTransportClient transport = mock(TamTamTransportClient.class);
+        TamTamSerializer serializer = mock(TamTamSerializer.class);
+        when(transport.post(anyString(), any())).thenReturn(INTERRUPTING_FUTURE);
+
+        TamTamClient clientMock = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer);
+        new TamTamQuery<>(clientMock, "/me", User.class, TamTamQuery.Method.POST).execute();
+    }
+
+    @Test(expected = ClientException.class)
+    public void shouldWrapEncodingException() throws Exception {
+        TamTamQuery<User> query = new TamTamQuery<User>(client, "/me", User.class, TamTamQuery.Method.POST) {
+            @Override
+            protected String encodeParam(String paramValue) throws UnsupportedEncodingException {
+                throw new UnsupportedEncodingException("test");
+            }
+        };
+
+        new QueryParam<>("param", "value", query);
+        query.buildURL();
     }
 }

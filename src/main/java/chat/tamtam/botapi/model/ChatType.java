@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Type of chat. Dialog (one-on-one), chat or channel
  */
-public enum ChatType {
+public enum ChatType implements TamTamEnum {
     
     DIALOG("dialog"),
     CHAT("chat"),

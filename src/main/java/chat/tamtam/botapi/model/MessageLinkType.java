@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Type of linked message
  */
-public enum MessageLinkType {
+public enum MessageLinkType implements TamTamEnum {
     
     FORWARD("forward"),
     REPLY("reply");
