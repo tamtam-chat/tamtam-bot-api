@@ -1,5 +1,5 @@
-[![travis](https://img.shields.io/travis/com/tamtam-chat/tamtam-bot-api.svg)](https://travis-ci.org/tamtam-chat/tamtam-bot-api)
-[![Coverage Status](https://coveralls.io/repos/github/tamtam-chat/tamtam-bot-api/badge.svg?branch=master)](https://coveralls.io/github/tamtam-chat/tamtam-bot-api?branch=master)
+[![Maven](https://maven-badges.herokuapp.com/maven-central/chat.tamtam/tamtam-bot-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/chat.tamtam/tamtam-bot-api) [![travis](https://img.shields.io/travis/com/tamtam-chat/tamtam-bot-api.svg)](https://travis-ci.org/tamtam-chat/tamtam-bot-api)
+[![Coverage Status](https://coveralls.io/repos/github/tamtam-chat/tamtam-bot-api/badge.svg?branch=master)](https://coveralls.io/github/tamtam-chat/tamtam-bot-api?branch=master) [![Javadocs](http://www.javadoc.io/badge/chat.tamtam/tamtam-bot-api.svg)](http://www.javadoc.io/doc/chat.tamtam/tamtam-bot-api)
 
 # TamTam Bot API Java Client
 This is Java client for TamTam Bot API. It gives you full access to API in your Java code.
