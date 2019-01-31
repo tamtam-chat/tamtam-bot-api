@@ -30,6 +30,7 @@ import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
  */
 public class TamTamClient {
     private static final String ENDPOINT = "https://botapi.tamtam.chat";
+    static final String ENDPOINT_ENV_VAR_NAME = "TAMTAM_BOTAPI_ENDPOINT";
 
     private final String accessToken;
     private final TamTamTransportClient transport;
@@ -66,12 +67,16 @@ public class TamTamClient {
         return transport;
     }
 
-    private static String createEndpoint() {
-        String env = System.getenv("TAMTAM_BOTAPI_ENDPOINT");
+    private String createEndpoint() {
+        String env = getEnvironment(ENDPOINT_ENV_VAR_NAME);
         if (env != null) {
             return env;
         }
 
         return System.getProperty("tamtam.botapi.endpoint", ENDPOINT);
+    }
+
+    String getEnvironment(String name) {
+        return System.getenv(name);
     }
 }

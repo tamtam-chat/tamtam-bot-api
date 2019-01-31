@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Intent of button
  */
-public enum Intent {
+public enum Intent implements TamTamEnum {
     
     POSITIVE("positive"),
     NEGATIVE("negative"),

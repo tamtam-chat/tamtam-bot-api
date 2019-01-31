@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.Ignore;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -43,7 +44,7 @@ public class GetMembersQueryTest extends QueryTest {
     
     @Test
     public void getMembersTest() throws Exception {
-        ChatList chatList = new GetChatsQuery(client).count(1).execute();
+        ChatList chatList = api.getChats().count(1).execute();
         Chat chat = chatList.getChats().get(0);
         Long chatId = chat.getChatId();
         Long marker = null;
@@ -56,6 +57,10 @@ public class GetMembersQueryTest extends QueryTest {
         } while (marker != null);
 
         assertThat(members.size(), is(chat.getParticipantsCount()));
+        for (ChatMember member : members) {
+            assertThat(member.getIsOwner(), is(notNullValue()));
+            assertThat(member.getLastAccessTime(), is(notNullValue()));
+        }
     }
 
     @Test(expected = RequiredParameterMissingException.class)

@@ -24,15 +24,15 @@ package chat.tamtam.botapi.exceptions;
  * @author alexandrchuprin
  */
 public class TransportClientException extends Exception {
-    public TransportClientException(String message) {
-        super(message);
-    }
-
     public TransportClientException(Throwable cause) {
         super(cause);
     }
 
     public TransportClientException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public TransportClientException(String message) {
+        super(message);
     }
 }

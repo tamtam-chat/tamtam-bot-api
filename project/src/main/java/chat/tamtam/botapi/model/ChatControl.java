@@ -38,7 +38,7 @@ public class ChatControl implements TamTamSerializable {
     private ChatMember removeMember;
 
     public ChatControl title(String title) {
-        this.title = title;
+        this.setTitle(title);
         return this;
     }
 
@@ -56,7 +56,7 @@ public class ChatControl implements TamTamSerializable {
     }
 
     public ChatControl icon(PhotoAttachmentRequest icon) {
-        this.icon = icon;
+        this.setIcon(icon);
         return this;
     }
 
@@ -74,7 +74,7 @@ public class ChatControl implements TamTamSerializable {
     }
 
     public ChatControl leave(String leave) {
-        this.leave = leave;
+        this.setLeave(leave);
         return this;
     }
 
@@ -92,7 +92,7 @@ public class ChatControl implements TamTamSerializable {
     }
 
     public ChatControl addMembers(List<ChatMember> addMembers) {
-        this.addMembers = addMembers;
+        this.setAddMembers(addMembers);
         return this;
     }
 
@@ -119,7 +119,7 @@ public class ChatControl implements TamTamSerializable {
     }
 
     public ChatControl removeMember(ChatMember removeMember) {
-        this.removeMember = removeMember;
+        this.setRemoveMember(removeMember);
         return this;
     }
 

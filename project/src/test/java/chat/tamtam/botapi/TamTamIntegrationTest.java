@@ -24,8 +24,8 @@ public abstract class TamTamIntegrationTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private TamTamClient client = new TamTamClient(getToken(), new OkHttpTransportClient(), new JacksonSerializer());
 
-    TamTamBotAPI botAPI = new TamTamBotAPI(client);
-    TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
+    protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
+    protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
     User me;
 
     @Before

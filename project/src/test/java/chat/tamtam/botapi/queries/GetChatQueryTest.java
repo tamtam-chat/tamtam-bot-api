@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.server.TamTamService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,8 +34,9 @@ public class GetChatQueryTest extends QueryTest {
     @Test
     public void getChatTest() throws Exception {
         Long chatId = randomChat().getChatId();
-        Chat response = api.getChat(chatId).execute();
-        assertThat(response.getChatId(), is(chatId));
+        Chat chat = api.getChat(chatId).execute();
+        assertThat(chat.getChatId(), is(chatId));
+        assertThat(chat.getIcon().getUrl(), is(TamTamService.CHAT_ICON_URL));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

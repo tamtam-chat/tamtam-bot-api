@@ -16,12 +16,15 @@ import com.jparams.verifier.tostring.preset.IntelliJPreset;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 /**
  * @author alexandrchuprin
  */
 public class ModelTest {
     @Test
-    public void name() throws Exception {
+    public void testAllModels() throws Exception {
         for (Class aClass : getClasses("chat.tamtam.botapi.model")) {
             if (aClass.getName().endsWith("Test")) {
                 continue;
@@ -29,6 +32,10 @@ public class ModelTest {
 
             if (aClass.isInterface()) {
                 continue;
+            }
+
+            if (aClass.isEnum()) {
+                testEnum((Class<? extends Enum<?>>) aClass);
             }
 
             if (!aClass.isEnum()) {
@@ -42,6 +49,15 @@ public class ModelTest {
                     .suppress(Warning.NONFINAL_FIELDS)
                     .usingGetClass()
                     .verify();
+        }
+    }
+
+    private void testEnum(Class<? extends Enum<?>> anEnum) {
+        Enum<?>[] enumConstants = anEnum.getEnumConstants();
+        for (Enum<?> enumConstant : enumConstants) {
+            if (enumConstant instanceof TamTamEnum) {
+                assertThat(TamTamEnum.create(enumConstant.getDeclaringClass(), ((TamTamEnum) enumConstant).getValue()), is(enumConstant));
+            }
         }
     }
 

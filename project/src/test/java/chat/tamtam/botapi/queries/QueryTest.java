@@ -14,7 +14,7 @@ import chat.tamtam.botapi.server.TamTamService;
  */
 public class QueryTest {
     public final TamTamClient client = TamTamClient.create(TamTamService.ACCESS_TOKEN);
-    public final TamTamBotAPI api = new TamTamBotAPI(client);
+    public final TamTamBotAPI api = TamTamBotAPI.create(TamTamService.ACCESS_TOKEN);
 
     protected TamTamClient invalidClient = new TamTamClient("accesstoken", client.getTransport(), client.getSerializer()) {
         @Override
@@ -24,7 +24,7 @@ public class QueryTest {
     };
 
     static {
-        System.setProperty("tamtam.botapi.endpoint", "http://localhost:4567");
+        System.setProperty("tamtam.botapi.endpoint", TamTamServer.ENDPOINT);
         TamTamServer.start();
     }
 

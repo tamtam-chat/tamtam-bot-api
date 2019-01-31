@@ -17,6 +17,8 @@ import static spark.Spark.put;
  * @author alexandrchuprin
  */
 public class TamTamServer {
+    public static final String ENDPOINT = "http://localhost:4567";
+
     public static void start() {
         ObjectMapper mapper = new ObjectMapper();
         TamTamService service = new TamTamService(mapper);

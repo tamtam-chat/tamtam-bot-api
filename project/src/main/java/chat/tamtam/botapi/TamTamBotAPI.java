@@ -62,10 +62,8 @@ import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserIdsList;
 
-import java.util.Objects;
-
 public class TamTamBotAPI {
-    private final TamTamClient client;
+    final TamTamClient client;
 
     public TamTamBotAPI(String accessToken, TamTamTransportClient transport, TamTamSerializer serializer) {
         this(new TamTamClient(accessToken, transport, serializer));

@@ -51,7 +51,7 @@ public class QueryParam<T> {
         return value;
     }
 
-    public void setValue(@NotNull T value) {
+    public void setValue(@Nullable T value) {
         this.value = value;
     }
 

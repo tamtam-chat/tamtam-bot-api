@@ -119,8 +119,8 @@ public class Chat implements TamTamSerializable {
         return participantsCount;
     }
 
-    public Chat ownerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public Chat ownerId(@Nullable Long ownerId) {
+        this.setOwnerId(ownerId);
         return this;
     }
 
@@ -134,12 +134,12 @@ public class Chat implements TamTamSerializable {
         return ownerId;
     }
 
-    public void setOwnerId(Long ownerId) {
+    public void setOwnerId(@Nullable Long ownerId) {
         this.ownerId = ownerId;
     }
 
-    public Chat participants(Map<String, Long> participants) {
-        this.participants = participants;
+    public Chat participants(@Nullable Map<String, Long> participants) {
+        this.setParticipants(participants);
         return this;
     }
 
@@ -162,7 +162,7 @@ public class Chat implements TamTamSerializable {
         return participants;
     }
 
-    public void setParticipants(Map<String, Long> participants) {
+    public void setParticipants(@Nullable Map<String, Long> participants) {
         this.participants = participants;
     }
 

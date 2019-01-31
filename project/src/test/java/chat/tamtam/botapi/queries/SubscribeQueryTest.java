@@ -40,7 +40,8 @@ public class SubscribeQueryTest extends QueryTest {
     
     @Test
     public void subscribeTest() throws Exception {
-        SubscriptionRequestBody subscriptionRequestBody = new SubscriptionRequestBody("https://someurl.com");
+        SubscriptionRequestBody subscriptionRequestBody = new SubscriptionRequestBody("https://someurl.com")
+                .filter("some-filter");
         SimpleQueryResult response = api.subscribe(subscriptionRequestBody).execute();
         assertThat(response.getSuccess(), is(true));
     }

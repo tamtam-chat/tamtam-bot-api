@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
@@ -20,6 +21,8 @@ import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentPayload;
 import chat.tamtam.botapi.model.AudioAttachment;
+import chat.tamtam.botapi.model.BotAddedToChatUpdate;
+import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.Callback;
 import chat.tamtam.botapi.model.CallbackButton;
@@ -34,14 +37,17 @@ import chat.tamtam.botapi.model.ContactAttachment;
 import chat.tamtam.botapi.model.ContactAttachmentPayload;
 import chat.tamtam.botapi.model.FileAttachment;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
+import chat.tamtam.botapi.model.Image;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.Keyboard;
+import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.MessageCallbackUpdate;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.MessageEditedUpdate;
+import chat.tamtam.botapi.model.MessageLinkType;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.MessageRemovedUpdate;
 import chat.tamtam.botapi.model.MessageRestoredUpdate;
@@ -52,6 +58,7 @@ import chat.tamtam.botapi.model.Recipient;
 import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.ShareAttachment;
 import chat.tamtam.botapi.model.SimpleQueryResult;
+import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.Subscription;
 import chat.tamtam.botapi.model.SubscriptionRequestBody;
 import chat.tamtam.botapi.model.Update;
@@ -59,6 +66,8 @@ import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.User;
+import chat.tamtam.botapi.model.UserAddedToChatUpdate;
+import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
 import spark.Request;
@@ -72,6 +81,8 @@ public class TamTamService {
     private static final SimpleQueryResult SUCCESSFULL = new SimpleQueryResult(true);
     private static final SimpleQueryResult NOT_SUCCESSFULL = new SimpleQueryResult(false);
     private static final AtomicLong ID_COUNTER = new AtomicLong();
+    public static final String CHAT_ICON_URL = "iconurl";
+
     private final UserWithPhoto me = new UserWithPhoto(
             "avata_rul",
             "full_avatar_url",
@@ -164,7 +175,8 @@ public class TamTamService {
     }
 
     public Object getUploadUrl(Request request, Response response) {
-        UploadType uploadType = UploadType.create(request.queryParams("type"));
+        String type = request.queryParams("type");
+        UploadType uploadType = UploadType.create(type);
         return new UploadEndpoint("http://url" + uploadType.name() + ".com");
     }
 
@@ -200,9 +212,10 @@ public class TamTamService {
     }
 
     public Object sendMessage(Request request, Response response) throws IOException {
-        long chatId = Long.parseLong(request.queryParams("chat_id"));
+        String chatId = request.queryParams("chat_id");
+        String userId = request.queryParams("user_id");
         NewMessageBody newMessage = mapper.readValue(request.body(), NewMessageBody.class);
-        return new SendMessageResult(chatId, chatId, "mid." + chatId);
+        return new SendMessageResult(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId), "mid." + chatId);
     }
 
     public Object getUpdates(Request request, Response response) throws Exception {
@@ -213,7 +226,11 @@ public class TamTamService {
                 new MessageEditedUpdate(newMessage(randomChat), now),
                 new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(), now),
                 new MessageRestoredUpdate("mid." + ID_COUNTER.incrementAndGet(), now),
-                new MessageCallbackUpdate(new Callback(now, "calbackId", "payload", random(users.values())), now)
+                new MessageCallbackUpdate(new Callback(now, "calbackId", "payload", random(users.values())), now),
+                new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
+                new UserRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
+                new BotAddedToChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
+                new BotRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis())
         );
 
         return new UpdateList(updates, null);
@@ -254,7 +271,11 @@ public class TamTamService {
                 : null;
 
         MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);
-        return new Message(sender, recipient, System.currentTimeMillis(), body);
+        Message message = new Message(sender, recipient, System.currentTimeMillis(), body);
+        message.link(new LinkedMessage(MessageLinkType.FORWARD, sender, id, body));
+        body.replyTo("replyTo");
+
+        return message;
     }
 
     private Attachment newAttachment() {
@@ -278,6 +299,8 @@ public class TamTamService {
                     .collect(Collectors.toList());
             Keyboard keyboard = new Keyboard(buttons);
             return new InlineKeyboardAttachment("callbackId" + ID_COUNTER.incrementAndGet(), keyboard);
+        } else if (random.nextBoolean()) {
+            return new StickerAttachment(new AttachmentPayload("stickerurl"));
         }
 
         return new ShareAttachment(new AttachmentPayload("shareurl"));
@@ -290,7 +313,13 @@ public class TamTamService {
     private Chat newChat() {
         boolean isDialog = ThreadLocalRandom.current().nextBoolean();
         ChatType type = isDialog ? ChatType.DIALOG : ChatType.CHAT;
-        return new Chat(ID_COUNTER.incrementAndGet(), type, ChatStatus.ACTIVE, "chat title", null, 0L,
+        Image icon = new Image(CHAT_ICON_URL);
+        Chat chat = new Chat(ID_COUNTER.incrementAndGet(), type, ChatStatus.ACTIVE, "chat title", icon, 0L,
                 isDialog ? 2 : ThreadLocalRandom.current().nextInt(100));
+
+        Map<String, Long> participants = new HashMap<>();
+        return chat.ownerId(ID_COUNTER.incrementAndGet())
+                .putParticipantsItem(String.valueOf(ID_COUNTER.incrementAndGet()), System.currentTimeMillis())
+                .participants(participants);
     }
 }

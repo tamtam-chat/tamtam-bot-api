@@ -85,8 +85,8 @@ public class MessageBody implements TamTamSerializable {
         return attachments;
     }
 
-    public MessageBody replyTo(String replyTo) {
-        this.replyTo = replyTo;
+    public MessageBody replyTo(@Nullable String replyTo) {
+        this.setReplyTo(replyTo);
         return this;
     }
 
@@ -100,7 +100,7 @@ public class MessageBody implements TamTamSerializable {
         return replyTo;
     }
 
-    public void setReplyTo(String replyTo) {
+    public void setReplyTo(@Nullable String replyTo) {
         this.replyTo = replyTo;
     }
 
