@@ -30,7 +30,7 @@ import java.util.Objects;
 /**
  * &#x60;Update&#x60; object repsesents different types of events that happened in chat. See its inheritors
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "update_type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "update_type", visible = true, defaultImpl = Update.class)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = "message_created"),
   @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = "message_callback"),
@@ -44,20 +44,11 @@ import java.util.Objects;
 })
 public class Update implements TamTamSerializable {
 
-    private String updateType;
     private final Long timestamp;
 
     @JsonCreator
     public Update(@JsonProperty("timestamp") Long timestamp) { 
         this.timestamp = timestamp;
-    }
-
-    /**
-    * @return updateType
-    **/
-    @JsonProperty("update_type")
-    public String getUpdateType() {
-        return updateType;
     }
 
     /**
@@ -79,14 +70,12 @@ public class Update implements TamTamSerializable {
         }
 
         Update other = (Update) o;
-        return Objects.equals(this.updateType, other.updateType) &&
-            Objects.equals(this.timestamp, other.timestamp);
+        return Objects.equals(this.timestamp, other.timestamp);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = 31 * result + (updateType != null ? updateType.hashCode() : 0);
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         return result;
     }
@@ -94,7 +83,6 @@ public class Update implements TamTamSerializable {
     @Override
     public String toString() {
         return "Update{"
-            + " updateType='" + updateType + '\''
             + " timestamp='" + timestamp + '\''
             + '}';
     }

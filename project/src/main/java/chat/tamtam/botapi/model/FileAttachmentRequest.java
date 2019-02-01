@@ -22,14 +22,12 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Request to attach file to message. MUST be the only attachment in message
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class FileAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
     private final UploadedFileInfo payload;
@@ -58,13 +56,12 @@ public class FileAttachmentRequest extends AttachmentRequest implements TamTamSe
         }
 
         FileAttachmentRequest other = (FileAttachmentRequest) o;
-        return Objects.equals(this.payload, other.payload) &&
-            super.equals(o);
+        return Objects.equals(this.payload, other.payload);
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = 1;
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
         return result;
     }

@@ -20,16 +20,14 @@
 
 package chat.tamtam.botapi.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import java.util.Objects;
 
 
 /**
  * Generic schema representing message attachment
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = Attachment.class)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = PhotoAttachment.class, name = "image"),
   @JsonSubTypes.Type(value = VideoAttachment.class, name = "video"),
@@ -42,40 +40,12 @@ import java.util.Objects;
 })
 public class Attachment implements TamTamSerializable {
 
-    private String type;
 
-    /**
-    * @return type
-    **/
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-          return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-          return false;
-        }
-
-        Attachment other = (Attachment) o;
-        return Objects.equals(this.type, other.type);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 1;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
-    }
 
     @Override
     public String toString() {
         return "Attachment{"
-            + " type='" + type + '\''
             + '}';
     }
 }

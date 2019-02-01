@@ -22,14 +22,12 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
  * After pressing this type of button client sends new message with attachment of current user geo location
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class RequestGeoLocationButton extends Button implements TamTamSerializable {
 
 
@@ -38,16 +36,7 @@ public class RequestGeoLocationButton extends Button implements TamTamSerializab
         super(text, intent);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-          return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-          return false;
-        }
-        return super.equals(o);
-    }
+
 
     @Override
     public String toString() {

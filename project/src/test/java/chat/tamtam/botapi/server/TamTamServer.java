@@ -2,6 +2,8 @@ package chat.tamtam.botapi.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import chat.tamtam.botapi.client.impl.JacksonSerializer;
+import spark.ResponseTransformer;
 import spark.Spark;
 
 import static spark.Spark.awaitInitialization;
@@ -20,7 +22,7 @@ public class TamTamServer {
     public static final String ENDPOINT = "http://localhost:4567";
 
     public static void start() {
-        ObjectMapper mapper = new ObjectMapper();
+        JacksonSerializer mapper = new JacksonSerializer();
         TamTamService service = new TamTamService(mapper);
         before(((request, response) -> {
             boolean isUpload = request.pathInfo().startsWith("/fileupload")
@@ -37,30 +39,27 @@ public class TamTamServer {
             }
         }));
 
-        get("/me", service::getMyInfo, mapper::writeValueAsString);
+        get("/me", service::getMyInfo, service::serialize);
 
-        get("/chats", service::getChats, mapper::writeValueAsString);
-        get("/chats/:chatId", service::getChat, mapper::writeValueAsString);
-        patch("/chats/:chatId", service::editChat, mapper::writeValueAsString);
-        get("/chats/:chatId/members", service::getMembers, mapper::writeValueAsString);
-        post("/chats/:chatId/members", service::addMembers, mapper::writeValueAsString);
-        delete("/chats/:chatId/members", service::removeMembers, mapper::writeValueAsString);
-        delete("/chats/:chatId/members/me", service::leaveChat, mapper::writeValueAsString);
-        post("/chats/:chatId/actions", service::sendAction, mapper::writeValueAsString);
+        get("/chats", service::getChats, service::serialize);
+        get("/chats/:chatId", service::getChat, service::serialize);
+        patch("/chats/:chatId", service::editChat, service::serialize);
+        get("/chats/:chatId/members", service::getMembers, service::serialize);
+        post("/chats/:chatId/members", service::addMembers, service::serialize);
+        delete("/chats/:chatId/members", service::removeMembers, service::serialize);
+        delete("/chats/:chatId/members/me", service::leaveChat, service::serialize);
+        post("/chats/:chatId/actions", service::sendAction, service::serialize);
 
-        post("/messages", service::sendMessage, mapper::writeValueAsString);
-        put("/messages", service::editMessage, mapper::writeValueAsString);
-        get("/messages", service::getMessages, mapper::writeValueAsString);
+        put("/messages", service::editMessage, service::serialize);
+        get("/messages", service::getMessages, service::serialize);
 
-        post("/answers", service::answer, mapper::writeValueAsString);
+        post("/answers", service::answer, service::serialize);
 
-        get("/subscriptions", service::getSubscriptions, mapper::writeValueAsString);
-        post("/subscriptions", service::addSubscription, mapper::writeValueAsString);
-        delete("/subscriptions", service::removeSubscription, mapper::writeValueAsString);
+        get("/subscriptions", service::getSubscriptions, service::serialize);
+        post("/subscriptions", service::addSubscription, service::serialize);
+        delete("/subscriptions", service::removeSubscription, service::serialize);
 
-        post("/uploads", service::getUploadUrl, mapper::writeValueAsString);
-
-        get("/updates", service::getUpdates, mapper::writeValueAsString);
+        post("/uploads", service::getUploadUrl, service::serialize);
 
         awaitInitialization();
     }

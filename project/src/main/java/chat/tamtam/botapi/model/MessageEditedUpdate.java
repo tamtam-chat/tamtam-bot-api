@@ -22,14 +22,12 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * You will get this &#x60;update&#x60; as soon as message is edited
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class MessageEditedUpdate extends Update implements TamTamSerializable {
 
     private final Message message;

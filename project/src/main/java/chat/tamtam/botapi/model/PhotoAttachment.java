@@ -22,14 +22,12 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Image attachment
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class PhotoAttachment extends Attachment implements TamTamSerializable {
 
     private final PhotoAttachmentPayload payload;
@@ -58,13 +56,12 @@ public class PhotoAttachment extends Attachment implements TamTamSerializable {
         }
 
         PhotoAttachment other = (PhotoAttachment) o;
-        return Objects.equals(this.payload, other.payload) &&
-            super.equals(o);
+        return Objects.equals(this.payload, other.payload);
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = 1;
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
         return result;
     }

@@ -22,14 +22,12 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * Request to attach keyboard to message
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class InlineKeyboardAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
     private final InlineKeyboardAttachmentRequestPayload payload;
@@ -58,13 +56,12 @@ public class InlineKeyboardAttachmentRequest extends AttachmentRequest implement
         }
 
         InlineKeyboardAttachmentRequest other = (InlineKeyboardAttachmentRequest) o;
-        return Objects.equals(this.payload, other.payload) &&
-            super.equals(o);
+        return Objects.equals(this.payload, other.payload);
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = 1;
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
         return result;
     }

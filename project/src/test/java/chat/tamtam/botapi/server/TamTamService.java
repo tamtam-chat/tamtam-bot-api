@@ -1,8 +1,6 @@
 package chat.tamtam.botapi.server;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -15,16 +13,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import chat.tamtam.botapi.client.TamTamSerializer;
+import chat.tamtam.botapi.exceptions.SerializationException;
 import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentPayload;
 import chat.tamtam.botapi.model.AudioAttachment;
-import chat.tamtam.botapi.model.BotAddedToChatUpdate;
-import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.Button;
-import chat.tamtam.botapi.model.Callback;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
@@ -44,30 +39,19 @@ import chat.tamtam.botapi.model.Keyboard;
 import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
-import chat.tamtam.botapi.model.MessageCallbackUpdate;
-import chat.tamtam.botapi.model.MessageCreatedUpdate;
-import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.MessageLinkType;
 import chat.tamtam.botapi.model.MessageList;
-import chat.tamtam.botapi.model.MessageRemovedUpdate;
-import chat.tamtam.botapi.model.MessageRestoredUpdate;
-import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentPayload;
 import chat.tamtam.botapi.model.Recipient;
-import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.ShareAttachment;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.Subscription;
 import chat.tamtam.botapi.model.SubscriptionRequestBody;
-import chat.tamtam.botapi.model.Update;
-import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.User;
-import chat.tamtam.botapi.model.UserAddedToChatUpdate;
-import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
 import spark.Request;
@@ -91,12 +75,12 @@ public class TamTamService {
             "testbot"
     );
 
-    private final Map<Long, User> users = new ConcurrentHashMap<>();
-    private final Map<Long, Chat> chats = new ConcurrentHashMap<>();
-    private final Map<Long, List<ChatMember>> chatMembers = new ConcurrentHashMap<>();
-    private final Map<Long, List<Message>> chatMessages = new ConcurrentHashMap<>();
-    private final ObjectMapper mapper;
-    private final List<Subscription> subscriptions = Stream.generate(this::newSubscription)
+    protected final Map<Long, User> users = new ConcurrentHashMap<>();
+    protected final Map<Long, Chat> chats = new ConcurrentHashMap<>();
+    protected final Map<Long, List<ChatMember>> chatMembers = new ConcurrentHashMap<>();
+    protected final Map<Long, List<Message>> chatMessages = new ConcurrentHashMap<>();
+    protected final TamTamSerializer serializer;
+    protected final List<Subscription> subscriptions = Stream.generate(this::newSubscription)
             .limit(3)
             .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
 
@@ -113,8 +97,8 @@ public class TamTamService {
         });
     }
 
-    public TamTamService(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public TamTamService(TamTamSerializer serializer) {
+        this.serializer = serializer;
     }
 
     public Object getSubscriptions(Request request, Response response) {
@@ -135,7 +119,7 @@ public class TamTamService {
 
     public Object editChat(Request request, Response response) throws Exception {
         Long chatId = Long.valueOf(request.params("chatId"));
-        ChatPatch patch = mapper.readValue(request.bodyAsBytes(), ChatPatch.class);
+        ChatPatch patch = serializer.deserialize(request.body(), ChatPatch.class);
         Chat chat = chats.get(chatId);
         return new Chat(chatId, chat.getType(), chat.getStatus(),
                 patch.getTitle() == null ? chat.getTitle() : patch.getTitle(), null, chat.getLastEventTime(),
@@ -193,12 +177,12 @@ public class TamTamService {
 
     public Object sendAction(Request request, Response response) throws Exception {
         Long chatId = Long.valueOf(request.params("chatId"));
-        ActionRequestBody actionRequestBody = mapper.readValue(request.body(), ActionRequestBody.class);
+        ActionRequestBody actionRequestBody = serializer.deserialize(request.body(), ActionRequestBody.class);
         return SUCCESSFULL;
     }
 
-    public Object addSubscription(Request request, Response response) throws IOException {
-        SubscriptionRequestBody subscription = mapper.readValue(request.body(), SubscriptionRequestBody.class);
+    public Object addSubscription(Request request, Response response) throws Exception {
+        SubscriptionRequestBody subscription = serializer.deserialize(request.body(), SubscriptionRequestBody.class);
         return SUCCESSFULL;
     }
 
@@ -211,29 +195,8 @@ public class TamTamService {
         return SUCCESSFULL;
     }
 
-    public Object sendMessage(Request request, Response response) throws IOException {
-        String chatId = request.queryParams("chat_id");
-        String userId = request.queryParams("user_id");
-        NewMessageBody newMessage = mapper.readValue(request.body(), NewMessageBody.class);
-        return new SendMessageResult(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId), "mid." + chatId);
-    }
-
-    public Object getUpdates(Request request, Response response) throws Exception {
-        Chat randomChat = random(chats.values());
-        long now = System.currentTimeMillis();
-        List<Update> updates = Arrays.asList(
-                new MessageCreatedUpdate(newMessage(randomChat), now),
-                new MessageEditedUpdate(newMessage(randomChat), now),
-                new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(), now),
-                new MessageRestoredUpdate("mid." + ID_COUNTER.incrementAndGet(), now),
-                new MessageCallbackUpdate(new Callback(now, "calbackId", "payload", random(users.values())), now),
-                new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
-                new UserRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
-                new BotAddedToChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
-                new BotRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), System.currentTimeMillis())
-        );
-
-        return new UpdateList(updates, null);
+    public String serialize(Object o) throws SerializationException {
+        return new String(serializer.serialize(o));
     }
 
     private static ChatMember newChatMember() {
@@ -246,7 +209,7 @@ public class TamTamService {
         return param == null ? OptionalInt.empty() : OptionalInt.of(Integer.parseInt(param));
     }
 
-    private static <T> T random(Collection<T> collection) {
+    protected static <T> T random(Collection<T> collection) {
         List<T> list = new ArrayList<>(collection);
         return list.get(ThreadLocalRandom.current().nextInt(list.size()));
     }
@@ -260,7 +223,7 @@ public class TamTamService {
         return new User(userId, "user-" + userId, "username" + userId);
     }
 
-    private Message newMessage(Chat chat) {
+    protected Message newMessage(Chat chat) {
         User sender = random(new ArrayList<>(users.values()));
         Recipient recipient = new Recipient(chat.getChatId(), chat.getType(), null);
         long id = ID_COUNTER.incrementAndGet();
