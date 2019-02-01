@@ -36,7 +36,10 @@ public class RequestGeoLocationButton extends Button implements TamTamSerializab
         super(text, intent);
     }
 
-
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
 
     @Override
     public String toString() {

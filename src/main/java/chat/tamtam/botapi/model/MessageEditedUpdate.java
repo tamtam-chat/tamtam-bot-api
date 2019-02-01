@@ -38,6 +38,11 @@ public class MessageEditedUpdate extends Update implements TamTamSerializable {
         this.message = message;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * Edited message
     * @return message

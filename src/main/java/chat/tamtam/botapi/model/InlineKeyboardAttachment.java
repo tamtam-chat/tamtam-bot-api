@@ -40,6 +40,11 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
         this.payload = payload;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * Unique identifier of keyboard
     * @return callbackId

@@ -38,6 +38,11 @@ public class AudioAttachmentRequest extends AttachmentRequest implements TamTamS
         this.payload = payload;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * @return payload
     **/

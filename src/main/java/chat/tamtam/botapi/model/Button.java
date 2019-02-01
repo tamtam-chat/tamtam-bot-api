@@ -49,6 +49,10 @@ public class Button implements TamTamSerializable {
         this.intent = intent;
     }
 
+    public void visit(Visitor visitor) {
+        visitor.visitDefault(this);
+    }
+
     /**
     * Visible text of button
     * @return text
@@ -96,6 +100,14 @@ public class Button implements TamTamSerializable {
             + " text='" + text + '\''
             + " intent='" + intent + '\''
             + '}';
+    }
+
+    public interface Visitor {
+        void visit(CallbackButton model);
+        void visit(LinkButton model);
+        void visit(RequestGeoLocationButton model);
+        void visit(RequestContactButton model);
+        void visitDefault(Button model);
     }
 }
 

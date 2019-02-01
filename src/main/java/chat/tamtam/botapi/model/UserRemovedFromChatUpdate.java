@@ -42,8 +42,13 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
         this.adminId = adminId;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
-    * Chat identifier where event occured
+    * Chat identifier where event has occured
     * @return chatId
     **/
     @JsonProperty("chat_id")

@@ -38,6 +38,11 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
         this.messageId = messageId;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * Identifier of removed message
     * @return messageId

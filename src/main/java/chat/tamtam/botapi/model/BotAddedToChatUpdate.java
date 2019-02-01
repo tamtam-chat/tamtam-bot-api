@@ -40,6 +40,11 @@ public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
         this.userId = userId;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * Chat id where bot was added
     * @return chatId

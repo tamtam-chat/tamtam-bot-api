@@ -39,6 +39,11 @@ public class LinkButton extends Button implements TamTamSerializable {
         this.url = url;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * @return url
     **/

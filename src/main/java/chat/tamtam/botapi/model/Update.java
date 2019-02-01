@@ -53,8 +53,12 @@ public class Update implements TamTamSerializable {
         this.timestamp = timestamp;
     }
 
+    public void visit(Visitor visitor) {
+        visitor.visitDefault(this);
+    }
+
     /**
-    * Unix-time when event occured
+    * Unix-time when event has occured
     * @return timestamp
     **/
     @JsonProperty("timestamp")
@@ -87,6 +91,21 @@ public class Update implements TamTamSerializable {
         return "Update{"
             + " timestamp='" + timestamp + '\''
             + '}';
+    }
+
+    public interface Visitor {
+        void visit(MessageCreatedUpdate model);
+        void visit(MessageCallbackUpdate model);
+        void visit(MessageEditedUpdate model);
+        void visit(MessageRemovedUpdate model);
+        void visit(MessageRestoredUpdate model);
+        void visit(BotAddedToChatUpdate model);
+        void visit(BotRemovedFromChatUpdate model);
+        void visit(UserAddedToChatUpdate model);
+        void visit(UserRemovedFromChatUpdate model);
+        void visit(BotStartedUpdate model);
+        void visit(ChatTitleChangedUpdate model);
+        void visitDefault(Update model);
     }
 }
 

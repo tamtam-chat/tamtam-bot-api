@@ -40,8 +40,13 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
         this.userId = userId;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
-    * Dialog identifier where event occured
+    * Dialog identifier where event has occurred
     * @return chatId
     **/
     @JsonProperty("chat_id")
