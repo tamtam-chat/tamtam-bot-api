@@ -46,7 +46,7 @@ public class ModelTest {
             }
 
             EqualsVerifier.forClass(aClass)
-                    .suppress(Warning.NONFINAL_FIELDS)
+                    .suppress(Warning.NONFINAL_FIELDS, Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                     .usingGetClass()
                     .verify();
         }

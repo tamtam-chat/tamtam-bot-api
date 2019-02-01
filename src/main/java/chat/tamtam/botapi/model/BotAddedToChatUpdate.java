@@ -22,14 +22,12 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 
 /**
  * You will receive this update when bot has been added to chat
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
 
     private final Long chatId;

@@ -26,6 +26,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import chat.tamtam.botapi.client.TamTamSerializer;
+import chat.tamtam.botapi.client.impl.JacksonSerializer;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
@@ -49,23 +54,35 @@ import chat.tamtam.botapi.model.StickerAttachmentRequestPayload;
 import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
+import spark.Request;
+import spark.Response;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static spark.Spark.post;
 
 public class SendMessageQueryTest extends QueryTest {
 
     @Test
     public void sendMessageTest() throws Exception {
-        NewMessageBody newMessageBody = new NewMessageBody("text", createAttachmentRequests())
+        NewMessageBody sendingMessage = new NewMessageBody("text", createAttachmentRequests())
                 .notify(true);
 
+        post("/messages", (req, resp) -> {
+            String chatId = req.queryParams("chat_id");
+            String userId = req.queryParams("user_id");
+            NewMessageBody newMessage = serializer.deserialize(req.body(), NewMessageBody.class);
+            assertThat(newMessage, is(equalTo(sendingMessage)));
+            return new SendMessageResult(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId), "mid." + chatId);
+        }, this::serialize);
+
         Long chatId = 1L;
-        SendMessageResult response = api.sendMessage(newMessageBody).chatId(chatId).execute();
+        SendMessageResult response = api.sendMessage(sendingMessage).chatId(chatId).execute();
         assertThat(response.getMessageId(), is(notNullValue()));
 
-        SendMessageResult response2 = api.sendMessage(newMessageBody).userId(2L).execute();
+        SendMessageResult response2 = api.sendMessage(sendingMessage).userId(2L).execute();
         assertThat(response2.getRecipientId(), is(notNullValue()));
     }
 
@@ -76,28 +93,27 @@ public class SendMessageQueryTest extends QueryTest {
 
     private List<AttachmentRequest> createAttachmentRequests() {
         return Arrays.asList(
-                new PhotoAttachmentRequest(
-                        new PhotoAttachmentRequestPayload("https://url", null)),
-                new PhotoAttachmentRequest(
-                        new PhotoAttachmentRequestPayload(null,
-                                Collections.singletonMap("photokey", new PhotoToken("token")))),
-                new VideoAttachmentRequest(new UploadedInfo(1L)),
-                new AudioAttachmentRequest(new UploadedInfo(2L)),
-                new FileAttachmentRequest(new UploadedFileInfo(3L)),
-                new StickerAttachmentRequest(new StickerAttachmentRequestPayload("stickercode")),
-                new ContactAttachmentRequest(new ContactAttachmentRequestPayload("name", null, "vcfInfo", null)),
-                new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
-                        Arrays.asList(
-                                Arrays.asList(
-                                        new CallbackButton("payload", "text", Intent.DEFAULT),
-                                        new LinkButton("https://url.com", "linktext", Intent.DEFAULT)
-                                ),
-                                Arrays.asList(
-                                        new RequestContactButton("willbeignored", Intent.DEFAULT),
-                                        new RequestGeoLocationButton("willbeignored", Intent.DEFAULT)
-                                )
-                        )
-                ))
+                new PhotoAttachmentRequest(null)
+//                new PhotoAttachmentRequest(
+//                        new PhotoAttachmentRequestPayload(null,
+//                                Collections.singletonMap("photokey", new PhotoToken("token"))))
+//                new VideoAttachmentRequest(new UploadedInfo(1L))
+//                new AudioAttachmentRequest(new UploadedInfo(2L))
+//                new FileAttachmentRequest(new UploadedFileInfo(3L))
+//                new StickerAttachmentRequest(new StickerAttachmentRequestPayload("stickercode"))
+//                new ContactAttachmentRequest(new ContactAttachmentRequestPayload("name", null, "vcfInfo", null))
+//                new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
+//                        Arrays.asList(
+//                                Arrays.asList(
+//                                        new CallbackButton("payload", "text", Intent.DEFAULT),
+//                                        new LinkButton("https://url.com", "linktext", Intent.DEFAULT)
+//                                ),
+//                                Arrays.asList(
+//                                        new RequestContactButton("willbeignored", Intent.DEFAULT),
+//                                        new RequestGeoLocationButton("willbeignored", Intent.DEFAULT)
+//                                )
+//                        )
+//                ))
         );
     }
 
