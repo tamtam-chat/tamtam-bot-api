@@ -41,12 +41,26 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public class Attachment implements TamTamSerializable {
 
 
-
+    public void visit(Visitor visitor) {
+        visitor.visitDefault(this);
+    }
 
     @Override
     public String toString() {
         return "Attachment{"
             + '}';
+    }
+
+    public interface Visitor {
+        void visit(PhotoAttachment model);
+        void visit(VideoAttachment model);
+        void visit(AudioAttachment model);
+        void visit(FileAttachment model);
+        void visit(StickerAttachment model);
+        void visit(ContactAttachment model);
+        void visit(InlineKeyboardAttachment model);
+        void visit(ShareAttachment model);
+        void visitDefault(Attachment model);
     }
 }
 

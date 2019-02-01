@@ -38,6 +38,11 @@ public class FileAttachmentRequest extends AttachmentRequest implements TamTamSe
         this.payload = payload;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * @return payload
     **/

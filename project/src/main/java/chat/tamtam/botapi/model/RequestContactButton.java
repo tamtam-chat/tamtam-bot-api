@@ -36,7 +36,10 @@ public class RequestContactButton extends Button implements TamTamSerializable {
         super(text, intent);
     }
 
-
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
 
     @Override
     public String toString() {

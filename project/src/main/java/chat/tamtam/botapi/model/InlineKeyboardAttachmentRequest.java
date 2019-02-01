@@ -38,6 +38,11 @@ public class InlineKeyboardAttachmentRequest extends AttachmentRequest implement
         this.payload = payload;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * @return payload
     **/

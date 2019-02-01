@@ -38,6 +38,11 @@ public class VideoAttachment extends Attachment implements TamTamSerializable {
         this.payload = payload;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * @return payload
     **/

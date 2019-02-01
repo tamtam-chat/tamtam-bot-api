@@ -40,6 +40,11 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
         this.userId = userId;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * Chat identifier bot removed from
     * @return chatId

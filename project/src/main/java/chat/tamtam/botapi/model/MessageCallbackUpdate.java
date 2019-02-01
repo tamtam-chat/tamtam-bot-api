@@ -38,6 +38,11 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
         this.callback = callback;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * @return callback
     **/

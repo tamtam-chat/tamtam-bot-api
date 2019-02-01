@@ -39,6 +39,11 @@ public class CallbackButton extends Button implements TamTamSerializable {
         this.payload = payload;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * Button payload
     * @return payload

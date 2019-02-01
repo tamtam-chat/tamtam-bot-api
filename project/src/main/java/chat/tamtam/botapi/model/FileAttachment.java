@@ -38,6 +38,11 @@ public class FileAttachment extends Attachment implements TamTamSerializable {
         this.payload = payload;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
     * @return payload
     **/

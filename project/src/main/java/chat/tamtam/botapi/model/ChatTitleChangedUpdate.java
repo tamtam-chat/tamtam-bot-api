@@ -42,8 +42,13 @@ public class ChatTitleChangedUpdate extends Update implements TamTamSerializable
         this.title = title;
     }
 
+    @Override
+    public void visit(Visitor visitor) {
+        visitor.visit(this);
+    }
+
     /**
-    * Chat identifier where event has occured
+    * Chat identifier where event has occurred
     * @return chatId
     **/
     @JsonProperty("chat_id")
