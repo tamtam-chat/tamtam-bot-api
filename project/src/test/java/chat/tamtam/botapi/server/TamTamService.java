@@ -1,7 +1,9 @@
 package chat.tamtam.botapi.server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,14 +38,16 @@ import chat.tamtam.botapi.model.Image;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.Keyboard;
+import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.MessageLinkType;
-import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentPayload;
 import chat.tamtam.botapi.model.Recipient;
+import chat.tamtam.botapi.model.RequestContactButton;
+import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.ShareAttachment;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.StickerAttachment;
@@ -65,9 +69,32 @@ public class TamTamService {
     private static final SimpleQueryResult SUCCESSFULL = new SimpleQueryResult(true);
     private static final SimpleQueryResult NOT_SUCCESSFULL = new SimpleQueryResult(false);
     private static final AtomicLong ID_COUNTER = new AtomicLong();
+    public static final PhotoAttachment PHOTO_ATTACHMENT = new PhotoAttachment(
+            new PhotoAttachmentPayload(ID_COUNTER.incrementAndGet(), "url"));
     public static final String CHAT_ICON_URL = "iconurl";
+    public static final VideoAttachment VIDEO_ATTACHMENT = new VideoAttachment(new AttachmentPayload("urlvideo"));
+    public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(new AttachmentPayload("urlaudio"));
+    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new AttachmentPayload("urlfile"));
+    public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
+            new ContactAttachmentPayload("vcfinfo", null));
+    public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text", Intent.DEFAULT);
+    public static final RequestContactButton REQUEST_CONTACT_BUTTON = new RequestContactButton("request contact",
+            Intent.NEGATIVE);
+    public static final RequestGeoLocationButton REQUEST_GEO_LOCATION_BUTTON = new RequestGeoLocationButton(
+            "request location", Intent.POSITIVE);
+    public static final LinkButton LINK_BUTTON = new LinkButton("https://mail.ru", "link", Intent.POSITIVE);
+    public static final InlineKeyboardAttachment INLINE_KEYBOARD_ATTACHMENT = new InlineKeyboardAttachment(
+            "callbackId" + ID_COUNTER.incrementAndGet(), new Keyboard(
+            Arrays.asList(
+                    Collections.singletonList(CALLBACK_BUTTON),
+                    Arrays.asList(REQUEST_CONTACT_BUTTON, REQUEST_GEO_LOCATION_BUTTON),
+                    Arrays.asList(LINK_BUTTON)
+            )));
+    public static final StickerAttachment STICKER_ATTACHMENT = new StickerAttachment(new AttachmentPayload(
+            "stickerurl"));
+    public static final ShareAttachment SHARE_ATTACHMENT = new ShareAttachment(new AttachmentPayload("shareurl"));
 
-    private final UserWithPhoto me = new UserWithPhoto(
+    protected final UserWithPhoto me = new UserWithPhoto(
             "avata_rul",
             "full_avatar_url",
             ID_COUNTER.incrementAndGet(),
@@ -91,9 +118,6 @@ public class TamTamService {
             chatMembers.put(chat.getChatId(), Stream.generate(TamTamService::newChatMember)
                     .limit(chat.getParticipantsCount())
                     .collect(Collectors.toList()));
-            chatMessages.put(chat.getChatId(), Stream.generate(() -> newMessage(chat))
-                    .limit(ThreadLocalRandom.current().nextInt(1, 30))
-                    .collect(Collectors.toList()));
         });
     }
 
@@ -103,10 +127,6 @@ public class TamTamService {
 
     public Object getSubscriptions(Request request, Response response) {
         return new GetSubscriptionsResult(subscriptions);
-    }
-
-    public Object getMyInfo(Request request, Response response) {
-        return me;
     }
 
     public Object addMembers(Request request, Response response) {
@@ -153,11 +173,6 @@ public class TamTamService {
         return new ChatMembersList(result, to == chatMembers.size() ? null : to);
     }
 
-    public Object getMessages(Request request, Response response) {
-        long chatId = Long.parseLong(request.queryParams("chat_id"));
-        return new MessageList(this.chatMessages.get(chatId));
-    }
-
     public Object getUploadUrl(Request request, Response response) {
         String type = request.queryParams("type");
         UploadType uploadType = UploadType.create(type);
@@ -199,6 +214,30 @@ public class TamTamService {
         return new String(serializer.serialize(o));
     }
 
+    protected Message message(Long chatId) {
+        User sender = random(new ArrayList<>(users.values()));
+        Recipient recipient = new Recipient(chatId, ChatType.CHAT, null);
+        long id = ID_COUNTER.incrementAndGet();
+        boolean hasText = ThreadLocalRandom.current().nextBoolean();
+        List<Attachment> attachments = Arrays.asList(
+                PHOTO_ATTACHMENT,
+                VIDEO_ATTACHMENT,
+                AUDIO_ATTACHMENT,
+                FILE_ATTACHMENT,
+                STICKER_ATTACHMENT,
+                SHARE_ATTACHMENT,
+                INLINE_KEYBOARD_ATTACHMENT,
+                CONTACT_ATTACHMENT
+        );
+
+        MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);
+        Message message = new Message(sender, recipient, System.currentTimeMillis(), body);
+        message.link(new LinkedMessage(MessageLinkType.FORWARD, sender, id, body));
+        body.replyTo("replyTo");
+
+        return message;
+    }
+
     private static ChatMember newChatMember() {
         return new ChatMember(ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextBoolean(),
                 ID_COUNTER.incrementAndGet(), "name", null, null, null);
@@ -221,56 +260,6 @@ public class TamTamService {
     private User newUser() {
         long userId = ID_COUNTER.incrementAndGet();
         return new User(userId, "user-" + userId, "username" + userId);
-    }
-
-    protected Message newMessage(Chat chat) {
-        User sender = random(new ArrayList<>(users.values()));
-        Recipient recipient = new Recipient(chat.getChatId(), chat.getType(), null);
-        long id = ID_COUNTER.incrementAndGet();
-        boolean hasText = ThreadLocalRandom.current().nextBoolean();
-        boolean hasAttachments = !hasText || ThreadLocalRandom.current().nextBoolean();
-        List<Attachment> attachments = hasAttachments
-                ? Stream.generate(this::newAttachment).limit(3).collect(Collectors.toList())
-                : null;
-
-        MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);
-        Message message = new Message(sender, recipient, System.currentTimeMillis(), body);
-        message.link(new LinkedMessage(MessageLinkType.FORWARD, sender, id, body));
-        body.replyTo("replyTo");
-
-        return message;
-    }
-
-    private Attachment newAttachment() {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        if (random.nextBoolean()) {
-            return new PhotoAttachment(new PhotoAttachmentPayload(ID_COUNTER.incrementAndGet(), "url"));
-        } else if (random.nextBoolean()) {
-            return new VideoAttachment(new AttachmentPayload("urlvideo"));
-        } else if (random.nextBoolean()) {
-            return new AudioAttachment(new AttachmentPayload("urlaudio"));
-        } else if (random.nextBoolean()) {
-            return new FileAttachment(new AttachmentPayload("urlfile"));
-        } else if (random.nextBoolean()) {
-            return new ContactAttachment(new ContactAttachmentPayload("vcfinfo", null));
-        } else if (random.nextBoolean()) {
-            List<List<Button>> buttons = Stream.generate(
-                    () -> Stream.generate(this::newButton)
-                            .limit(random.nextInt(1, 3))
-                            .collect(Collectors.toList()))
-                    .limit(random.nextInt(1, 3))
-                    .collect(Collectors.toList());
-            Keyboard keyboard = new Keyboard(buttons);
-            return new InlineKeyboardAttachment("callbackId" + ID_COUNTER.incrementAndGet(), keyboard);
-        } else if (random.nextBoolean()) {
-            return new StickerAttachment(new AttachmentPayload("stickerurl"));
-        }
-
-        return new ShareAttachment(new AttachmentPayload("shareurl"));
-    }
-
-    private Button newButton() {
-        return new CallbackButton("payload", "text", Intent.DEFAULT);
     }
 
     private Chat newChat() {

@@ -27,8 +27,11 @@ import org.junit.Test;
 
 import chat.tamtam.botapi.model.BotAddedToChatUpdate;
 import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
+import chat.tamtam.botapi.model.BotStartedUpdate;
 import chat.tamtam.botapi.model.Callback;
 import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.model.ChatTitleChangedUpdate;
+import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 import chat.tamtam.botapi.model.MessageCallbackUpdate;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.MessageEditedUpdate;
@@ -41,6 +44,7 @@ import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static spark.Spark.get;
 
 public class GetUpdatesQueryTest extends QueryTest {
@@ -50,20 +54,43 @@ public class GetUpdatesQueryTest extends QueryTest {
         Chat randomChat = random(chats.values());
         long now = System.currentTimeMillis();
 
+        MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(randomChat.getChatId()), now);
+        MessageEditedUpdate messageEditedUpdate = new MessageEditedUpdate(message(randomChat.getChatId()), now);
+        MessageRemovedUpdate messageRemovedUpdate = new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(),
+                now);
+        MessageRestoredUpdate messageRestoredUpdate = new MessageRestoredUpdate("mid." + ID_COUNTER.incrementAndGet(),
+                now);
+        MessageCallbackUpdate messageCallbackUpdate = new MessageCallbackUpdate(
+                new Callback(now, "calbackId", "payload", random(users.values())), now);
+        UserAddedToChatUpdate userAddedToChatUpdate = new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(), System.currentTimeMillis());
+        UserRemovedFromChatUpdate userRemovedFromChatUpdate = new UserRemovedFromChatUpdate(
+                ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(), System.currentTimeMillis());
+        BotAddedToChatUpdate botAddedToChatUpdate = new BotAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(),
+                System.currentTimeMillis());
+        BotRemovedFromChatUpdate botRemovedFromChatUpdate = new BotRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(),
+                System.currentTimeMillis());
+        BotStartedUpdate botStartedUpdate = new BotStartedUpdate(ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(), System.currentTimeMillis());
+        ChatTitleChangedUpdate chatTitleChangedUpdate = new ChatTitleChangedUpdate(ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(), "title", System.currentTimeMillis());
+
         List<Update> updates = Arrays.asList(
-                new MessageCreatedUpdate(newMessage(randomChat), now),
-                new MessageEditedUpdate(newMessage(randomChat), now),
-                new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(), now),
-                new MessageRestoredUpdate("mid." + ID_COUNTER.incrementAndGet(), now),
-                new MessageCallbackUpdate(new Callback(now, "calbackId", "payload", random(users.values())), now),
-                new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(),
-                        ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
-                new UserRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(),
-                        ID_COUNTER.incrementAndGet(), System.currentTimeMillis()),
-                new BotAddedToChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(),
-                        System.currentTimeMillis()),
-                new BotRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(),
-                        System.currentTimeMillis())
+                messageCreatedUpdate,
+                messageEditedUpdate,
+                messageRemovedUpdate,
+                messageRestoredUpdate,
+                messageCallbackUpdate,
+                userAddedToChatUpdate,
+                userRemovedFromChatUpdate,
+                botAddedToChatUpdate,
+                botRemovedFromChatUpdate,
+                botStartedUpdate,
+                chatTitleChangedUpdate
         );
 
         get("/updates", (request, response) -> new UpdateList(updates, null), this::serialize);
@@ -73,5 +100,64 @@ public class GetUpdatesQueryTest extends QueryTest {
         Long marker = null;
         UpdateList response = api.getUpdates().marker(marker).limit(limit).timeout(timeout).execute();
         assertThat(response.getUpdates(), is(updates));
+
+        for (Update update : updates) {
+            update.visit(new FailByDefaultUpdateVisitor() {
+                @Override
+                public void visit(MessageCreatedUpdate model) {
+                    assertThat(model, is(messageCreatedUpdate));
+                }
+
+                @Override
+                public void visit(MessageCallbackUpdate model) {
+                    assertThat(model, is(messageCallbackUpdate));
+                }
+
+                @Override
+                public void visit(MessageEditedUpdate model) {
+                    assertThat(model, is(messageEditedUpdate));
+                }
+
+                @Override
+                public void visit(MessageRemovedUpdate model) {
+                    assertThat(model, is(messageRemovedUpdate));
+                }
+
+                @Override
+                public void visit(MessageRestoredUpdate model) {
+                    assertThat(model, is(messageRestoredUpdate));
+                }
+
+                @Override
+                public void visit(BotAddedToChatUpdate model) {
+                    assertThat(model, is(botAddedToChatUpdate));
+                }
+
+                @Override
+                public void visit(BotRemovedFromChatUpdate model) {
+                    assertThat(model, is(botRemovedFromChatUpdate));
+                }
+
+                @Override
+                public void visit(UserAddedToChatUpdate model) {
+                    assertThat(model, is(userAddedToChatUpdate));
+                }
+
+                @Override
+                public void visit(UserRemovedFromChatUpdate model) {
+                    assertThat(model, is(userRemovedFromChatUpdate));
+                }
+
+                @Override
+                public void visit(BotStartedUpdate model) {
+                    assertThat(model, is(botStartedUpdate));
+                }
+
+                @Override
+                public void visit(ChatTitleChangedUpdate model) {
+                    assertThat(model, is(chatTitleChangedUpdate));
+                }
+            });
+        }
     }
 }

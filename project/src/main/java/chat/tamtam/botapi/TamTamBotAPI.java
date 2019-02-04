@@ -59,8 +59,8 @@ import chat.tamtam.botapi.queries.UnsubscribeQuery;
 import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
-import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserIdsList;
+import chat.tamtam.botapi.model.UserWithPhoto;
 
 public class TamTamBotAPI {
     final TamTamClient client;
@@ -142,7 +142,7 @@ public class TamTamBotAPI {
 
     /**
     * Edit message
-    * Updated message should be sent as &#x60;NewMessage&#x60; in a request body. In case &#x60;attachments&#x60; field is &#x60;null&#x60;, the current message attachments won’t be changed. In case of sending an empty list in this field, all attachments will be deleted.
+    * Updated message should be sent as &#x60;NewMessageBody&#x60; in a request body. In case &#x60;attachments&#x60; field is &#x60;null&#x60;, the current message attachments won’t be changed. In case of sending an empty list in this field, all attachments will be deleted.
     * @param newMessageBody  (required)
     * @param messageId Editing message identifier (required)
     * @return {@link SimpleQueryResult}
@@ -222,7 +222,7 @@ public class TamTamBotAPI {
     /**
     * Get current bot info
     * Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).
-    * @return {@link User}
+    * @return {@link UserWithPhoto}
     */
     public GetMyInfoQuery getMyInfo() { 
 
