@@ -30,10 +30,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum ChatStatus implements TamTamEnum {
     
-    ACTIVE("ACTIVE"),
-    REMOVED("REMOVED"),
-    LEFT("LEFT"),
-    CLOSED("CLOSED");
+    ACTIVE("active"),
+    REMOVED("removed"),
+    LEFT("left"),
+    CLOSED("closed"),
+    SUSPENDED("suspended");
 
     private String value;
 
