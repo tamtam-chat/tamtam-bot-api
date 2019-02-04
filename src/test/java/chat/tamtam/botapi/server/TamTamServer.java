@@ -39,8 +39,6 @@ public class TamTamServer {
             }
         }));
 
-        get("/me", service::getMyInfo, service::serialize);
-
         get("/chats", service::getChats, service::serialize);
         get("/chats/:chatId", service::getChat, service::serialize);
         patch("/chats/:chatId", service::editChat, service::serialize);
@@ -51,7 +49,6 @@ public class TamTamServer {
         post("/chats/:chatId/actions", service::sendAction, service::serialize);
 
         put("/messages", service::editMessage, service::serialize);
-        get("/messages", service::getMessages, service::serialize);
 
         post("/answers", service::answer, service::serialize);
 

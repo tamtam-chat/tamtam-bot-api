@@ -24,6 +24,9 @@ package chat.tamtam.botapi.exceptions;
  * @author alexandrchuprin
  */
 public class ExceptionMapper {
+    private ExceptionMapper() {
+    }
+
     public static APIException map(chat.tamtam.botapi.model.Error error) {
         String message = error.getMessage();
         switch (error.getCode()) {

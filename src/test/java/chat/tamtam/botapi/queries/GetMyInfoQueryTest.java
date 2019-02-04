@@ -27,13 +27,16 @@ import chat.tamtam.botapi.model.User;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static spark.Spark.get;
 
 public class GetMyInfoQueryTest extends QueryTest {
 
     @Test
     public void getMyInfoTest() throws Exception {
+        get("/me", (req, resp) -> me, this::serialize);
+
         User response = api.getMyInfo().execute();
-        assertThat(response.getUserId(), is(1L));
+        assertThat(response, is(me));
     }
 
 }

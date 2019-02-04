@@ -39,7 +39,7 @@ public class EditChatQueryTest extends QueryTest {
         ChatPatch chatPatch = new ChatPatch();
         String newTitle = "some new title";
         chatPatch.title(newTitle);
-        chatPatch.icon(new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload("https://iconurl", null)));
+        chatPatch.icon(new PhotoAttachmentRequestPayload("https://iconurl", null));
         Long chatId = randomChat().getChatId();
         Chat response = api.editChat(chatPatch, chatId).execute();
         assertThat(response.getTitle(), is(newTitle));

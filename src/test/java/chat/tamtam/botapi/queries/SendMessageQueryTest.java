@@ -37,6 +37,7 @@ import chat.tamtam.botapi.model.AudioAttachmentRequest;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
 import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
+import chat.tamtam.botapi.model.FailByDefaultARVisitor;
 import chat.tamtam.botapi.model.FileAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
@@ -59,11 +60,34 @@ import spark.Response;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static spark.Spark.post;
 
 public class SendMessageQueryTest extends QueryTest {
+
+    private static final PhotoAttachmentRequest PHOTO_ATTACHMENT_REQUEST = new PhotoAttachmentRequest(
+            new PhotoAttachmentRequestPayload(null,
+                    Collections.singletonMap("photokey", new PhotoToken("token"))));
+    private static final VideoAttachmentRequest VIDEO_ATTACHMENT_REQUEST = new VideoAttachmentRequest(new UploadedInfo(1L));
+    private static final AudioAttachmentRequest AUDIO_ATTACHMENT_REQUEST = new AudioAttachmentRequest(new UploadedInfo(2L));
+    private static final FileAttachmentRequest FILE_ATTACHMENT_REQUEST = new FileAttachmentRequest(new UploadedFileInfo(3L));
+    private static final StickerAttachmentRequest STICKER_ATTACHMENT_REQUEST = new StickerAttachmentRequest(new StickerAttachmentRequestPayload("stickercode"));
+    private static final ContactAttachmentRequest CONTACT_ATTACHMENT_REQUEST = new ContactAttachmentRequest(new ContactAttachmentRequestPayload("name", null, "vcfInfo", null));
+    private static final InlineKeyboardAttachmentRequest INLINE_KEYBOARD_ATTACHMENT_REQUEST = new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
+            Arrays.asList(
+                    Arrays.asList(
+                            new CallbackButton("payload", "text", Intent.DEFAULT),
+                            new LinkButton("https://url.com", "linktext", Intent.DEFAULT)
+                    ),
+                    Arrays.asList(
+                            new RequestContactButton("willbeignored", Intent.DEFAULT),
+                            new RequestGeoLocationButton("willbeignored", Intent.DEFAULT)
+                    )
+            )
+    ));
 
     @Test
     public void sendMessageTest() throws Exception {
@@ -75,6 +99,7 @@ public class SendMessageQueryTest extends QueryTest {
             String userId = req.queryParams("user_id");
             NewMessageBody newMessage = serializer.deserialize(req.body(), NewMessageBody.class);
             assertThat(newMessage, is(equalTo(sendingMessage)));
+            visit(newMessage.getAttachments());
             return new SendMessageResult(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId), "mid." + chatId);
         }, this::serialize);
 
@@ -86,6 +111,47 @@ public class SendMessageQueryTest extends QueryTest {
         assertThat(response2.getRecipientId(), is(notNullValue()));
     }
 
+    private void visit(List<AttachmentRequest> attachments) {
+        for (AttachmentRequest attachment : attachments) {
+            attachment.visit(new FailByDefaultARVisitor() {
+                @Override
+                public void visit(PhotoAttachmentRequest model) {
+                    assertThat(model, is(PHOTO_ATTACHMENT_REQUEST));
+                }
+
+                @Override
+                public void visit(VideoAttachmentRequest model) {
+                    assertThat(model, is(VIDEO_ATTACHMENT_REQUEST));
+                }
+
+                @Override
+                public void visit(AudioAttachmentRequest model) {
+                    assertThat(model, is(AUDIO_ATTACHMENT_REQUEST));
+                }
+
+                @Override
+                public void visit(FileAttachmentRequest model) {
+                    assertThat(model, is(FILE_ATTACHMENT_REQUEST));
+                }
+
+                @Override
+                public void visit(StickerAttachmentRequest model) {
+                    assertThat(model, is(STICKER_ATTACHMENT_REQUEST));
+                }
+
+                @Override
+                public void visit(ContactAttachmentRequest model) {
+                    assertThat(model, is(CONTACT_ATTACHMENT_REQUEST));
+                }
+
+                @Override
+                public void visit(InlineKeyboardAttachmentRequest model) {
+                    assertThat(model, is(INLINE_KEYBOARD_ATTACHMENT_REQUEST));
+                }
+            });
+        }
+    }
+
     @Test(expected = RequiredParameterMissingException.class)
     public void shouldThrowException() throws Exception {
         api.sendMessage(null).execute();
@@ -93,27 +159,13 @@ public class SendMessageQueryTest extends QueryTest {
 
     private List<AttachmentRequest> createAttachmentRequests() {
         return Arrays.asList(
-                new PhotoAttachmentRequest(null)
-//                new PhotoAttachmentRequest(
-//                        new PhotoAttachmentRequestPayload(null,
-//                                Collections.singletonMap("photokey", new PhotoToken("token"))))
-//                new VideoAttachmentRequest(new UploadedInfo(1L))
-//                new AudioAttachmentRequest(new UploadedInfo(2L))
-//                new FileAttachmentRequest(new UploadedFileInfo(3L))
-//                new StickerAttachmentRequest(new StickerAttachmentRequestPayload("stickercode"))
-//                new ContactAttachmentRequest(new ContactAttachmentRequestPayload("name", null, "vcfInfo", null))
-//                new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
-//                        Arrays.asList(
-//                                Arrays.asList(
-//                                        new CallbackButton("payload", "text", Intent.DEFAULT),
-//                                        new LinkButton("https://url.com", "linktext", Intent.DEFAULT)
-//                                ),
-//                                Arrays.asList(
-//                                        new RequestContactButton("willbeignored", Intent.DEFAULT),
-//                                        new RequestGeoLocationButton("willbeignored", Intent.DEFAULT)
-//                                )
-//                        )
-//                ))
+                PHOTO_ATTACHMENT_REQUEST,
+                VIDEO_ATTACHMENT_REQUEST,
+                AUDIO_ATTACHMENT_REQUEST,
+                FILE_ATTACHMENT_REQUEST,
+                STICKER_ATTACHMENT_REQUEST,
+                CONTACT_ATTACHMENT_REQUEST,
+                INLINE_KEYBOARD_ATTACHMENT_REQUEST
         );
     }
 

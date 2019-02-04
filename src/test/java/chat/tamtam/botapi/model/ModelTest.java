@@ -34,6 +34,14 @@ public class ModelTest {
                 continue;
             }
 
+            if (aClass.isAnonymousClass()) {
+                continue;
+            }
+
+            String classPath = aClass.getProtectionDomain().getCodeSource().getLocation().getPath();
+            if (classPath.contains("test-classes"))
+                continue;
+
             if (aClass.isEnum()) {
                 testEnum((Class<? extends Enum<?>>) aClass);
             }

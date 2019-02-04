@@ -23,12 +23,12 @@ package chat.tamtam.botapi.queries;
 import chat.tamtam.botapi.client.TamTamClient;
 
 import chat.tamtam.botapi.queries.GetMyInfoQuery;
-import chat.tamtam.botapi.model.User;
+import chat.tamtam.botapi.model.UserWithPhoto;
 
-public class GetMyInfoQuery extends TamTamQuery<User> {
+public class GetMyInfoQuery extends TamTamQuery<UserWithPhoto> {
 
     public GetMyInfoQuery(TamTamClient client) {
-        super(client, "/me", null, User.class, Method.GET);
+        super(client, "/me", null, UserWithPhoto.class, Method.GET);
     }
 
 }
