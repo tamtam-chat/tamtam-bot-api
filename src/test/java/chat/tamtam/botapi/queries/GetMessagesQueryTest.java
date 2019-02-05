@@ -37,6 +37,7 @@ import chat.tamtam.botapi.model.FailByDefaultButtonVisitor;
 import chat.tamtam.botapi.model.FileAttachment;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
 import chat.tamtam.botapi.model.LinkButton;
+import chat.tamtam.botapi.model.LocationAttachment;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.PhotoAttachment;
@@ -115,6 +116,11 @@ public class GetMessagesQueryTest extends QueryTest {
                     @Override
                     public void visit(ShareAttachment model) {
                         assertThat(model, is(SHARE_ATTACHMENT));
+                    }
+
+                    @Override
+                    public void visit(LocationAttachment model) {
+                        assertThat(model, is(LOCATION_ATTACHMENT));
                     }
 
                     private void visitButton(Button button) {

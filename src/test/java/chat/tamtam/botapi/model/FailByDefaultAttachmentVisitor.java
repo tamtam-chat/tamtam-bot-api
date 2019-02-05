@@ -47,6 +47,11 @@ public class FailByDefaultAttachmentVisitor implements Attachment.Visitor {
     }
 
     @Override
+    public void visit(LocationAttachment model) {
+        fail("Should not happens");
+    }
+
+    @Override
     public void visitDefault(Attachment model) {
         fail("Should not happens");
     }

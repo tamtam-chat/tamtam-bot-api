@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = StickerAttachmentRequest.class, name = "sticker"),
   @JsonSubTypes.Type(value = ContactAttachmentRequest.class, name = "contact"),
   @JsonSubTypes.Type(value = InlineKeyboardAttachmentRequest.class, name = "inline_keyboard"),
+  @JsonSubTypes.Type(value = LocationAttachmentRequest.class, name = "location"),
 })
 public class AttachmentRequest implements TamTamSerializable {
 
@@ -58,6 +59,7 @@ public class AttachmentRequest implements TamTamSerializable {
         void visit(StickerAttachmentRequest model);
         void visit(ContactAttachmentRequest model);
         void visit(InlineKeyboardAttachmentRequest model);
+        void visit(LocationAttachmentRequest model);
         void visitDefault(AttachmentRequest model);
     }
 }

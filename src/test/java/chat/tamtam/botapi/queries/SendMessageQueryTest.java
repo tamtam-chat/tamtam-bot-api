@@ -23,14 +23,10 @@ package chat.tamtam.botapi.queries;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import chat.tamtam.botapi.client.TamTamSerializer;
-import chat.tamtam.botapi.client.impl.JacksonSerializer;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
@@ -43,6 +39,7 @@ import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
+import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
@@ -55,15 +52,11 @@ import chat.tamtam.botapi.model.StickerAttachmentRequestPayload;
 import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
-import spark.Request;
-import spark.Response;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static spark.Spark.post;
 
 public class SendMessageQueryTest extends QueryTest {
@@ -76,6 +69,8 @@ public class SendMessageQueryTest extends QueryTest {
     private static final FileAttachmentRequest FILE_ATTACHMENT_REQUEST = new FileAttachmentRequest(new UploadedFileInfo(3L));
     private static final StickerAttachmentRequest STICKER_ATTACHMENT_REQUEST = new StickerAttachmentRequest(new StickerAttachmentRequestPayload("stickercode"));
     private static final ContactAttachmentRequest CONTACT_ATTACHMENT_REQUEST = new ContactAttachmentRequest(new ContactAttachmentRequestPayload("name", null, "vcfInfo", null));
+    private static final LocationAttachmentRequest LOCATION_ATTACHMENT_REQUEST = new LocationAttachmentRequest(
+            ThreadLocalRandom.current().nextFloat(), ThreadLocalRandom.current().nextFloat());
     private static final InlineKeyboardAttachmentRequest INLINE_KEYBOARD_ATTACHMENT_REQUEST = new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
             Arrays.asList(
                     Arrays.asList(
@@ -91,8 +86,7 @@ public class SendMessageQueryTest extends QueryTest {
 
     @Test
     public void sendMessageTest() throws Exception {
-        NewMessageBody sendingMessage = new NewMessageBody("text", createAttachmentRequests())
-                .notify(true);
+        NewMessageBody sendingMessage = new NewMessageBody("text", createAttachmentRequests()).notify(true);
 
         post("/messages", (req, resp) -> {
             String chatId = req.queryParams("chat_id");
@@ -145,6 +139,11 @@ public class SendMessageQueryTest extends QueryTest {
                 }
 
                 @Override
+                public void visit(LocationAttachmentRequest model) {
+                    assertThat(model, is(LOCATION_ATTACHMENT_REQUEST));
+                }
+
+                @Override
                 public void visit(InlineKeyboardAttachmentRequest model) {
                     assertThat(model, is(INLINE_KEYBOARD_ATTACHMENT_REQUEST));
                 }
@@ -165,7 +164,8 @@ public class SendMessageQueryTest extends QueryTest {
                 FILE_ATTACHMENT_REQUEST,
                 STICKER_ATTACHMENT_REQUEST,
                 CONTACT_ATTACHMENT_REQUEST,
-                INLINE_KEYBOARD_ATTACHMENT_REQUEST
+                INLINE_KEYBOARD_ATTACHMENT_REQUEST,
+                LOCATION_ATTACHMENT_REQUEST
         );
     }
 
