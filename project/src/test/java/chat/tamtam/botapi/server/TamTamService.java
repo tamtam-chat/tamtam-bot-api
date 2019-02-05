@@ -21,7 +21,6 @@ import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentPayload;
 import chat.tamtam.botapi.model.AudioAttachment;
-import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
@@ -40,6 +39,7 @@ import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.Keyboard;
 import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.LinkedMessage;
+import chat.tamtam.botapi.model.LocationAttachment;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.MessageLinkType;
@@ -93,6 +93,8 @@ public class TamTamService {
     public static final StickerAttachment STICKER_ATTACHMENT = new StickerAttachment(new AttachmentPayload(
             "stickerurl"));
     public static final ShareAttachment SHARE_ATTACHMENT = new ShareAttachment(new AttachmentPayload("shareurl"));
+    public static final LocationAttachment LOCATION_ATTACHMENT = new LocationAttachment(
+            ThreadLocalRandom.current().nextFloat(), ThreadLocalRandom.current().nextFloat());
 
     protected final UserWithPhoto me = new UserWithPhoto(
             "avata_rul",
@@ -105,7 +107,6 @@ public class TamTamService {
     protected final Map<Long, User> users = new ConcurrentHashMap<>();
     protected final Map<Long, Chat> chats = new ConcurrentHashMap<>();
     protected final Map<Long, List<ChatMember>> chatMembers = new ConcurrentHashMap<>();
-    protected final Map<Long, List<Message>> chatMessages = new ConcurrentHashMap<>();
     protected final TamTamSerializer serializer;
     protected final List<Subscription> subscriptions = Stream.generate(this::newSubscription)
             .limit(3)
@@ -227,7 +228,8 @@ public class TamTamService {
                 STICKER_ATTACHMENT,
                 SHARE_ATTACHMENT,
                 INLINE_KEYBOARD_ATTACHMENT,
-                CONTACT_ATTACHMENT
+                CONTACT_ATTACHMENT,
+                LOCATION_ATTACHMENT
         );
 
         MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);

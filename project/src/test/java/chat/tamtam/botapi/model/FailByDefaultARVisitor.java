@@ -43,6 +43,11 @@ public class FailByDefaultARVisitor implements AttachmentRequest.Visitor {
     }
 
     @Override
+    public void visit(LocationAttachmentRequest model) {
+        fail("Should not happens");
+    }
+
+    @Override
     public void visitDefault(AttachmentRequest model) {
         fail("Should not happens");
     }
