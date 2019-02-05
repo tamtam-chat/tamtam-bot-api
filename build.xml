@@ -72,12 +72,14 @@
 
     <target name="build">
         <exec executable="mvn" failonerror="true">
-            <arg value="package"/>
+            <arg value="compile"/>
         </exec>
 
         <exec executable="mvn" failonerror="true">
             <arg value="-f"/>
             <arg value="project/pom.xml"/>
+            <arg value="test"/>
+            <arg value="jacoco:report"/>
             <arg value="package"/>
         </exec>
     </target>
