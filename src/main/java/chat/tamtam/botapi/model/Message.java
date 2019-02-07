@@ -38,7 +38,7 @@ public class Message implements TamTamSerializable {
     private final MessageBody message;
 
     @JsonCreator
-    public Message(@JsonProperty("sender") User sender, @JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @Nullable @JsonProperty("message") MessageBody message) { 
+    public Message(@JsonProperty("sender") User sender, @JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @JsonProperty("message") MessageBody message) { 
         this.sender = sender;
         this.recipient = recipient;
         this.timestamp = timestamp;
@@ -95,7 +95,6 @@ public class Message implements TamTamSerializable {
     * Body of created message. Text + attachments. Could be null if message contains only forwarded message.
     * @return message
     **/
-    @Nullable
     @JsonProperty("message")
     public MessageBody getMessage() {
         return message;
