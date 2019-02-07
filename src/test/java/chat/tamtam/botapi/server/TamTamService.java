@@ -94,7 +94,7 @@ public class TamTamService {
             "stickerurl"));
     public static final ShareAttachment SHARE_ATTACHMENT = new ShareAttachment(new AttachmentPayload("shareurl"));
     public static final LocationAttachment LOCATION_ATTACHMENT = new LocationAttachment(
-            ThreadLocalRandom.current().nextFloat(), ThreadLocalRandom.current().nextFloat());
+            ThreadLocalRandom.current().nextDouble(), ThreadLocalRandom.current().nextDouble());
 
     protected final UserWithPhoto me = new UserWithPhoto(
             "avata_rul",

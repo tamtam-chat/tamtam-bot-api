@@ -70,7 +70,7 @@ public class SendMessageQueryTest extends QueryTest {
     private static final StickerAttachmentRequest STICKER_ATTACHMENT_REQUEST = new StickerAttachmentRequest(new StickerAttachmentRequestPayload("stickercode"));
     private static final ContactAttachmentRequest CONTACT_ATTACHMENT_REQUEST = new ContactAttachmentRequest(new ContactAttachmentRequestPayload("name", null, "vcfInfo", null));
     private static final LocationAttachmentRequest LOCATION_ATTACHMENT_REQUEST = new LocationAttachmentRequest(
-            ThreadLocalRandom.current().nextFloat(), ThreadLocalRandom.current().nextFloat());
+            ThreadLocalRandom.current().nextDouble(), ThreadLocalRandom.current().nextDouble());
     private static final InlineKeyboardAttachmentRequest INLINE_KEYBOARD_ATTACHMENT_REQUEST = new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
             Arrays.asList(
                     Arrays.asList(
