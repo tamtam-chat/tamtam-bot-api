@@ -30,11 +30,11 @@ import java.util.Objects;
  */
 public class LocationAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
-    private final Float latitude;
-    private final Float longitude;
+    private final Double latitude;
+    private final Double longitude;
 
     @JsonCreator
-    public LocationAttachmentRequest(@JsonProperty("latitude") Float latitude, @JsonProperty("longitude") Float longitude) { 
+    public LocationAttachmentRequest(@JsonProperty("latitude") Double latitude, @JsonProperty("longitude") Double longitude) { 
         super();
         this.latitude = latitude;
         this.longitude = longitude;
@@ -49,7 +49,7 @@ public class LocationAttachmentRequest extends AttachmentRequest implements TamT
     * @return latitude
     **/
     @JsonProperty("latitude")
-    public Float getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
@@ -57,7 +57,7 @@ public class LocationAttachmentRequest extends AttachmentRequest implements TamT
     * @return longitude
     **/
     @JsonProperty("longitude")
-    public Float getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
