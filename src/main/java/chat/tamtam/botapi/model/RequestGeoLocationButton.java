@@ -22,6 +22,7 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RequestGeoLocationButton extends Button implements TamTamSerializable {
 
+    private Boolean quick;
 
     @JsonCreator
     public RequestGeoLocationButton(@JsonProperty("text") String text, @Nullable @JsonProperty("intent") Intent intent) { 
@@ -41,9 +43,49 @@ public class RequestGeoLocationButton extends Button implements TamTamSerializab
         visitor.visit(this);
     }
 
+    public RequestGeoLocationButton quick(Boolean quick) {
+        this.setQuick(quick);
+        return this;
+    }
+
+    /**
+    * If *true*, sends location without asking user&#39;s confirmation
+    * @return quick
+    **/
+    @JsonProperty("quick")
+    public Boolean getQuick() {
+        return quick;
+    }
+
+    public void setQuick(Boolean quick) {
+        this.quick = quick;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+          return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+          return false;
+        }
+
+        RequestGeoLocationButton other = (RequestGeoLocationButton) o;
+        return Objects.equals(this.quick, other.quick) &&
+            super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (quick != null ? quick.hashCode() : 0);
+        return result;
+    }
+
     @Override
     public String toString() {
         return "RequestGeoLocationButton{"+ super.toString()
+            + " quick='" + quick + '\''
             + '}';
     }
 }
