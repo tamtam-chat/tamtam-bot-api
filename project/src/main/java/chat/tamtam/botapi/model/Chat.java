@@ -74,7 +74,7 @@ public class Chat implements TamTamSerializable {
     }
 
     /**
-    * Status of chat. One of: ACTIVE, REMOVED, LEFT of CLOSED
+    * Chat status. One of:  - active: bot is active member of chat  - removed: bot was kicked  - left: bot intentionally left chat  - closed: chat was closed
     * @return status
     **/
     @JsonProperty("status")
