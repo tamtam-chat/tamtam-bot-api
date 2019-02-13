@@ -93,5 +93,15 @@
         <ivy-publish resolver="local"/>
     </target>
 
+    <target name="integration-test">
+        <exec executable="mvn">
+            <arg value="-f"/>
+            <arg value="project/pom.xml"/>
+            <arg value="test"/>
+            <arg value="-P"/>
+            <arg value="stage"/>
+        </exec>
+    </target>
+
     <target name="core" depends="project-instructions"/>
 </project>
