@@ -43,7 +43,7 @@ public class Recipient implements TamTamSerializable {
     }
 
     /**
-    * User identifier
+    * Chat identifier
     * @return chatId
     **/
     @Nullable
@@ -62,7 +62,7 @@ public class Recipient implements TamTamSerializable {
     }
 
     /**
-    * Chat identifier
+    * User identifier, if message was sent to user
     * @return userId
     **/
     @Nullable

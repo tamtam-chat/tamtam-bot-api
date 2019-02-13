@@ -37,14 +37,14 @@ public class EditMessageQueryTest extends QueryTest {
     public void editMessageTest() throws Exception {
         NewMessageBody newMessageBody = new NewMessageBody("edited", null)
                 .attachment(new StickerAttachmentRequest(new StickerAttachmentRequestPayload("code")));
-        Long messageId = 1L;
+        String messageId = "mid.qweqwekljoiy7971346";
         SimpleQueryResult response = api.editMessage(newMessageBody, messageId).execute();
         assertThat(response.getSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)
     public void shouldThrowException() throws Exception {
-        api.editMessage(null, 1L).execute();
+        api.editMessage(null, "mid.0912348787923687263847834").execute();
     }
 
     @Test(expected = RequiredParameterMissingException.class)

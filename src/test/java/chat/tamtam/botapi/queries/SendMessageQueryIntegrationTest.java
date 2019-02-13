@@ -5,53 +5,46 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
+import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
-import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
 import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
-import chat.tamtam.botapi.model.ContactAttachment;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
 import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
-import chat.tamtam.botapi.model.FileAttachment;
 import chat.tamtam.botapi.model.FileAttachmentRequest;
-import chat.tamtam.botapi.model.InlineKeyboardAttachment;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
-import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
-import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.SendMessageResult;
-import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.UserWithPhoto;
-import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @author alexandrchuprin
@@ -61,6 +54,29 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldSendSimpleTextMessage() throws Exception {
         NewMessageBody newMessage = new NewMessageBody("text", null);
         send(newMessage);
+    }
+
+    @Test
+    public void shouldThrowException() throws Exception {
+        NewMessageBody newMessage = new NewMessageBody(null, null);
+        List<Chat> chats = getChats();
+        Chat dialog = getByType(chats, ChatType.DIALOG);
+        Chat chat = getByType(chats, ChatType.CHAT);
+        Chat channel = getByType(chats, ChatType.CHANNEL);
+
+        int exceptions = 0;
+        List<Chat> list = Arrays.asList(dialog, chat, channel);
+        for (Chat c : list) {
+            try {
+                doSend(newMessage, c.getChatId());
+            } catch (Exception e) {
+                exceptions++;
+            }
+        }
+
+        if (exceptions != list.size()) {
+            fail();
+        }
     }
 
     @Test
@@ -180,88 +196,5 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(5));
             }
         } while (true);
-    }
-
-    private Chat getByType(List<Chat> chats, ChatType type) throws Exception {
-        return chats.stream().filter(c -> c.getType() == type).findFirst().orElseThrow(notFound(type.getValue()));
-    }
-
-    private static Supplier<Exception> notFound(String entity) {
-        return () -> new RuntimeException(entity + " not found");
-    }
-
-    private static void compare(InlineKeyboardAttachmentRequest request, InlineKeyboardAttachment attachment) {
-        List<List<Button>> expected = request.getPayload().getButtons();
-        List<List<Button>> actual = attachment.getPayload().getButtons();
-        assertThat(expected, is(actual));
-    }
-
-    private static void compare(PhotoAttachmentRequest request, PhotoAttachment attachment) {
-        assertThat(attachment.getPayload().getPhotoId(), is(notNullValue()));
-    }
-
-    private static void compare(VideoAttachmentRequest request, VideoAttachment attachment) {
-        assertThat(attachment.getPayload().getUrl(), is(notNullValue()));
-    }
-
-    private static void compare(FileAttachmentRequest request, FileAttachment attachment) {
-        assertThat(attachment.getPayload().getUrl(), is(notNullValue()));
-    }
-
-    private static void compare(AudioAttachmentRequest request, AudioAttachment attachment) {
-        assertThat(attachment.getPayload().getUrl(), is(notNullValue()));
-    }
-
-    private static void compare(ContactAttachmentRequest request, ContactAttachment attachment) {
-        assertThat(attachment.getPayload().getVcfInfo(), is(attachment.getPayload().getVcfInfo()));
-    }
-
-    private static void compare(AttachmentRequest attachmentRequest, Attachment attachment) {
-        attachmentRequest.visit(new AttachmentRequest.Visitor() {
-            @Override
-            public void visit(PhotoAttachmentRequest model) {
-                compare(model, ((PhotoAttachment) attachment));
-            }
-
-            @Override
-            public void visit(VideoAttachmentRequest model) {
-                compare(model, ((VideoAttachment) attachment));
-            }
-
-            @Override
-            public void visit(AudioAttachmentRequest model) {
-                compare(model, ((AudioAttachment) attachment));
-            }
-
-            @Override
-            public void visit(InlineKeyboardAttachmentRequest model) {
-                compare(model, (InlineKeyboardAttachment) attachment);
-            }
-
-            @Override
-            public void visit(LocationAttachmentRequest model) {
-
-            }
-
-            @Override
-            public void visit(FileAttachmentRequest model) {
-                compare(model, ((FileAttachment) attachment));
-            }
-
-            @Override
-            public void visit(StickerAttachmentRequest model) {
-
-            }
-
-            @Override
-            public void visit(ContactAttachmentRequest model) {
-                compare(model, ((ContactAttachment) attachment));
-            }
-
-            @Override
-            public void visitDefault(AttachmentRequest model) {
-
-            }
-        });
     }
 }
