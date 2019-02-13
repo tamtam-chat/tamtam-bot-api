@@ -148,7 +148,7 @@ public class TamTamBotAPI {
     * @return {@link SimpleQueryResult}
     * @throws ClientException if fails to make API call
     */
-    public EditMessageQuery editMessage(NewMessageBody newMessageBody, Long messageId) throws ClientException { 
+    public EditMessageQuery editMessage(NewMessageBody newMessageBody, String messageId) throws ClientException { 
         if (messageId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'message_id' when calling editMessage");
         }

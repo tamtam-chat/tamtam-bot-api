@@ -27,9 +27,9 @@ import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 
 public class EditMessageQuery extends TamTamQuery<SimpleQueryResult> {
-    private final QueryParam<Long> messageId = new QueryParam<Long>("message_id", this).required();
+    private final QueryParam<String> messageId = new QueryParam<String>("message_id", this).required();
 
-    public EditMessageQuery(TamTamClient client, NewMessageBody newMessageBody, Long messageId) {
+    public EditMessageQuery(TamTamClient client, NewMessageBody newMessageBody, String messageId) {
         super(client, "/messages", newMessageBody, SimpleQueryResult.class, Method.PUT);
         this.messageId.setValue(messageId);
     }
