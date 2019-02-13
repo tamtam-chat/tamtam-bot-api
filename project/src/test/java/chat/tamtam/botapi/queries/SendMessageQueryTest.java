@@ -27,6 +27,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import chat.tamtam.botapi.client.TamTamSerializer;
+import chat.tamtam.botapi.client.impl.JacksonSerializer;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
@@ -52,9 +57,12 @@ import chat.tamtam.botapi.model.StickerAttachmentRequestPayload;
 import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
+import spark.Request;
+import spark.Response;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static spark.Spark.post;
@@ -87,6 +95,15 @@ public class SendMessageQueryTest extends QueryTest {
     @Test
     public void sendMessageTest() throws Exception {
         NewMessageBody sendingMessage = new NewMessageBody("text", createAttachmentRequests()).notify(true);
+
+        post("/messages", (req, resp) -> {
+            String chatId = req.queryParams("chat_id");
+            String userId = req.queryParams("user_id");
+            NewMessageBody newMessage = serializer.deserialize(req.body(), NewMessageBody.class);
+            assertThat(newMessage, is(equalTo(sendingMessage)));
+            visit(newMessage.getAttachments());
+            return new SendMessageResult(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId), "mid." + chatId);
+        }, this::serialize);
 
         post("/messages", (req, resp) -> {
             String chatId = req.queryParams("chat_id");
