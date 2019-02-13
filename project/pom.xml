@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>chat.tamtam</groupId>
     <artifactId>tamtam-bot-api</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.1</version>
 
     <name>TamTam Bot API Java Client</name>
     <description>Java library to build bots for TamTam messenger</description>
@@ -38,7 +37,8 @@
         <url>https://github.com/tamtam-chat/tamtam-bot-api</url>
         <connection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api.git</connection>
         <developerConnection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api.git</developerConnection>
-    </scm>
+      <tag>v0.1.1</tag>
+  </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
