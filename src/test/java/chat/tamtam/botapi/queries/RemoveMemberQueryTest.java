@@ -35,7 +35,7 @@ public class RemoveMemberQueryTest extends QueryTest {
         Long chatId = 1L;
         Long userId = 2L;
         SimpleQueryResult response = api.removeMember(chatId, userId).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

@@ -53,7 +53,7 @@ public class RequestGeoLocationButton extends Button implements TamTamSerializab
     * @return quick
     **/
     @JsonProperty("quick")
-    public Boolean getQuick() {
+    public Boolean isQuick() {
         return quick;
     }
 

@@ -44,7 +44,7 @@ public class AddMembersQueryTest extends QueryTest {
         UserIdsList userIdsList = new UserIdsList(Arrays.asList(1L, 2L, 3L));
         Long chatId = 3L;
         SimpleQueryResult response = api.addMembers(userIdsList, chatId).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

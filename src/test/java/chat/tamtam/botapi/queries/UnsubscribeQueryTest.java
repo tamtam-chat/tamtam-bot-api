@@ -34,7 +34,7 @@ public class UnsubscribeQueryTest extends QueryTest {
     public void unsubscribeTest() throws Exception {
         String url = "https://url.com";
         SimpleQueryResult response = api.unsubscribe(url).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

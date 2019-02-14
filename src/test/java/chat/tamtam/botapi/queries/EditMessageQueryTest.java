@@ -39,7 +39,7 @@ public class EditMessageQueryTest extends QueryTest {
                 .attachment(new StickerAttachmentRequest(new StickerAttachmentRequestPayload("code")));
         String messageId = "mid.qweqwekljoiy7971346";
         SimpleQueryResult response = api.editMessage(newMessageBody, messageId).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

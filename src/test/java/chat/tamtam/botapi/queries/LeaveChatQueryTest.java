@@ -41,7 +41,7 @@ public class LeaveChatQueryTest extends QueryTest {
     public void leaveChatTest() throws Exception {
         Long chatId = 1L;
         SimpleQueryResult response = api.leaveChat(chatId).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

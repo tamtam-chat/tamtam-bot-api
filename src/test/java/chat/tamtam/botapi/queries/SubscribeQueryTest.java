@@ -43,7 +43,7 @@ public class SubscribeQueryTest extends QueryTest {
         SubscriptionRequestBody subscriptionRequestBody = new SubscriptionRequestBody("https://someurl.com")
                 .filter("some-filter");
         SimpleQueryResult response = api.subscribe(subscriptionRequestBody).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

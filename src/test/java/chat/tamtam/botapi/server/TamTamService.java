@@ -142,9 +142,12 @@ public class TamTamService {
         Long chatId = Long.valueOf(request.params("chatId"));
         ChatPatch patch = serializer.deserialize(request.body(), ChatPatch.class);
         Chat chat = chats.get(chatId);
-        return new Chat(chatId, chat.getType(), chat.getStatus(),
+        Chat edited = new Chat(chatId, chat.getType(), chat.getStatus(),
                 patch.getTitle() == null ? chat.getTitle() : patch.getTitle(), null, chat.getLastEventTime(),
-                chat.getParticipantsCount());
+                chat.getParticipantsCount(), chat.isPublic(), chat.getDescription());
+
+        edited.setLink("https://editedlink.com");
+        return edited;
     }
 
     public Object editMessage(Request request, Response response) {
@@ -268,8 +271,12 @@ public class TamTamService {
         boolean isDialog = ThreadLocalRandom.current().nextBoolean();
         ChatType type = isDialog ? ChatType.DIALOG : ChatType.CHAT;
         Image icon = new Image(CHAT_ICON_URL);
-        Chat chat = new Chat(ID_COUNTER.incrementAndGet(), type, ChatStatus.ACTIVE, "chat title", icon, 0L,
-                isDialog ? 2 : ThreadLocalRandom.current().nextInt(100));
+        long chatId = ID_COUNTER.incrementAndGet();
+        Chat chat = new Chat(chatId, type, ChatStatus.ACTIVE, "chat title", icon, 0L,
+                isDialog ? 2 : ThreadLocalRandom.current().nextInt(100), ThreadLocalRandom.current().nextBoolean(),
+                ThreadLocalRandom.current().nextBoolean() ? null : "description " + chatId);
+
+        chat.setLink("https://tt.me/chatlink");
 
         Map<String, Long> participants = new HashMap<>();
         return chat.ownerId(ID_COUNTER.incrementAndGet())
