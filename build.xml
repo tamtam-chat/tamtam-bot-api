@@ -94,7 +94,7 @@
     </target>
 
     <target name="integration-test">
-        <exec executable="mvn">
+        <exec executable="mvn" failonerror="true">
             <arg value="-f"/>
             <arg value="project/pom.xml"/>
             <arg value="test"/>
