@@ -53,7 +53,7 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
     * @return isOwner
     **/
     @JsonProperty("is_owner")
-    public Boolean getIsOwner() {
+    public Boolean isOwner() {
         return isOwner;
     }
 

@@ -58,7 +58,7 @@ public class GetMembersQueryTest extends QueryTest {
 
         assertThat(members.size(), is(chat.getParticipantsCount()));
         for (ChatMember member : members) {
-            assertThat(member.getIsOwner(), is(notNullValue()));
+            assertThat(member.isOwner(), is(notNullValue()));
             assertThat(member.getLastAccessTime(), is(notNullValue()));
         }
     }

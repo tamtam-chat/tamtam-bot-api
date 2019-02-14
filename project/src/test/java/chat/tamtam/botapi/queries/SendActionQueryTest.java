@@ -44,7 +44,7 @@ public class SendActionQueryTest extends QueryTest {
         ActionRequestBody actionRequestBody = new ActionRequestBody(SenderAction.TYPING_ON);
         Long chatId = 1L;
         SimpleQueryResult response = api.sendAction(actionRequestBody, chatId).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

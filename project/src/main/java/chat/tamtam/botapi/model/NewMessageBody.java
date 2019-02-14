@@ -93,7 +93,7 @@ public class NewMessageBody implements TamTamSerializable {
     * @return notify
     **/
     @JsonProperty("notify")
-    public Boolean getNotify() {
+    public Boolean isNotify() {
         return notify;
     }
 

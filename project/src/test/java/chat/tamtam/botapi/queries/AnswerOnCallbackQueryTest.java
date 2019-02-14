@@ -41,13 +41,13 @@ public class AnswerOnCallbackQueryTest extends QueryTest {
         NewMessageBody newMessageBody = new NewMessageBody("some text", null);
         messageCallbackAnswer.message(newMessageBody);
         SimpleQueryResult response = api.answerOnCallback(messageCallbackAnswer, callbackId).execute();
-        assertThat(response.getSuccess(), is(true));
+        assertThat(response.isSuccess(), is(true));
 
         CallbackAnswer callbackAnswer = new CallbackAnswer();
         callbackAnswer.notification("some notification");
         callbackAnswer.userId(ThreadLocalRandom.current().nextLong());
         SimpleQueryResult response2 = api.answerOnCallback(callbackAnswer, callbackId).execute();
-        assertThat(response2.getSuccess(), is(true));
+        assertThat(response2.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

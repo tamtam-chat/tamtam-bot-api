@@ -43,9 +43,12 @@ public class Chat implements TamTamSerializable {
     private final Integer participantsCount;
     private Long ownerId;
     private Map<String, Long> participants;
+    private final Boolean isPublic;
+    private String link;
+    private final Object description;
 
     @JsonCreator
-    public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount) { 
+    public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") Object description) { 
         this.chatId = chatId;
         this.type = type;
         this.status = status;
@@ -53,6 +56,8 @@ public class Chat implements TamTamSerializable {
         this.icon = icon;
         this.lastEventTime = lastEventTime;
         this.participantsCount = participantsCount;
+        this.isPublic = isPublic;
+        this.description = description;
     }
 
     /**
@@ -166,6 +171,44 @@ public class Chat implements TamTamSerializable {
         this.participants = participants;
     }
 
+    /**
+    * Is current chat publicly available. Always &#x60;false&#x60; for dialogs
+    * @return isPublic
+    **/
+    @JsonProperty("is_public")
+    public Boolean isPublic() {
+        return isPublic;
+    }
+
+    public Chat link(@Nullable String link) {
+        this.setLink(link);
+        return this;
+    }
+
+    /**
+    * Link on chat if it is public
+    * @return link
+    **/
+    @Nullable
+    @JsonProperty("link")
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(@Nullable String link) {
+        this.link = link;
+    }
+
+    /**
+    * Chat description
+    * @return description
+    **/
+    @Nullable
+    @JsonProperty("description")
+    public Object getDescription() {
+        return description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -184,7 +227,10 @@ public class Chat implements TamTamSerializable {
             Objects.equals(this.lastEventTime, other.lastEventTime) &&
             Objects.equals(this.participantsCount, other.participantsCount) &&
             Objects.equals(this.ownerId, other.ownerId) &&
-            Objects.equals(this.participants, other.participants);
+            Objects.equals(this.participants, other.participants) &&
+            Objects.equals(this.isPublic, other.isPublic) &&
+            Objects.equals(this.link, other.link) &&
+            Objects.equals(this.description, other.description);
     }
 
     @Override
@@ -199,6 +245,9 @@ public class Chat implements TamTamSerializable {
         result = 31 * result + (participantsCount != null ? participantsCount.hashCode() : 0);
         result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (participants != null ? participants.hashCode() : 0);
+        result = 31 * result + (isPublic != null ? isPublic.hashCode() : 0);
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
@@ -214,6 +263,9 @@ public class Chat implements TamTamSerializable {
             + " participantsCount='" + participantsCount + '\''
             + " ownerId='" + ownerId + '\''
             + " participants='" + participants + '\''
+            + " isPublic='" + isPublic + '\''
+            + " link='" + link + '\''
+            + " description='" + description + '\''
             + '}';
     }
 }
