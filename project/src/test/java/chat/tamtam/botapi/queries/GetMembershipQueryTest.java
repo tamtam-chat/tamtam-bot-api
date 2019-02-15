@@ -18,18 +18,32 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 1;
-    private static final int BUILD = 2;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.model.ChatMember;
+import chat.tamtam.botapi.queries.GetMembershipQuery;
+import spark.Spark;
 
-    private Version() {
+import org.junit.Test;
+import org.junit.Ignore;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GetMembershipQueryTest extends QueryTest {
+    @Test
+    public void getMembershipTest() throws Exception {
+        Long chatId = random(chats.values()).getChatId();
+        Spark.get("/chats/:chatId/members/me", (req, resp) -> chatMembers.get(chatId).get(0), this::serialize);
+        GetMembershipQuery query = new GetMembershipQuery(client, chatId);
+        ChatMember response = query.execute();
+        assertThat(response, is(chatMembers.get(chatId).get(0)));
     }
-
-    public static String get() {
-        return VERSION;
-    }
+    
 }

@@ -32,6 +32,7 @@ import chat.tamtam.botapi.queries.AnswerOnCallbackQuery;
 import chat.tamtam.botapi.model.CallbackAnswer;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
+import chat.tamtam.botapi.model.ChatMember;
 import chat.tamtam.botapi.model.ChatMembersList;
 import chat.tamtam.botapi.model.ChatPatch;
 import chat.tamtam.botapi.queries.EditChatQuery;
@@ -39,6 +40,7 @@ import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
 import chat.tamtam.botapi.queries.GetMembersQuery;
+import chat.tamtam.botapi.queries.GetMembershipQuery;
 import chat.tamtam.botapi.queries.GetMessagesQuery;
 import chat.tamtam.botapi.queries.GetMyInfoQuery;
 import chat.tamtam.botapi.queries.GetSubscriptionsQuery;
@@ -93,7 +95,6 @@ public class TamTamBotAPI {
         if (chatId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling addMembers");
         }
-    
 
         return new AddMembersQuery(client, userIdsList, chatId);
     }
@@ -135,7 +136,6 @@ public class TamTamBotAPI {
         if (chatId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling editChat");
         }
-    
 
         return new EditChatQuery(client, chatPatch, chatId);
     }
@@ -172,7 +172,6 @@ public class TamTamBotAPI {
         if (chatId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling getChat");
         }
-    
 
         return new GetChatQuery(client, chatId);
     }
@@ -198,9 +197,23 @@ public class TamTamBotAPI {
         if (chatId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling getMembers");
         }
-    
 
         return new GetMembersQuery(client, chatId);
+    }
+
+    /**
+    * Chat membership
+    * Obtains bot membership info
+    * @param chatId Chat identifier (required)
+    * @return {@link ChatMember}
+    * @throws ClientException if fails to make API call
+    */
+    public GetMembershipQuery getMembership(Long chatId) throws ClientException { 
+        if (chatId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling getMembership");
+        }
+
+        return new GetMembershipQuery(client, chatId);
     }
 
     /**
@@ -267,7 +280,7 @@ public class TamTamBotAPI {
 
     /**
     * Leave chat
-    * Removes bot from chat members
+    * Removes bot from chat members.
     * @param chatId Chat identifier (required)
     * @return {@link SimpleQueryResult}
     * @throws ClientException if fails to make API call
@@ -276,7 +289,6 @@ public class TamTamBotAPI {
         if (chatId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling leaveChat");
         }
-    
 
         return new LeaveChatQuery(client, chatId);
     }
@@ -297,7 +309,6 @@ public class TamTamBotAPI {
         if (chatId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling removeMember");
         }
-    
 
         return new RemoveMemberQuery(client, chatId, userId);
     }
@@ -318,7 +329,6 @@ public class TamTamBotAPI {
         if (chatId == null) {
             throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling sendAction");
         }
-    
 
         return new SendActionQuery(client, actionRequestBody, chatId);
     }

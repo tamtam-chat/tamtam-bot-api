@@ -44,8 +44,7 @@ import static org.junit.Assert.assertThat;
  */
 @Category(IntegrationTest.class)
 public abstract class TamTamIntegrationTest {
-    private TamTamClient client = new TamTamClient(getToken(), new OkHttpTransportClient(), new JacksonSerializer());
-
+    protected TamTamClient client = new TamTamClient(getToken(), new OkHttpTransportClient(), new JacksonSerializer());
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 

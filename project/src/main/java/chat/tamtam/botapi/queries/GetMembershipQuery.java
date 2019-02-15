@@ -18,18 +18,17 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 1;
-    private static final int BUILD = 2;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.client.TamTamClient;
 
-    private Version() {
+import chat.tamtam.botapi.model.ChatMember;
+import chat.tamtam.botapi.queries.GetMembershipQuery;
+
+public class GetMembershipQuery extends TamTamQuery<ChatMember> {
+
+    public GetMembershipQuery(TamTamClient client, Long chatId) {
+        super(client, substitute("/chats/{chatId}/members/me", chatId), null, ChatMember.class, Method.GET);
     }
 
-    public static String get() {
-        return VERSION;
-    }
 }
