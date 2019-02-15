@@ -18,18 +18,44 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.model;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 1;
-    private static final int BUILD = 2;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import com.fasterxml.jackson.annotation.JsonCreator;
 
-    private Version() {
+
+import com.fasterxml.jackson.annotation.JsonValue;
+
+/**
+ * Chat admin permissions
+ */
+public enum ChatAdminPermission implements TamTamEnum {
+    
+    READ_ALL_MESSAGES("read_all_messages"),
+    ADD_REMOVE_MEMBERS("add_remove_members"),
+    ADD_ADMINS("add_admins"),
+    CHANGE_CHAT_INFO("change_chat_info"),
+    PIN_MESSAGE("pin_message"),
+    WRITE("write");
+
+    private String value;
+
+    ChatAdminPermission(String value) {
+        this.value = value;
     }
 
-    public static String get() {
-        return VERSION;
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @JsonValue
+    public String getValue() {
+        return this.value;
+    }
+
+    @JsonCreator
+    public static ChatAdminPermission create(String text) {
+        return TamTamEnum.create(ChatAdminPermission.class, text);
     }
 }
+

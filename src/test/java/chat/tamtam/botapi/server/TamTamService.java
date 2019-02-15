@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import chat.tamtam.botapi.model.AttachmentPayload;
 import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.model.ChatAdminPermission;
 import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.model.ChatMember;
 import chat.tamtam.botapi.model.ChatMembersList;
@@ -244,7 +246,9 @@ public class TamTamService {
     }
 
     private static ChatMember newChatMember() {
-        return new ChatMember(ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextBoolean(),
+        boolean isOwner = ThreadLocalRandom.current().nextBoolean();
+        return new ChatMember(ThreadLocalRandom.current().nextLong(), isOwner, System.currentTimeMillis(),
+                isOwner ? EnumSet.allOf(ChatAdminPermission.class) : null,
                 ID_COUNTER.incrementAndGet(), "name", null, null, null);
     }
 
