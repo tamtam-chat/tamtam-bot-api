@@ -115,4 +115,3 @@ public class Callback implements TamTamSerializable {
             + '}';
     }
 }
-

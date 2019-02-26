@@ -63,6 +63,10 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
         return userId;
     }
 
+    public String getType() {
+        return Update.BOT_REMOVED;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -94,4 +98,3 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
             + '}';
     }
 }
-

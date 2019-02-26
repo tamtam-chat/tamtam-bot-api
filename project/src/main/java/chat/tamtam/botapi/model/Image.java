@@ -73,4 +73,3 @@ public class Image implements TamTamSerializable {
             + '}';
     }
 }
-

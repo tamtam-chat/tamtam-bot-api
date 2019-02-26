@@ -51,6 +51,10 @@ public class FileAttachmentRequest extends AttachmentRequest implements TamTamSe
         return payload;
     }
 
+    public String getType() {
+        return AttachmentRequest.FILE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,4 +82,3 @@ public class FileAttachmentRequest extends AttachmentRequest implements TamTamSe
             + '}';
     }
 }
-

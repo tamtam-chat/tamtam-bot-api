@@ -74,6 +74,10 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
         return adminId;
     }
 
+    public String getType() {
+        return Update.USER_REMOVED;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -108,4 +112,3 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
             + '}';
     }
 }
-

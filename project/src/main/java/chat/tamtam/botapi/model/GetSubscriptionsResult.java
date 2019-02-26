@@ -75,4 +75,3 @@ public class GetSubscriptionsResult implements TamTamSerializable {
             + '}';
     }
 }
-

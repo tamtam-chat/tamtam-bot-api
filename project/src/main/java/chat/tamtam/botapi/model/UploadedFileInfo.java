@@ -73,4 +73,3 @@ public class UploadedFileInfo implements TamTamSerializable {
             + '}';
     }
 }
-

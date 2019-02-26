@@ -90,4 +90,3 @@ public class UserWithPhoto extends User implements TamTamSerializable {
             + '}';
     }
 }
-

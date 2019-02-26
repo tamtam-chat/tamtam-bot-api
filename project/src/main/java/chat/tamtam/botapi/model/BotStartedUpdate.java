@@ -63,6 +63,10 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
         return userId;
     }
 
+    public String getType() {
+        return Update.BOT_STARTED;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -94,4 +98,3 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
             + '}';
     }
 }
-

@@ -72,4 +72,3 @@ public class UploadedInfo implements TamTamSerializable {
             + '}';
     }
 }
-

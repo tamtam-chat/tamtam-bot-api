@@ -51,6 +51,10 @@ public class AudioAttachmentRequest extends AttachmentRequest implements TamTamS
         return payload;
     }
 
+    public String getType() {
+        return AttachmentRequest.AUDIO;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,4 +82,3 @@ public class AudioAttachmentRequest extends AttachmentRequest implements TamTamS
             + '}';
     }
 }
-

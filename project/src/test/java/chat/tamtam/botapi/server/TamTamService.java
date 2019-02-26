@@ -263,7 +263,7 @@ public class TamTamService {
     }
 
     private Subscription newSubscription() {
-        return new Subscription("http://url" + ID_COUNTER.incrementAndGet() + ".com", System.currentTimeMillis());
+        return new Subscription("http://url" + ID_COUNTER.incrementAndGet() + ".com", System.currentTimeMillis(), null);
     }
 
     private User newUser() {

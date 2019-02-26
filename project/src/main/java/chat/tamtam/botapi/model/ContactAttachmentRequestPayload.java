@@ -120,4 +120,3 @@ public class ContactAttachmentRequestPayload implements TamTamSerializable {
             + '}';
     }
 }
-

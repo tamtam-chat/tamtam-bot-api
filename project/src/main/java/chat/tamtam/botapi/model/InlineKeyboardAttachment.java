@@ -62,6 +62,10 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
         return payload;
     }
 
+    public String getType() {
+        return Attachment.INLINE_KEYBOARD;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -92,4 +96,3 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
             + '}';
     }
 }
-

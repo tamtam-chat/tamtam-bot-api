@@ -75,4 +75,3 @@ public class InlineKeyboardAttachmentRequestPayload implements TamTamSerializabl
             + '}';
     }
 }
-

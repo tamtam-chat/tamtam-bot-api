@@ -22,13 +22,15 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.GetUpdatesQuery;
+import java.util.Set;
 import chat.tamtam.botapi.model.UpdateList;
+import java.util.Collection;
 
-public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
-    private final QueryParam<Integer> limit = new QueryParam<Integer>("limit", this);
-    private final QueryParam<Integer> timeout = new QueryParam<Integer>("timeout", this);
-    private final QueryParam<Long> marker = new QueryParam<Long>("marker", this);
+public class GetUpdatesQuery extends TamTamQuery<UpdateList> { 
+    private final QueryParam<Integer> limit = new QueryParam<>("limit", this);
+    private final QueryParam<Integer> timeout = new QueryParam<>("timeout", this);
+    private final QueryParam<Long> marker = new QueryParam<>("marker", this);
+    private final QueryParam<Collection<String>> types = new CollectionQueryParam<>("types", this);
 
     public GetUpdatesQuery(TamTamClient client) {
         super(client, "/updates", null, UpdateList.class, Method.GET);
@@ -44,6 +46,10 @@ public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
     }
     public GetUpdatesQuery marker(Long value) {
         this.marker.setValue(value);
+        return this;
+    }
+    public GetUpdatesQuery types(Set<String> value) {
+        this.types.setValue(value);
         return this;
     }
 }

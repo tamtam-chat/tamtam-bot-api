@@ -51,6 +51,10 @@ public class VideoAttachmentRequest extends AttachmentRequest implements TamTamS
         return payload;
     }
 
+    public String getType() {
+        return AttachmentRequest.VIDEO;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,4 +82,3 @@ public class VideoAttachmentRequest extends AttachmentRequest implements TamTamS
             + '}';
     }
 }
-

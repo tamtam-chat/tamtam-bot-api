@@ -75,4 +75,3 @@ public class PhotoTokens implements TamTamSerializable {
             + '}';
     }
 }
-

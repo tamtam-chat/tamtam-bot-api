@@ -74,4 +74,3 @@ public class UserIdsList implements TamTamSerializable {
             + '}';
     }
 }
-

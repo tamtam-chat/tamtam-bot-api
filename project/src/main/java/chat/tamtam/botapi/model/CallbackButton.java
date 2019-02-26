@@ -53,6 +53,10 @@ public class CallbackButton extends Button implements TamTamSerializable {
         return payload;
     }
 
+    public String getType() {
+        return Button.CALLBACK;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -81,4 +85,3 @@ public class CallbackButton extends Button implements TamTamSerializable {
             + '}';
     }
 }
-

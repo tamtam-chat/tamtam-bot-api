@@ -103,4 +103,3 @@ public class User implements TamTamSerializable {
             + '}';
     }
 }
-

@@ -73,4 +73,3 @@ public class UploadEndpoint implements TamTamSerializable {
             + '}';
     }
 }
-

@@ -22,11 +22,10 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.GetUploadUrlQuery;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
 
-public class GetUploadUrlQuery extends TamTamQuery<UploadEndpoint> {
+public class GetUploadUrlQuery extends TamTamQuery<UploadEndpoint> { 
     private final QueryParam<UploadType> type = new QueryParam<UploadType>("type", this).required();
 
     public GetUploadUrlQuery(TamTamClient client, UploadType type) {

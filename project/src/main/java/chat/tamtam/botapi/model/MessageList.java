@@ -75,4 +75,3 @@ public class MessageList implements TamTamSerializable {
             + '}';
     }
 }
-

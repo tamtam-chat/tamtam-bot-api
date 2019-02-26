@@ -64,4 +64,8 @@ public class QueryParam<T> {
     public boolean isRequired() {
         return isRequired;
     }
+
+    public String format() {
+        return String.valueOf(value);
+    }
 }

@@ -23,9 +23,8 @@ package chat.tamtam.botapi.queries;
 import chat.tamtam.botapi.client.TamTamClient;
 
 import chat.tamtam.botapi.model.SimpleQueryResult;
-import chat.tamtam.botapi.queries.UnsubscribeQuery;
 
-public class UnsubscribeQuery extends TamTamQuery<SimpleQueryResult> {
+public class UnsubscribeQuery extends TamTamQuery<SimpleQueryResult> { 
     private final QueryParam<String> url = new QueryParam<String>("url", this).required();
 
     public UnsubscribeQuery(TamTamClient client, String url) {

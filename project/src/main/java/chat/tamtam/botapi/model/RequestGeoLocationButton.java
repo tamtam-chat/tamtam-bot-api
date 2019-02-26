@@ -61,6 +61,10 @@ public class RequestGeoLocationButton extends Button implements TamTamSerializab
         this.quick = quick;
     }
 
+    public String getType() {
+        return Button.REQUEST_GEO_LOCATION;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -89,4 +93,3 @@ public class RequestGeoLocationButton extends Button implements TamTamSerializab
             + '}';
     }
 }
-

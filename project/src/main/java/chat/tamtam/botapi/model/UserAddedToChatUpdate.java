@@ -74,6 +74,10 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
         return inviterId;
     }
 
+    public String getType() {
+        return Update.USER_ADDED;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -108,4 +112,3 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
             + '}';
     }
 }
-

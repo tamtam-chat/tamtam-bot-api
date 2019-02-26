@@ -22,7 +22,10 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -31,7 +34,7 @@ import java.util.Objects;
 public class SubscriptionRequestBody implements TamTamSerializable {
 
     private final String url;
-    private String filter;
+    private Set<String> updateTypes;
 
     @JsonCreator
     public SubscriptionRequestBody(@JsonProperty("url") String url) { 
@@ -47,21 +50,22 @@ public class SubscriptionRequestBody implements TamTamSerializable {
         return url;
     }
 
-    public SubscriptionRequestBody filter(String filter) {
-        this.setFilter(filter);
+    public SubscriptionRequestBody updateTypes(Set<String> updateTypes) {
+        this.setUpdateTypes(updateTypes);
         return this;
     }
 
     /**
-    * @return filter
+    * List of update types your bot want to receive. See &#x60;Update&#x60; object for a complete list of types
+    * @return updateTypes
     **/
-    @JsonProperty("filter")
-    public String getFilter() {
-        return filter;
+    @JsonProperty("update_types")
+    public Set<String> getUpdateTypes() {
+        return updateTypes;
     }
 
-    public void setFilter(String filter) {
-        this.filter = filter;
+    public void setUpdateTypes(Set<String> updateTypes) {
+        this.updateTypes = updateTypes;
     }
 
     @Override
@@ -75,14 +79,14 @@ public class SubscriptionRequestBody implements TamTamSerializable {
 
         SubscriptionRequestBody other = (SubscriptionRequestBody) o;
         return Objects.equals(this.url, other.url) &&
-            Objects.equals(this.filter, other.filter);
+            Objects.equals(this.updateTypes, other.updateTypes);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (filter != null ? filter.hashCode() : 0);
+        result = 31 * result + (updateTypes != null ? updateTypes.hashCode() : 0);
         return result;
     }
 
@@ -90,8 +94,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
     public String toString() {
         return "SubscriptionRequestBody{"
             + " url='" + url + '\''
-            + " filter='" + filter + '\''
+            + " updateTypes='" + updateTypes + '\''
             + '}';
     }
 }
-

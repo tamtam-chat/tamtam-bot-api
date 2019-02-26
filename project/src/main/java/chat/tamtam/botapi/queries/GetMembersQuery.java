@@ -23,11 +23,10 @@ package chat.tamtam.botapi.queries;
 import chat.tamtam.botapi.client.TamTamClient;
 
 import chat.tamtam.botapi.model.ChatMembersList;
-import chat.tamtam.botapi.queries.GetMembersQuery;
 
-public class GetMembersQuery extends TamTamQuery<ChatMembersList> {
-    private final QueryParam<Long> marker = new QueryParam<Long>("marker", this);
-    private final QueryParam<Integer> count = new QueryParam<Integer>("count", this);
+public class GetMembersQuery extends TamTamQuery<ChatMembersList> { 
+    private final QueryParam<Long> marker = new QueryParam<>("marker", this);
+    private final QueryParam<Integer> count = new QueryParam<>("count", this);
 
     public GetMembersQuery(TamTamClient client, Long chatId) {
         super(client, substitute("/chats/{chatId}/members", chatId), null, ChatMembersList.class, Method.GET);

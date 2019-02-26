@@ -22,8 +22,12 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Schema to describe WebHook subscription
@@ -32,11 +36,13 @@ public class Subscription implements TamTamSerializable {
 
     private final String url;
     private final Long time;
+    private final Set<String> updateTypes;
 
     @JsonCreator
-    public Subscription(@JsonProperty("url") String url, @JsonProperty("time") Long time) { 
+    public Subscription(@JsonProperty("url") String url, @JsonProperty("time") Long time, @Nullable @JsonProperty("update_types") Set<String> updateTypes) { 
         this.url = url;
         this.time = time;
+        this.updateTypes = updateTypes;
     }
 
     /**
@@ -57,6 +63,16 @@ public class Subscription implements TamTamSerializable {
         return time;
     }
 
+    /**
+    * Update types bot subscribed for
+    * @return updateTypes
+    **/
+    @Nullable
+    @JsonProperty("update_types")
+    public Set<String> getUpdateTypes() {
+        return updateTypes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -68,7 +84,8 @@ public class Subscription implements TamTamSerializable {
 
         Subscription other = (Subscription) o;
         return Objects.equals(this.url, other.url) &&
-            Objects.equals(this.time, other.time);
+            Objects.equals(this.time, other.time) &&
+            Objects.equals(this.updateTypes, other.updateTypes);
     }
 
     @Override
@@ -76,6 +93,7 @@ public class Subscription implements TamTamSerializable {
         int result = 1;
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
+        result = 31 * result + (updateTypes != null ? updateTypes.hashCode() : 0);
         return result;
     }
 
@@ -84,7 +102,7 @@ public class Subscription implements TamTamSerializable {
         return "Subscription{"
             + " url='" + url + '\''
             + " time='" + time + '\''
+            + " updateTypes='" + updateTypes + '\''
             + '}';
     }
 }
-
