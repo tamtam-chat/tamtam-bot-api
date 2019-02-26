@@ -51,6 +51,10 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
         return payload;
     }
 
+    public String getType() {
+        return Attachment.STICKER;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,4 +82,3 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
             + '}';
     }
 }
-

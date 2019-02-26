@@ -24,7 +24,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -32,19 +35,43 @@ import java.util.Objects;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "update_type", visible = true, defaultImpl = Update.class)
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = "message_created"),
-  @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = "message_callback"),
-  @JsonSubTypes.Type(value = MessageEditedUpdate.class, name = "message_edited"),
-  @JsonSubTypes.Type(value = MessageRemovedUpdate.class, name = "message_removed"),
-  @JsonSubTypes.Type(value = MessageRestoredUpdate.class, name = "message_restored"),
-  @JsonSubTypes.Type(value = BotAddedToChatUpdate.class, name = "bot_added"),
-  @JsonSubTypes.Type(value = BotRemovedFromChatUpdate.class, name = "bot_removed"),
-  @JsonSubTypes.Type(value = UserAddedToChatUpdate.class, name = "user_added"),
-  @JsonSubTypes.Type(value = UserRemovedFromChatUpdate.class, name = "user_removed"),
-  @JsonSubTypes.Type(value = BotStartedUpdate.class, name = "bot_started"),
-  @JsonSubTypes.Type(value = ChatTitleChangedUpdate.class, name = "chat_title_changed"),
+  @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = Update.MESSAGE_CREATED),
+  @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = Update.MESSAGE_CALLBACK),
+  @JsonSubTypes.Type(value = MessageEditedUpdate.class, name = Update.MESSAGE_EDITED),
+  @JsonSubTypes.Type(value = MessageRemovedUpdate.class, name = Update.MESSAGE_REMOVED),
+  @JsonSubTypes.Type(value = MessageRestoredUpdate.class, name = Update.MESSAGE_RESTORED),
+  @JsonSubTypes.Type(value = BotAddedToChatUpdate.class, name = Update.BOT_ADDED),
+  @JsonSubTypes.Type(value = BotRemovedFromChatUpdate.class, name = Update.BOT_REMOVED),
+  @JsonSubTypes.Type(value = UserAddedToChatUpdate.class, name = Update.USER_ADDED),
+  @JsonSubTypes.Type(value = UserRemovedFromChatUpdate.class, name = Update.USER_REMOVED),
+  @JsonSubTypes.Type(value = BotStartedUpdate.class, name = Update.BOT_STARTED),
+  @JsonSubTypes.Type(value = ChatTitleChangedUpdate.class, name = Update.CHAT_TITLE_CHANGED),
 })
 public class Update implements TamTamSerializable {
+    public static final String MESSAGE_CREATED = "message_created";
+    public static final String MESSAGE_CALLBACK = "message_callback";
+    public static final String MESSAGE_EDITED = "message_edited";
+    public static final String MESSAGE_REMOVED = "message_removed";
+    public static final String MESSAGE_RESTORED = "message_restored";
+    public static final String BOT_ADDED = "bot_added";
+    public static final String BOT_REMOVED = "bot_removed";
+    public static final String USER_ADDED = "user_added";
+    public static final String USER_REMOVED = "user_removed";
+    public static final String BOT_STARTED = "bot_started";
+    public static final String CHAT_TITLE_CHANGED = "chat_title_changed";
+    public static final Set<String> TYPES = new HashSet<>(Arrays.asList(
+        MESSAGE_CREATED, 
+        MESSAGE_CALLBACK, 
+        MESSAGE_EDITED, 
+        MESSAGE_REMOVED, 
+        MESSAGE_RESTORED, 
+        BOT_ADDED, 
+        BOT_REMOVED, 
+        USER_ADDED, 
+        USER_REMOVED, 
+        BOT_STARTED, 
+        CHAT_TITLE_CHANGED
+    ));
 
     private final Long timestamp;
 
@@ -64,6 +91,10 @@ public class Update implements TamTamSerializable {
     @JsonProperty("timestamp")
     public Long getTimestamp() {
         return timestamp;
+    }
+
+    public String getType() {
+        throw new UnsupportedOperationException("Model has no concrete type.");
     }
 
     @Override
@@ -108,4 +139,3 @@ public class Update implements TamTamSerializable {
         void visitDefault(Update model);
     }
 }
-

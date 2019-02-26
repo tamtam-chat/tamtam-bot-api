@@ -51,6 +51,10 @@ public class StickerAttachmentRequest extends AttachmentRequest implements TamTa
         return payload;
     }
 
+    public String getType() {
+        return AttachmentRequest.STICKER;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,4 +82,3 @@ public class StickerAttachmentRequest extends AttachmentRequest implements TamTa
             + '}';
     }
 }
-

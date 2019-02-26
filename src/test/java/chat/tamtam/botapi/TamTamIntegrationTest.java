@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
 import org.junit.experimental.categories.Category;
@@ -44,7 +45,15 @@ import static org.junit.Assert.assertThat;
  */
 @Category(IntegrationTest.class)
 public abstract class TamTamIntegrationTest {
-    protected TamTamClient client = new TamTamClient(getToken(), new OkHttpTransportClient(), new JacksonSerializer());
+    protected static final AtomicLong ID_COUNTER = new AtomicLong();
+    private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
+    private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
+
+    private final OkHttpTransportClient transportClient = new OkHttpTransportClient();
+    private final JacksonSerializer serializer = new JacksonSerializer();
+
+    protected TamTamClient client = new TamTamClient(TOKEN_1, transportClient, serializer);
+    protected TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 
@@ -125,18 +134,13 @@ public abstract class TamTamIntegrationTest {
         return UUID.randomUUID().toString();
     }
 
-    private static String getToken() {
-        String tokenEnv = System.getenv("TAMTAM_BOTAPI_TOKEN");
+    private static String getToken(String envVar) {
+        String tokenEnv = System.getenv(envVar);
         if (tokenEnv != null) {
             return tokenEnv;
         }
 
-        String property = System.getProperty("tamtam.botapi.token");
-        if (property == null) {
-            throw new NullPointerException("No token provided. Please set TAMTAM_BOTAPI_TOKEN environment variable.");
-        }
-
-        return property;
+        throw new NullPointerException("No token provided. Please set " + envVar + " environment variable.");
     }
 
     private static Supplier<Exception> notFound(String entity) {

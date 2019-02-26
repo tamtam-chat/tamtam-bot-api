@@ -22,6 +22,9 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -29,21 +32,45 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = Attachment.class)
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = PhotoAttachment.class, name = "image"),
-  @JsonSubTypes.Type(value = VideoAttachment.class, name = "video"),
-  @JsonSubTypes.Type(value = AudioAttachment.class, name = "audio"),
-  @JsonSubTypes.Type(value = FileAttachment.class, name = "file"),
-  @JsonSubTypes.Type(value = StickerAttachment.class, name = "sticker"),
-  @JsonSubTypes.Type(value = ContactAttachment.class, name = "contact"),
-  @JsonSubTypes.Type(value = InlineKeyboardAttachment.class, name = "inline_keyboard"),
-  @JsonSubTypes.Type(value = ShareAttachment.class, name = "share"),
-  @JsonSubTypes.Type(value = LocationAttachment.class, name = "location"),
+  @JsonSubTypes.Type(value = PhotoAttachment.class, name = Attachment.IMAGE),
+  @JsonSubTypes.Type(value = VideoAttachment.class, name = Attachment.VIDEO),
+  @JsonSubTypes.Type(value = AudioAttachment.class, name = Attachment.AUDIO),
+  @JsonSubTypes.Type(value = FileAttachment.class, name = Attachment.FILE),
+  @JsonSubTypes.Type(value = StickerAttachment.class, name = Attachment.STICKER),
+  @JsonSubTypes.Type(value = ContactAttachment.class, name = Attachment.CONTACT),
+  @JsonSubTypes.Type(value = InlineKeyboardAttachment.class, name = Attachment.INLINE_KEYBOARD),
+  @JsonSubTypes.Type(value = ShareAttachment.class, name = Attachment.SHARE),
+  @JsonSubTypes.Type(value = LocationAttachment.class, name = Attachment.LOCATION),
 })
 public class Attachment implements TamTamSerializable {
+    public static final String IMAGE = "image";
+    public static final String VIDEO = "video";
+    public static final String AUDIO = "audio";
+    public static final String FILE = "file";
+    public static final String STICKER = "sticker";
+    public static final String CONTACT = "contact";
+    public static final String INLINE_KEYBOARD = "inline_keyboard";
+    public static final String SHARE = "share";
+    public static final String LOCATION = "location";
+    public static final Set<String> TYPES = new HashSet<>(Arrays.asList(
+        IMAGE, 
+        VIDEO, 
+        AUDIO, 
+        FILE, 
+        STICKER, 
+        CONTACT, 
+        INLINE_KEYBOARD, 
+        SHARE, 
+        LOCATION
+    ));
 
 
     public void visit(Visitor visitor) {
         visitor.visitDefault(this);
+    }
+
+    public String getType() {
+        throw new UnsupportedOperationException("Model has no concrete type.");
     }
 
     @Override
@@ -65,4 +92,3 @@ public class Attachment implements TamTamSerializable {
         void visitDefault(Attachment model);
     }
 }
-

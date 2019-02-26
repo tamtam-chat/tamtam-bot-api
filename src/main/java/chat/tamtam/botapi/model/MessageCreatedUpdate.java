@@ -52,6 +52,10 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
         return message;
     }
 
+    public String getType() {
+        return Update.MESSAGE_CREATED;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -80,4 +84,3 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
             + '}';
     }
 }
-

@@ -114,4 +114,3 @@ public class LinkedMessage implements TamTamSerializable {
             + '}';
     }
 }
-

@@ -24,7 +24,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -33,12 +36,22 @@ import org.jetbrains.annotations.Nullable;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = Button.class)
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = CallbackButton.class, name = "callback"),
-  @JsonSubTypes.Type(value = LinkButton.class, name = "link"),
-  @JsonSubTypes.Type(value = RequestGeoLocationButton.class, name = "request_geo_location"),
-  @JsonSubTypes.Type(value = RequestContactButton.class, name = "request_contact"),
+  @JsonSubTypes.Type(value = CallbackButton.class, name = Button.CALLBACK),
+  @JsonSubTypes.Type(value = LinkButton.class, name = Button.LINK),
+  @JsonSubTypes.Type(value = RequestGeoLocationButton.class, name = Button.REQUEST_GEO_LOCATION),
+  @JsonSubTypes.Type(value = RequestContactButton.class, name = Button.REQUEST_CONTACT),
 })
 public class Button implements TamTamSerializable {
+    public static final String CALLBACK = "callback";
+    public static final String LINK = "link";
+    public static final String REQUEST_GEO_LOCATION = "request_geo_location";
+    public static final String REQUEST_CONTACT = "request_contact";
+    public static final Set<String> TYPES = new HashSet<>(Arrays.asList(
+        CALLBACK, 
+        LINK, 
+        REQUEST_GEO_LOCATION, 
+        REQUEST_CONTACT
+    ));
 
     private final String text;
     private final Intent intent;
@@ -70,6 +83,10 @@ public class Button implements TamTamSerializable {
     @JsonProperty("intent")
     public Intent getIntent() {
         return intent;
+    }
+
+    public String getType() {
+        throw new UnsupportedOperationException("Model has no concrete type.");
     }
 
     @Override
@@ -110,4 +127,3 @@ public class Button implements TamTamSerializable {
         void visitDefault(Button model);
     }
 }
-

@@ -52,6 +52,10 @@ public class LinkButton extends Button implements TamTamSerializable {
         return url;
     }
 
+    public String getType() {
+        return Button.LINK;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -80,4 +84,3 @@ public class LinkButton extends Button implements TamTamSerializable {
             + '}';
     }
 }
-

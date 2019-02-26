@@ -51,6 +51,10 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
         return callback;
     }
 
+    public String getType() {
+        return Update.MESSAGE_CALLBACK;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,4 +83,3 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
             + '}';
     }
 }
-

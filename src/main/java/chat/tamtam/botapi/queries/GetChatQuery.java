@@ -23,9 +23,8 @@ package chat.tamtam.botapi.queries;
 import chat.tamtam.botapi.client.TamTamClient;
 
 import chat.tamtam.botapi.model.Chat;
-import chat.tamtam.botapi.queries.GetChatQuery;
 
-public class GetChatQuery extends TamTamQuery<Chat> {
+public class GetChatQuery extends TamTamQuery<Chat> { 
 
     public GetChatQuery(TamTamClient client, Long chatId) {
         super(client, substitute("/chats/{chatId}", chatId), null, Chat.class, Method.GET);

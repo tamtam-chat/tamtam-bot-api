@@ -91,4 +91,3 @@ public class ChatMembersList implements TamTamSerializable {
             + '}';
     }
 }
-

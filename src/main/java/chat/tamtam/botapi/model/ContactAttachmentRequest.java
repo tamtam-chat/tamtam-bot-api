@@ -51,6 +51,10 @@ public class ContactAttachmentRequest extends AttachmentRequest implements TamTa
         return payload;
     }
 
+    public String getType() {
+        return AttachmentRequest.CONTACT;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,4 +82,3 @@ public class ContactAttachmentRequest extends AttachmentRequest implements TamTa
             + '}';
     }
 }
-

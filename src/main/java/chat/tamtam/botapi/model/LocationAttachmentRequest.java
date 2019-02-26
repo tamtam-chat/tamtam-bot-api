@@ -61,6 +61,10 @@ public class LocationAttachmentRequest extends AttachmentRequest implements TamT
         return longitude;
     }
 
+    public String getType() {
+        return AttachmentRequest.LOCATION;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,4 +95,3 @@ public class LocationAttachmentRequest extends AttachmentRequest implements TamT
             + '}';
     }
 }
-

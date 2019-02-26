@@ -51,6 +51,10 @@ public class InlineKeyboardAttachmentRequest extends AttachmentRequest implement
         return payload;
     }
 
+    public String getType() {
+        return AttachmentRequest.INLINE_KEYBOARD;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,4 +82,3 @@ public class InlineKeyboardAttachmentRequest extends AttachmentRequest implement
             + '}';
     }
 }
-

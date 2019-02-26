@@ -20,28 +20,23 @@
 
 package chat.tamtam.botapi.queries;
 
+import java.util.Collections;
+
+import org.junit.Test;
+
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.SimpleQueryResult;
-import chat.tamtam.botapi.queries.SubscribeQuery;
 import chat.tamtam.botapi.model.SubscriptionRequestBody;
-import org.junit.Test;
-import org.junit.Ignore;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class SubscribeQueryTest extends QueryTest {
     
     @Test
     public void subscribeTest() throws Exception {
-        SubscriptionRequestBody subscriptionRequestBody = new SubscriptionRequestBody("https://someurl.com")
-                .filter("some-filter");
+        SubscriptionRequestBody subscriptionRequestBody = new SubscriptionRequestBody("https://someurl.com");
+        subscriptionRequestBody.setUpdateTypes(Collections.singleton("message_created"));
         SimpleQueryResult response = api.subscribe(subscriptionRequestBody).execute();
         assertThat(response.isSuccess(), is(true));
     }

@@ -20,14 +20,26 @@
 
 package chat.tamtam.botapi.queries;
 
-import chat.tamtam.botapi.client.TamTamClient;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
-import chat.tamtam.botapi.model.SimpleQueryResult;
+import org.jetbrains.annotations.NotNull;
 
-public class LeaveChatQuery extends TamTamQuery<SimpleQueryResult> { 
-
-    public LeaveChatQuery(TamTamClient client, Long chatId) {
-        super(client, substitute("/chats/{chatId}/members/me", chatId), null, SimpleQueryResult.class, Method.DELETE);
+/**
+ * @author alexandrchuprin
+ */
+public class CollectionQueryParam<T> extends QueryParam<Collection<T>> {
+    public CollectionQueryParam(@NotNull String name, @NotNull TamTamQuery<?> holder) {
+        super(name, holder);
     }
 
+    @Override
+    public String format() {
+        Collection<T> value = getValue();
+        if (value == null) {
+            return "";
+        }
+
+        return value.stream().map(String::valueOf).collect(Collectors.joining(","));
+    }
 }

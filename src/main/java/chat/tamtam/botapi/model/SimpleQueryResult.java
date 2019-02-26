@@ -73,4 +73,3 @@ public class SimpleQueryResult implements TamTamSerializable {
             + '}';
     }
 }
-

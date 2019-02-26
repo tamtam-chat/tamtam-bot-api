@@ -269,4 +269,3 @@ public class Chat implements TamTamSerializable {
             + '}';
     }
 }
-

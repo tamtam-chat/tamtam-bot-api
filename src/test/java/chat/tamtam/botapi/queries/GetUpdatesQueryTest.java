@@ -21,6 +21,7 @@
 package chat.tamtam.botapi.queries;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.junit.Test;
@@ -98,7 +99,12 @@ public class GetUpdatesQueryTest extends QueryTest {
         Integer limit = 100;
         Integer timeout = 30;
         Long marker = null;
-        UpdateList response = api.getUpdates().marker(marker).limit(limit).timeout(timeout).execute();
+        UpdateList response = api.getUpdates()
+                .marker(marker)
+                .limit(limit)
+                .timeout(timeout)
+                .types(new HashSet<>(Arrays.asList(Update.MESSAGE_CREATED, Update.BOT_ADDED)))
+                .execute();
         assertThat(response.getUpdates(), is(updates));
 
         for (Update update : updates) {

@@ -22,14 +22,13 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.GetMessagesQuery;
 import chat.tamtam.botapi.model.MessageList;
 
-public class GetMessagesQuery extends TamTamQuery<MessageList> {
+public class GetMessagesQuery extends TamTamQuery<MessageList> { 
     private final QueryParam<Long> chatId = new QueryParam<Long>("chat_id", this).required();
-    private final QueryParam<Long> from = new QueryParam<Long>("from", this);
-    private final QueryParam<Long> to = new QueryParam<Long>("to", this);
-    private final QueryParam<Integer> count = new QueryParam<Integer>("count", this);
+    private final QueryParam<Long> from = new QueryParam<>("from", this);
+    private final QueryParam<Long> to = new QueryParam<>("to", this);
+    private final QueryParam<Integer> count = new QueryParam<>("count", this);
 
     public GetMessagesQuery(TamTamClient client, Long chatId) {
         super(client, "/messages", null, MessageList.class, Method.GET);

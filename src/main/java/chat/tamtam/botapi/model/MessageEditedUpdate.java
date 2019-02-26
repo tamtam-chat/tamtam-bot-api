@@ -52,6 +52,10 @@ public class MessageEditedUpdate extends Update implements TamTamSerializable {
         return message;
     }
 
+    public String getType() {
+        return Update.MESSAGE_EDITED;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -80,4 +84,3 @@ public class MessageEditedUpdate extends Update implements TamTamSerializable {
             + '}';
     }
 }
-

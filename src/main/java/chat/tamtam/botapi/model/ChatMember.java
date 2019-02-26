@@ -119,4 +119,3 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
             + '}';
     }
 }
-

@@ -22,11 +22,10 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 
-public class EditMessageQuery extends TamTamQuery<SimpleQueryResult> {
+public class EditMessageQuery extends TamTamQuery<SimpleQueryResult> { 
     private final QueryParam<String> messageId = new QueryParam<String>("message_id", this).required();
 
     public EditMessageQuery(TamTamClient client, NewMessageBody newMessageBody, String messageId) {

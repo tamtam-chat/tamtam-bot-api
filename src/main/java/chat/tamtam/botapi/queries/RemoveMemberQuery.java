@@ -22,10 +22,9 @@ package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
 
-import chat.tamtam.botapi.queries.RemoveMemberQuery;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 
-public class RemoveMemberQuery extends TamTamQuery<SimpleQueryResult> {
+public class RemoveMemberQuery extends TamTamQuery<SimpleQueryResult> { 
     private final QueryParam<Long> userId = new QueryParam<Long>("user_id", this).required();
 
     public RemoveMemberQuery(TamTamClient client, Long chatId, Long userId) {

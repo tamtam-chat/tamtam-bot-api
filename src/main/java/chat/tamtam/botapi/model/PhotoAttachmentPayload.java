@@ -87,4 +87,3 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
             + '}';
     }
 }
-

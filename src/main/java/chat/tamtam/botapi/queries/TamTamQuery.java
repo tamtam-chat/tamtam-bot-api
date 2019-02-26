@@ -196,8 +196,7 @@ public class TamTamQuery<T> {
             sb.append(name);
             sb.append('=');
             try {
-                String paramValue = String.valueOf(param.getValue());
-                sb.append(encodeParam(paramValue));
+                sb.append(encodeParam(param.format()));
             } catch (UnsupportedEncodingException e) {
                 throw new ClientException(e);
             }

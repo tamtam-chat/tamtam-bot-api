@@ -61,6 +61,10 @@ public class LocationAttachment extends Attachment implements TamTamSerializable
         return longitude;
     }
 
+    public String getType() {
+        return Attachment.LOCATION;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,4 +95,3 @@ public class LocationAttachment extends Attachment implements TamTamSerializable
             + '}';
     }
 }
-
