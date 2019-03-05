@@ -33,7 +33,7 @@ public class GetChatsQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             if (chat.getTitle() != null && chat.getTitle().toLowerCase().contains("public")) {
                 assertThat(chat.isPublic(), is(true));
-                assertThat(chat.getLink(), is(notNullValue()));
+                assertThat(chat.getLink(), is("https://tt.me/asdqweqwe"));
             }
 
             assertThat(chat.getChatId(), is(notNullValue()));
