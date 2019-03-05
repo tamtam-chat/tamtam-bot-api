@@ -17,6 +17,21 @@ git fetch github
 git subtree merge -P project github/master
 ```
 
+# Release process
+- Fetch all changes made in GitHub repo
+- `cd project`
+- `mvn release:prepare`
+- Check everything is ok
+- Push changes to GitHub (from parent directory): `git subtree push --prefix project github master`
+- Push current version tag to GitHub: `git push github v0.1.2`
+- `mvn release:perform`
+
+## Notice on deploy to Maven Central
+
+The last release stage will deploy jar artifact to Maven Central through the [Sonatype Staging Repository](https://central.sonatype.org/pages/ossrh-guide.html).
+You should have credentials to deploy to it.
+See [this issue](https://issues.sonatype.org/browse/OSSRH-45920) for details.
+
 # TamTam Bot API Java client
 
 ## Overview
