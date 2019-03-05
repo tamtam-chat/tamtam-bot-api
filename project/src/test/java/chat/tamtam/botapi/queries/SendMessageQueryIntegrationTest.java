@@ -95,7 +95,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                         new RequestContactButton("contact", Intent.DEFAULT)
                 ),
                 Collections.singletonList(
-                        new RequestGeoLocationButton("geo location", Intent.DEFAULT)
+                        new RequestGeoLocationButton("geo location", Intent.DEFAULT).quick(true)
                 )
         );
 
