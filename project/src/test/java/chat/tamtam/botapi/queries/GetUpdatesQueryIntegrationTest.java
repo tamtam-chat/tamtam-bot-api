@@ -51,6 +51,9 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         Set<String> receivedMessages = ConcurrentHashMap.newKeySet();
         CountDownLatch sendFinished = new CountDownLatch(1);
 
+        // consume all pending updates to make sure queue is clean before test
+        new GetUpdatesQuery(client).timeout(5).execute();
+
         Runnable getUpdates = () -> {
             try {
                 UpdateList updateList = new GetUpdatesQuery(client)
