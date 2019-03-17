@@ -21,6 +21,7 @@ import chat.tamtam.botapi.model.AudioAttachmentRequest;
 import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
+import chat.tamtam.botapi.model.ChatStatus;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachment;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
@@ -71,7 +72,11 @@ public abstract class TamTamIntegrationTest {
     }
 
     protected Chat getByType(List<Chat> chats, ChatType type) throws Exception {
-        return chats.stream().filter(c -> c.getType() == type).findFirst().orElseThrow(notFound(type.getValue()));
+        return chats.stream()
+                .filter(c -> c.getType() == type)
+                .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
+                .findFirst()
+                .orElseThrow(notFound(type.getValue()));
     }
 
     protected static void compare(List<AttachmentRequest> attachmentRequests, List<Attachment> attachments) {

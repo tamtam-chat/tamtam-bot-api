@@ -17,6 +17,7 @@ import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.model.ChatStatus;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
@@ -35,8 +36,15 @@ import static org.junit.Assert.assertThat;
 public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void name() throws Exception {
-        Set<Long> bot1chats = getChats().stream().map(Chat::getChatId).collect(Collectors.toSet());
-        Set<Long> bot2chats = new GetChatsQuery(client2).execute().getChats().stream().map(Chat::getChatId).collect(Collectors.toSet());
+        Set<Long> bot1chats = getChats().stream()
+                .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
+                .map(Chat::getChatId)
+                .collect(Collectors.toSet());
+        Set<Long> bot2chats = new GetChatsQuery(client2).execute().getChats().stream()
+                .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
+                .map(Chat::getChatId)
+                .collect(Collectors.toSet());
+
         bot1chats.retainAll(bot2chats);
         Long commonChatId = bot1chats.iterator().next();
         Set<String> sentMessages = ConcurrentHashMap.newKeySet();
