@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
-import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
@@ -68,7 +67,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         List<Chat> list = Arrays.asList(dialog, chat, channel);
         for (Chat c : list) {
             try {
-                doSend(newMessage, c.getChatId());
+                doSend(newMessage, c);
             } catch (Exception e) {
                 exceptions++;
             }
@@ -171,8 +170,12 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         Chat channel = getByType(chats, ChatType.CHANNEL);
 
         for (Chat c : Arrays.asList(dialog, chat, channel)) {
+            if (c.getType() == ChatType.CHANNEL && !c.getTitle().contains("bot is admin")) {
+                continue;
+            }
+
             Long chatId = c.getChatId();
-            SendMessageResult sendMessageResult = doSend(newMessage, chatId);
+            SendMessageResult sendMessageResult = doSend(newMessage, c);
             assertThat(sendMessageResult, is(notNullValue()));
 
             if (c.getType() == ChatType.CHAT) {
@@ -196,10 +199,11 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         }
     }
 
-    private SendMessageResult doSend(NewMessageBody newMessage, Long chatId) throws Exception {
+    private SendMessageResult doSend(NewMessageBody newMessage, Chat chat) throws Exception {
         do {
             try {
-                return botAPI.sendMessage(newMessage).chatId(chatId).execute();
+                LOG.info("Sending message to chat: " + chat);
+                return botAPI.sendMessage(newMessage).chatId(chat.getChatId()).execute();
             } catch (AttachmentNotReadyException e) {
                 // it is ok, try again
                 Thread.sleep(TimeUnit.SECONDS.toMillis(5));
