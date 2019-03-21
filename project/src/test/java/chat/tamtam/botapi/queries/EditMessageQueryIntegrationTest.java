@@ -39,6 +39,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         String uploadUrl = getUploadUrl();
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
