@@ -8,11 +8,14 @@ import org.junit.Test;
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
+import chat.tamtam.botapi.model.ChatType;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -33,13 +36,17 @@ public class GetChatsQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             if (chat.getTitle() != null && chat.getTitle().toLowerCase().contains("public")) {
                 assertThat(chat.isPublic(), is(true));
-                assertThat(chat.getLink(), is("https://tt.me/asdqweqwe"));
+                assertThat(chat.getLink(), is(not(isEmptyString())));
             }
 
             assertThat(chat.getChatId(), is(notNullValue()));
             assertThat(chat.getType(), is(notNullValue()));
             assertThat(chat.getStatus(), is(notNullValue()));
             assertThat(chat.getParticipantsCount(), is(greaterThan(0)));
+
+            if (chat.getType() != ChatType.DIALOG && chat.getTitle().contains("bot is admin")) {
+                assertThat(chat.getOwnerId(), is(notNullValue()));
+            }
         }
     }
 }
