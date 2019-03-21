@@ -34,6 +34,11 @@ public class ExceptionMapper {
                 return new AttachmentNotReadyException();
             case "too.many.requests":
                 return new TooManyRequestsException(message);
+            case "chat.denied":
+                if ("chat.send.msg.no.permission.because.not.admin".equals(message)) {
+                    return new SendMessageForbiddenException(message);
+                }
+                return new ChatAccessForbiddenException(message);
         }
 
         return new APIException(error.getCode(), message);
