@@ -117,6 +117,15 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
+    public void shouldSendGifByURL() throws Exception {
+        String url = "https://media1.giphy.com/media/2RCQECf4JBfoc/giphy.gif?cid=e1bb72ff5c936527514b67642ec770cf";
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload(url, null);
+        AttachmentRequest attach = new PhotoAttachmentRequest(payload);
+        NewMessageBody newMessage = new NewMessageBody("image", Collections.singletonList(attach));
+        send(newMessage);
+    }
+
+    @Test
     public void shouldSendVideo() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.VIDEO).execute();
         File file = new File(getClass().getClassLoader().getResource("test.mp4").toURI());

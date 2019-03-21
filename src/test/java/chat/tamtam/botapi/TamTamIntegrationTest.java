@@ -1,5 +1,6 @@
 package chat.tamtam.botapi;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -7,7 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
+import org.junit.Before;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.client.impl.JacksonSerializer;
@@ -46,6 +50,7 @@ import static org.junit.Assert.assertThat;
  */
 @Category(IntegrationTest.class)
 public abstract class TamTamIntegrationTest {
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
@@ -57,6 +62,11 @@ public abstract class TamTamIntegrationTest {
     protected TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
+
+    @Before
+    public void setUp() throws Exception {
+        LOG.info("i am: {}", getMe());
+    }
 
     protected UserWithPhoto getMe() throws APIException, ClientException {
         return botAPI.getMyInfo().execute();
