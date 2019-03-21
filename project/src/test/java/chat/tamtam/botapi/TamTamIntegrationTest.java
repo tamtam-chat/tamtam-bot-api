@@ -50,7 +50,7 @@ import static org.junit.Assert.assertThat;
  */
 @Category(IntegrationTest.class)
 public abstract class TamTamIntegrationTest {
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    protected static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
