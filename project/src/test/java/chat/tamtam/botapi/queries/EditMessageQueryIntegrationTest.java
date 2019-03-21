@@ -50,7 +50,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         PhotoTokens photoTokens2 = uploadAPI.uploadImage(uploadUrl2, file2).execute();
         photoAR2 = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload(null, photoTokens2.getPhotos()));
 
-        List<Chat> allChats = getChats();
+        List<Chat> allChats = getChatsCanSend();
         chats = Arrays.asList(
                 getByType(allChats, ChatType.DIALOG),
                 getByType(allChats, ChatType.CHAT),

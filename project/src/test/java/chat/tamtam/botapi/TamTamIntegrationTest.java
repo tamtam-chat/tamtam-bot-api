@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.experimental.categories.Category;
@@ -75,6 +76,19 @@ public abstract class TamTamIntegrationTest {
     protected List<Chat> getChats() throws APIException, ClientException {
         ChatList chatList = botAPI.getChats().count(10).execute();
         return chatList.getChats();
+    }
+
+    protected List<Chat> getChatsCanSend() throws APIException, ClientException {
+        ChatList chatList = botAPI.getChats().count(10).execute();
+        return chatList.getChats().stream()
+                .filter(c -> {
+                    if (c.getType() == ChatType.CHANNEL) {
+                        return c.getTitle().contains("bot is admin");
+                    }
+
+                    return true;
+                })
+                .collect(Collectors.toList());
     }
 
     protected static <T> T random(List<T> list) {

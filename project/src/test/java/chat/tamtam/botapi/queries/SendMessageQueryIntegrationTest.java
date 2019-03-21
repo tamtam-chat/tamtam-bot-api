@@ -164,7 +164,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     private void send(NewMessageBody newMessage) throws Exception {
-        List<Chat> chats = getChats();
+        List<Chat> chats = getChatsCanSend();
         Chat dialog = getByType(chats, ChatType.DIALOG);
         Chat chat = getByType(chats, ChatType.CHAT);
         Chat channel = getByType(chats, ChatType.CHANNEL);
