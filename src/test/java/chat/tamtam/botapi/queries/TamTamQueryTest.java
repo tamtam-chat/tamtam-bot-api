@@ -19,8 +19,10 @@ import chat.tamtam.botapi.client.TamTamSerializer;
 import chat.tamtam.botapi.client.TamTamTransportClient;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
+import chat.tamtam.botapi.exceptions.ChatAccessForbiddenException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
+import chat.tamtam.botapi.exceptions.SendMessageForbiddenException;
 import chat.tamtam.botapi.exceptions.ServiceNotAvailableException;
 import chat.tamtam.botapi.exceptions.TooManyRequestsException;
 import chat.tamtam.botapi.exceptions.TransportClientException;
@@ -47,8 +49,14 @@ public class TamTamQueryTest extends QueryTest {
     private static final chat.tamtam.botapi.model.Error TOO_MANY_REQUESTS
             = new chat.tamtam.botapi.model.Error("too.many.requests", "error");
 
-    private static final chat.tamtam.botapi.model.Error ATTACH_NOT_REQDY_ERROR
+    private static final chat.tamtam.botapi.model.Error ATTACH_NOT_READY_ERROR
             = new chat.tamtam.botapi.model.Error("attachment.not.ready", "error");
+
+    private static final chat.tamtam.botapi.model.Error CHAT_DENIED_ERROR
+            = new chat.tamtam.botapi.model.Error("chat.denied", "error");
+
+    private static final chat.tamtam.botapi.model.Error CANNON_SEND_ERROR
+            = new chat.tamtam.botapi.model.Error("chat.denied", "chat.send.msg.no.permission.because.not.admin");
 
     private static final Future<ClientResponse> INTERRUPTING_FUTURE = new Future<ClientResponse>() {
         @Override
@@ -86,7 +94,9 @@ public class TamTamQueryTest extends QueryTest {
         get("/emptybody", ((request, response) -> halt(500, null)));
         get("/errorbody", ((request, response) -> halt(500, mapper.writeValueAsString(ERROR))));
         get("/toomanyrequests", ((request, response) -> halt(429, mapper.writeValueAsString(TOO_MANY_REQUESTS))));
-        get("/attachnotready", ((request, response) -> halt(429, mapper.writeValueAsString(ATTACH_NOT_REQDY_ERROR))));
+        get("/attachnotready", ((request, response) -> halt(429, mapper.writeValueAsString(ATTACH_NOT_READY_ERROR))));
+        get("/accessdenied", ((request, response) -> halt(403, mapper.writeValueAsString(CHAT_DENIED_ERROR))));
+        get("/cannotsend", ((request, response) -> halt(429, mapper.writeValueAsString(CANNON_SEND_ERROR))));
         get("/ok", ((request, response) -> "{}"));
     }
 
@@ -123,6 +133,18 @@ public class TamTamQueryTest extends QueryTest {
     @Test(expected = AttachmentNotReadyException.class)
     public void shouldThrowANRException() throws Exception {
         TamTamQuery<Void> query = new TamTamQuery<>(client, "/attachnotready", Void.class, TamTamQuery.Method.GET);
+        query.execute();
+    }
+
+    @Test(expected = ChatAccessForbiddenException.class)
+    public void shouldThrowAccessDeniedException() throws Exception {
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/accessdenied", Void.class, TamTamQuery.Method.GET);
+        query.execute();
+    }
+
+    @Test(expected = SendMessageForbiddenException.class)
+    public void shouldThrowSMFException() throws Exception {
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/cannotsend", Void.class, TamTamQuery.Method.GET);
         query.execute();
     }
 

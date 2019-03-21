@@ -5,9 +5,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import chat.tamtam.botapi.TamTamBotAPI;
 import chat.tamtam.botapi.client.TamTamClient;
-import chat.tamtam.botapi.client.TamTamSerializer;
 import chat.tamtam.botapi.client.impl.JacksonSerializer;
-import chat.tamtam.botapi.exceptions.SerializationException;
+import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.server.TamTamServer;
@@ -19,8 +18,16 @@ import chat.tamtam.botapi.server.TamTamService;
 public class QueryTest extends TamTamService {
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
 
-    public final TamTamClient client = TamTamClient.create(TamTamService.ACCESS_TOKEN);
-    public final TamTamBotAPI api = TamTamBotAPI.create(TamTamService.ACCESS_TOKEN);
+    private OkHttpTransportClient transport = new OkHttpTransportClient();
+    JacksonSerializer serializer = new JacksonSerializer();
+    public final TamTamClient client = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer) {
+        @Override
+        public String getEndpoint() {
+            return TamTamServer.ENDPOINT;
+        }
+    };
+
+    public final TamTamBotAPI api = new TamTamBotAPI(client);
 
     protected TamTamClient invalidClient = new TamTamClient("accesstoken", client.getTransport(), client.getSerializer()) {
         @Override
