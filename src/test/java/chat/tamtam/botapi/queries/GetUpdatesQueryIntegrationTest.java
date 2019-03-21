@@ -56,7 +56,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         List<String> receivedMessages = new CopyOnWriteArrayList<>();
         CountDownLatch sendFinished = new CountDownLatch(1);
 
-        // consume all pending updates to make sure queue is clean before test
+        // consume all pending updates to make sure queue is empty before test
         new GetUpdatesQuery(client).timeout(5).execute();
 
         Runnable getUpdates = () -> {

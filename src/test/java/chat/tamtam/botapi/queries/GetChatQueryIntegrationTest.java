@@ -29,8 +29,8 @@ public class GetChatQueryIntegrationTest extends TamTamIntegrationTest {
 
         for (Long chatId : chatIds) {
             Chat chat = new GetChatQuery(client, chatId).execute();
-            assertThat(chat.getOwnerId(), is(nullValue()));
-            assertThat(chat.getParticipants().size(), is(0));
+            assertThat("chat + " + chat, chat.getOwnerId(), is(nullValue()));
+            assertThat("chat + " + chat, chat.getParticipants(), is(nullValue()));
         }
     }
 
