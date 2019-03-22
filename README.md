@@ -8,19 +8,19 @@ Library has been built based on [TamTam Bot API Schema](https://github.com/tamta
 
 Full documentation of API can be found [here](https://dev.tamtam.chat).
 
-# Requirements
+## Requirements
 Minimum required version of Java is 8.
 
 To use TamTam Bot API you should obtain `ACCESS_TOKEN` for each bot you create.
 
-Speak to [@PrimeBot](http://tt.me/primebot). It will helps you to create your first bot.
+Talk to [@PrimeBot](http://tt.me/primebot). It will helps you to create your first bot.
 
-# Dependencies
-- [Jackson 2.9.8](https://github.com/FasterXML/jackson)
-- [OkHttp 3.12.0](https://github.com/square/okhttp)
-- [SLF4J](https://github.com/qos-ch/slf4j)
+## Dependencies
+  - [Jackson 2.9.8](https://github.com/FasterXML/jackson)
+  - [OkHttp 3.12.0](https://github.com/square/okhttp)
+  - [SLF4J](https://github.com/qos-ch/slf4j)
 
-# Usage
+## Usage
 To start using this client add it as Maven dependency:
 ```xml
 <dependency>
@@ -30,7 +30,7 @@ To start using this client add it as Maven dependency:
 </dependency>
 ```
 
-## Initialization
+### Initialization
 The easiest way to create it is to call:
 ```java
 TamTamBotAPI api = TamTamBotAPI.create("%ACCESS_TOKEN%);
@@ -46,7 +46,7 @@ TamTamClient client = new TamTamClient("%ACCESS_TOKEN%", transportClient, serial
 TamTamBotAPI botAPI = new TamTamBotAPI(client);
 ```
 
-## Making requests
+### Making requests
 `TamTamBotAPI` provides access to all methods supported by the API. All methods return `TamTamQuery` object that can be executed **synchronous** or **asynchronous**.
  
 For example:
@@ -67,34 +67,34 @@ SendMessageResult result = sendMessageQuery.execute();
 Future<SendMessageResult> futureResult = sendMessageQuery.enqueue();
 ```
 
-## Uploading media
+### Uploading media
 Your bot is able to attach some media content to messages. It could be image, video, audio or file.
 
 To attach media to message you should follow two steps:
 
-1. Obtain URL to upload:
+ 1. Obtain URL to upload:
 ```java
 UploadEndpoint endpoint = botAPI.getUploadUrl(UploadType.VIDEO).execute();
 String uploadUrl = endpoint.getUrl();
 ```
-2. Upload binary data to this url. You can manually execute HTTP-request to send binary data to this url, or use built-in `TamTamUploadAPI`:
+ 2. Upload binary data to this url. You can manually execute HTTP-request to send binary data to this url, or use built-in `TamTamUploadAPI`:
 
 ```java
 TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 UploadedFileInfo uploadedInfo = uploadAPI.uploadFile(uploadUrl, new File("%FILE_PATH%")).execute();
 ```
 
-### Important notice:
+#### Important notice
 It may take a time for server to process you file (audio/video or binary file). While file is not processed you can't attach it and will get `AttachmentNotReadyException` when calling `sendMessage` method. Try again until you'll get successful result.
 
-## Handling exceptions
+### Handling exceptions
 All methods can throw two type of exceptions:
 
 1. ClientException: general exception type wrapping all kinds of IO/serialization exceptions.
 
 2. APIException: exception you will get if API was used incorrectly. For example, some arguments are missing or access to requested resource is denied.
 
-## Logging
+### Logging
 No logging is performed by default. This project uses SLF4J, so you should bring adapter for logging framework you prefer. For example, add slf4j-log4j12 as dependency:
 
 ```xml
@@ -105,11 +105,11 @@ No logging is performed by default. This project uses SLF4J, so you should bring
 </dependency>
 ```
 
-# Contributing
+## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
-# License
+## License
 This project is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
