@@ -16,9 +16,9 @@ To use TamTam Bot API you should obtain `ACCESS_TOKEN` for each bot you create.
 Talk to [@PrimeBot](http://tt.me/primebot). It will helps you to create your first bot.
 
 ## Dependencies
-  - [Jackson 2.9.8](https://github.com/FasterXML/jackson)
-  - [OkHttp 3.12.0](https://github.com/square/okhttp)
-  - [SLF4J](https://github.com/qos-ch/slf4j)
+- [Jackson 2.9.8](https://github.com/FasterXML/jackson)
+- [OkHttp 3.12.0](https://github.com/square/okhttp)
+- [SLF4J](https://github.com/qos-ch/slf4j)
 
 ## Usage
 To start using this client add it as Maven dependency:
@@ -72,12 +72,12 @@ Your bot is able to attach some media content to messages. It could be image, vi
 
 To attach media to message you should follow two steps:
 
- 1. Obtain URL to upload:
+1. Obtain URL to upload:
 ```java
 UploadEndpoint endpoint = botAPI.getUploadUrl(UploadType.VIDEO).execute();
 String uploadUrl = endpoint.getUrl();
 ```
- 2. Upload binary data to this url. You can manually execute HTTP-request to send binary data to this url, or use built-in `TamTamUploadAPI`:
+2. Upload binary data to this url. You can manually execute HTTP-request to send binary data to this url, or use built-in `TamTamUploadAPI`:
 
 ```java
 TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
