@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import javax.xml.stream.util.StreamReaderDelegate;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,17 +43,8 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void name() throws Exception {
-        Set<Long> bot1chats = getChats().stream()
-                .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
-                .map(Chat::getChatId)
-                .collect(Collectors.toSet());
-        Set<Long> bot2chats = new GetChatsQuery(client2).execute().getChats().stream()
-                .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
-                .map(Chat::getChatId)
-                .collect(Collectors.toSet());
-
-        bot1chats.retainAll(bot2chats);
-        Long commonChatId = bot1chats.iterator().next();
+        Chat commonChat = getByTitle(getChats(), "test chat #6");
+        Long commonChatId = commonChat.getChatId();
         List<String> sentMessages = new CopyOnWriteArrayList<>();
         List<String> receivedMessages = new CopyOnWriteArrayList<>();
         CountDownLatch sendFinished = new CountDownLatch(1);
