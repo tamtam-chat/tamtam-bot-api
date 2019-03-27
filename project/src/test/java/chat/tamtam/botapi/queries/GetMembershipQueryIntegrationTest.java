@@ -1,9 +1,5 @@
 package chat.tamtam.botapi.queries;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
@@ -17,7 +13,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -32,24 +27,18 @@ public class GetMembershipQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void shouldReturnPermissionsForChatWhereBotIsAdmin() throws Exception {
-        Map<Boolean, List<Chat>> chats = getChats().stream()
-                .filter(c -> c.getType() != ChatType.DIALOG)
-                .collect(Collectors.groupingBy(c -> c.getTitle().contains("bot is admin")));
+        Chat chat = getByTitle(getChats(), "test chat #1");
+        GetMembershipQuery query = new GetMembershipQuery(client, chat.getChatId());
+        ChatMember chatMember = query.execute();
+        assertThat(chatMember.getPermissions().size(), is(greaterThan(0)));
+        assertThat(chatMember.getPermissions(), hasItem(ChatAdminPermission.WRITE));
+    }
 
-        assertThat(chats.get(true), hasSize(greaterThan(0)));
-        assertThat(chats.get(false), hasSize(greaterThan(0)));
-
-        for (Chat chatWherBotIsAdmin : chats.get(true)) {
-            GetMembershipQuery query = new GetMembershipQuery(client, chatWherBotIsAdmin.getChatId());
-            ChatMember chatMember = query.execute();
-            assertThat(chatMember.getPermissions().size(), is(greaterThan(0)));
-            assertThat(chatMember.getPermissions(), hasItem(ChatAdminPermission.WRITE));
-        }
-
-        for (Chat chatWherBotIsNotAdmin : chats.get(false)) {
-            GetMembershipQuery query = new GetMembershipQuery(client, chatWherBotIsNotAdmin.getChatId());
-            ChatMember chatMember = query.execute();
-            assertThat(chatMember.getPermissions(), is(nullValue()));
-        }
+    @Test
+    public void shouldReturnNullForChatWhereBotIsNOTAdmin() throws Exception {
+        Chat chat = getByTitle(getChats(), "test chat #3");
+        GetMembershipQuery query = new GetMembershipQuery(client, chat.getChatId());
+        ChatMember chatMember = query.execute();
+        assertThat(chatMember.getPermissions(), is(nullValue()));
     }
 }

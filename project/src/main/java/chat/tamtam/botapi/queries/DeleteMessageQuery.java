@@ -18,18 +18,18 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 1;
-    private static final int BUILD = 3;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.client.TamTamClient;
 
-    private Version() {
+import chat.tamtam.botapi.model.SimpleQueryResult;
+
+public class DeleteMessageQuery extends TamTamQuery<SimpleQueryResult> { 
+    private final QueryParam<String> messageId = new QueryParam<String>("message_id", this).required();
+
+    public DeleteMessageQuery(TamTamClient client, String messageId) {
+        super(client, "/messages", null, SimpleQueryResult.class, Method.DELETE);
+        this.messageId.setValue(messageId);
     }
 
-    public static String get() {
-        return VERSION;
-    }
 }

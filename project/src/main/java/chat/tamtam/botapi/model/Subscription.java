@@ -37,12 +37,14 @@ public class Subscription implements TamTamSerializable {
     private final String url;
     private final Long time;
     private final Set<String> updateTypes;
+    private final String version;
 
     @JsonCreator
-    public Subscription(@JsonProperty("url") String url, @JsonProperty("time") Long time, @Nullable @JsonProperty("update_types") Set<String> updateTypes) { 
+    public Subscription(@JsonProperty("url") String url, @JsonProperty("time") Long time, @Nullable @JsonProperty("update_types") Set<String> updateTypes, @Nullable @JsonProperty("version") String version) { 
         this.url = url;
         this.time = time;
         this.updateTypes = updateTypes;
+        this.version = version;
     }
 
     /**
@@ -73,6 +75,15 @@ public class Subscription implements TamTamSerializable {
         return updateTypes;
     }
 
+    /**
+    * @return version
+    **/
+    @Nullable
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,7 +96,8 @@ public class Subscription implements TamTamSerializable {
         Subscription other = (Subscription) o;
         return Objects.equals(this.url, other.url) &&
             Objects.equals(this.time, other.time) &&
-            Objects.equals(this.updateTypes, other.updateTypes);
+            Objects.equals(this.updateTypes, other.updateTypes) &&
+            Objects.equals(this.version, other.version);
     }
 
     @Override
@@ -94,6 +106,7 @@ public class Subscription implements TamTamSerializable {
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (updateTypes != null ? updateTypes.hashCode() : 0);
+        result = 31 * result + (version != null ? version.hashCode() : 0);
         return result;
     }
 
@@ -103,6 +116,7 @@ public class Subscription implements TamTamSerializable {
             + " url='" + url + '\''
             + " time='" + time + '\''
             + " updateTypes='" + updateTypes + '\''
+            + " version='" + version + '\''
             + '}';
     }
 }

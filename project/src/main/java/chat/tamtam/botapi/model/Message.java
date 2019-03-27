@@ -35,14 +35,14 @@ public class Message implements TamTamSerializable {
     private final Recipient recipient;
     private final Long timestamp;
     private LinkedMessage link;
-    private final MessageBody message;
+    private final MessageBody body;
 
     @JsonCreator
-    public Message(@JsonProperty("sender") User sender, @JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @JsonProperty("message") MessageBody message) { 
+    public Message(@JsonProperty("sender") User sender, @JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @JsonProperty("body") MessageBody body) { 
         this.sender = sender;
         this.recipient = recipient;
         this.timestamp = timestamp;
-        this.message = message;
+        this.body = body;
     }
 
     /**
@@ -93,11 +93,11 @@ public class Message implements TamTamSerializable {
 
     /**
     * Body of created message. Text + attachments. Could be null if message contains only forwarded message.
-    * @return message
+    * @return body
     **/
-    @JsonProperty("message")
-    public MessageBody getMessage() {
-        return message;
+    @JsonProperty("body")
+    public MessageBody getBody() {
+        return body;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class Message implements TamTamSerializable {
             Objects.equals(this.recipient, other.recipient) &&
             Objects.equals(this.timestamp, other.timestamp) &&
             Objects.equals(this.link, other.link) &&
-            Objects.equals(this.message, other.message);
+            Objects.equals(this.body, other.body);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class Message implements TamTamSerializable {
         result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
-        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (body != null ? body.hashCode() : 0);
         return result;
     }
 
@@ -135,7 +135,7 @@ public class Message implements TamTamSerializable {
             + " recipient='" + recipient + '\''
             + " timestamp='" + timestamp + '\''
             + " link='" + link + '\''
-            + " message='" + message + '\''
+            + " body='" + body + '\''
             + '}';
     }
 }

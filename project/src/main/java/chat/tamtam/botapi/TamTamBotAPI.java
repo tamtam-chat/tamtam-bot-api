@@ -35,6 +35,7 @@ import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.model.ChatMember;
 import chat.tamtam.botapi.model.ChatMembersList;
 import chat.tamtam.botapi.model.ChatPatch;
+import chat.tamtam.botapi.queries.DeleteMessageQuery;
 import chat.tamtam.botapi.queries.EditChatQuery;
 import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
@@ -118,6 +119,21 @@ public class TamTamBotAPI {
         }
 
         return new AnswerOnCallbackQuery(client, callbackAnswer, callbackId);
+    }
+
+    /**
+    * Delete message
+    * Deletes message in a dialog or in a chat if bot has permission to delete messages.
+    * @param messageId Deleting message identifier (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public DeleteMessageQuery deleteMessage(String messageId) throws ClientException { 
+        if (messageId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'message_id' when calling deleteMessage");
+        }
+
+        return new DeleteMessageQuery(client, messageId);
     }
 
     /**
@@ -217,16 +233,10 @@ public class TamTamBotAPI {
     /**
     * Get messages
     * Returns messages in chat: result page and marker referencing to the next page. Messages traversed in reverse direction so the latest message in chat will be first in result array. Therefore if you use &#x60;from&#x60; and &#x60;to&#x60; parameters, &#x60;to&#x60; must be **less than** &#x60;from&#x60;
-    * @param chatId Chat identifier (required)
     * @return {@link MessageList}
-    * @throws ClientException if fails to make API call
     */
-    public GetMessagesQuery getMessages(Long chatId) throws ClientException { 
-        if (chatId == null) {
-            throw new RequiredParameterMissingException("Missing the required parameter 'chat_id' when calling getMessages");
-        }
-
-        return new GetMessagesQuery(client, chatId);
+    public GetMessagesQuery getMessages() { 
+        return new GetMessagesQuery(client);
     }
 
     /**
@@ -328,7 +338,7 @@ public class TamTamBotAPI {
 
     /**
     * Send message
-    * Sends a message to a chat. As a result for this method new message identifier returns.
+    * Sends a message to a chat. As a result for this method new message identifier returns. ### Attaching media Attaching media to messages is a three-step process.  At first step, you should [obtain a URL to upload](#operation/getUploadUrl) your media files.  At the second, you should upload binary of appropriate format to URL you obtained at the previous step. See [upload](https://dev.tamtam.chat/#operation/getUploadUrl) section for details.  Finally, if the upload process was successful, you will receive JSON-object in a response body.  Use this object to create attachment. Construct an object with two properties:  - &#x60;type&#x60; with the value set to appropriate media type  - and &#x60;payload&#x60; filled with the JSON you&#39;ve got.   For example, you can attach a video to message this way:  1. Get URL to upload. Execute following: &#x60;&#x60;&#x60;shell curl -X POST \\   &#39;https://botapi.tamtam.chat/uploads?access_token&#x3D;%access_token%&amp;type&#x3D;video&#39; &#x60;&#x60;&#x60; As the result it will return URL for the next step. &#x60;&#x60;&#x60;json {     \&quot;url\&quot;: \&quot;http://vu.mycdn.me/upload.do…\&quot; } &#x60;&#x60;&#x60;   2. Use this url to upload your binary:  &#x60;&#x60;&#x60;shell curl -i -X POST      -H \&quot;Content-Type: multipart/form-data\&quot;      -F \&quot;data&#x3D;@movie.mp4\&quot; \&quot;http://vu.mycdn.me/upload.do…\&quot; &#x60;&#x60;&#x60; As the result it will return JSON you can attach to message: &#x60;&#x60;&#x60;json {     \&quot;id\&quot;: 1234567890 } &#x60;&#x60;&#x60; 3. Send message with attach: &#x60;&#x60;&#x60;json {  \&quot;text\&quot;: \&quot;Message with video\&quot;,  \&quot;attachments\&quot;: [   {    \&quot;type\&quot;: \&quot;video\&quot;,    \&quot;payload\&quot;: {        \&quot;id\&quot;: 1173574260020    }   }  ] } &#x60;&#x60;&#x60;  **Important notice**:  It may take time for the server to process your file (audio/video or any binary). While a file is not processed you can&#39;t attach it. It means the last step will fail with &#x60;503&#x60; error. Try to send a message again until you&#39;ll get a successful result.
     * @param newMessageBody  (required)
     * @return {@link SendMessageResult}
     * @throws ClientException if fails to make API call

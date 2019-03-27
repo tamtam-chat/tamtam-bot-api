@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
+import org.jetbrains.annotations.Nullable;
 
 /**
  * You will get this &#x60;update&#x60; as soon as user presses button
@@ -31,11 +32,13 @@ import java.util.Objects;
 public class MessageCallbackUpdate extends Update implements TamTamSerializable {
 
     private final Callback callback;
+    private final Message message;
 
     @JsonCreator
-    public MessageCallbackUpdate(@JsonProperty("callback") Callback callback, @JsonProperty("timestamp") Long timestamp) { 
+    public MessageCallbackUpdate(@JsonProperty("callback") Callback callback, @Nullable @JsonProperty("message") Message message, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.callback = callback;
+        this.message = message;
     }
 
     @Override
@@ -49,6 +52,16 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
     @JsonProperty("callback")
     public Callback getCallback() {
         return callback;
+    }
+
+    /**
+    * Original message containing inline keyboard. Can be &#x60;null&#x60; in case it had been deleted by the moment a bot got this update.
+    * @return message
+    **/
+    @Nullable
+    @JsonProperty("message")
+    public Message getMessage() {
+        return message;
     }
 
     public String getType() {
@@ -66,6 +79,7 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
 
         MessageCallbackUpdate other = (MessageCallbackUpdate) o;
         return Objects.equals(this.callback, other.callback) &&
+            Objects.equals(this.message, other.message) &&
             super.equals(o);
     }
 
@@ -73,6 +87,7 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (callback != null ? callback.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
     }
 
@@ -80,6 +95,7 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
     public String toString() {
         return "MessageCallbackUpdate{"+ super.toString()
             + " callback='" + callback + '\''
+            + " message='" + message + '\''
             + '}';
     }
 }

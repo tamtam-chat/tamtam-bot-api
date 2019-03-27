@@ -36,14 +36,16 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
 
     private final Long lastAccessTime;
     private final Boolean isOwner;
+    private final Boolean isAdmin;
     private final Long joinTime;
     private final Set<ChatAdminPermission> permissions;
 
     @JsonCreator
-    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("join_time") Long joinTime, @Nullable @JsonProperty("permissions") Set<ChatAdminPermission> permissions, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("avatar_url") String avatarUrl, @JsonProperty("full_avatar_url") String fullAvatarUrl) { 
+    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("is_admin") Boolean isAdmin, @JsonProperty("join_time") Long joinTime, @Nullable @JsonProperty("permissions") Set<ChatAdminPermission> permissions, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("avatar_url") String avatarUrl, @JsonProperty("full_avatar_url") String fullAvatarUrl) { 
         super(avatarUrl, fullAvatarUrl, userId, name, username);
         this.lastAccessTime = lastAccessTime;
         this.isOwner = isOwner;
+        this.isAdmin = isAdmin;
         this.joinTime = joinTime;
         this.permissions = permissions;
     }
@@ -62,6 +64,14 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
     @JsonProperty("is_owner")
     public Boolean isOwner() {
         return isOwner;
+    }
+
+    /**
+    * @return isAdmin
+    **/
+    @JsonProperty("is_admin")
+    public Boolean isAdmin() {
+        return isAdmin;
     }
 
     /**
@@ -94,6 +104,7 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
         ChatMember other = (ChatMember) o;
         return Objects.equals(this.lastAccessTime, other.lastAccessTime) &&
             Objects.equals(this.isOwner, other.isOwner) &&
+            Objects.equals(this.isAdmin, other.isAdmin) &&
             Objects.equals(this.joinTime, other.joinTime) &&
             Objects.equals(this.permissions, other.permissions) &&
             super.equals(o);
@@ -104,6 +115,7 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
         int result = super.hashCode();
         result = 31 * result + (lastAccessTime != null ? lastAccessTime.hashCode() : 0);
         result = 31 * result + (isOwner != null ? isOwner.hashCode() : 0);
+        result = 31 * result + (isAdmin != null ? isAdmin.hashCode() : 0);
         result = 31 * result + (joinTime != null ? joinTime.hashCode() : 0);
         result = 31 * result + (permissions != null ? permissions.hashCode() : 0);
         return result;
@@ -114,6 +126,7 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
         return "ChatMember{"+ super.toString()
             + " lastAccessTime='" + lastAccessTime + '\''
             + " isOwner='" + isOwner + '\''
+            + " isAdmin='" + isAdmin + '\''
             + " joinTime='" + joinTime + '\''
             + " permissions='" + permissions + '\''
             + '}';

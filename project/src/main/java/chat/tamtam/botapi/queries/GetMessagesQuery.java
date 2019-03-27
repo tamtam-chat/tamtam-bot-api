@@ -23,18 +23,28 @@ package chat.tamtam.botapi.queries;
 import chat.tamtam.botapi.client.TamTamClient;
 
 import chat.tamtam.botapi.model.MessageList;
+import java.util.Set;
+import java.util.Collection;
 
 public class GetMessagesQuery extends TamTamQuery<MessageList> { 
-    private final QueryParam<Long> chatId = new QueryParam<Long>("chat_id", this).required();
+    private final QueryParam<Long> chatId = new QueryParam<>("chat_id", this);
+    private final QueryParam<Collection<String>> messageIds = new CollectionQueryParam<>("message_ids", this);
     private final QueryParam<Long> from = new QueryParam<>("from", this);
     private final QueryParam<Long> to = new QueryParam<>("to", this);
     private final QueryParam<Integer> count = new QueryParam<>("count", this);
 
-    public GetMessagesQuery(TamTamClient client, Long chatId) {
+    public GetMessagesQuery(TamTamClient client) {
         super(client, "/messages", null, MessageList.class, Method.GET);
-        this.chatId.setValue(chatId);
     }
 
+    public GetMessagesQuery chatId(Long value) {
+        this.chatId.setValue(value);
+        return this;
+    }
+    public GetMessagesQuery messageIds(Set<String> value) {
+        this.messageIds.setValue(value);
+        return this;
+    }
     public GetMessagesQuery from(Long value) {
         this.from.setValue(value);
         return this;

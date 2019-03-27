@@ -31,11 +31,13 @@ import java.util.Objects;
 public class PhotoAttachmentPayload implements TamTamSerializable {
 
     private final Long photoId;
+    private final String token;
     private final String url;
 
     @JsonCreator
-    public PhotoAttachmentPayload(@JsonProperty("photo_id") Long photoId, @JsonProperty("url") String url) { 
+    public PhotoAttachmentPayload(@JsonProperty("photo_id") Long photoId, @JsonProperty("token") String token, @JsonProperty("url") String url) { 
         this.photoId = photoId;
+        this.token = token;
         this.url = url;
     }
 
@@ -46,6 +48,14 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
     @JsonProperty("photo_id")
     public Long getPhotoId() {
         return photoId;
+    }
+
+    /**
+    * @return token
+    **/
+    @JsonProperty("token")
+    public String getToken() {
+        return token;
     }
 
     /**
@@ -68,6 +78,7 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
 
         PhotoAttachmentPayload other = (PhotoAttachmentPayload) o;
         return Objects.equals(this.photoId, other.photoId) &&
+            Objects.equals(this.token, other.token) &&
             Objects.equals(this.url, other.url);
     }
 
@@ -75,6 +86,7 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + (photoId != null ? photoId.hashCode() : 0);
+        result = 31 * result + (token != null ? token.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
@@ -83,6 +95,7 @@ public class PhotoAttachmentPayload implements TamTamSerializable {
     public String toString() {
         return "PhotoAttachmentPayload{"
             + " photoId='" + photoId + '\''
+            + " token='" + token + '\''
             + " url='" + url + '\''
             + '}';
     }

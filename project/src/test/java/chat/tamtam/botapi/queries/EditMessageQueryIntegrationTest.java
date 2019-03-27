@@ -43,18 +43,18 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         String uploadUrl = getUploadUrl();
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
-        photoAR = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload(null, photoTokens.getPhotos()));
+        photoAR = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos()));
 
         String uploadUrl2 = getUploadUrl();
         File file2 = new File(getClass().getClassLoader().getResource("test2.png").toURI());
         PhotoTokens photoTokens2 = uploadAPI.uploadImage(uploadUrl2, file2).execute();
-        photoAR2 = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload(null, photoTokens2.getPhotos()));
+        photoAR2 = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().photos(photoTokens2.getPhotos()));
 
-        List<Chat> allChats = getChatsCanSend();
+        List<Chat> allChats = getChats();
         chats = Arrays.asList(
                 getByType(allChats, ChatType.DIALOG),
-                getByType(allChats, ChatType.CHAT),
-                getByType(allChats, ChatType.CHANNEL)
+                getByTitle(allChats, "test chat #1"),
+                getByTitle(allChats, "test channel #1")
                 );
     }
 
@@ -65,8 +65,8 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
                     Collections.singletonList(photoAR));
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
             NewMessageBody editedMessageBody = new NewMessageBody("edited message text", null);
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
-            MessageBody lastMessage = getLast(chat).getMessage();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            MessageBody lastMessage = getLast(chat).getBody();
 
             assertThat(lastMessage.getText(), is(editedMessageBody.getText()));
             compare(photoAR, lastMessage.getAttachments().get(0));
@@ -83,8 +83,8 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
             List<AttachmentRequest> editAttachmentRequests = Collections.singletonList(photoAR2);
             NewMessageBody editedMessageBody = new NewMessageBody(null, editAttachmentRequests);
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
-            MessageBody lastMessage = getLast(chat).getMessage();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            MessageBody lastMessage = getLast(chat).getBody();
 
             assertThat(lastMessage.getText(), is(text));
             compare(editAttachmentRequests, lastMessage.getAttachments());
@@ -102,8 +102,8 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             List<AttachmentRequest> editAttachmentRequests = Collections.singletonList(photoAR2);
             String newText = "edited " + text;
             NewMessageBody editedMessageBody = new NewMessageBody(newText, editAttachmentRequests);
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
-            MessageBody lastMessage = getLast(chat).getMessage();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            MessageBody lastMessage = getLast(chat).getBody();
 
             assertThat(lastMessage.getText(), is(newText));
             compare(editAttachmentRequests, lastMessage.getAttachments());
@@ -119,8 +119,8 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody(null, Collections.emptyList());
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
-            MessageBody lastMessage = getLast(chat).getMessage();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            MessageBody lastMessage = getLast(chat).getBody();
 
             assertThat("chatType: " + chat.getType(), lastMessage.getText(), is(text));
             assertThat("chatType: " + chat.getType(), lastMessage.getAttachments(), is(nullValue()));
@@ -136,8 +136,8 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody("", null);
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
-            MessageBody lastMessage = getLast(chat).getMessage();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            MessageBody lastMessage = getLast(chat).getBody();
 
             assertThat(lastMessage.getText().length(), is(0));
             compare(attachmentRequests, lastMessage.getAttachments());
@@ -153,7 +153,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList());
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
         }
     }
 
@@ -165,7 +165,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody("", null);
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
         }
     }
 
@@ -175,7 +175,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             NewMessageBody newMessageBody = new NewMessageBody("", Collections.singletonList(photoAR));
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
             NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList());
-            botAPI.editMessage(editedMessageBody, result.getMessageId()).execute();
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
         }
     }
 
@@ -189,6 +189,6 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     private Message getLast(Chat chat) throws Exception {
-        return botAPI.getMessages(chat.getChatId()).count(1).execute().getMessages().get(0);
+        return botAPI.getMessages().chatId(chat.getChatId()).count(1).execute().getMessages().get(0);
     }
 }
