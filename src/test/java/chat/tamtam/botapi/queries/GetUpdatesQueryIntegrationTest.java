@@ -71,7 +71,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         @Override
                         public void visit(MessageCreatedUpdate model) {
                             Message message = model.getMessage();
-                            MessageBody body = message.getMessage();
+                            MessageBody body = message.getBody();
                             receivedMessages.add(body.getMid());
                         }
                     });
@@ -99,7 +99,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                             .chatId(commonChatId)
                             .execute();
 
-                    String messageId = sendMessageResult.getMessageId();
+                    String messageId = sendMessageResult.getMessage().getBody().getMid();
                     sentMessages.add(messageId);
                     LOG.info("Message {} sent", messageId);
                     Thread.sleep(TimeUnit.SECONDS.toMillis(1));

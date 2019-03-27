@@ -158,7 +158,7 @@ public class Chat implements TamTamSerializable {
     }
 
     /**
-    * Participants in chat with time of last activity. Visible only for chat admins
+    * Participants in chat with time of last activity. Can be *null* when you request list of chats. Visible for chat admins only
     * @return participants
     **/
     @Nullable

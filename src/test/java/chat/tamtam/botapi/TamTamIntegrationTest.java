@@ -38,9 +38,11 @@ import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
+import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
+import chat.tamtam.botapi.queries.GetMyInfoQuery;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -64,9 +66,14 @@ public abstract class TamTamIntegrationTest {
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 
+    protected User me;
+    protected User bot2;
+
     @Before
     public void setUp() throws Exception {
-        LOG.info("i am: {}", getMe());
+        me = getMe();
+        bot2 = new GetMyInfoQuery(client2).execute();
+        LOG.info("Endpoint: {}", client.getEndpoint());
     }
 
     protected UserWithPhoto getMe() throws APIException, ClientException {
@@ -74,7 +81,7 @@ public abstract class TamTamIntegrationTest {
     }
 
     protected List<Chat> getChats() throws APIException, ClientException {
-        ChatList chatList = botAPI.getChats().count(10).execute();
+        ChatList chatList = botAPI.getChats().count(100).execute();
         return chatList.getChats();
     }
 
@@ -101,6 +108,14 @@ public abstract class TamTamIntegrationTest {
                 .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
                 .findFirst()
                 .orElseThrow(notFound(type.getValue()));
+    }
+
+    protected Chat getByTitle(List<Chat> chats, String title) throws Exception {
+        return chats.stream()
+                .filter(c -> title.equals(c.getTitle()))
+                .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
+                .findFirst()
+                .orElseThrow(notFound(title));
     }
 
     protected static void compare(List<AttachmentRequest> attachmentRequests, List<Attachment> attachments) {

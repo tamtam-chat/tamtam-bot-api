@@ -35,6 +35,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
 
     private final String url;
     private Set<String> updateTypes;
+    private String version;
 
     @JsonCreator
     public SubscriptionRequestBody(@JsonProperty("url") String url) { 
@@ -68,6 +69,24 @@ public class SubscriptionRequestBody implements TamTamSerializable {
         this.updateTypes = updateTypes;
     }
 
+    public SubscriptionRequestBody version(String version) {
+        this.setVersion(version);
+        return this;
+    }
+
+    /**
+    * Version of API. Affects model representation
+    * @return version
+    **/
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,7 +98,8 @@ public class SubscriptionRequestBody implements TamTamSerializable {
 
         SubscriptionRequestBody other = (SubscriptionRequestBody) o;
         return Objects.equals(this.url, other.url) &&
-            Objects.equals(this.updateTypes, other.updateTypes);
+            Objects.equals(this.updateTypes, other.updateTypes) &&
+            Objects.equals(this.version, other.version);
     }
 
     @Override
@@ -87,6 +107,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
         int result = 1;
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (updateTypes != null ? updateTypes.hashCode() : 0);
+        result = 31 * result + (version != null ? version.hashCode() : 0);
         return result;
     }
 
@@ -95,6 +116,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
         return "SubscriptionRequestBody{"
             + " url='" + url + '\''
             + " updateTypes='" + updateTypes + '\''
+            + " version='" + version + '\''
             + '}';
     }
 }

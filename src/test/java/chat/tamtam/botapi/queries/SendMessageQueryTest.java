@@ -70,8 +70,7 @@ import static spark.Spark.post;
 public class SendMessageQueryTest extends QueryTest {
 
     private static final PhotoAttachmentRequest PHOTO_ATTACHMENT_REQUEST = new PhotoAttachmentRequest(
-            new PhotoAttachmentRequestPayload(null,
-                    Collections.singletonMap("photokey", new PhotoToken("token"))));
+            new PhotoAttachmentRequestPayload().photos(Collections.singletonMap("photokey", new PhotoToken("token"))));
     private static final VideoAttachmentRequest VIDEO_ATTACHMENT_REQUEST = new VideoAttachmentRequest(new UploadedInfo(1L));
     private static final AudioAttachmentRequest AUDIO_ATTACHMENT_REQUEST = new AudioAttachmentRequest(new UploadedInfo(2L));
     private static final FileAttachmentRequest FILE_ATTACHMENT_REQUEST = new FileAttachmentRequest(new UploadedFileInfo(3L));
@@ -102,7 +101,7 @@ public class SendMessageQueryTest extends QueryTest {
             NewMessageBody newMessage = serializer.deserialize(req.body(), NewMessageBody.class);
             assertThat(newMessage, is(equalTo(sendingMessage)));
             visit(newMessage.getAttachments());
-            return new SendMessageResult(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId), "mid." + chatId);
+            return new SendMessageResult(message(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId)));
         }, this::serialize);
 
         post("/messages", (req, resp) -> {
@@ -111,15 +110,14 @@ public class SendMessageQueryTest extends QueryTest {
             NewMessageBody newMessage = serializer.deserialize(req.body(), NewMessageBody.class);
             assertThat(newMessage, is(equalTo(sendingMessage)));
             visit(newMessage.getAttachments());
-            return new SendMessageResult(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId), "mid." + chatId);
+            return new SendMessageResult(message(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId)));
         }, this::serialize);
 
-        Long chatId = 1L;
-        SendMessageResult response = api.sendMessage(sendingMessage).chatId(chatId).execute();
-        assertThat(response.getMessageId(), is(notNullValue()));
+        SendMessageResult response = api.sendMessage(sendingMessage).chatId(1L).execute();
+        assertThat(response.getMessage().getBody().getMid(), is(notNullValue()));
 
         SendMessageResult response2 = api.sendMessage(sendingMessage).userId(2L).execute();
-        assertThat(response2.getRecipientId(), is(notNullValue()));
+        assertThat(response2.getMessage().getRecipient().getUserId(), is(notNullValue()));
     }
 
     private void visit(List<AttachmentRequest> attachments) {

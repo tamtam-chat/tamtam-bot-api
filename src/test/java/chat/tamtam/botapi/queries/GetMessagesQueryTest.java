@@ -63,10 +63,11 @@ public class GetMessagesQueryTest extends QueryTest {
         get("/messages", (req, resp) -> {
             long chatIdParam = Long.parseLong(req.queryParams("chat_id"));
             assertThat(chatIdParam, is(chatId));
-            return new MessageList(Arrays.asList(message(chatId), message(chatId)));
+            return new MessageList(Arrays.asList(message(chatId, null), message(chatId, null)));
         }, this::serialize);
 
-        MessageList response = api.getMessages(chatId)
+        MessageList response = api.getMessages()
+                .chatId(chatId)
                 .count(ThreadLocalRandom.current().nextInt())
                 .from(ThreadLocalRandom.current().nextLong())
                 .to(ThreadLocalRandom.current().nextLong())
@@ -74,8 +75,8 @@ public class GetMessagesQueryTest extends QueryTest {
 
         assertThat(response.getMessages().size(), is(greaterThan(0)));
         for (Message message : response.getMessages()) {
-            assertThat(message.getMessage().getReplyTo(), is(notNullValue()));
-            for (Attachment attachment : message.getMessage().getAttachments()) {
+            assertThat(message.getBody().getReplyTo(), is(notNullValue()));
+            for (Attachment attachment : message.getBody().getAttachments()) {
                 attachment.visit(new FailByDefaultAttachmentVisitor() {
                     @Override
                     public void visit(PhotoAttachment model) {
@@ -149,10 +150,5 @@ public class GetMessagesQueryTest extends QueryTest {
                 });
             }
         }
-    }
-
-    @Test(expected = RequiredParameterMissingException.class)
-    public void shouldThrowException() throws Exception {
-        api.getMessages(null).execute();
     }
 }

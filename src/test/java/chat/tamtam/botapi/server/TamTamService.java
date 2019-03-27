@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.Nullable;
+
 import chat.tamtam.botapi.client.TamTamSerializer;
 import chat.tamtam.botapi.exceptions.SerializationException;
 import chat.tamtam.botapi.model.ActionRequestBody;
@@ -72,7 +74,7 @@ public class TamTamService {
     private static final SimpleQueryResult NOT_SUCCESSFULL = new SimpleQueryResult(false);
     private static final AtomicLong ID_COUNTER = new AtomicLong();
     public static final PhotoAttachment PHOTO_ATTACHMENT = new PhotoAttachment(
-            new PhotoAttachmentPayload(ID_COUNTER.incrementAndGet(), "url"));
+            new PhotoAttachmentPayload(ID_COUNTER.incrementAndGet(), "token", "url"));
     public static final String CHAT_ICON_URL = "iconurl";
     public static final VideoAttachment VIDEO_ATTACHMENT = new VideoAttachment(new AttachmentPayload("urlvideo"));
     public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(new AttachmentPayload("urlaudio"));
@@ -220,9 +222,9 @@ public class TamTamService {
         return new String(serializer.serialize(o));
     }
 
-    protected Message message(Long chatId) {
+    protected Message message(@Nullable Long chatId, @Nullable Long userId) {
         User sender = random(new ArrayList<>(users.values()));
-        Recipient recipient = new Recipient(chatId, ChatType.CHAT, null);
+        Recipient recipient = new Recipient(chatId, ChatType.CHAT, userId);
         long id = ID_COUNTER.incrementAndGet();
         boolean hasText = ThreadLocalRandom.current().nextBoolean();
         List<Attachment> attachments = Arrays.asList(
@@ -247,7 +249,7 @@ public class TamTamService {
 
     private static ChatMember newChatMember() {
         boolean isOwner = ThreadLocalRandom.current().nextBoolean();
-        return new ChatMember(ThreadLocalRandom.current().nextLong(), isOwner, System.currentTimeMillis(),
+        return new ChatMember(ThreadLocalRandom.current().nextLong(), isOwner, false, System.currentTimeMillis(),
                 isOwner ? EnumSet.allOf(ChatAdminPermission.class) : null,
                 ID_COUNTER.incrementAndGet(), "name", null, null, null);
     }
@@ -263,7 +265,7 @@ public class TamTamService {
     }
 
     private Subscription newSubscription() {
-        return new Subscription("http://url" + ID_COUNTER.incrementAndGet() + ".com", System.currentTimeMillis(), null);
+        return new Subscription("http://url" + ID_COUNTER.incrementAndGet() + ".com", System.currentTimeMillis(), null, "0.1.3");
     }
 
     private User newUser() {

@@ -1,6 +1,7 @@
 package chat.tamtam.botapi.queries;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,7 @@ import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
+import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.PhotoTokens;
@@ -41,7 +43,9 @@ import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -106,19 +110,45 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void shouldSendPhoto() throws Exception {
-        UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.PHOTO).execute();
+        String uploadUrl = getUploadUrl(UploadType.PHOTO);
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
-        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadEndpoint.getUrl(), file).execute();
-        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload(null, photoTokens.getPhotos());
+        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
         AttachmentRequest attach = new PhotoAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody("image", Collections.singletonList(attach));
         send(newMessage);
     }
 
     @Test
+    public void shouldSendPhotoByToken() throws Exception {
+        List<Chat> chats = getChats();
+        Chat dialog = getByType(chats, ChatType.DIALOG);
+        Chat chat = getByTitle(chats, "test chat #4");
+        Chat channel = getByTitle(chats, "test channel #1");
+
+        String uploadUrl = getUploadUrl(UploadType.PHOTO);
+        File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
+        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
+        AttachmentRequest attach = new PhotoAttachmentRequest(payload);
+        NewMessageBody newMessage = new NewMessageBody("image", Collections.singletonList(attach));
+
+        SendMessageResult result = doSend(newMessage, dialog);
+        PhotoAttachment attachment = (PhotoAttachment) result.getMessage().getBody().getAttachments().get(0);
+        String token = attachment.getPayload().getToken();
+
+        newMessage = new NewMessageBody("image", Collections.singletonList(new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().token(token))));
+        doSend(newMessage, chat);
+        doSend(newMessage, channel);
+
+        assertThat(result.getMessage().getBody().getAttachments(), is(not(empty())));
+        assertThat(result.getMessage().getBody().getAttachments(), is(not(empty())));
+    }
+
+    @Test
     public void shouldSendGifByURL() throws Exception {
         String url = "https://media1.giphy.com/media/2RCQECf4JBfoc/giphy.gif?cid=e1bb72ff5c936527514b67642ec770cf";
-        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload(url, null);
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().url(url);
         AttachmentRequest attach = new PhotoAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody("image", Collections.singletonList(attach));
         send(newMessage);
@@ -126,9 +156,9 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void shouldSendVideo() throws Exception {
-        UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.VIDEO).execute();
+        String uploadUrl = getUploadUrl(UploadType.VIDEO);
         File file = new File(getClass().getClassLoader().getResource("test.mp4").toURI());
-        UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadEndpoint.getUrl(), file).execute();
+        UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadUrl, file).execute();
         AttachmentRequest attach = new VideoAttachmentRequest(uploadedInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(attach));
         send(newMessage);
@@ -146,9 +176,9 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void shouldSendAudio() throws Exception {
-        UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.AUDIO).execute();
+        String uploadUrl = getUploadUrl(UploadType.AUDIO);
         File file = new File(getClass().getClassLoader().getResource("test.m4a").toURI());
-        UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadEndpoint.getUrl(), file).execute();
+        UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadUrl, file).execute();
         AttachmentRequest request = new AudioAttachmentRequest(uploadedInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request));
         send(newMessage);
@@ -163,40 +193,36 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         send(newMessage);
     }
 
-    private void send(NewMessageBody newMessage) throws Exception {
-        List<Chat> chats = getChatsCanSend();
+    private List<Message> send(NewMessageBody newMessage) throws Exception {
+        List<Chat> chats = getChats();
         Chat dialog = getByType(chats, ChatType.DIALOG);
-        Chat chat = getByType(chats, ChatType.CHAT);
-        Chat channel = getByType(chats, ChatType.CHANNEL);
+        Chat chat = getByTitle(chats, "test chat #4");
+        Chat channel = getByTitle(chats, "test channel #1");
 
+        List<Message> sent = new ArrayList<>();
         for (Chat c : Arrays.asList(dialog, chat, channel)) {
-            if (c.getType() == ChatType.CHANNEL && !c.getTitle().contains("bot is admin")) {
-                continue;
-            }
-
             Long chatId = c.getChatId();
             SendMessageResult sendMessageResult = doSend(newMessage, c);
+            sent.add(sendMessageResult.getMessage());
             assertThat(sendMessageResult, is(notNullValue()));
 
-            if (c.getType() == ChatType.CHAT) {
-                continue;
-            }
-
-            MessageList messageList = botAPI.getMessages(chatId).execute();
+            MessageList messageList = botAPI.getMessages().chatId(chatId).execute();
             Message lastMessage = messageList.getMessages().get(0);
             String text = newMessage.getText();
-            assertThat(lastMessage.getMessage().getText(), is(text == null ? "" : text));
-            assertThat(lastMessage.getMessage().getMid(), is(sendMessageResult.getMessageId()));
+            assertThat(lastMessage.getBody().getText(), is(text == null ? "" : text));
+            assertThat(lastMessage.getBody().getMid(), is(sendMessageResult.getMessage().getBody().getMid()));
 
             List<AttachmentRequest> attachments = newMessage.getAttachments();
             if (attachments != null) {
                 for (int i = 0; i < attachments.size(); i++) {
                     AttachmentRequest request = attachments.get(i);
-                    Attachment attachment = lastMessage.getMessage().getAttachments().get(i);
+                    Attachment attachment = lastMessage.getBody().getAttachments().get(i);
                     compare(request, attachment);
                 }
             }
         }
+
+        return sent;
     }
 
     private SendMessageResult doSend(NewMessageBody newMessage, Chat chat) throws Exception {
@@ -209,5 +235,14 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(5));
             }
         } while (true);
+    }
+
+    private String getUploadUrl(UploadType uploadType) throws Exception {
+        String url = botAPI.getUploadUrl(uploadType).execute().getUrl();
+        if (url.startsWith("http")) {
+            return url;
+        }
+
+        return "http:" + url;
     }
 }

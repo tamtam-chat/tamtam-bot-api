@@ -24,50 +24,25 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import org.jetbrains.annotations.Nullable;
 
 /**
  * SendMessageResult
  */
 public class SendMessageResult implements TamTamSerializable {
 
-    private final Long chatId;
-    private final Long recipientId;
-    private final String messageId;
+    private final Message message;
 
     @JsonCreator
-    public SendMessageResult(@JsonProperty("chat_id") Long chatId, @Nullable @JsonProperty("recipient_id") Long recipientId, @JsonProperty("message_id") String messageId) { 
-        this.chatId = chatId;
-        this.recipientId = recipientId;
-        this.messageId = messageId;
+    public SendMessageResult(@JsonProperty("message") Message message) { 
+        this.message = message;
     }
 
     /**
-    * Identifier of chat message was created in
-    * @return chatId
+    * @return message
     **/
-    @JsonProperty("chat_id")
-    public Long getChatId() {
-        return chatId;
-    }
-
-    /**
-    * In most cases same as chat_id.
-    * @return recipientId
-    **/
-    @Nullable
-    @JsonProperty("recipient_id")
-    public Long getRecipientId() {
-        return recipientId;
-    }
-
-    /**
-    * Unique identifier of created message
-    * @return messageId
-    **/
-    @JsonProperty("message_id")
-    public String getMessageId() {
-        return messageId;
+    @JsonProperty("message")
+    public Message getMessage() {
+        return message;
     }
 
     @Override
@@ -80,26 +55,20 @@ public class SendMessageResult implements TamTamSerializable {
         }
 
         SendMessageResult other = (SendMessageResult) o;
-        return Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.recipientId, other.recipientId) &&
-            Objects.equals(this.messageId, other.messageId);
+        return Objects.equals(this.message, other.message);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (recipientId != null ? recipientId.hashCode() : 0);
-        result = 31 * result + (messageId != null ? messageId.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "SendMessageResult{"
-            + " chatId='" + chatId + '\''
-            + " recipientId='" + recipientId + '\''
-            + " messageId='" + messageId + '\''
+            + " message='" + message + '\''
             + '}';
     }
 }
