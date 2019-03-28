@@ -24,7 +24,7 @@ git subtree merge -P project github/master
 - Check everything is ok
 - Push changes to GitHub (from parent directory): `git subtree push --prefix project github master`
 - Push current version tag to GitHub: `git push github v0.1.2`
-- `mvn release:perform`
+- `mvn -P release release:perform`
 
 ## Notice on deploy to Maven Central
 
