@@ -8,7 +8,7 @@ import org.junit.Test;
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
-import chat.tamtam.botapi.model.ChatType;
+import chat.tamtam.botapi.model.ChatStatus;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -34,6 +34,10 @@ public class GetChatsQueryIntegrationTest extends TamTamIntegrationTest {
         assertThat(chats.size(), is(greaterThan(0)));
 
         for (Chat chat : chats) {
+            if (chat.getStatus() != ChatStatus.ACTIVE) {
+                continue;
+            }
+
             if (chat.getTitle() != null && chat.getTitle().toLowerCase().contains("public")) {
                 assertThat(chat.isPublic(), is(true));
                 assertThat(chat.getLink(), is(not(isEmptyString())));
