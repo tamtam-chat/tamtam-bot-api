@@ -21,7 +21,9 @@ git subtree merge -P project github/master
 - Fetch all changes made in GitHub repo
 - `cd project`
 - `mvn release:prepare`
+- Go to parent dir: `cd ..`
 - Check everything is ok
+- Check what are you going to push: `git diff --stat github/master HEAD:project`
 - Push changes to GitHub (from parent directory): `git subtree push --prefix project github master`
 - Push current version tag to GitHub: `git push github v0.1.2`
 - `mvn -P release release:perform`
