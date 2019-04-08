@@ -24,9 +24,10 @@ git subtree merge -P project github/master
 - Go to parent dir: `cd ..`
 - Check everything is ok
 - Check what are you going to push: `git diff --stat github/master HEAD:project`
-- Push changes to GitHub (from parent directory): `git subtree push --prefix project github master`
+- Push changes to GitHub: `git subtree push --prefix project github master`
 - Push current version tag to GitHub: `git push github v0.1.2`
-- `mvn -P release release:perform`
+- `cd project && mvn -P release release:perform`
+- Draft new release at https://github.com/tamtam-chat/tamtam-bot-api/releases/new
 
 ## Notice on deploy to Maven Central
 
