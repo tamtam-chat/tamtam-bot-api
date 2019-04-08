@@ -27,11 +27,6 @@ public class FailByDefaultUpdateVisitor implements Update.Visitor {
     }
 
     @Override
-    public void visit(MessageRestoredUpdate model) {
-        fail("Should not happens");
-    }
-
-    @Override
     public void visit(BotAddedToChatUpdate model) {
         fail("Should not happens");
     }

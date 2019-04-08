@@ -37,7 +37,6 @@ import chat.tamtam.botapi.model.MessageCallbackUpdate;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.MessageRemovedUpdate;
-import chat.tamtam.botapi.model.MessageRestoredUpdate;
 import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
@@ -58,8 +57,6 @@ public class GetUpdatesQueryTest extends QueryTest {
         MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(randomChat.getChatId(), null), now);
         MessageEditedUpdate messageEditedUpdate = new MessageEditedUpdate(message(randomChat.getChatId(), null), now);
         MessageRemovedUpdate messageRemovedUpdate = new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(),
-                now);
-        MessageRestoredUpdate messageRestoredUpdate = new MessageRestoredUpdate("mid." + ID_COUNTER.incrementAndGet(),
                 now);
         Callback callback = new Callback(now, "calbackId", "payload", random(users.values()));
         MessageCallbackUpdate messageCallbackUpdate = new MessageCallbackUpdate(
@@ -85,7 +82,6 @@ public class GetUpdatesQueryTest extends QueryTest {
                 messageCreatedUpdate,
                 messageEditedUpdate,
                 messageRemovedUpdate,
-                messageRestoredUpdate,
                 messageCallbackUpdate,
                 userAddedToChatUpdate,
                 userRemovedFromChatUpdate,
@@ -128,11 +124,6 @@ public class GetUpdatesQueryTest extends QueryTest {
                 @Override
                 public void visit(MessageRemovedUpdate model) {
                     assertThat(model, is(messageRemovedUpdate));
-                }
-
-                @Override
-                public void visit(MessageRestoredUpdate model) {
-                    assertThat(model, is(messageRestoredUpdate));
                 }
 
                 @Override

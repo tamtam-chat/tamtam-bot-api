@@ -20,9 +20,13 @@
 
 package chat.tamtam.botapi.queries;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Test;
 
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
+import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
@@ -35,8 +39,8 @@ public class EditMessageQueryTest extends QueryTest {
 
     @Test
     public void editMessageTest() throws Exception {
-        NewMessageBody newMessageBody = new NewMessageBody("edited", null)
-                .attachment(new StickerAttachmentRequest(new StickerAttachmentRequestPayload("code")));
+        List<AttachmentRequest> attachments = Collections.singletonList(new StickerAttachmentRequest(new StickerAttachmentRequestPayload("code")));
+        NewMessageBody newMessageBody = new NewMessageBody("edited", attachments);
         String messageId = "mid.qweqwekljoiy7971346";
         SimpleQueryResult response = api.editMessage(newMessageBody, messageId).execute();
         assertThat(response.isSuccess(), is(true));

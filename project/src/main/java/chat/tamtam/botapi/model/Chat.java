@@ -48,7 +48,7 @@ public class Chat implements TamTamSerializable {
     private final Object description;
 
     @JsonCreator
-    public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") Object description) { 
+    public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @Nullable @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") Object description) { 
         this.chatId = chatId;
         this.type = type;
         this.status = status;
@@ -88,9 +88,10 @@ public class Chat implements TamTamSerializable {
     }
 
     /**
-    * Visible title of chat
+    * Visible title of chat. Can be null for dialogs
     * @return title
     **/
+    @Nullable
     @JsonProperty("title")
     public String getTitle() {
         return title;

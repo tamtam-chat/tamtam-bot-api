@@ -39,7 +39,6 @@ import java.util.Set;
   @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = Update.MESSAGE_CALLBACK),
   @JsonSubTypes.Type(value = MessageEditedUpdate.class, name = Update.MESSAGE_EDITED),
   @JsonSubTypes.Type(value = MessageRemovedUpdate.class, name = Update.MESSAGE_REMOVED),
-  @JsonSubTypes.Type(value = MessageRestoredUpdate.class, name = Update.MESSAGE_RESTORED),
   @JsonSubTypes.Type(value = BotAddedToChatUpdate.class, name = Update.BOT_ADDED),
   @JsonSubTypes.Type(value = BotRemovedFromChatUpdate.class, name = Update.BOT_REMOVED),
   @JsonSubTypes.Type(value = UserAddedToChatUpdate.class, name = Update.USER_ADDED),
@@ -52,7 +51,6 @@ public class Update implements TamTamSerializable {
     public static final String MESSAGE_CALLBACK = "message_callback";
     public static final String MESSAGE_EDITED = "message_edited";
     public static final String MESSAGE_REMOVED = "message_removed";
-    public static final String MESSAGE_RESTORED = "message_restored";
     public static final String BOT_ADDED = "bot_added";
     public static final String BOT_REMOVED = "bot_removed";
     public static final String USER_ADDED = "user_added";
@@ -64,7 +62,6 @@ public class Update implements TamTamSerializable {
         MESSAGE_CALLBACK, 
         MESSAGE_EDITED, 
         MESSAGE_REMOVED, 
-        MESSAGE_RESTORED, 
         BOT_ADDED, 
         BOT_REMOVED, 
         USER_ADDED, 
@@ -129,7 +126,6 @@ public class Update implements TamTamSerializable {
         void visit(MessageCallbackUpdate model);
         void visit(MessageEditedUpdate model);
         void visit(MessageRemovedUpdate model);
-        void visit(MessageRestoredUpdate model);
         void visit(BotAddedToChatUpdate model);
         void visit(BotRemovedFromChatUpdate model);
         void visit(UserAddedToChatUpdate model);
