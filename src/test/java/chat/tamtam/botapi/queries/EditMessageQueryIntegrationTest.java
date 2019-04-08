@@ -15,7 +15,8 @@ import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
-import chat.tamtam.botapi.model.Message;
+import chat.tamtam.botapi.model.ContactAttachmentRequest;
+import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
@@ -55,7 +56,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 getByType(allChats, ChatType.DIALOG),
                 getByTitle(allChats, "test chat #1"),
                 getByTitle(allChats, "test channel #1")
-                );
+        );
     }
 
     @Test
@@ -179,6 +180,27 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         }
     }
 
+    @Test
+    public void shouldEditSingleAttachment() throws Exception {
+        for (Chat chat : chats) {
+            List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
+            String text = randomText();
+            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests);
+            SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
+
+            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name", me.getUserId(), null, "+79991234567");
+            ContactAttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
+            NewMessageBody editedMessageBody = new NewMessageBody(null, null)
+                    .attachment(contactAR);
+
+            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            MessageBody lastMessage = getLast(chat).getBody();
+
+            assertThat(lastMessage.getText(), is(text));
+            compare(Collections.singletonList(contactAR), lastMessage.getAttachments());
+        }
+    }
+
     private String getUploadUrl() throws Exception {
         String url = botAPI.getUploadUrl(UploadType.PHOTO).execute().getUrl();
         if (url.startsWith("http")) {
@@ -186,9 +208,5 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         }
 
         return "http:" + url;
-    }
-
-    private Message getLast(Chat chat) throws Exception {
-        return botAPI.getMessages().chatId(chat.getChatId()).count(1).execute().getMessages().get(0);
     }
 }
