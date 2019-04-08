@@ -239,7 +239,6 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     private SendMessageResult doSend(NewMessageBody newMessage, Chat chat) throws Exception {
         do {
             try {
-                LOG.info("Sending message to chat: " + chat);
                 return botAPI.sendMessage(newMessage).chatId(chat.getChatId()).execute();
             } catch (AttachmentNotReadyException e) {
                 // it is ok, try again
