@@ -48,7 +48,7 @@ public class SubscribeQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldSubscribeWebhookWithFilter() throws Exception {
         SubscriptionRequestBody body = new SubscriptionRequestBody(url);
-        Set<String> updateTypes = new HashSet<>(Arrays.asList(Update.MESSAGE_CREATED, Update.MESSAGE_REMOVED));
+        Set<String> updateTypes = new HashSet<>(Arrays.asList(Update.MESSAGE_CREATED, Update.MESSAGE_CALLBACK));
         body.setUpdateTypes(updateTypes);
 
         SimpleQueryResult subscribeResult = new SubscribeQuery(client, body).execute();

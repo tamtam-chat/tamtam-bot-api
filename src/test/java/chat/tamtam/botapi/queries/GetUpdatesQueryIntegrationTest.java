@@ -42,7 +42,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
-    public void name() throws Exception {
+    public void shouldGetUpdates() throws Exception {
         Chat commonChat = getByTitle(getChats(), "test chat #6");
         Long commonChatId = commonChat.getChatId();
         List<String> sentMessages = new CopyOnWriteArrayList<>();
@@ -112,8 +112,8 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         });
 
 
-        consumer.start();
         producer.start();
+        consumer.start();
         sendFinished.await();
         consumerStopped.set(true);
         consumer.join();
