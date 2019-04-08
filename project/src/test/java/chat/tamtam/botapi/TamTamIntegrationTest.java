@@ -35,6 +35,7 @@ import chat.tamtam.botapi.model.FileAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.LocationAttachmentRequest;
+import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
@@ -172,6 +173,10 @@ public abstract class TamTamIntegrationTest {
 
             }
         });
+    }
+
+    protected Message getLast(Chat chat) throws Exception {
+        return botAPI.getMessages().chatId(chat.getChatId()).count(1).execute().getMessages().get(0);
     }
 
     protected static String randomText() {

@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class NewMessageBody implements TamTamSerializable {
 
     private final String text;
+    private AttachmentRequest attachment;
     private final List<AttachmentRequest> attachments;
     private Boolean notify;
 
@@ -51,6 +52,25 @@ public class NewMessageBody implements TamTamSerializable {
     @JsonProperty("text")
     public String getText() {
         return text;
+    }
+
+    public NewMessageBody attachment(@Nullable AttachmentRequest attachment) {
+        this.setAttachment(attachment);
+        return this;
+    }
+
+    /**
+    * Single message attachment.
+    * @return attachment
+    **/
+    @Nullable
+    @JsonProperty("attachment")
+    public AttachmentRequest getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(@Nullable AttachmentRequest attachment) {
+        this.attachment = attachment;
     }
 
     /**
@@ -92,6 +112,7 @@ public class NewMessageBody implements TamTamSerializable {
 
         NewMessageBody other = (NewMessageBody) o;
         return Objects.equals(this.text, other.text) &&
+            Objects.equals(this.attachment, other.attachment) &&
             Objects.equals(this.attachments, other.attachments) &&
             Objects.equals(this.notify, other.notify);
     }
@@ -100,6 +121,7 @@ public class NewMessageBody implements TamTamSerializable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (attachment != null ? attachment.hashCode() : 0);
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
         result = 31 * result + (notify != null ? notify.hashCode() : 0);
         return result;
@@ -109,6 +131,7 @@ public class NewMessageBody implements TamTamSerializable {
     public String toString() {
         return "NewMessageBody{"
             + " text='" + text + '\''
+            + " attachment='" + attachment + '\''
             + " attachments='" + attachments + '\''
             + " notify='" + notify + '\''
             + '}';

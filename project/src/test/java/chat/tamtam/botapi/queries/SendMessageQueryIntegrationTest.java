@@ -120,6 +120,17 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
+    public void shouldSendPhotoAsSingleAttach() throws Exception {
+        String uploadUrl = getUploadUrl(UploadType.PHOTO);
+        File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
+        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
+        AttachmentRequest attach = new PhotoAttachmentRequest(payload);
+        NewMessageBody newMessage = new NewMessageBody(null, null).attachment(attach);
+        send(newMessage);
+    }
+
+    @Test
     public void shouldSendPhotoByToken() throws Exception {
         List<Chat> chats = getChats();
         Chat dialog = getByType(chats, ChatType.DIALOG);
