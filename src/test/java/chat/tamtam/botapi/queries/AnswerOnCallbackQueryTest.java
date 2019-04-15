@@ -38,7 +38,7 @@ public class AnswerOnCallbackQueryTest extends QueryTest {
     public void answerOnCallbackTest() throws Exception {
         String callbackId = "somecallbackId";
         CallbackAnswer messageCallbackAnswer = new CallbackAnswer();
-        NewMessageBody newMessageBody = new NewMessageBody("some text", null);
+        NewMessageBody newMessageBody = new NewMessageBody("some text", null, null);
         messageCallbackAnswer.message(newMessageBody);
         SimpleQueryResult response = api.answerOnCallback(messageCallbackAnswer, callbackId).execute();
         assertThat(response.isSuccess(), is(true));

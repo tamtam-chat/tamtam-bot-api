@@ -51,7 +51,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
                     Collections.singletonList(Collections.singletonList(button)));
             AttachmentRequest keyboardAttach = new InlineKeyboardAttachmentRequest(keyboardPayload);
             String text = "AnswerOnCallbackQueryIntegrationTest message " + System.currentTimeMillis();
-            NewMessageBody body = new NewMessageBody(text, null).attachment(keyboardAttach);
+            NewMessageBody body = new NewMessageBody(text, null, null).attachment(keyboardAttach);
 
             SendMessageResult result = botAPI.sendMessage(body).chatId(chat.getChatId()).execute();
             InlineKeyboardAttachment attachment =
@@ -60,7 +60,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
             String editedText = "AnswerOnCallbackQueryIntegrationTest answer";
             ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test", me.getUserId(), null, "+79991234567");
             AttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
-            NewMessageBody answerMessage = new NewMessageBody(editedText, null)
+            NewMessageBody answerMessage = new NewMessageBody(editedText, null, null)
                     .attachment(contactAR);
             CallbackAnswer answer = new CallbackAnswer().message(answerMessage);
             new AnswerOnCallbackQuery(client, answer, attachment.getCallbackId()).execute();

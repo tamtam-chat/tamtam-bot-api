@@ -62,10 +62,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldEditText() throws Exception {
         for (Chat chat : chats) {
-            NewMessageBody newMessageBody = new NewMessageBody(randomText(),
-                    Collections.singletonList(photoAR));
+            NewMessageBody newMessageBody = new NewMessageBody(randomText(), Collections.singletonList(photoAR), null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
-            NewMessageBody editedMessageBody = new NewMessageBody("edited message text", null);
+            NewMessageBody editedMessageBody = new NewMessageBody("edited message text", null, null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
             MessageBody lastMessage = getLast(chat).getBody();
 
@@ -79,11 +78,11 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
             String text = randomText();
-            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests);
+            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             List<AttachmentRequest> editAttachmentRequests = Collections.singletonList(photoAR2);
-            NewMessageBody editedMessageBody = new NewMessageBody(null, editAttachmentRequests);
+            NewMessageBody editedMessageBody = new NewMessageBody(null, editAttachmentRequests, null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
             MessageBody lastMessage = getLast(chat).getBody();
 
@@ -97,12 +96,12 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
             String text = randomText();
-            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests);
+            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             List<AttachmentRequest> editAttachmentRequests = Collections.singletonList(photoAR2);
             String newText = "edited " + text;
-            NewMessageBody editedMessageBody = new NewMessageBody(newText, editAttachmentRequests);
+            NewMessageBody editedMessageBody = new NewMessageBody(newText, editAttachmentRequests, null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
             MessageBody lastMessage = getLast(chat).getBody();
 
@@ -116,10 +115,10 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
             String text = randomText();
-            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests);
+            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
-            NewMessageBody editedMessageBody = new NewMessageBody(null, Collections.emptyList());
+            NewMessageBody editedMessageBody = new NewMessageBody(null, Collections.emptyList(), null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
             MessageBody lastMessage = getLast(chat).getBody();
 
@@ -133,10 +132,10 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
             String text = randomText();
-            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests);
+            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
-            NewMessageBody editedMessageBody = new NewMessageBody("", null);
+            NewMessageBody editedMessageBody = new NewMessageBody("", null, null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
             MessageBody lastMessage = getLast(chat).getBody();
 
@@ -150,10 +149,10 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
             String text = randomText();
-            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests);
+            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
-            NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList());
+            NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList(), null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
         }
     }
@@ -162,10 +161,10 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void cannotRemoveTextWhenThereIsNoAttaches() throws Exception {
         for (Chat chat : chats) {
             String text = randomText();
-            NewMessageBody newMessageBody = new NewMessageBody(text, null);
+            NewMessageBody newMessageBody = new NewMessageBody(text, null, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
-            NewMessageBody editedMessageBody = new NewMessageBody("", null);
+            NewMessageBody editedMessageBody = new NewMessageBody("", null, null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
         }
     }
@@ -173,9 +172,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Test(expected = APIException.class)
     public void cannotRemoveAttachesWhenThereIsNoText() throws Exception {
         for (Chat chat : chats) {
-            NewMessageBody newMessageBody = new NewMessageBody("", Collections.singletonList(photoAR));
+            NewMessageBody newMessageBody = new NewMessageBody("", Collections.singletonList(photoAR), null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
-            NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList());
+            NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList(), null);
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
         }
     }
@@ -185,12 +184,12 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat chat : chats) {
             List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
             String text = randomText();
-            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests);
+            NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name", me.getUserId(), null, "+79991234567");
             ContactAttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
-            NewMessageBody editedMessageBody = new NewMessageBody(null, null)
+            NewMessageBody editedMessageBody = new NewMessageBody(null, null, null)
                     .attachment(contactAR);
 
             botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
