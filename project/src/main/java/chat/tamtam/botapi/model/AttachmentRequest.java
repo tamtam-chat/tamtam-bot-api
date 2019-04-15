@@ -20,6 +20,7 @@
 
 package chat.tamtam.botapi.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Arrays;
@@ -30,7 +31,7 @@ import java.util.Set;
 /**
  * Request to attach some data to message
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = AttachmentRequest.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = AttachmentRequest.class, include = JsonTypeInfo.As.EXISTING_PROPERTY)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = PhotoAttachmentRequest.class, name = AttachmentRequest.IMAGE),
   @JsonSubTypes.Type(value = VideoAttachmentRequest.class, name = AttachmentRequest.VIDEO),
@@ -66,6 +67,7 @@ public class AttachmentRequest implements TamTamSerializable {
         visitor.visitDefault(this);
     }
 
+    @JsonProperty("type")
     public String getType() {
         throw new UnsupportedOperationException("Model has no concrete type.");
     }

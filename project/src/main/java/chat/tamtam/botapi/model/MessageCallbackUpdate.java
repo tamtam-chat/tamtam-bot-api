@@ -64,6 +64,8 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
         return message;
     }
 
+    @JsonProperty("update_type")
+    @Override
     public String getType() {
         return Update.MESSAGE_CALLBACK;
     }

@@ -74,6 +74,8 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
         return adminId;
     }
 
+    @JsonProperty("update_type")
+    @Override
     public String getType() {
         return Update.USER_REMOVED;
     }

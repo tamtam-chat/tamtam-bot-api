@@ -36,6 +36,7 @@ import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachment;
 import chat.tamtam.botapi.model.ContactAttachmentPayload;
 import chat.tamtam.botapi.model.FileAttachment;
+import chat.tamtam.botapi.model.FileAttachmentPayload;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.model.Image;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
@@ -44,6 +45,7 @@ import chat.tamtam.botapi.model.Keyboard;
 import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.LocationAttachment;
+import chat.tamtam.botapi.model.MediaAttachmentPayload;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.MessageLinkType;
@@ -76,9 +78,11 @@ public class TamTamService {
     public static final PhotoAttachment PHOTO_ATTACHMENT = new PhotoAttachment(
             new PhotoAttachmentPayload(ID_COUNTER.incrementAndGet(), "token", "url"));
     public static final String CHAT_ICON_URL = "iconurl";
-    public static final VideoAttachment VIDEO_ATTACHMENT = new VideoAttachment(new AttachmentPayload("urlvideo"));
-    public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(new AttachmentPayload("urlaudio"));
-    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new AttachmentPayload("urlfile"));
+    public static final VideoAttachment VIDEO_ATTACHMENT = new VideoAttachment(
+            new MediaAttachmentPayload(1L, "urlvideo"));
+    public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(
+            new MediaAttachmentPayload(1L, "urlaudio"));
+    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload(1L, "urlfile"));
     public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
             new ContactAttachmentPayload("vcfinfo", null));
     public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text", Intent.DEFAULT);

@@ -53,6 +53,8 @@ public class CallbackButton extends Button implements TamTamSerializable {
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Button.CALLBACK;
     }

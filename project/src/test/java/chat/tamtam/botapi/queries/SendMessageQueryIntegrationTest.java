@@ -13,6 +13,7 @@ import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
+import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
 import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.CallbackButton;
@@ -20,6 +21,7 @@ import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
 import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
+import chat.tamtam.botapi.model.FileAttachment;
 import chat.tamtam.botapi.model.FileAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
@@ -40,6 +42,7 @@ import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.UserWithPhoto;
+import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -71,7 +74,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         List<Chat> list = Arrays.asList(dialog, chat, channel);
         for (Chat c : list) {
             try {
-                doSend(newMessage, c);
+                doSend(newMessage, c.getChatId());
             } catch (Exception e) {
                 exceptions++;
             }
@@ -144,13 +147,13 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         AttachmentRequest attach = new PhotoAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody("image", Collections.singletonList(attach));
 
-        SendMessageResult result = doSend(newMessage, dialog);
+        SendMessageResult result = doSend(newMessage, dialog.getChatId());
         PhotoAttachment attachment = (PhotoAttachment) result.getMessage().getBody().getAttachments().get(0);
         String token = attachment.getPayload().getToken();
 
         newMessage = new NewMessageBody("image", Collections.singletonList(new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().token(token))));
-        doSend(newMessage, chat);
-        doSend(newMessage, channel);
+        doSend(newMessage, chat.getChatId());
+        doSend(newMessage, channel.getChatId());
 
         assertThat(result.getMessage().getBody().getAttachments(), is(not(empty())));
         assertThat(result.getMessage().getBody().getAttachments(), is(not(empty())));
@@ -176,6 +179,24 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
+    public void shouldSendVideoById() throws Exception {
+        String uploadUrl = getUploadUrl(UploadType.VIDEO);
+        File file = new File(getClass().getClassLoader().getResource("test.mp4").toURI());
+        UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadUrl, file).execute();
+        AttachmentRequest attach = new VideoAttachmentRequest(uploadedInfo);
+        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(attach));
+        List<Message> createdMessages = send(newMessage);
+        for (Message createdMessage : createdMessages) {
+            VideoAttachment attachment = (VideoAttachment) createdMessage.getBody().getAttachments().get(0);
+            AttachmentRequest copyAttach = new VideoAttachmentRequest(
+                    new UploadedInfo(attachment.getPayload().getId()));
+
+            doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach)),
+                    createdMessage.getRecipient().getChatId());
+        }
+    }
+
+    @Test
     public void shouldSendFile() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
         File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
@@ -186,6 +207,24 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
+    public void shouldSendFileReusingId() throws Exception {
+        UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
+        File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
+        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
+        AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
+        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request));
+        List<Message> createdMessages = send(newMessage);
+        for (Message createdMessage : createdMessages) {
+            FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
+            FileAttachmentRequest copyAttach = new FileAttachmentRequest(
+                    new UploadedFileInfo(attachment.getPayload().getFileId()));
+
+            doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach)),
+                    createdMessage.getRecipient().getChatId());
+        }
+    }
+
+    @Test
     public void shouldSendAudio() throws Exception {
         String uploadUrl = getUploadUrl(UploadType.AUDIO);
         File file = new File(getClass().getClassLoader().getResource("test.m4a").toURI());
@@ -193,6 +232,24 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         AttachmentRequest request = new AudioAttachmentRequest(uploadedInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request));
         send(newMessage);
+    }
+
+    @Test
+    public void shouldSendAudioReusingId() throws Exception {
+        String uploadUrl = getUploadUrl(UploadType.AUDIO);
+        File file = new File(getClass().getClassLoader().getResource("test.m4a").toURI());
+        UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadUrl, file).execute();
+        AttachmentRequest request = new AudioAttachmentRequest(uploadedInfo);
+        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request));
+        List<Message> createdMessages = send(newMessage);
+        for (Message createdMessage : createdMessages) {
+            AudioAttachment attachment = (AudioAttachment) createdMessage.getBody().getAttachments().get(0);
+            AudioAttachmentRequest copyAttach = new AudioAttachmentRequest(
+                    new UploadedInfo(attachment.getPayload().getId()));
+
+            doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach)),
+                    createdMessage.getRecipient().getChatId());
+        }
     }
 
     @Test
@@ -212,34 +269,34 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
         List<Message> sent = new ArrayList<>();
         for (Chat c : Arrays.asList(dialog, chat, channel)) {
-            Long chatId = c.getChatId();
-            SendMessageResult sendMessageResult = doSend(newMessage, c);
+            SendMessageResult sendMessageResult = doSend(newMessage, c.getChatId());
             sent.add(sendMessageResult.getMessage());
-            assertThat(sendMessageResult, is(notNullValue()));
-
-            MessageList messageList = botAPI.getMessages().chatId(chatId).execute();
-            Message lastMessage = messageList.getMessages().get(0);
-            String text = newMessage.getText();
-            assertThat(lastMessage.getBody().getText(), is(text == null ? "" : text));
-            assertThat(lastMessage.getBody().getMid(), is(sendMessageResult.getMessage().getBody().getMid()));
-
-            List<AttachmentRequest> attachments = newMessage.getAttachments();
-            if (attachments != null) {
-                for (int i = 0; i < attachments.size(); i++) {
-                    AttachmentRequest request = attachments.get(i);
-                    Attachment attachment = lastMessage.getBody().getAttachments().get(i);
-                    compare(request, attachment);
-                }
-            }
         }
 
         return sent;
     }
 
-    private SendMessageResult doSend(NewMessageBody newMessage, Chat chat) throws Exception {
+    private SendMessageResult doSend(NewMessageBody newMessage, Long chatId) throws Exception {
         do {
             try {
-                return botAPI.sendMessage(newMessage).chatId(chat.getChatId()).execute();
+                SendMessageResult sendMessageResult = botAPI.sendMessage(newMessage).chatId(chatId).execute();
+                assertThat(sendMessageResult, is(notNullValue()));
+                MessageList messageList = botAPI.getMessages().chatId(chatId).execute();
+                Message lastMessage = messageList.getMessages().get(0);
+                String text = newMessage.getText();
+                assertThat(lastMessage.getBody().getText(), is(text == null ? "" : text));
+                assertThat(lastMessage.getBody().getMid(), is(sendMessageResult.getMessage().getBody().getMid()));
+
+                List<AttachmentRequest> attachments = newMessage.getAttachments();
+                if (attachments != null) {
+                    for (int i = 0; i < attachments.size(); i++) {
+                        AttachmentRequest request = attachments.get(i);
+                        Attachment attachment = lastMessage.getBody().getAttachments().get(i);
+                        compare(request, attachment);
+                    }
+                }
+
+                return sendMessageResult;
             } catch (AttachmentNotReadyException e) {
                 // it is ok, try again
                 Thread.sleep(TimeUnit.SECONDS.toMillis(5));

@@ -41,6 +41,8 @@ public class RequestContactButton extends Button implements TamTamSerializable {
         visitor.visit(this);
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Button.REQUEST_CONTACT;
     }

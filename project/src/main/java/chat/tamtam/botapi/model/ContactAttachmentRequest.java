@@ -51,6 +51,8 @@ public class ContactAttachmentRequest extends AttachmentRequest implements TamTa
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return AttachmentRequest.CONTACT;
     }

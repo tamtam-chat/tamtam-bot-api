@@ -74,6 +74,8 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
         return inviterId;
     }
 
+    @JsonProperty("update_type")
+    @Override
     public String getType() {
         return Update.USER_ADDED;
     }

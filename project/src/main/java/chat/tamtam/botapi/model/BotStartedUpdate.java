@@ -63,6 +63,8 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
         return userId;
     }
 
+    @JsonProperty("update_type")
+    @Override
     public String getType() {
         return Update.BOT_STARTED;
     }

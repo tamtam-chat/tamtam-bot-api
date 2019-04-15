@@ -51,6 +51,8 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Attachment.STICKER;
     }

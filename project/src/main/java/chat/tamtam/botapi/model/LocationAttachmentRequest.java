@@ -61,6 +61,8 @@ public class LocationAttachmentRequest extends AttachmentRequest implements TamT
         return longitude;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return AttachmentRequest.LOCATION;
     }

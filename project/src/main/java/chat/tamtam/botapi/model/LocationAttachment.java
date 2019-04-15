@@ -61,6 +61,8 @@ public class LocationAttachment extends Attachment implements TamTamSerializable
         return longitude;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Attachment.LOCATION;
     }

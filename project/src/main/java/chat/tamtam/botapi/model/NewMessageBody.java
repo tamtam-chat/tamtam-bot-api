@@ -60,7 +60,7 @@ public class NewMessageBody implements TamTamSerializable {
     }
 
     /**
-    * Single message attachment.
+    * Use &#x60;attachments&#x60; property instead. Will be removed in the next major release.  Single message attachment.
     * @return attachment
     **/
     @Nullable

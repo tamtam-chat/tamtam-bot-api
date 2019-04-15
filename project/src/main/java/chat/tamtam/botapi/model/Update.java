@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * &#x60;Update&#x60; object repsesents different types of events that happened in chat. See its inheritors
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "update_type", visible = true, defaultImpl = Update.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "update_type", visible = true, defaultImpl = Update.class, include = JsonTypeInfo.As.EXISTING_PROPERTY)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = MessageCreatedUpdate.class, name = Update.MESSAGE_CREATED),
   @JsonSubTypes.Type(value = MessageCallbackUpdate.class, name = Update.MESSAGE_CALLBACK),
@@ -90,6 +90,7 @@ public class Update implements TamTamSerializable {
         return timestamp;
     }
 
+    @JsonProperty("update_type")
     public String getType() {
         throw new UnsupportedOperationException("Model has no concrete type.");
     }

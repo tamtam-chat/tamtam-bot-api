@@ -30,10 +30,10 @@ import java.util.Objects;
  */
 public class AudioAttachment extends Attachment implements TamTamSerializable {
 
-    private final AttachmentPayload payload;
+    private final MediaAttachmentPayload payload;
 
     @JsonCreator
-    public AudioAttachment(@JsonProperty("payload") AttachmentPayload payload) { 
+    public AudioAttachment(@JsonProperty("payload") MediaAttachmentPayload payload) { 
         super();
         this.payload = payload;
     }
@@ -47,10 +47,12 @@ public class AudioAttachment extends Attachment implements TamTamSerializable {
     * @return payload
     **/
     @JsonProperty("payload")
-    public AttachmentPayload getPayload() {
+    public MediaAttachmentPayload getPayload() {
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Attachment.AUDIO;
     }

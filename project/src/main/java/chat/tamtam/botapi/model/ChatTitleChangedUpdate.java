@@ -74,6 +74,8 @@ public class ChatTitleChangedUpdate extends Update implements TamTamSerializable
         return title;
     }
 
+    @JsonProperty("update_type")
+    @Override
     public String getType() {
         return Update.CHAT_TITLE_CHANGED;
     }
