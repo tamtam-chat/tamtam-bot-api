@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 public class ButtonTest {
     @Test
     public void shouldVisitDefault() {
-        Button button = new Button("text", Intent.POSITIVE);
+        Button button = new Button("text");
         button.visit(new FailByDefaultButtonVisitor() {
             @Override
             public void visitDefault(Button model) {

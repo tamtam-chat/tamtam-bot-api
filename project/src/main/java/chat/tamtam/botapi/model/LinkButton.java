@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import org.jetbrains.annotations.Nullable;
 
 /**
  * After pressing this type of button user follows the link it contains
@@ -34,8 +33,8 @@ public class LinkButton extends Button implements TamTamSerializable {
     private final String url;
 
     @JsonCreator
-    public LinkButton(@JsonProperty("url") String url, @JsonProperty("text") String text, @Nullable @JsonProperty("intent") Intent intent) { 
-        super(text, intent);
+    public LinkButton(@JsonProperty("url") String url, @JsonProperty("text") String text) { 
+        super(text);
         this.url = url;
     }
 
