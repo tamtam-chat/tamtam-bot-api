@@ -38,7 +38,10 @@ import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.LocationAttachmentRequest;
+import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.Message;
+import chat.tamtam.botapi.model.MessageLinkType;
+import chat.tamtam.botapi.model.NewMessageLink;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.RequestContactButton;
@@ -180,6 +183,20 @@ public abstract class TamTamIntegrationTest {
         });
     }
 
+    protected static void compare(LinkedMessage linkedMessage, NewMessageLink link) {
+        if (link.getType() == MessageLinkType.REPLY) {
+            assertThat(getMessageId(linkedMessage.getMessage().getMid()),
+                    is(getMessageId(link.getMid())));
+        } else {
+            assertThat(linkedMessage.getMessage().getMid(), is(link.getMid()));
+        }
+        assertThat(linkedMessage.getType(), is(link.getType()));
+    }
+
+    private static String getMessageId(String mid) {
+        return mid.substring("mid.".length() + 16);
+    }
+
     protected Message getLast(Chat chat) throws Exception {
         return botAPI.getMessages().chatId(chat.getChatId()).count(1).execute().getMessages().get(0);
     }
@@ -271,4 +288,5 @@ public abstract class TamTamIntegrationTest {
     private static void compare(ContactAttachmentRequest request, ContactAttachment attachment) {
         assertThat(attachment.getPayload().getVcfInfo(), is(attachment.getPayload().getVcfInfo()));
     }
+
 }

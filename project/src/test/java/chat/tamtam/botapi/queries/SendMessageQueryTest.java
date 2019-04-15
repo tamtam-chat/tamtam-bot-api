@@ -93,7 +93,7 @@ public class SendMessageQueryTest extends QueryTest {
 
     @Test
     public void sendMessageTest() throws Exception {
-        NewMessageBody sendingMessage = new NewMessageBody("text", createAttachmentRequests()).notify(true);
+        NewMessageBody sendingMessage = new NewMessageBody("text", createAttachmentRequests(), null).notify(true);
 
         post("/messages", (req, resp) -> {
             String chatId = req.queryParams("chat_id");

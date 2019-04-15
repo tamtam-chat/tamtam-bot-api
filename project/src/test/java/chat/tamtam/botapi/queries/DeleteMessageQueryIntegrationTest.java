@@ -29,7 +29,7 @@ public class DeleteMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldDeleteItsOwnMessageInDialog() throws Exception {
         List<Chat> chats = getChats();
         Chat dialog = getByType(chats, ChatType.DIALOG);
-        SendMessageResult result = botAPI.sendMessage(new NewMessageBody("to be deleted", null))
+        SendMessageResult result = botAPI.sendMessage(new NewMessageBody("to be deleted", null, null))
                 .chatId(dialog.getChatId())
                 .execute();
 
@@ -49,10 +49,10 @@ public class DeleteMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 .orElseThrow(() -> new Exception("Couldn't find chat"));
 
         Long chatId = chat.getChatId();
-        SendMessageResult result1 = new SendMessageQuery(client, new NewMessageBody("bot 1 message", null))
+        SendMessageResult result1 = new SendMessageQuery(client, new NewMessageBody("bot 1 message", null, null))
                 .chatId(chatId).execute();
 
-        SendMessageResult result2 = new SendMessageQuery(client2, new NewMessageBody("bot 2 message", null))
+        SendMessageResult result2 = new SendMessageQuery(client2, new NewMessageBody("bot 2 message", null, null))
                 .chatId(chatId).execute();
 
         new DeleteMessageQuery(client, result1.getMessage().getBody().getMid()).execute();
@@ -70,7 +70,7 @@ public class DeleteMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 .orElseThrow(() -> new Exception("Couldn't find chat"));
 
         Long chatId = chat.getChatId();
-        SendMessageResult bot2Message = new SendMessageQuery(client2, new NewMessageBody("bot 2 message", null))
+        SendMessageResult bot2Message = new SendMessageQuery(client2, new NewMessageBody("bot 2 message", null, null))
                 .chatId(chatId).execute();
 
         new DeleteMessageQuery(client, bot2Message.getMessage().getBody().getMid()).execute();
@@ -86,7 +86,7 @@ public class DeleteMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
         Long chatId = chat.getChatId();
 
-        SendMessageResult bot2Message = new SendMessageQuery(client2, new NewMessageBody("bot 2 message", null))
+        SendMessageResult bot2Message = new SendMessageQuery(client2, new NewMessageBody("bot 2 message", null, null))
                 .chatId(chatId).execute();
 
         new DeleteMessageQuery(client, bot2Message.getMessage().getBody().getMid()).execute();

@@ -40,7 +40,7 @@ public class EditMessageQueryTest extends QueryTest {
     @Test
     public void editMessageTest() throws Exception {
         List<AttachmentRequest> attachments = Collections.singletonList(new StickerAttachmentRequest(new StickerAttachmentRequestPayload("code")));
-        NewMessageBody newMessageBody = new NewMessageBody("edited", attachments);
+        NewMessageBody newMessageBody = new NewMessageBody("edited", attachments, null);
         String messageId = "mid.qweqwekljoiy7971346";
         SimpleQueryResult response = api.editMessage(newMessageBody, messageId).execute();
         assertThat(response.isSuccess(), is(true));
@@ -53,6 +53,6 @@ public class EditMessageQueryTest extends QueryTest {
 
     @Test(expected = RequiredParameterMissingException.class)
     public void shouldThrowException2() throws Exception {
-        api.editMessage(new NewMessageBody("text", null), null).execute();
+        api.editMessage(new NewMessageBody("text", null, null), null).execute();
     }
 }

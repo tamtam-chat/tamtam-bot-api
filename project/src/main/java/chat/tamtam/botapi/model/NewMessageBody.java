@@ -36,12 +36,14 @@ public class NewMessageBody implements TamTamSerializable {
     private final String text;
     private AttachmentRequest attachment;
     private final List<AttachmentRequest> attachments;
+    private final NewMessageLink link;
     private Boolean notify;
 
     @JsonCreator
-    public NewMessageBody(@Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<AttachmentRequest> attachments) { 
+    public NewMessageBody(@Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<AttachmentRequest> attachments, @Nullable @JsonProperty("link") NewMessageLink link) { 
         this.text = text;
         this.attachments = attachments;
+        this.link = link;
     }
 
     /**
@@ -83,6 +85,16 @@ public class NewMessageBody implements TamTamSerializable {
         return attachments;
     }
 
+    /**
+    * Link to Message
+    * @return link
+    **/
+    @Nullable
+    @JsonProperty("link")
+    public NewMessageLink getLink() {
+        return link;
+    }
+
     public NewMessageBody notify(Boolean notify) {
         this.setNotify(notify);
         return this;
@@ -114,6 +126,7 @@ public class NewMessageBody implements TamTamSerializable {
         return Objects.equals(this.text, other.text) &&
             Objects.equals(this.attachment, other.attachment) &&
             Objects.equals(this.attachments, other.attachments) &&
+            Objects.equals(this.link, other.link) &&
             Objects.equals(this.notify, other.notify);
     }
 
@@ -123,6 +136,7 @@ public class NewMessageBody implements TamTamSerializable {
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (attachment != null ? attachment.hashCode() : 0);
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
+        result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (notify != null ? notify.hashCode() : 0);
         return result;
     }
@@ -133,6 +147,7 @@ public class NewMessageBody implements TamTamSerializable {
             + " text='" + text + '\''
             + " attachment='" + attachment + '\''
             + " attachments='" + attachments + '\''
+            + " link='" + link + '\''
             + " notify='" + notify + '\''
             + '}';
     }

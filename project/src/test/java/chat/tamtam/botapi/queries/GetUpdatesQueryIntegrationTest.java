@@ -79,7 +79,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                 int count = 20;
                 while (count-- > 0) {
                     if (ThreadLocalRandom.current().nextBoolean() && !sentMessages.isEmpty()) {
-                        NewMessageBody body = new NewMessageBody("edited message", null);
+                        NewMessageBody body = new NewMessageBody("edited message", null, null);
                         String messageId = sentMessages.get(ThreadLocalRandom.current().nextInt(sentMessages.size()));
                         EditMessageQuery editMessageQuery = new EditMessageQuery(client2, body, messageId);
                         editMessageQuery.execute();
@@ -87,7 +87,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         continue;
                     }
 
-                    NewMessageBody newMessage = new NewMessageBody("text " + ID_COUNTER.incrementAndGet(), null);
+                    NewMessageBody newMessage = new NewMessageBody("text " + ID_COUNTER.incrementAndGet(), null, null);
                     SendMessageResult sendMessageResult = new SendMessageQuery(client2, newMessage)
                             .chatId(commonChatId)
                             .execute();

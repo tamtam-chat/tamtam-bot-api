@@ -34,9 +34,9 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
         List<Chat> chats = getChats();
         Chat dialog = getByType(chats, ChatType.DIALOG);
         Chat chat = getByTitle(chats, "test chat #1");
-        SendMessageResult sendMessageResult = botAPI.sendMessage(new NewMessageBody(text, null)).chatId(
+        SendMessageResult sendMessageResult = botAPI.sendMessage(new NewMessageBody(text, null, null)).chatId(
                 dialog.getChatId()).execute();
-        SendMessageResult sendMessageResult2 = botAPI.sendMessage(new NewMessageBody(text2, null)).chatId(
+        SendMessageResult sendMessageResult2 = botAPI.sendMessage(new NewMessageBody(text2, null, null)).chatId(
                 chat.getChatId()).execute();
         Set<String> ids = new HashSet<>();
         ids.add(sendMessageResult.getMessage().getBody().getMid());
@@ -52,7 +52,7 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
         int count = 5;
         List<Chat> chats = getChats();
         Chat chat = getByTitle(chats, "test chat #5");
-        Set<NewMessageBody> newMessages = Stream.generate(() -> new NewMessageBody(randomText(), null))
+        Set<NewMessageBody> newMessages = Stream.generate(() -> new NewMessageBody(randomText(), null, null))
                 .limit(count)
                 .collect(Collectors.toSet());
 
