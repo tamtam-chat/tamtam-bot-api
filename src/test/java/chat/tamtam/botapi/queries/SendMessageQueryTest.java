@@ -81,12 +81,12 @@ public class SendMessageQueryTest extends QueryTest {
     private static final InlineKeyboardAttachmentRequest INLINE_KEYBOARD_ATTACHMENT_REQUEST = new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
             Arrays.asList(
                     Arrays.asList(
-                            new CallbackButton("payload", "text", Intent.DEFAULT),
-                            new LinkButton("https://url.com", "linktext", Intent.DEFAULT)
+                            new CallbackButton("payload", "text"),
+                            new LinkButton("https://url.com", "linktext")
                     ),
                     Arrays.asList(
-                            new RequestContactButton("willbeignored", Intent.DEFAULT),
-                            new RequestGeoLocationButton("willbeignored", Intent.DEFAULT)
+                            new RequestContactButton("willbeignored"),
+                            new RequestGeoLocationButton("willbeignored")
                     )
             )
     ));

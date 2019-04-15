@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import org.jetbrains.annotations.Nullable;
 
 /**
  * After pressing this type of button client sends to server payload it contains
@@ -32,10 +31,11 @@ import org.jetbrains.annotations.Nullable;
 public class CallbackButton extends Button implements TamTamSerializable {
 
     private final String payload;
+    private Intent intent;
 
     @JsonCreator
-    public CallbackButton(@JsonProperty("payload") String payload, @JsonProperty("text") String text, @Nullable @JsonProperty("intent") Intent intent) { 
-        super(text, intent);
+    public CallbackButton(@JsonProperty("payload") String payload, @JsonProperty("text") String text) { 
+        super(text);
         this.payload = payload;
     }
 
@@ -51,6 +51,24 @@ public class CallbackButton extends Button implements TamTamSerializable {
     @JsonProperty("payload")
     public String getPayload() {
         return payload;
+    }
+
+    public CallbackButton intent(Intent intent) {
+        this.setIntent(intent);
+        return this;
+    }
+
+    /**
+    * Intent of button. Affects clients representation.
+    * @return intent
+    **/
+    @JsonProperty("intent")
+    public Intent getIntent() {
+        return intent;
+    }
+
+    public void setIntent(Intent intent) {
+        this.intent = intent;
     }
 
     @JsonProperty("type")
@@ -70,6 +88,7 @@ public class CallbackButton extends Button implements TamTamSerializable {
 
         CallbackButton other = (CallbackButton) o;
         return Objects.equals(this.payload, other.payload) &&
+            Objects.equals(this.intent, other.intent) &&
             super.equals(o);
     }
 
@@ -77,6 +96,7 @@ public class CallbackButton extends Button implements TamTamSerializable {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        result = 31 * result + (intent != null ? intent.hashCode() : 0);
         return result;
     }
 
@@ -84,6 +104,7 @@ public class CallbackButton extends Button implements TamTamSerializable {
     public String toString() {
         return "CallbackButton{"+ super.toString()
             + " payload='" + payload + '\''
+            + " intent='" + intent + '\''
             + '}';
     }
 }

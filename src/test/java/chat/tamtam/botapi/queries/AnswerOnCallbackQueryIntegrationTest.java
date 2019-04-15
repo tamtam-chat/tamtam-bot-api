@@ -46,7 +46,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
     @Test
     public void shouldEditMessageOnAnswer() throws Exception {
         for (Chat chat : chats) {
-            CallbackButton button = new CallbackButton("payload", "button text", Intent.DEFAULT);
+            CallbackButton button = new CallbackButton("payload", "button text");
             InlineKeyboardAttachmentRequestPayload keyboardPayload = new InlineKeyboardAttachmentRequestPayload(
                     Collections.singletonList(Collections.singletonList(button)));
             AttachmentRequest keyboardAttach = new InlineKeyboardAttachmentRequest(keyboardPayload);

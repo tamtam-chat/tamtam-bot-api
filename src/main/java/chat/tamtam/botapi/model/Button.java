@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Button
@@ -54,12 +53,10 @@ public class Button implements TamTamSerializable {
     ));
 
     private final String text;
-    private final Intent intent;
 
     @JsonCreator
-    public Button(@JsonProperty("text") String text, @Nullable @JsonProperty("intent") Intent intent) { 
+    public Button(@JsonProperty("text") String text) { 
         this.text = text;
-        this.intent = intent;
     }
 
     public void visit(Visitor visitor) {
@@ -73,16 +70,6 @@ public class Button implements TamTamSerializable {
     @JsonProperty("text")
     public String getText() {
         return text;
-    }
-
-    /**
-    * Intent of button. Affects clients representation.
-    * @return intent
-    **/
-    @Nullable
-    @JsonProperty("intent")
-    public Intent getIntent() {
-        return intent;
     }
 
     @JsonProperty("type")
@@ -100,15 +87,13 @@ public class Button implements TamTamSerializable {
         }
 
         Button other = (Button) o;
-        return Objects.equals(this.text, other.text) &&
-            Objects.equals(this.intent, other.intent);
+        return Objects.equals(this.text, other.text);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (intent != null ? intent.hashCode() : 0);
         return result;
     }
 
@@ -116,7 +101,6 @@ public class Button implements TamTamSerializable {
     public String toString() {
         return "Button{"
             + " text='" + text + '\''
-            + " intent='" + intent + '\''
             + '}';
     }
 

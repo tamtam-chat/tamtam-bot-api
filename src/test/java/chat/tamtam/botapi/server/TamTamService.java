@@ -85,12 +85,11 @@ public class TamTamService {
     public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload(1L, "urlfile"));
     public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
             new ContactAttachmentPayload("vcfinfo", null));
-    public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text", Intent.DEFAULT);
-    public static final RequestContactButton REQUEST_CONTACT_BUTTON = new RequestContactButton("request contact",
-            Intent.NEGATIVE);
+    public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text");
+    public static final RequestContactButton REQUEST_CONTACT_BUTTON = new RequestContactButton("request contact");
     public static final RequestGeoLocationButton REQUEST_GEO_LOCATION_BUTTON = new RequestGeoLocationButton(
-            "request location", Intent.POSITIVE);
-    public static final LinkButton LINK_BUTTON = new LinkButton("https://mail.ru", "link", Intent.POSITIVE);
+            "request location");
+    public static final LinkButton LINK_BUTTON = new LinkButton("https://mail.ru", "link");
     public static final InlineKeyboardAttachment INLINE_KEYBOARD_ATTACHMENT = new InlineKeyboardAttachment(
             "callbackId" + ID_COUNTER.incrementAndGet(), new Keyboard(
             Arrays.asList(

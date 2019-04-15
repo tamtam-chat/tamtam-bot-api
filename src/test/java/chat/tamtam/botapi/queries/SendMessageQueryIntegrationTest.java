@@ -89,19 +89,19 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldSendKeyboard() throws Exception {
         List<List<Button>> buttons = Arrays.asList(
                 Arrays.asList(
-                        new CallbackButton("payload", "text", Intent.DEFAULT),
-                        new CallbackButton("payload2", "text", Intent.NEGATIVE),
-                        new CallbackButton("payload2", "text", Intent.POSITIVE)
+                        new CallbackButton("payload", "text"),
+                        new CallbackButton("payload2", "text").intent(Intent.NEGATIVE),
+                        new CallbackButton("payload2", "text").intent(Intent.POSITIVE)
                 ),
                 Arrays.asList(
-                        new LinkButton("https://mail.ru", "link", Intent.DEFAULT),
-                        new LinkButton("https://tt.me/beer", "link", Intent.DEFAULT)
+                        new LinkButton("https://mail.ru", "link"),
+                        new LinkButton("https://tt.me/beer", "link")
                 ),
                 Collections.singletonList(
-                        new RequestContactButton("contact", Intent.DEFAULT)
+                        new RequestContactButton("contact")
                 ),
                 Collections.singletonList(
-                        new RequestGeoLocationButton("geo location", Intent.DEFAULT).quick(true)
+                        new RequestGeoLocationButton("geo location").quick(true)
                 )
         );
 

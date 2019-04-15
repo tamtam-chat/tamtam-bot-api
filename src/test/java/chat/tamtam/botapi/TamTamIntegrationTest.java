@@ -24,6 +24,7 @@ import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
 import chat.tamtam.botapi.model.Button;
+import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.model.ChatStatus;
@@ -34,10 +35,14 @@ import chat.tamtam.botapi.model.FileAttachment;
 import chat.tamtam.botapi.model.FileAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
+import chat.tamtam.botapi.model.Intent;
+import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
+import chat.tamtam.botapi.model.RequestContactButton;
+import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserWithPhoto;
@@ -199,7 +204,49 @@ public abstract class TamTamIntegrationTest {
     private static void compare(InlineKeyboardAttachmentRequest request, InlineKeyboardAttachment attachment) {
         List<List<Button>> expected = request.getPayload().getButtons();
         List<List<Button>> actual = attachment.getPayload().getButtons();
-        assertThat(expected, is(actual));
+        for (int i = 0; i < actual.size(); i++) {
+            for (int j = 0; j < actual.get(i).size(); j++) {
+                Button actualButton = actual.get(i).get(j);
+                Button expectedButton = expected.get(i).get(j);
+                compare(actualButton, expectedButton);
+            }
+        }
+    }
+
+    private static void compare(Button actualButton, Button expectedButton) {
+        actualButton.visit(new Button.Visitor() {
+            @Override
+            public void visit(CallbackButton model) {
+                CallbackButton expectedCallbackButton = (CallbackButton) expectedButton;
+                assertThat(model.getPayload(), is(expectedCallbackButton.getPayload()));
+                assertThat(model.getText(), is(expectedCallbackButton.getText()));
+                if (expectedCallbackButton.getIntent() != null) {
+                    assertThat(model.getIntent(), is(expectedCallbackButton.getIntent()));
+                } else {
+                    assertThat(model.getIntent(), is(Intent.DEFAULT));
+                }
+            }
+
+            @Override
+            public void visit(LinkButton model) {
+                assertThat(model, is(expectedButton));
+            }
+
+            @Override
+            public void visit(RequestGeoLocationButton model) {
+                assertThat(model, is(expectedButton));
+            }
+
+            @Override
+            public void visit(RequestContactButton model) {
+                assertThat(model, is(expectedButton));
+            }
+
+            @Override
+            public void visitDefault(Button model) {
+                assertThat(model, is(expectedButton));
+            }
+        });
     }
 
     private static void compare(PhotoAttachmentRequest request, PhotoAttachment attachment) {
