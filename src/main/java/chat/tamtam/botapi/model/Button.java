@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Button
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = Button.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = Button.class, include = JsonTypeInfo.As.EXISTING_PROPERTY)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = CallbackButton.class, name = Button.CALLBACK),
   @JsonSubTypes.Type(value = LinkButton.class, name = Button.LINK),
@@ -85,6 +85,7 @@ public class Button implements TamTamSerializable {
         return intent;
     }
 
+    @JsonProperty("type")
     public String getType() {
         throw new UnsupportedOperationException("Model has no concrete type.");
     }

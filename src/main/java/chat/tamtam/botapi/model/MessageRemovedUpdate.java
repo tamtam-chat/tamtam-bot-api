@@ -52,6 +52,8 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
         return messageId;
     }
 
+    @JsonProperty("update_type")
+    @Override
     public String getType() {
         return Update.MESSAGE_REMOVED;
     }

@@ -51,6 +51,8 @@ public class InlineKeyboardAttachmentRequest extends AttachmentRequest implement
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return AttachmentRequest.INLINE_KEYBOARD;
     }

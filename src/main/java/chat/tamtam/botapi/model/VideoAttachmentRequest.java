@@ -51,6 +51,8 @@ public class VideoAttachmentRequest extends AttachmentRequest implements TamTamS
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return AttachmentRequest.VIDEO;
     }

@@ -61,6 +61,8 @@ public class RequestGeoLocationButton extends Button implements TamTamSerializab
         this.quick = quick;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Button.REQUEST_GEO_LOCATION;
     }

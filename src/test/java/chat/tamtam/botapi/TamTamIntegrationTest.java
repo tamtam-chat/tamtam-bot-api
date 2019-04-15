@@ -208,14 +208,17 @@ public abstract class TamTamIntegrationTest {
 
     private static void compare(VideoAttachmentRequest request, VideoAttachment attachment) {
         assertThat(attachment.getPayload().getUrl(), is(notNullValue()));
+        assertThat(attachment.getPayload().getId(), is(request.getPayload().getId()));
     }
 
     private static void compare(FileAttachmentRequest request, FileAttachment attachment) {
         assertThat(attachment.getPayload().getUrl(), is(notNullValue()));
+        assertThat(attachment.getPayload().getFileId(), is(request.getPayload().getFileId()));
     }
 
     private static void compare(AudioAttachmentRequest request, AudioAttachment attachment) {
         assertThat(attachment.getPayload().getUrl(), is(notNullValue()));
+        assertThat(attachment.getPayload().getId(), is(request.getPayload().getId()));
     }
 
     private static void compare(ContactAttachmentRequest request, ContactAttachment attachment) {

@@ -63,6 +63,8 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
         return userId;
     }
 
+    @JsonProperty("update_type")
+    @Override
     public String getType() {
         return Update.BOT_REMOVED;
     }

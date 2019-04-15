@@ -26,35 +26,25 @@ import java.util.Objects;
 
 
 /**
- * VideoAttachment
+ * MediaAttachmentPayload
  */
-public class VideoAttachment extends Attachment implements TamTamSerializable {
+public class MediaAttachmentPayload extends AttachmentPayload implements TamTamSerializable {
 
-    private final MediaAttachmentPayload payload;
+    private final Long id;
 
     @JsonCreator
-    public VideoAttachment(@JsonProperty("payload") MediaAttachmentPayload payload) { 
-        super();
-        this.payload = payload;
-    }
-
-    @Override
-    public void visit(Visitor visitor) {
-        visitor.visit(this);
+    public MediaAttachmentPayload(@JsonProperty("id") Long id, @JsonProperty("url") String url) { 
+        super(url);
+        this.id = id;
     }
 
     /**
-    * @return payload
+    * Identifier of media attachment
+    * @return id
     **/
-    @JsonProperty("payload")
-    public MediaAttachmentPayload getPayload() {
-        return payload;
-    }
-
-    @JsonProperty("type")
-    @Override
-    public String getType() {
-        return Attachment.VIDEO;
+    @JsonProperty("id")
+    public Long getId() {
+        return id;
     }
 
     @Override
@@ -66,21 +56,22 @@ public class VideoAttachment extends Attachment implements TamTamSerializable {
           return false;
         }
 
-        VideoAttachment other = (VideoAttachment) o;
-        return Objects.equals(this.payload, other.payload);
+        MediaAttachmentPayload other = (MediaAttachmentPayload) o;
+        return Objects.equals(this.id, other.id) &&
+            super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        int result = 1;
-        result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "VideoAttachment{"+ super.toString()
-            + " payload='" + payload + '\''
+        return "MediaAttachmentPayload{"+ super.toString()
+            + " id='" + id + '\''
             + '}';
     }
 }

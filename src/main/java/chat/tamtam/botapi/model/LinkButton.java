@@ -52,6 +52,8 @@ public class LinkButton extends Button implements TamTamSerializable {
         return url;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Button.LINK;
     }

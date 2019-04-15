@@ -62,6 +62,8 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return Attachment.INLINE_KEYBOARD;
     }

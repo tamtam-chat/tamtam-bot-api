@@ -51,6 +51,8 @@ public class FileAttachmentRequest extends AttachmentRequest implements TamTamSe
         return payload;
     }
 
+    @JsonProperty("type")
+    @Override
     public String getType() {
         return AttachmentRequest.FILE;
     }
