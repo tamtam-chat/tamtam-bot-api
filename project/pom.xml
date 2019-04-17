@@ -5,7 +5,7 @@
 
     <groupId>chat.tamtam</groupId>
     <artifactId>tamtam-bot-api</artifactId>
-    <version>0.1.5</version>
+    <version>0.1.6-SNAPSHOT</version>
 
     <name>TamTam Bot API Java Client</name>
     <description>Java library to build bots for TamTam messenger</description>
@@ -37,7 +37,7 @@
         <url>https://github.com/tamtam-chat/tamtam-bot-api</url>
         <connection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api.git</connection>
         <developerConnection>scm:git:https://github.com/tamtam-chat/tamtam-bot-api.git</developerConnection>
-      <tag>v0.1.5</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <properties>
