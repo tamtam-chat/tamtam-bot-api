@@ -94,6 +94,10 @@ public abstract class TamTamIntegrationTest {
         return chatList.getChats();
     }
 
+    protected Chat getChat(long chatId) throws APIException, ClientException {
+        return botAPI.getChat(chatId).execute();
+    }
+
     protected List<Chat> getChatsCanSend() throws APIException, ClientException {
         ChatList chatList = botAPI.getChats().count(10).execute();
         return chatList.getChats().stream()
