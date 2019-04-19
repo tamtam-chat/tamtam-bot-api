@@ -50,6 +50,7 @@ import chat.tamtam.botapi.model.VideoAttachmentRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -299,6 +300,43 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         }
     }
 
+    @Test
+    public void shouldContainsSenderAndRecipientInDialog() throws Exception {
+        Chat dialog = getByType(getChats(), ChatType.DIALOG);
+        NewMessageBody newMessage = new NewMessageBody(randomText(), null, null);
+        SendMessageResult result = doSend(newMessage, dialog.getChatId());
+        assertThat(result.getMessage().getSender().getUserId(), is(me.getUserId()));
+        assertThat(result.getMessage().getRecipient().getChatId(), is(dialog.getChatId()));
+        assertThat(result.getMessage().getRecipient().getUserId(), is(not(me.getUserId())));
+    }
+
+    @Test
+    public void shouldNOTContainsRecipientUserIdInChat() throws Exception {
+        Chat chat = getByTitle(getChats(), "test chat #4");
+        NewMessageBody newMessage = new NewMessageBody(randomText(), null, null);
+        SendMessageResult result = doSend(newMessage, chat.getChatId());
+        assertThat(result.getMessage().getSender().getUserId(), is(me.getUserId()));
+        assertThat(result.getMessage().getRecipient().getChatId(), is(chat.getChatId()));
+        assertThat(result.getMessage().getRecipient().getUserId(), is(nullValue()));
+    }
+
+    @Test
+    public void shoulReturnSenderInChannelIfSigned() throws Exception {
+        Chat channel = getByTitle(getChats(), "test channel #3");
+        NewMessageBody newMessage = new NewMessageBody(randomText(), null, null);
+        SendMessageResult result = doSend(newMessage, channel.getChatId());
+        assertThat(result.getMessage().getSender().getUserId(), is(me.getUserId()));
+        assertThat(result.getMessage().getSender().getName(), is(me.getName()));
+    }
+
+    @Test
+    public void should_NOT_ReturnSenderInChannelIf_NOT_Signed() throws Exception {
+        Chat channel = getByTitle(getChats(), "test channel #1");
+        NewMessageBody newMessage = new NewMessageBody(randomText(), null, null);
+        SendMessageResult result = doSend(newMessage, channel.getChatId());
+        assertThat(result.getMessage().getSender(), is(nullValue()));
+    }
+
     @NotNull
     private AttachmentRequest getPhotoAttachmentRequest() throws Exception {
         String uploadUrl = getUploadUrl(UploadType.PHOTO);
@@ -358,6 +396,10 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                     compare(linkedMessage, link);
                 }
 
+                Chat chat = getChat(chatId);
+                if (chat.getType() == ChatType.CHANNEL) {
+                    assertThat(lastMessage.getRecipient().getChatType(), is(ChatType.CHANNEL));
+                }
                 return sendMessageResult;
             } catch (AttachmentNotReadyException e) {
                 // it is ok, try again
