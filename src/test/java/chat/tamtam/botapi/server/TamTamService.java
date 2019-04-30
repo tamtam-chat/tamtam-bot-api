@@ -50,6 +50,7 @@ import chat.tamtam.botapi.model.MediaAttachmentPayload;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.MessageLinkType;
+import chat.tamtam.botapi.model.MessageStat;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentPayload;
 import chat.tamtam.botapi.model.Recipient;
@@ -249,6 +250,7 @@ public class TamTamService {
         MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);
         Message message = new Message(recipient, System.currentTimeMillis(), body).sender(sender);
         message.link(new LinkedMessage(MessageLinkType.FORWARD, sender, id, body));
+        message.stat(new MessageStat(2));
         body.replyTo("replyTo");
 
         return message;
