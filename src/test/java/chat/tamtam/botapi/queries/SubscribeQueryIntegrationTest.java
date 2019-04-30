@@ -29,7 +29,7 @@ public class SubscribeQueryIntegrationTest extends TamTamIntegrationTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        url = "https://tamtam.chat/" + System.currentTimeMillis();
+        url = "https://tamtam.chat/" + now();
     }
 
     @Test

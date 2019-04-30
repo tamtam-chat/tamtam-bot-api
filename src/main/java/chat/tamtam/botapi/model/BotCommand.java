@@ -23,54 +23,52 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
- * New message recepient. Could be user or chat
+ * BotCommand
  */
-public class Recipient implements TamTamSerializable {
+public class BotCommand implements TamTamSerializable {
 
+    @Size(min = 1, max = 64)
+    private final String name;
     @Nullable
-    private final Long chatId;
-    private final ChatType chatType;
-    @Nullable
-    private final Long userId;
+    @Size(min = 1, max = 128)
+    private String description;
 
     @JsonCreator
-    public Recipient(@Nullable @JsonProperty("chat_id") Long chatId, @JsonProperty("chat_type") ChatType chatType, @Nullable @JsonProperty("user_id") Long userId) { 
-        this.chatId = chatId;
-        this.chatType = chatType;
-        this.userId = userId;
+    public BotCommand(@JsonProperty("name") String name) { 
+        this.name = name;
     }
 
     /**
-    * Chat identifier
-    * @return chatId
+    * Command name
+    * @return name
+    **/
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
+
+    public BotCommand description(@Nullable String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    /**
+    * Optional command description
+    * @return description
     **/
     @Nullable
-    @JsonProperty("chat_id")
-    public Long getChatId() {
-        return chatId;
+    @JsonProperty("description")
+    public String getDescription() {
+        return description;
     }
 
-    /**
-    * Chat type
-    * @return chatType
-    **/
-    @JsonProperty("chat_type")
-    public ChatType getChatType() {
-        return chatType;
-    }
-
-    /**
-    * User identifier, if message was sent to user
-    * @return userId
-    **/
-    @Nullable
-    @JsonProperty("user_id")
-    public Long getUserId() {
-        return userId;
+    public void setDescription(@Nullable String description) {
+        this.description = description;
     }
 
     @Override
@@ -82,27 +80,24 @@ public class Recipient implements TamTamSerializable {
           return false;
         }
 
-        Recipient other = (Recipient) o;
-        return Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.chatType, other.chatType) &&
-            Objects.equals(this.userId, other.userId);
+        BotCommand other = (BotCommand) o;
+        return Objects.equals(this.name, other.name) &&
+            Objects.equals(this.description, other.description);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (chatType != null ? chatType.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Recipient{"
-            + " chatId='" + chatId + '\''
-            + " chatType='" + chatType + '\''
-            + " userId='" + userId + '\''
+        return "BotCommand{"
+            + " name='" + name + '\''
+            + " description='" + description + '\''
             + '}';
     }
 }

@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class ChatList implements TamTamSerializable {
 
     private final List<Chat> chats;
+    @Nullable
     private final Long marker;
 
     @JsonCreator

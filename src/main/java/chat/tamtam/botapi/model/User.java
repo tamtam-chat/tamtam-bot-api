@@ -33,6 +33,7 @@ public class User implements TamTamSerializable {
 
     private final Long userId;
     private final String name;
+    @Nullable
     private final String username;
 
     @JsonCreator

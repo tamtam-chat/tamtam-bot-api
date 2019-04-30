@@ -24,6 +24,7 @@ import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentPayload;
 import chat.tamtam.botapi.model.AudioAttachment;
+import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatAdminPermission;
@@ -103,13 +104,16 @@ public class TamTamService {
     public static final LocationAttachment LOCATION_ATTACHMENT = new LocationAttachment(
             ThreadLocalRandom.current().nextDouble(), ThreadLocalRandom.current().nextDouble());
 
-    protected final UserWithPhoto me = new UserWithPhoto(
-            "avata_rul",
-            "full_avatar_url",
+    protected final BotInfo me = new BotInfo(
             ID_COUNTER.incrementAndGet(),
             "test bot",
             "testbot"
     );
+
+    {
+        me.avatarUrl("avatar_url").fullAvatarUrl("full_avatar_url");
+    }
+
 
     protected final Map<Long, User> users = new ConcurrentHashMap<>();
     protected final Map<Long, Chat> chats = new ConcurrentHashMap<>();
@@ -243,7 +247,7 @@ public class TamTamService {
         );
 
         MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);
-        Message message = new Message(sender, recipient, System.currentTimeMillis(), body);
+        Message message = new Message(recipient, System.currentTimeMillis(), body).sender(sender);
         message.link(new LinkedMessage(MessageLinkType.FORWARD, sender, id, body));
         body.replyTo("replyTo");
 
@@ -254,7 +258,7 @@ public class TamTamService {
         boolean isOwner = ThreadLocalRandom.current().nextBoolean();
         return new ChatMember(ThreadLocalRandom.current().nextLong(), isOwner, false, System.currentTimeMillis(),
                 isOwner ? EnumSet.allOf(ChatAdminPermission.class) : null,
-                ID_COUNTER.incrementAndGet(), "name", null, null, null);
+                ID_COUNTER.incrementAndGet(), "name", null);
     }
 
     private static OptionalInt getInt(Request request, String paramName) {

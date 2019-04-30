@@ -1,5 +1,6 @@
 package chat.tamtam.botapi;
 
+import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +9,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -23,6 +26,7 @@ import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
+import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
@@ -37,16 +41,19 @@ import chat.tamtam.botapi.model.InlineKeyboardAttachment;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
-import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.LinkedMessage;
+import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageLinkType;
 import chat.tamtam.botapi.model.NewMessageLink;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
+import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
+import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
+import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
@@ -75,8 +82,8 @@ public abstract class TamTamIntegrationTest {
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 
-    protected User me;
-    protected User bot2;
+    protected BotInfo me;
+    protected BotInfo bot2;
 
     @Before
     public void setUp() throws Exception {
@@ -85,7 +92,7 @@ public abstract class TamTamIntegrationTest {
         LOG.info("Endpoint: {}", client.getEndpoint());
     }
 
-    protected UserWithPhoto getMe() throws APIException, ClientException {
+    protected BotInfo getMe() throws APIException, ClientException {
         return botAPI.getMyInfo().execute();
     }
 
@@ -197,6 +204,28 @@ public abstract class TamTamIntegrationTest {
         assertThat(linkedMessage.getType(), is(link.getType()));
     }
 
+    protected static long now() {
+        return System.currentTimeMillis();
+    }
+
+    @NotNull
+    protected PhotoAttachmentRequest getPhotoAttachmentRequest() throws Exception {
+        String uploadUrl = getUploadUrl(UploadType.PHOTO);
+        File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
+        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
+        return new PhotoAttachmentRequest(payload);
+    }
+
+    protected String getUploadUrl(UploadType uploadType) throws Exception {
+        String url = botAPI.getUploadUrl(uploadType).execute().getUrl();
+        if (url.startsWith("http")) {
+            return url;
+        }
+
+        return "http:" + url;
+    }
+
     private static String getMessageId(String mid) {
         return mid.substring("mid.".length() + 16);
     }
@@ -207,6 +236,14 @@ public abstract class TamTamIntegrationTest {
 
     protected static String randomText() {
         return UUID.randomUUID().toString();
+    }
+
+    protected static String randomText(int length) {
+        String alphabet = "qwertyuiopasdfghjklzxcvbnm";
+        return Stream.generate(() -> alphabet.charAt(ThreadLocalRandom.current().nextInt(alphabet.length())))
+                .limit(length)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 
     private static String getToken(String envVar) {

@@ -23,6 +23,7 @@ package chat.tamtam.botapi.queries;
 import org.junit.Test;
 
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
+import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.User;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,7 +36,7 @@ public class GetMyInfoQueryTest extends QueryTest {
     public void getMyInfoTest() throws Exception {
         get("/me", (req, resp) -> me, this::serialize);
 
-        User response = api.getMyInfo().execute();
+        BotInfo response = api.getMyInfo().execute();
         assertThat(response, is(me));
     }
 

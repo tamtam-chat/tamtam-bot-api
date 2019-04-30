@@ -22,57 +22,66 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
- * UserWithPhoto
+ * BotInfo
  */
-public class UserWithPhoto extends User implements TamTamSerializable {
+public class BotInfo extends UserWithPhoto implements TamTamSerializable {
 
-    private String avatarUrl;
-    private String fullAvatarUrl;
+    @Nullable
+    @Size(max = 32)
+    private List<BotCommand> commands;
+    @Nullable
+    @Size(max = 16000)
+    private String description;
 
     @JsonCreator
-    public UserWithPhoto(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
+    public BotInfo(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
         super(userId, name, username);
     }
 
-    public UserWithPhoto avatarUrl(String avatarUrl) {
-        this.setAvatarUrl(avatarUrl);
+    public BotInfo commands(@Nullable List<BotCommand> commands) {
+        this.setCommands(commands);
         return this;
     }
 
     /**
-    * URL of avatar
-    * @return avatarUrl
+    * Commands supported by bot
+    * @return commands
     **/
-    @JsonProperty("avatar_url")
-    public String getAvatarUrl() {
-        return avatarUrl;
+    @Nullable
+    @JsonProperty("commands")
+    public List<BotCommand> getCommands() {
+        return commands;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setCommands(@Nullable List<BotCommand> commands) {
+        this.commands = commands;
     }
 
-    public UserWithPhoto fullAvatarUrl(String fullAvatarUrl) {
-        this.setFullAvatarUrl(fullAvatarUrl);
+    public BotInfo description(@Nullable String description) {
+        this.setDescription(description);
         return this;
     }
 
     /**
-    * URL of avatar of a bigger size
-    * @return fullAvatarUrl
+    * Bot description
+    * @return description
     **/
-    @JsonProperty("full_avatar_url")
-    public String getFullAvatarUrl() {
-        return fullAvatarUrl;
+    @Nullable
+    @JsonProperty("description")
+    public String getDescription() {
+        return description;
     }
 
-    public void setFullAvatarUrl(String fullAvatarUrl) {
-        this.fullAvatarUrl = fullAvatarUrl;
+    public void setDescription(@Nullable String description) {
+        this.description = description;
     }
 
     @Override
@@ -84,25 +93,25 @@ public class UserWithPhoto extends User implements TamTamSerializable {
           return false;
         }
 
-        UserWithPhoto other = (UserWithPhoto) o;
-        return Objects.equals(this.avatarUrl, other.avatarUrl) &&
-            Objects.equals(this.fullAvatarUrl, other.fullAvatarUrl) &&
+        BotInfo other = (BotInfo) o;
+        return Objects.equals(this.commands, other.commands) &&
+            Objects.equals(this.description, other.description) &&
             super.equals(o);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (avatarUrl != null ? avatarUrl.hashCode() : 0);
-        result = 31 * result + (fullAvatarUrl != null ? fullAvatarUrl.hashCode() : 0);
+        result = 31 * result + (commands != null ? commands.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "UserWithPhoto{"+ super.toString()
-            + " avatarUrl='" + avatarUrl + '\''
-            + " fullAvatarUrl='" + fullAvatarUrl + '\''
+        return "BotInfo{"+ super.toString()
+            + " commands='" + commands + '\''
+            + " description='" + description + '\''
             + '}';
     }
 }

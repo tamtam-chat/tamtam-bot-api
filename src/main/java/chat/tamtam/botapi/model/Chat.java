@@ -37,14 +37,20 @@ public class Chat implements TamTamSerializable {
     private final Long chatId;
     private final ChatType type;
     private final ChatStatus status;
+    @Nullable
     private final String title;
+    @Nullable
     private final Image icon;
     private final Long lastEventTime;
     private final Integer participantsCount;
+    @Nullable
     private Long ownerId;
+    @Nullable
     private Map<String, Long> participants;
     private final Boolean isPublic;
+    @Nullable
     private String link;
+    @Nullable
     private final Object description;
 
     @JsonCreator
