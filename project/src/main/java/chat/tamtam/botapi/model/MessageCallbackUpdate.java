@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 public class MessageCallbackUpdate extends Update implements TamTamSerializable {
 
     private final Callback callback;
+    @Nullable
     private final Message message;
 
     @JsonCreator

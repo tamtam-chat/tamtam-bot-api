@@ -50,7 +50,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
             InlineKeyboardAttachmentRequestPayload keyboardPayload = new InlineKeyboardAttachmentRequestPayload(
                     Collections.singletonList(Collections.singletonList(button)));
             AttachmentRequest keyboardAttach = new InlineKeyboardAttachmentRequest(keyboardPayload);
-            String text = "AnswerOnCallbackQueryIntegrationTest message " + System.currentTimeMillis();
+            String text = "AnswerOnCallbackQueryIntegrationTest message " + now();
             NewMessageBody body = new NewMessageBody(text, null, null).attachment(keyboardAttach);
 
             SendMessageResult result = botAPI.sendMessage(body).chatId(chat.getChatId()).execute();

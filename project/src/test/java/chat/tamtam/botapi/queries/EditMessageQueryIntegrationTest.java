@@ -41,12 +41,12 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        String uploadUrl = getUploadUrl();
+        String uploadUrl = getUploadUrl(UploadType.PHOTO);
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
         photoAR = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos()));
 
-        String uploadUrl2 = getUploadUrl();
+        String uploadUrl2 = getUploadUrl(UploadType.PHOTO);
         File file2 = new File(getClass().getClassLoader().getResource("test2.png").toURI());
         PhotoTokens photoTokens2 = uploadAPI.uploadImage(uploadUrl2, file2).execute();
         photoAR2 = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().photos(photoTokens2.getPhotos()));
@@ -198,14 +198,5 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             assertThat(lastMessage.getText(), is(text));
             compare(Collections.singletonList(contactAR), lastMessage.getAttachments());
         }
-    }
-
-    private String getUploadUrl() throws Exception {
-        String url = botAPI.getUploadUrl(UploadType.PHOTO).execute().getUrl();
-        if (url.startsWith("http")) {
-            return url;
-        }
-
-        return "http:" + url;
     }
 }

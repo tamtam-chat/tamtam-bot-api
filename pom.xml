@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <schema.version>0.1.5-SNAPSHOT</schema.version>
+        <schema.version>0.1.6-SNAPSHOT</schema.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -64,7 +64,7 @@
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-generator</artifactId>
-                        <version>0.0.9-SNAPSHOT</version>
+                        <version>0.0.10-SNAPSHOT</version>
                     </dependency>
                     <dependency>
                         <groupId>chat.tamtam</groupId>

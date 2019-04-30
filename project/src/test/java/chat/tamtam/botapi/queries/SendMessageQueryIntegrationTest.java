@@ -337,15 +337,6 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         assertThat(result.getMessage().getSender(), is(nullValue()));
     }
 
-    @NotNull
-    private AttachmentRequest getPhotoAttachmentRequest() throws Exception {
-        String uploadUrl = getUploadUrl(UploadType.PHOTO);
-        File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
-        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
-        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
-        return new PhotoAttachmentRequest(payload);
-    }
-
 
     private List<Chat> getChatsForSend() throws Exception {
         List<Chat> chats = getChats();
@@ -406,15 +397,6 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(5));
             }
         } while (true);
-    }
-
-    private String getUploadUrl(UploadType uploadType) throws Exception {
-        String url = botAPI.getUploadUrl(uploadType).execute().getUrl();
-        if (url.startsWith("http")) {
-            return url;
-        }
-
-        return "http:" + url;
     }
 
 }

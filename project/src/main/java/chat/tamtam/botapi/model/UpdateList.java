@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class UpdateList implements TamTamSerializable {
 
     private final List<Update> updates;
+    @Nullable
     private final Long marker;
 
     @JsonCreator

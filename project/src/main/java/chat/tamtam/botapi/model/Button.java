@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -52,6 +53,7 @@ public class Button implements TamTamSerializable {
         REQUEST_CONTACT
     ));
 
+    @Size(max = 128)
     private final String text;
 
     @JsonCreator

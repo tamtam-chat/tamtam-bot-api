@@ -35,8 +35,11 @@ public class MessageBody implements TamTamSerializable {
 
     private final String mid;
     private final Long seq;
+    @Nullable
     private final String text;
+    @Nullable
     private final List<Attachment> attachments;
+    @Nullable
     private String replyTo;
 
     @JsonCreator

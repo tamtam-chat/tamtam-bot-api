@@ -31,7 +31,9 @@ import org.jetbrains.annotations.Nullable;
 public class CallbackAnswer implements TamTamSerializable {
 
     private Long userId;
+    @Nullable
     private NewMessageBody message;
+    @Nullable
     private String notification;
 
     public CallbackAnswer userId(Long userId) {

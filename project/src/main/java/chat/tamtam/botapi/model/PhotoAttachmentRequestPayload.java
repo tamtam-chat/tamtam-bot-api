@@ -33,8 +33,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PhotoAttachmentRequestPayload implements TamTamSerializable {
 
+    @Nullable
     private String url;
+    @Nullable
     private String token;
+    @Nullable
     private Map<String, PhotoToken> photos;
 
     public PhotoAttachmentRequestPayload url(@Nullable String url) {
@@ -43,7 +46,7 @@ public class PhotoAttachmentRequestPayload implements TamTamSerializable {
     }
 
     /**
-    * If specified, given URL will be attached to message as image
+    * Any external image URL you want to attach
     * @return url
     **/
     @Nullable

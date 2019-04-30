@@ -29,6 +29,8 @@ import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.queries.AddMembersQuery;
 import chat.tamtam.botapi.queries.AnswerOnCallbackQuery;
+import chat.tamtam.botapi.model.BotInfo;
+import chat.tamtam.botapi.model.BotPatch;
 import chat.tamtam.botapi.model.CallbackAnswer;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
@@ -38,6 +40,7 @@ import chat.tamtam.botapi.model.ChatPatch;
 import chat.tamtam.botapi.queries.DeleteMessageQuery;
 import chat.tamtam.botapi.queries.EditChatQuery;
 import chat.tamtam.botapi.queries.EditMessageQuery;
+import chat.tamtam.botapi.queries.EditMyInfoQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
 import chat.tamtam.botapi.queries.GetMembersQuery;
@@ -64,7 +67,6 @@ import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.UserIdsList;
-import chat.tamtam.botapi.model.UserWithPhoto;
 
 public class TamTamBotAPI {
     final TamTamClient client;
@@ -177,6 +179,21 @@ public class TamTamBotAPI {
     }
 
     /**
+    * Edit current bot info
+    * Edits current bot info. Fill only the fields you want to update. All remaning fields will stay untouched.
+    * @param botPatch  (required)
+    * @return {@link BotInfo}
+    * @throws ClientException if fails to make API call
+    */
+    public EditMyInfoQuery editMyInfo(BotPatch botPatch) throws ClientException { 
+        if (botPatch == null) {
+            throw new RequiredParameterMissingException("Missing the required request body when calling editMyInfo");
+        }
+
+        return new EditMyInfoQuery(client, botPatch);
+    }
+
+    /**
     * Get chat
     * Returns info about chat.
     * @param chatId Requested chat identifier (required)
@@ -242,7 +259,7 @@ public class TamTamBotAPI {
     /**
     * Get current bot info
     * Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).
-    * @return {@link UserWithPhoto}
+    * @return {@link BotInfo}
     */
     public GetMyInfoQuery getMyInfo() { 
         return new GetMyInfoQuery(client);

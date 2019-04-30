@@ -31,7 +31,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ContactAttachmentPayload implements TamTamSerializable {
 
+    @Nullable
     private final String vcfInfo;
+    @Nullable
     private final User tamInfo;
 
     @JsonCreator

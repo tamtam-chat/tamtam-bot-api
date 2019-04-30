@@ -30,7 +30,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ChatPatch implements TamTamSerializable {
 
+    @Nullable
     private PhotoAttachmentRequestPayload icon;
+    @Nullable
     private String title;
 
     public ChatPatch icon(@Nullable PhotoAttachmentRequestPayload icon) {

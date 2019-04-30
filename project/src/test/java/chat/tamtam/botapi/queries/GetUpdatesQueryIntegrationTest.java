@@ -10,6 +10,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.xml.stream.util.StreamReaderDelegate;
@@ -52,11 +55,12 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         // consume all pending updates to make sure queue is empty before test
         new GetUpdatesQuery(client).timeout(5).execute();
 
-        Runnable getUpdates = () -> {
+        Function<Long, Long> getUpdates = (marker) -> {
             try {
                 UpdateList updateList = new GetUpdatesQuery(client)
                         .timeout(10)
                         .types(new HashSet<>(Arrays.asList(Update.MESSAGE_CREATED, Update.MESSAGE_REMOVED)))
+                        .marker(marker)
                         .execute();
 
                 for (Update update : updateList.getUpdates()) {
@@ -69,6 +73,8 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         }
                     });
                 }
+
+                return updateList.getMarker();
             } catch (APIException | ClientException e) {
                 throw new RuntimeException(e);
             }
@@ -106,8 +112,9 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
 
         AtomicBoolean consumerStopped = new AtomicBoolean();
         Thread consumer = new Thread(() -> {
+            Long marker = null;
             while (!consumerStopped.get()) {
-                getUpdates.run();
+                marker = getUpdates.apply(marker);
             }
         });
 
@@ -117,7 +124,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         sendFinished.await();
         consumerStopped.set(true);
         consumer.join();
-        getUpdates.run();
+        getUpdates.apply(null);
 
         assertThat(receivedMessages, is(sentMessages));
     }
