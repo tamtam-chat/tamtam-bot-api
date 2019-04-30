@@ -2,8 +2,10 @@ package chat.tamtam.botapi.queries;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
@@ -28,11 +30,13 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
     private String newDescription;
     private ArrayList<BotCommand> commands;
     private PhotoAttachmentRequestPayload photo;
+    private AtomicReference<BotInfo> originalMe = new AtomicReference<>();
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        originalMe.compareAndSet(null, me);
         newName = "TT Integration Test Bot " + now();
         newUsername = randomText(16);
         newDescription = randomText(64);
@@ -147,7 +151,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
         new EditMyInfoQuery(client, patch).execute();
     }
 
-    @Test
+    @Test(expected = APIException.class)
     public void shouldThrowExceptionWhenUsernameIsTooLong() throws Exception {
         BotPatch patch = new BotPatch().username(randomText(65));
         new EditMyInfoQuery(client, patch).execute();
@@ -163,10 +167,10 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
 
     private void rollback() throws Exception {
         BotPatch patch = new BotPatch()
-                .name(me.getName())
-                .description(me.getDescription())
-                .commands(me.getCommands())
-                .username(me.getUsername());
+                .name(originalMe.get().getName())
+                .description(originalMe.get().getDescription())
+                .commands(originalMe.get().getCommands())
+                .username(originalMe.get().getUsername());
 
         new EditMyInfoQuery(client, patch).execute();
     }
