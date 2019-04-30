@@ -37,6 +37,8 @@ public class Message implements TamTamSerializable {
     @Nullable
     private LinkedMessage link;
     private final MessageBody body;
+    @Nullable
+    private MessageStat stat;
 
     @JsonCreator
     public Message(@JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @JsonProperty("body") MessageBody body) { 
@@ -109,6 +111,25 @@ public class Message implements TamTamSerializable {
         return body;
     }
 
+    public Message stat(@Nullable MessageStat stat) {
+        this.setStat(stat);
+        return this;
+    }
+
+    /**
+    * Message staistics. Available only for channels in [GET:/messages](#operation/getMessages) context
+    * @return stat
+    **/
+    @Nullable
+    @JsonProperty("stat")
+    public MessageStat getStat() {
+        return stat;
+    }
+
+    public void setStat(@Nullable MessageStat stat) {
+        this.stat = stat;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -123,7 +144,8 @@ public class Message implements TamTamSerializable {
             Objects.equals(this.recipient, other.recipient) &&
             Objects.equals(this.timestamp, other.timestamp) &&
             Objects.equals(this.link, other.link) &&
-            Objects.equals(this.body, other.body);
+            Objects.equals(this.body, other.body) &&
+            Objects.equals(this.stat, other.stat);
     }
 
     @Override
@@ -134,6 +156,7 @@ public class Message implements TamTamSerializable {
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (body != null ? body.hashCode() : 0);
+        result = 31 * result + (stat != null ? stat.hashCode() : 0);
         return result;
     }
 
@@ -145,6 +168,7 @@ public class Message implements TamTamSerializable {
             + " timestamp='" + timestamp + '\''
             + " link='" + link + '\''
             + " body='" + body + '\''
+            + " stat='" + stat + '\''
             + '}';
     }
 }
