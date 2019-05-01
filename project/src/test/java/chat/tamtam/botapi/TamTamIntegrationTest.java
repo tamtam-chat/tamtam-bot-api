@@ -234,8 +234,8 @@ public abstract class TamTamIntegrationTest {
         return botAPI.getMessages().chatId(chat.getChatId()).count(1).execute().getMessages().get(0);
     }
 
-    protected static String randomText() {
-        return UUID.randomUUID().toString();
+    protected String randomText() {
+        return getClass().getSimpleName() + "\n" + UUID.randomUUID().toString();
     }
 
     protected static String randomText(int length) {
