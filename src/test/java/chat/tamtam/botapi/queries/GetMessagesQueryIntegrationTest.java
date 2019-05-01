@@ -1,5 +1,6 @@
 package chat.tamtam.botapi.queries;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,7 @@ import chat.tamtam.botapi.model.SendMessageResult;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -66,6 +68,49 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
 
         assertThat(messages.stream().map(m -> m.getBody().getText()).collect(Collectors.toSet()),
                 is(newMessages.stream().map(NewMessageBody::getText).collect(Collectors.toSet())));
+    }
+
+    @Test
+    public void shouldReturnMessageStat() throws Exception {
+        List<Chat> chats = getChats();
+        Chat chat = getByTitle(chats, "test channel #4");
+        new SendMessageQuery(client2, new NewMessageBody(randomText(), null, null)).chatId(chat.getChatId()).execute();
+
+        new GetMessagesQuery(client).chatId(chat.getChatId()).execute();
+        MessageList messageList = new GetMessagesQuery(client2).chatId(chat.getChatId()).execute();
+        assertThat(messageList.getMessages().get(0).getStat().getViews(), is(greaterThan(0)));
+    }
+
+    @Test
+    public void shouldGetAllMessagesInDialog() throws Exception {
+        List<Chat> chats = getChats();
+        Chat dialog = getByType(chats, ChatType.DIALOG);
+
+        List<String> posted = new ArrayList<>();
+        long start = now();
+        for (int i = 0; i < 30; i++) {
+            String text = randomText();
+            new SendMessageQuery(client, new NewMessageBody(text, null, null)).chatId(dialog.getChatId()).execute();
+            posted.add(text);
+        }
+
+        long from = now();
+        List<String> fetched = new ArrayList<>();
+        do {
+            MessageList messageList = new GetMessagesQuery(client).chatId(dialog.getChatId()).count(10).from(from).to(start).execute();
+            List<Message> messages = messageList.getMessages();
+            if (messages.isEmpty()) {
+                break;
+            }
+
+            from = messages.get(messages.size() - 1).getTimestamp() - 1;
+            for (Message message : messages) {
+                fetched.add(message.getBody().getText());
+            }
+        } while (from > start);
+
+        Collections.reverse(posted);
+        assertThat(fetched, is(posted));
     }
 
     @Test(expected = APIException.class)
