@@ -21,6 +21,7 @@ import chat.tamtam.botapi.model.SendMessageResult;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
@@ -79,6 +80,15 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
         new GetMessagesQuery(client).chatId(chat.getChatId()).execute();
         MessageList messageList = new GetMessagesQuery(client2).chatId(chat.getChatId()).execute();
         assertThat(messageList.getMessages().get(0).getStat().getViews(), is(greaterThan(0)));
+    }
+
+    @Test
+    public void shouldReturnNoStatInDialogs() throws Exception {
+        List<Chat> chats = getChats();
+        Chat chat = getByType(chats, ChatType.DIALOG);
+        new SendMessageQuery(client, new NewMessageBody(randomText(), null, null)).chatId(chat.getChatId()).execute();
+        MessageList messageList = new GetMessagesQuery(client).chatId(chat.getChatId()).execute();
+        assertThat(messageList.getMessages().get(0).getStat(), is(nullValue()));
     }
 
     @Test
