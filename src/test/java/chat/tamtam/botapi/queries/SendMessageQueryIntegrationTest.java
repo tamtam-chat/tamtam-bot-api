@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import chat.tamtam.botapi.model.*;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
@@ -29,13 +27,15 @@ import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
+import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.Message;
+import chat.tamtam.botapi.model.MessageLinkType;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
+import chat.tamtam.botapi.model.NewMessageLink;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
-import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.SendMessageResult;
@@ -80,6 +80,57 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 doSend(newMessage, c.getChatId());
             } catch (Exception e) {
                 exceptions++;
+            }
+        }
+
+        if (exceptions != list.size()) {
+            fail();
+        }
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenSendButtonsOnly() throws Exception {
+        AttachmentRequest keyboard = new InlineKeyboardAttachmentRequest(new InlineKeyboardAttachmentRequestPayload(
+                Collections.singletonList(Collections.singletonList(new CallbackButton("test", "ok")))
+        ));
+
+        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(keyboard), null);
+        List<Chat> chats = getChats();
+        Chat dialog = getByType(chats, ChatType.DIALOG);
+        Chat chat = getByType(chats, ChatType.CHAT);
+        Chat channel = getByType(chats, ChatType.CHANNEL);
+
+        int exceptions = 0;
+        List<Chat> list = Arrays.asList(dialog, chat, channel);
+        for (Chat c : list) {
+            try {
+                doSend(newMessage, c.getChatId());
+            } catch (Exception e) {
+                exceptions++;
+            }
+        }
+
+        if (exceptions != list.size()) {
+            fail();
+        }
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTextIsTooLong() throws Exception {
+        NewMessageBody newMessage = new NewMessageBody(randomText(4001), null, null);
+        List<Chat> chats = getChats();
+        Chat dialog = getByType(chats, ChatType.DIALOG);
+        Chat chat = getByTitle(chats, "test chat #1");
+        Chat channel = getByTitle(chats, "test channel #1");
+
+        int exceptions = 0;
+        List<Chat> list = Arrays.asList(dialog, chat, channel);
+        for (Chat c : list) {
+            try {
+                doSend(newMessage, c.getChatId());
+            } catch (Exception e) {
+                exceptions++;
+                LOG.error(e.getMessage(), e);
             }
         }
 
