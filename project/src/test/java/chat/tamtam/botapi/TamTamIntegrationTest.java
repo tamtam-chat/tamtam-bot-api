@@ -2,10 +2,12 @@ package chat.tamtam.botapi;
 
 import java.io.File;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.client.impl.JacksonSerializer;
 import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
 import chat.tamtam.botapi.exceptions.APIException;
+import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
@@ -45,6 +48,8 @@ import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageLinkType;
+import chat.tamtam.botapi.model.MessageList;
+import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.NewMessageLink;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
@@ -52,13 +57,18 @@ import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
+import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
+import chat.tamtam.botapi.queries.GetChatQuery;
+import chat.tamtam.botapi.queries.GetChatsQuery;
+import chat.tamtam.botapi.queries.GetMessagesQuery;
 import chat.tamtam.botapi.queries.GetMyInfoQuery;
+import chat.tamtam.botapi.queries.SendMessageQuery;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -97,12 +107,20 @@ public abstract class TamTamIntegrationTest {
     }
 
     protected List<Chat> getChats() throws APIException, ClientException {
-        ChatList chatList = botAPI.getChats().count(100).execute();
+        return getChats(client);
+    }
+
+    protected List<Chat> getChats(TamTamClient client) throws APIException, ClientException {
+        ChatList chatList = new GetChatsQuery(client).count(100).execute();
         return chatList.getChats();
     }
 
     protected Chat getChat(long chatId) throws APIException, ClientException {
-        return botAPI.getChat(chatId).execute();
+        return getChat(client, chatId);
+    }
+
+    protected Chat getChat(TamTamClient client, long chatId) throws APIException, ClientException {
+        return new GetChatQuery(client, chatId).execute();
     }
 
     protected List<Chat> getChatsCanSend() throws APIException, ClientException {
@@ -120,6 +138,59 @@ public abstract class TamTamIntegrationTest {
 
     protected static <T> T random(List<T> list) {
         return list.get(ThreadLocalRandom.current().nextInt(list.size()));
+    }
+
+    protected List<Message> send(NewMessageBody newMessage, List<Chat> toChats) throws Exception {
+        List<Message> sent = new ArrayList<>();
+        for (Chat c : toChats) {
+            SendMessageResult sendMessageResult = doSend(newMessage, c.getChatId());
+            sent.add(sendMessageResult.getMessage());
+        }
+
+        return sent;
+    }
+
+    protected SendMessageResult doSend(NewMessageBody newMessage, Long chatId) throws Exception {
+        return doSend(client, newMessage, chatId);
+    }
+
+    protected SendMessageResult doSend(TamTamClient client, NewMessageBody newMessage, Long chatId) throws Exception {
+        do {
+            try {
+                SendMessageResult sendMessageResult = new SendMessageQuery(client, newMessage).chatId(chatId).execute();
+                assertThat(sendMessageResult, is(notNullValue()));
+                MessageList messageList = new GetMessagesQuery(client).chatId(chatId).execute();
+                Message lastMessage = messageList.getMessages().get(0);
+                String text = newMessage.getText();
+                assertThat(lastMessage.getBody().getText(), is(text == null ? "" : text));
+                assertThat(lastMessage.getBody().getMid(), is(sendMessageResult.getMessage().getBody().getMid()));
+
+                List<AttachmentRequest> attachments = newMessage.getAttachments();
+                if (attachments != null) {
+                    for (int i = 0; i < attachments.size(); i++) {
+                        AttachmentRequest request = attachments.get(i);
+                        Attachment attachment = lastMessage.getBody().getAttachments().get(i);
+                        compare(request, attachment);
+                    }
+                }
+
+                NewMessageLink link = newMessage.getLink();
+                if (link != null) {
+                    LinkedMessage linkedMessage = lastMessage.getLink();
+                    assertThat(linkedMessage, is(notNullValue()));
+                    compare(linkedMessage, link);
+                }
+
+                Chat chat = getChat(client, chatId);
+                if (chat.getType() == ChatType.CHANNEL) {
+                    assertThat(lastMessage.getRecipient().getChatType(), is(ChatType.CHANNEL));
+                }
+                return sendMessageResult;
+            } catch (AttachmentNotReadyException e) {
+                // it is ok, try again
+                Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+            }
+        } while (true);
     }
 
     protected Chat getByType(List<Chat> chats, ChatType type) throws Exception {

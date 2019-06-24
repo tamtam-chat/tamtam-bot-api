@@ -84,7 +84,7 @@ public class TamTamService {
             new MediaAttachmentPayload(1L, "urlvideo"));
     public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(
             new MediaAttachmentPayload(1L, "urlaudio"));
-    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload(1L, "urlfile"));
+    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload(1L, "token", "name","urlfile"));
     public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
             new ContactAttachmentPayload("vcfinfo", null));
     public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text");

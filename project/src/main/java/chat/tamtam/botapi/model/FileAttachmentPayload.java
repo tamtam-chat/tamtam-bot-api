@@ -31,20 +31,42 @@ import java.util.Objects;
 public class FileAttachmentPayload extends AttachmentPayload implements TamTamSerializable {
 
     private final Long fileId;
+    private final String token;
+    private final String filename;
 
     @JsonCreator
-    public FileAttachmentPayload(@JsonProperty("fileId") Long fileId, @JsonProperty("url") String url) { 
+    public FileAttachmentPayload(@JsonProperty("fileId") Long fileId, @JsonProperty("token") String token, @JsonProperty("filename") String filename, @JsonProperty("url") String url) { 
         super(url);
         this.fileId = fileId;
+        this.token = token;
+        this.filename = filename;
     }
 
     /**
-    * Identifier of uploaded file
+    * Use &#x60;token&#x60; property if you want to use this attachment in other message
     * @return fileId
     **/
     @JsonProperty("fileId")
     public Long getFileId() {
         return fileId;
+    }
+
+    /**
+    * File unique identifier
+    * @return token
+    **/
+    @JsonProperty("token")
+    public String getToken() {
+        return token;
+    }
+
+    /**
+    * Uploaded file name
+    * @return filename
+    **/
+    @JsonProperty("filename")
+    public String getFilename() {
+        return filename;
     }
 
     @Override
@@ -58,6 +80,8 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
 
         FileAttachmentPayload other = (FileAttachmentPayload) o;
         return Objects.equals(this.fileId, other.fileId) &&
+            Objects.equals(this.token, other.token) &&
+            Objects.equals(this.filename, other.filename) &&
             super.equals(o);
     }
 
@@ -65,6 +89,8 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (fileId != null ? fileId.hashCode() : 0);
+        result = 31 * result + (token != null ? token.hashCode() : 0);
+        result = 31 * result + (filename != null ? filename.hashCode() : 0);
         return result;
     }
 
@@ -72,6 +98,8 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
     public String toString() {
         return "FileAttachmentPayload{"+ super.toString()
             + " fileId='" + fileId + '\''
+            + " token='" + token + '\''
+            + " filename='" + filename + '\''
             + '}';
     }
 }
