@@ -46,7 +46,7 @@ public class GetChatsQueryIntegrationTest extends TamTamIntegrationTest {
             assertThat(chat.getChatId(), is(notNullValue()));
             assertThat(chat.getType(), is(notNullValue()));
             assertThat(chat.getStatus(), is(notNullValue()));
-            assertThat(chat.getParticipantsCount(), is(greaterThan(0)));
+            assertThat(chat.getTitle(), chat.getParticipantsCount(), is(greaterThan(0)));
 
 //            if (chat.getType() != ChatType.DIALOG && chat.getTitle().contains("bot is admin")) {
 //                assertThat("Chat: " + chat, chat.getOwnerId(), is(notNullValue()));

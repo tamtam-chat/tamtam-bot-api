@@ -18,13 +18,13 @@ import static org.junit.Assert.assertThat;
 public class GetMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldGetMyInfo() throws Exception {
-        BotInfo botInfo = new GetMyInfoQuery(client).execute();
+        BotInfo botInfo = new GetMyInfoQuery(client2).execute();
         List<BotCommand> expectedCommands = Arrays.asList(
                 new BotCommand("cmd1").description("desc1"),
                 new BotCommand("cmd2")
         );
 
         assertThat(botInfo.getCommands(), is(expectedCommands));
-        assertThat(botInfo.getDescription(), is("test bot 1 description"));
+        assertThat(botInfo.getDescription(), is("test bot 2 description"));
     }
 }

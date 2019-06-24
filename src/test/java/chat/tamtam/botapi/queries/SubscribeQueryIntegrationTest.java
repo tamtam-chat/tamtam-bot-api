@@ -34,48 +34,54 @@ public class SubscribeQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void shouldSubscribeWebhook() throws Exception {
-        SubscriptionRequestBody body = new SubscriptionRequestBody(url);
-        SimpleQueryResult result = new SubscribeQuery(client, body).execute();
-        assertThat(result.isSuccess(), is(true));
+        try {
+            SubscriptionRequestBody body = new SubscriptionRequestBody(url);
+            SimpleQueryResult result = new SubscribeQuery(client, body).execute();
+            assertThat(result.isSuccess(), is(true));
 
-        GetSubscriptionsResult subscriptionsResult = new GetSubscriptionsQuery(client).execute();
-        List<Subscription> subscriptions = subscriptionsResult.getSubscriptions();
-        assertThat(subscriptions.get(0).getUrl(), is(url));
-
-        new UnsubscribeQuery(client, url).execute();
+            GetSubscriptionsResult subscriptionsResult = new GetSubscriptionsQuery(client).execute();
+            List<Subscription> subscriptions = subscriptionsResult.getSubscriptions();
+            assertThat(subscriptions.get(0).getUrl(), is(url));
+        } finally {
+            new UnsubscribeQuery(client, url).execute();
+        }
     }
 
     @Test
     public void shouldSubscribeWebhookWithFilter() throws Exception {
-        SubscriptionRequestBody body = new SubscriptionRequestBody(url);
-        Set<String> updateTypes = new HashSet<>(Arrays.asList(Update.MESSAGE_CREATED, Update.MESSAGE_CALLBACK));
-        body.setUpdateTypes(updateTypes);
+        try {
+            SubscriptionRequestBody body = new SubscriptionRequestBody(url);
+            Set<String> updateTypes = new HashSet<>(Arrays.asList(Update.MESSAGE_CREATED, Update.MESSAGE_CALLBACK));
+            body.setUpdateTypes(updateTypes);
 
-        SimpleQueryResult subscribeResult = new SubscribeQuery(client, body).execute();
-        assertThat(subscribeResult.isSuccess(), is(true));
+            SimpleQueryResult subscribeResult = new SubscribeQuery(client, body).execute();
+            assertThat(subscribeResult.isSuccess(), is(true));
 
-        GetSubscriptionsResult subscriptionsResult = new GetSubscriptionsQuery(client).execute();
-        List<Subscription> subscriptions = subscriptionsResult.getSubscriptions();
-        assertThat(subscriptions.get(0).getUrl(), is(url));
-        assertThat(subscriptions.get(0).getUpdateTypes(), is(updateTypes));
-
-        new UnsubscribeQuery(client, url).execute();
+            GetSubscriptionsResult subscriptionsResult = new GetSubscriptionsQuery(client).execute();
+            List<Subscription> subscriptions = subscriptionsResult.getSubscriptions();
+            assertThat(subscriptions.get(0).getUrl(), is(url));
+            assertThat(subscriptions.get(0).getUpdateTypes(), is(updateTypes));
+        } finally {
+            new UnsubscribeQuery(client, url).execute();
+        }
     }
 
     @Test
     public void shouldSubscribeWebhookWithVersion() throws Exception {
-        SubscriptionRequestBody body = new SubscriptionRequestBody(url);
-        body.setVersion(Version.get());
+        try {
+            SubscriptionRequestBody body = new SubscriptionRequestBody(url);
+            body.setVersion(Version.get());
 
-        SimpleQueryResult subscribeResult = new SubscribeQuery(client, body).execute();
-        assertThat(subscribeResult.isSuccess(), is(true));
+            SimpleQueryResult subscribeResult = new SubscribeQuery(client, body).execute();
+            assertThat(subscribeResult.isSuccess(), is(true));
 
-        GetSubscriptionsResult subscriptionsResult = new GetSubscriptionsQuery(client).execute();
-        List<Subscription> subscriptions = subscriptionsResult.getSubscriptions();
-        assertThat(subscriptions.get(0).getUrl(), is(url));
-        assertThat(subscriptions.get(0).getVersion(), is(Version.get()));
-
-        new UnsubscribeQuery(client, url).execute();
+            GetSubscriptionsResult subscriptionsResult = new GetSubscriptionsQuery(client).execute();
+            List<Subscription> subscriptions = subscriptionsResult.getSubscriptions();
+            assertThat(subscriptions.get(0).getUrl(), is(url));
+            assertThat(subscriptions.get(0).getVersion(), is(Version.get()));
+        } finally {
+            new UnsubscribeQuery(client, url).execute();
+        }
     }
 
     @Test(expected = APIException.class)

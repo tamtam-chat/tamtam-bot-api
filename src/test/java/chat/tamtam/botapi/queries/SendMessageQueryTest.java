@@ -73,7 +73,7 @@ public class SendMessageQueryTest extends QueryTest {
             new PhotoAttachmentRequestPayload().photos(Collections.singletonMap("photokey", new PhotoToken("token"))));
     private static final VideoAttachmentRequest VIDEO_ATTACHMENT_REQUEST = new VideoAttachmentRequest(new UploadedInfo(1L));
     private static final AudioAttachmentRequest AUDIO_ATTACHMENT_REQUEST = new AudioAttachmentRequest(new UploadedInfo(2L));
-    private static final FileAttachmentRequest FILE_ATTACHMENT_REQUEST = new FileAttachmentRequest(new UploadedFileInfo(3L));
+    private static final FileAttachmentRequest FILE_ATTACHMENT_REQUEST = new FileAttachmentRequest(new UploadedFileInfo(3L).token("token"));
     private static final StickerAttachmentRequest STICKER_ATTACHMENT_REQUEST = new StickerAttachmentRequest(new StickerAttachmentRequestPayload("stickercode"));
     private static final ContactAttachmentRequest CONTACT_ATTACHMENT_REQUEST = new ContactAttachmentRequest(new ContactAttachmentRequestPayload("name", null, "vcfInfo", null));
     private static final LocationAttachmentRequest LOCATION_ATTACHMENT_REQUEST = new LocationAttachmentRequest(

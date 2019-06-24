@@ -31,6 +31,7 @@ import java.util.Objects;
 public class UploadedInfo implements TamTamSerializable {
 
     private final Long id;
+    private String token;
 
     @JsonCreator
     public UploadedInfo(@JsonProperty("id") Long id) { 
@@ -45,6 +46,24 @@ public class UploadedInfo implements TamTamSerializable {
         return id;
     }
 
+    public UploadedInfo token(String token) {
+        this.setToken(token);
+        return this;
+    }
+
+    /**
+    * Token to attach this file to message
+    * @return token
+    **/
+    @JsonProperty("token")
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -55,13 +74,15 @@ public class UploadedInfo implements TamTamSerializable {
         }
 
         UploadedInfo other = (UploadedInfo) o;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.id, other.id) &&
+            Objects.equals(this.token, other.token);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (token != null ? token.hashCode() : 0);
         return result;
     }
 
@@ -69,6 +90,7 @@ public class UploadedInfo implements TamTamSerializable {
     public String toString() {
         return "UploadedInfo{"
             + " id='" + id + '\''
+            + " token='" + token + '\''
             + '}';
     }
 }

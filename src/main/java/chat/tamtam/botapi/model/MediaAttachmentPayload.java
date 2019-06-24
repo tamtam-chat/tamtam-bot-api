@@ -31,6 +31,7 @@ import java.util.Objects;
 public class MediaAttachmentPayload extends AttachmentPayload implements TamTamSerializable {
 
     private final Long id;
+    private String token;
 
     @JsonCreator
     public MediaAttachmentPayload(@JsonProperty("id") Long id, @JsonProperty("url") String url) { 
@@ -47,6 +48,24 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
         return id;
     }
 
+    public MediaAttachmentPayload token(String token) {
+        this.setToken(token);
+        return this;
+    }
+
+    /**
+    * Token to attach this file to message
+    * @return token
+    **/
+    @JsonProperty("token")
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -58,6 +77,7 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
 
         MediaAttachmentPayload other = (MediaAttachmentPayload) o;
         return Objects.equals(this.id, other.id) &&
+            Objects.equals(this.token, other.token) &&
             super.equals(o);
     }
 
@@ -65,6 +85,7 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (token != null ? token.hashCode() : 0);
         return result;
     }
 
@@ -72,6 +93,7 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
     public String toString() {
         return "MediaAttachmentPayload{"+ super.toString()
             + " id='" + id + '\''
+            + " token='" + token + '\''
             + '}';
     }
 }

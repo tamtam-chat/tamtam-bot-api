@@ -31,6 +31,7 @@ import java.util.Objects;
 public class UploadedFileInfo implements TamTamSerializable {
 
     private final Long fileId;
+    private String token;
 
     @JsonCreator
     public UploadedFileInfo(@JsonProperty("fileId") Long fileId) { 
@@ -46,6 +47,24 @@ public class UploadedFileInfo implements TamTamSerializable {
         return fileId;
     }
 
+    public UploadedFileInfo token(String token) {
+        this.setToken(token);
+        return this;
+    }
+
+    /**
+    * Token to attach this file to message
+    * @return token
+    **/
+    @JsonProperty("token")
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -56,13 +75,15 @@ public class UploadedFileInfo implements TamTamSerializable {
         }
 
         UploadedFileInfo other = (UploadedFileInfo) o;
-        return Objects.equals(this.fileId, other.fileId);
+        return Objects.equals(this.fileId, other.fileId) &&
+            Objects.equals(this.token, other.token);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (fileId != null ? fileId.hashCode() : 0);
+        result = 31 * result + (token != null ? token.hashCode() : 0);
         return result;
     }
 
@@ -70,6 +91,7 @@ public class UploadedFileInfo implements TamTamSerializable {
     public String toString() {
         return "UploadedFileInfo{"
             + " fileId='" + fileId + '\''
+            + " token='" + token + '\''
             + '}';
     }
 }
