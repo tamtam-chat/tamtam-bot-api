@@ -40,7 +40,7 @@ public class GetSubscriptionsResult implements TamTamSerializable {
     }
 
     /**
-    * Current suscriptions
+    * Current subscriptions
     * @return subscriptions
     **/
     @JsonProperty("subscriptions")

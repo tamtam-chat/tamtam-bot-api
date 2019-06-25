@@ -31,11 +31,15 @@ import java.util.Objects;
 public class FileAttachment extends Attachment implements TamTamSerializable {
 
     private final FileAttachmentPayload payload;
+    private final String filename;
+    private final Long size;
 
     @JsonCreator
-    public FileAttachment(@JsonProperty("payload") FileAttachmentPayload payload) { 
+    public FileAttachment(@JsonProperty("payload") FileAttachmentPayload payload, @JsonProperty("filename") String filename, @JsonProperty("size") Long size) { 
         super();
         this.payload = payload;
+        this.filename = filename;
+        this.size = size;
     }
 
     @Override
@@ -49,6 +53,24 @@ public class FileAttachment extends Attachment implements TamTamSerializable {
     @JsonProperty("payload")
     public FileAttachmentPayload getPayload() {
         return payload;
+    }
+
+    /**
+    * Uploaded file name
+    * @return filename
+    **/
+    @JsonProperty("filename")
+    public String getFilename() {
+        return filename;
+    }
+
+    /**
+    * File size in bytes
+    * @return size
+    **/
+    @JsonProperty("size")
+    public Long getSize() {
+        return size;
     }
 
     @JsonProperty("type")
@@ -67,13 +89,17 @@ public class FileAttachment extends Attachment implements TamTamSerializable {
         }
 
         FileAttachment other = (FileAttachment) o;
-        return Objects.equals(this.payload, other.payload);
+        return Objects.equals(this.payload, other.payload) &&
+            Objects.equals(this.filename, other.filename) &&
+            Objects.equals(this.size, other.size);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        result = 31 * result + (filename != null ? filename.hashCode() : 0);
+        result = 31 * result + (size != null ? size.hashCode() : 0);
         return result;
     }
 
@@ -81,6 +107,8 @@ public class FileAttachment extends Attachment implements TamTamSerializable {
     public String toString() {
         return "FileAttachment{"+ super.toString()
             + " payload='" + payload + '\''
+            + " filename='" + filename + '\''
+            + " size='" + size + '\''
             + '}';
     }
 }
