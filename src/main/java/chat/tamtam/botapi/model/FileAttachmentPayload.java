@@ -32,14 +32,12 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
 
     private final Long fileId;
     private final String token;
-    private final String filename;
 
     @JsonCreator
-    public FileAttachmentPayload(@JsonProperty("fileId") Long fileId, @JsonProperty("token") String token, @JsonProperty("filename") String filename, @JsonProperty("url") String url) { 
+    public FileAttachmentPayload(@JsonProperty("fileId") Long fileId, @JsonProperty("token") String token, @JsonProperty("url") String url) { 
         super(url);
         this.fileId = fileId;
         this.token = token;
-        this.filename = filename;
     }
 
     /**
@@ -60,15 +58,6 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
         return token;
     }
 
-    /**
-    * Uploaded file name
-    * @return filename
-    **/
-    @JsonProperty("filename")
-    public String getFilename() {
-        return filename;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -81,7 +70,6 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
         FileAttachmentPayload other = (FileAttachmentPayload) o;
         return Objects.equals(this.fileId, other.fileId) &&
             Objects.equals(this.token, other.token) &&
-            Objects.equals(this.filename, other.filename) &&
             super.equals(o);
     }
 
@@ -90,7 +78,6 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
         int result = super.hashCode();
         result = 31 * result + (fileId != null ? fileId.hashCode() : 0);
         result = 31 * result + (token != null ? token.hashCode() : 0);
-        result = 31 * result + (filename != null ? filename.hashCode() : 0);
         return result;
     }
 
@@ -99,7 +86,6 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
         return "FileAttachmentPayload{"+ super.toString()
             + " fileId='" + fileId + '\''
             + " token='" + token + '\''
-            + " filename='" + filename + '\''
             + '}';
     }
 }

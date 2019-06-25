@@ -145,7 +145,7 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
     }
 
     @Test(expected = APIException.class)
-    public void shouldNOTSendFileByIdIfNotOwner() throws Exception {
+    public void shouldNOTSendVideoByIdIfNotOwner() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.VIDEO).execute();
         File file = new File(getClass().getClassLoader().getResource("test.mp4").toURI());
         UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadEndpoint.getUrl(), file).execute();
