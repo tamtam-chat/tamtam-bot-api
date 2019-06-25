@@ -56,6 +56,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         new GetUpdatesQuery(client).timeout(5).execute();
 
         Function<Long, Long> getUpdates = (marker) -> {
+            LOG.info("Marker: " + marker);
             try {
                 UpdateList updateList = new GetUpdatesQuery(client)
                         .timeout(10)
@@ -69,6 +70,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         public void visit(MessageCreatedUpdate model) {
                             Message message = model.getMessage();
                             MessageBody body = message.getBody();
+                            LOG.info("Got update: " + body.getMid() + ", text: " + body.getText());
                             receivedMessages.add(body.getMid());
                         }
                     });
@@ -93,14 +95,15 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         continue;
                     }
 
-                    NewMessageBody newMessage = new NewMessageBody("text " + ID_COUNTER.incrementAndGet(), null, null);
+                    String text = "text " + ID_COUNTER.incrementAndGet();
+                    NewMessageBody newMessage = new NewMessageBody(text, null, null);
                     SendMessageResult sendMessageResult = new SendMessageQuery(client2, newMessage)
                             .chatId(commonChatId)
                             .execute();
 
                     String messageId = sendMessageResult.getMessage().getBody().getMid();
                     sentMessages.add(messageId);
-                    LOG.info("Message {} sent", messageId);
+                    LOG.info("Message {} sent: {}", messageId, text);
                     Thread.sleep(TimeUnit.SECONDS.toMillis(1));
                 }
             } catch (Exception e) {
@@ -116,15 +119,18 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
             while (!consumerStopped.get()) {
                 marker = getUpdates.apply(marker);
             }
+
+            getUpdates.apply(marker);
         });
 
 
         producer.start();
+        Thread.sleep(TimeUnit.SECONDS.toMillis(5));
         consumer.start();
+
         sendFinished.await();
         consumerStopped.set(true);
         consumer.join();
-        getUpdates.apply(null);
 
         assertThat(receivedMessages, is(sentMessages));
     }
