@@ -53,7 +53,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         CountDownLatch sendFinished = new CountDownLatch(1);
 
         // consume all pending updates to make sure queue is empty before test
-        new GetUpdatesQuery(client).timeout(5).execute();
+        flush();
 
         Function<Long, Long> getUpdates = (marker) -> {
             LOG.info("Marker: " + marker);
@@ -133,5 +133,10 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         consumer.join();
 
         assertThat(receivedMessages, is(sentMessages));
+    }
+
+    private void flush() throws APIException, ClientException {
+        Long marker = new GetUpdatesQuery(client).timeout(2).execute().getMarker();
+        new GetUpdatesQuery(client).marker(marker).timeout(2).execute();
     }
 }
