@@ -31,14 +31,14 @@ import java.util.Objects;
 public class UserRemovedFromChatUpdate extends Update implements TamTamSerializable {
 
     private final Long chatId;
-    private final Long userId;
+    private final User user;
     private final Long adminId;
 
     @JsonCreator
-    public UserRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user_id") Long userId, @JsonProperty("admin_id") Long adminId, @JsonProperty("timestamp") Long timestamp) { 
+    public UserRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("admin_id") Long adminId, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
-        this.userId = userId;
+        this.user = user;
         this.adminId = adminId;
     }
 
@@ -58,11 +58,11 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
 
     /**
     * User removed from chat
-    * @return userId
+    * @return user
     **/
-    @JsonProperty("user_id")
-    public Long getUserId() {
-        return userId;
+    @JsonProperty("user")
+    public User getUser() {
+        return user;
     }
 
     /**
@@ -91,7 +91,7 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
 
         UserRemovedFromChatUpdate other = (UserRemovedFromChatUpdate) o;
         return Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.userId, other.userId) &&
+            Objects.equals(this.user, other.user) &&
             Objects.equals(this.adminId, other.adminId) &&
             super.equals(o);
     }
@@ -100,7 +100,7 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (adminId != null ? adminId.hashCode() : 0);
         return result;
     }
@@ -109,7 +109,7 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
     public String toString() {
         return "UserRemovedFromChatUpdate{"+ super.toString()
             + " chatId='" + chatId + '\''
-            + " userId='" + userId + '\''
+            + " user='" + user + '\''
             + " adminId='" + adminId + '\''
             + '}';
     }

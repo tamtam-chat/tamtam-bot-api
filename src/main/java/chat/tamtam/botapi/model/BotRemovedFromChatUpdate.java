@@ -31,13 +31,13 @@ import java.util.Objects;
 public class BotRemovedFromChatUpdate extends Update implements TamTamSerializable {
 
     private final Long chatId;
-    private final Long userId;
+    private final User user;
 
     @JsonCreator
-    public BotRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user_id") Long userId, @JsonProperty("timestamp") Long timestamp) { 
+    public BotRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
-        this.userId = userId;
+        this.user = user;
     }
 
     @Override
@@ -55,12 +55,12 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
     }
 
     /**
-    * User id who removed bot from chat
-    * @return userId
+    * User who removed bot from chat
+    * @return user
     **/
-    @JsonProperty("user_id")
-    public Long getUserId() {
-        return userId;
+    @JsonProperty("user")
+    public User getUser() {
+        return user;
     }
 
     @JsonProperty("update_type")
@@ -80,7 +80,7 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
 
         BotRemovedFromChatUpdate other = (BotRemovedFromChatUpdate) o;
         return Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.userId, other.userId) &&
+            Objects.equals(this.user, other.user) &&
             super.equals(o);
     }
 
@@ -88,7 +88,7 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 
@@ -96,7 +96,7 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
     public String toString() {
         return "BotRemovedFromChatUpdate{"+ super.toString()
             + " chatId='" + chatId + '\''
-            + " userId='" + userId + '\''
+            + " user='" + user + '\''
             + '}';
     }
 }
