@@ -31,14 +31,14 @@ import java.util.Objects;
 public class UserAddedToChatUpdate extends Update implements TamTamSerializable {
 
     private final Long chatId;
-    private final Long userId;
+    private final User user;
     private final Long inviterId;
 
     @JsonCreator
-    public UserAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user_id") Long userId, @JsonProperty("inviter_id") Long inviterId, @JsonProperty("timestamp") Long timestamp) { 
+    public UserAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("inviter_id") Long inviterId, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
-        this.userId = userId;
+        this.user = user;
         this.inviterId = inviterId;
     }
 
@@ -58,11 +58,11 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
 
     /**
     * User added to chat
-    * @return userId
+    * @return user
     **/
-    @JsonProperty("user_id")
-    public Long getUserId() {
-        return userId;
+    @JsonProperty("user")
+    public User getUser() {
+        return user;
     }
 
     /**
@@ -91,7 +91,7 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
 
         UserAddedToChatUpdate other = (UserAddedToChatUpdate) o;
         return Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.userId, other.userId) &&
+            Objects.equals(this.user, other.user) &&
             Objects.equals(this.inviterId, other.inviterId) &&
             super.equals(o);
     }
@@ -100,7 +100,7 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (inviterId != null ? inviterId.hashCode() : 0);
         return result;
     }
@@ -109,7 +109,7 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
     public String toString() {
         return "UserAddedToChatUpdate{"+ super.toString()
             + " chatId='" + chatId + '\''
-            + " userId='" + userId + '\''
+            + " user='" + user + '\''
             + " inviterId='" + inviterId + '\''
             + '}';
     }

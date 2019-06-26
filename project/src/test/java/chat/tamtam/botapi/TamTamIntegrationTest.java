@@ -83,12 +83,14 @@ public abstract class TamTamIntegrationTest {
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
+    private static final String TOKEN_3 = getToken("TAMTAM_BOTAPI_TOKEN_3");
 
     private final OkHttpTransportClient transportClient = new OkHttpTransportClient();
     private final JacksonSerializer serializer = new JacksonSerializer();
 
     protected TamTamClient client = new TamTamClient(TOKEN_1, transportClient, serializer);
     protected TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
+    protected TamTamClient client3 = new TamTamClient(TOKEN_3, transportClient, serializer);
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 

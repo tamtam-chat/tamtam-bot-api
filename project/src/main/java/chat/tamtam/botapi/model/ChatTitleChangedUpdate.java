@@ -31,14 +31,14 @@ import java.util.Objects;
 public class ChatTitleChangedUpdate extends Update implements TamTamSerializable {
 
     private final Long chatId;
-    private final Long userId;
+    private final User user;
     private final String title;
 
     @JsonCreator
-    public ChatTitleChangedUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user_id") Long userId, @JsonProperty("title") String title, @JsonProperty("timestamp") Long timestamp) { 
+    public ChatTitleChangedUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("title") String title, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
-        this.userId = userId;
+        this.user = user;
         this.title = title;
     }
 
@@ -58,11 +58,11 @@ public class ChatTitleChangedUpdate extends Update implements TamTamSerializable
 
     /**
     * User who changed title
-    * @return userId
+    * @return user
     **/
-    @JsonProperty("user_id")
-    public Long getUserId() {
-        return userId;
+    @JsonProperty("user")
+    public User getUser() {
+        return user;
     }
 
     /**
@@ -91,7 +91,7 @@ public class ChatTitleChangedUpdate extends Update implements TamTamSerializable
 
         ChatTitleChangedUpdate other = (ChatTitleChangedUpdate) o;
         return Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.userId, other.userId) &&
+            Objects.equals(this.user, other.user) &&
             Objects.equals(this.title, other.title) &&
             super.equals(o);
     }
@@ -100,7 +100,7 @@ public class ChatTitleChangedUpdate extends Update implements TamTamSerializable
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         return result;
     }
@@ -109,7 +109,7 @@ public class ChatTitleChangedUpdate extends Update implements TamTamSerializable
     public String toString() {
         return "ChatTitleChangedUpdate{"+ super.toString()
             + " chatId='" + chatId + '\''
-            + " userId='" + userId + '\''
+            + " user='" + user + '\''
             + " title='" + title + '\''
             + '}';
     }

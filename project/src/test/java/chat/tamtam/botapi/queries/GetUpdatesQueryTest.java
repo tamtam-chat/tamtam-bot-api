@@ -39,6 +39,7 @@ import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.MessageRemovedUpdate;
 import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.UpdateList;
+import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
@@ -53,7 +54,7 @@ public class GetUpdatesQueryTest extends QueryTest {
     public void getUpdatesTest() throws Exception {
         Chat randomChat = random(chats.values());
         long now = System.currentTimeMillis();
-
+        User user = new User(ID_COUNTER.incrementAndGet(), "user name", "username");
         MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(randomChat.getChatId(), null), now);
         MessageEditedUpdate messageEditedUpdate = new MessageEditedUpdate(message(randomChat.getChatId(), null), now);
         MessageRemovedUpdate messageRemovedUpdate = new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(),
@@ -62,21 +63,20 @@ public class GetUpdatesQueryTest extends QueryTest {
         MessageCallbackUpdate messageCallbackUpdate = new MessageCallbackUpdate(
                 callback, message(randomChat.getChatId(), null), now);
         UserAddedToChatUpdate userAddedToChatUpdate = new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
-                ID_COUNTER.incrementAndGet(),
+                user,
                 ID_COUNTER.incrementAndGet(), System.currentTimeMillis());
         UserRemovedFromChatUpdate userRemovedFromChatUpdate = new UserRemovedFromChatUpdate(
-                ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(),
+                ID_COUNTER.incrementAndGet(), user,
                 ID_COUNTER.incrementAndGet(), System.currentTimeMillis());
         BotAddedToChatUpdate botAddedToChatUpdate = new BotAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
-                ID_COUNTER.incrementAndGet(),
+                user,
                 System.currentTimeMillis());
         BotRemovedFromChatUpdate botRemovedFromChatUpdate = new BotRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(),
-                ID_COUNTER.incrementAndGet(),
-                System.currentTimeMillis());
+                user, System.currentTimeMillis());
         BotStartedUpdate botStartedUpdate = new BotStartedUpdate(ID_COUNTER.incrementAndGet(),
-                ID_COUNTER.incrementAndGet(), System.currentTimeMillis());
+                user, System.currentTimeMillis());
         ChatTitleChangedUpdate chatTitleChangedUpdate = new ChatTitleChangedUpdate(ID_COUNTER.incrementAndGet(),
-                ID_COUNTER.incrementAndGet(), "title", System.currentTimeMillis());
+                user, "title", System.currentTimeMillis());
 
         List<Update> updates = Arrays.asList(
                 messageCreatedUpdate,
