@@ -41,7 +41,7 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
     }
 
     /**
-    * Use &#x60;token&#x60; property if you want to use this attachment in other message
+    * Uploaded file unique identifier
     * @return fileId
     **/
     @JsonProperty("fileId")
@@ -50,7 +50,7 @@ public class FileAttachmentPayload extends AttachmentPayload implements TamTamSe
     }
 
     /**
-    * File unique identifier
+    * Use &#x60;token&#x60; along with &#x60;fileId&#x60; in case when you are trying to reuse the same attachment in other message
     * @return token
     **/
     @JsonProperty("token")

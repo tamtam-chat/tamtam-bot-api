@@ -276,7 +276,7 @@ public class TamTamBotAPI {
 
     /**
     * Get updates
-    * You can use this method for getting updates in case your bot is not subscribed to WebHook. The method based on long polling.
+    * You can use this method for getting updates in case your bot is not subscribed to WebHook. The method is based on long polling.  Every update has its own sequence number. &#x60;marker&#x60; property in response points to the next upcoming update.  All previous updates are considered as *committed* after passing &#x60;marker&#x60; parameter. If &#x60;marker&#x60; parameter is **not passed**, your bot will get all updates happened before the last commitment.
     * @return {@link UpdateList}
     */
     public GetUpdatesQuery getUpdates() { 
@@ -370,7 +370,7 @@ public class TamTamBotAPI {
 
     /**
     * Subscribe
-    * Subscribes bot to receive updates via WebHook. After calling this method, the bot will receive notifications about new events in chat rooms at the specified URL
+    * Subscribes bot to receive updates via WebHook. After calling this method, the bot will receive notifications about new events in chat rooms at the specified URL.  Your server **must** be listening on one of the following ports: **80, 8080, 443, 8443, 16384-32383**
     * @param subscriptionRequestBody  (required)
     * @return {@link SimpleQueryResult}
     * @throws ClientException if fails to make API call

@@ -40,7 +40,7 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
     }
 
     /**
-    * Identifier of media attachment
+    * Unique identifier of media attachment
     * @return id
     **/
     @JsonProperty("id")
@@ -54,7 +54,7 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
     }
 
     /**
-    * Token to attach this file to message
+    * Use &#x60;token&#x60; along with &#x60;id&#x60; in case when you are trying to reuse the same attachment in other message
     * @return token
     **/
     @JsonProperty("token")

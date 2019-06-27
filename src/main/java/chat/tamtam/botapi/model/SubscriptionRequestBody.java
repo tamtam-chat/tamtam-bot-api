@@ -43,7 +43,7 @@ public class SubscriptionRequestBody implements TamTamSerializable {
     }
 
     /**
-    * URL of HTTP(S)-endpoint of your bot
+    * URL of HTTP(S)-endpoint of your bot. Must starts with http(s)://
     * @return url
     **/
     @JsonProperty("url")

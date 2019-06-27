@@ -52,7 +52,7 @@ public class Subscription implements TamTamSerializable {
     }
 
     /**
-    * WebHook URL
+    * Webhook URL
     * @return url
     **/
     @JsonProperty("url")
