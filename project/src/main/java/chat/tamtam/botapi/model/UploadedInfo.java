@@ -39,6 +39,7 @@ public class UploadedInfo implements TamTamSerializable {
     }
 
     /**
+    * Uploaded file unique identifier
     * @return id
     **/
     @JsonProperty("id")
@@ -52,7 +53,7 @@ public class UploadedInfo implements TamTamSerializable {
     }
 
     /**
-    * Token to attach this file to message
+    * Token is **required** in case you are trying to attach a media uploaded by another user
     * @return token
     **/
     @JsonProperty("token")
