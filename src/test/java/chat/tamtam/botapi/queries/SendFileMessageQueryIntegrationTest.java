@@ -47,24 +47,6 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
-    public void shouldSendOwnFileReusingId() throws Exception {
-        UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
-        File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
-        AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
-        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
-        List<Message> createdMessages = send(newMessage);
-        for (Message createdMessage : createdMessages) {
-            FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
-            FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getToken()));
-
-            doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach), null),
-                    createdMessage.getRecipient().getChatId());
-        }
-    }
-
-    @Test
     public void shouldSendAnyAccessibleFileUsingToken() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
         File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
