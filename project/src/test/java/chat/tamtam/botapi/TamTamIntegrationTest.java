@@ -58,10 +58,9 @@ import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.SendMessageResult;
+import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.UploadType;
-import chat.tamtam.botapi.model.User;
-import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
 import chat.tamtam.botapi.queries.GetChatQuery;
@@ -252,7 +251,7 @@ public abstract class TamTamIntegrationTest {
 
             @Override
             public void visit(StickerAttachmentRequest model) {
-
+                assertThat(model.getPayload().getCode(), is(((StickerAttachment) attachment).getPayload().getCode()));
             }
 
             @Override

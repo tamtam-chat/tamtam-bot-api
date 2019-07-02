@@ -32,12 +32,18 @@ import javax.validation.constraints.NotNull;
 public class StickerAttachment extends Attachment implements TamTamSerializable {
 
     @NotNull
-    private final AttachmentPayload payload;
+    private final StickerAttachmentPayload payload;
+    @NotNull
+    private final Integer width;
+    @NotNull
+    private final Integer height;
 
     @JsonCreator
-    public StickerAttachment(@JsonProperty("payload") AttachmentPayload payload) { 
+    public StickerAttachment(@JsonProperty("payload") StickerAttachmentPayload payload, @JsonProperty("width") Integer width, @JsonProperty("height") Integer height) { 
         super();
         this.payload = payload;
+        this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -49,8 +55,26 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
     * @return payload
     **/
     @JsonProperty("payload")
-    public AttachmentPayload getPayload() {
+    public StickerAttachmentPayload getPayload() {
         return payload;
+    }
+
+    /**
+    * Sticker wigth
+    * @return width
+    **/
+    @JsonProperty("width")
+    public Integer getWidth() {
+        return width;
+    }
+
+    /**
+    * Sticker height
+    * @return height
+    **/
+    @JsonProperty("height")
+    public Integer getHeight() {
+        return height;
     }
 
     @JsonProperty("type")
@@ -69,13 +93,17 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
         }
 
         StickerAttachment other = (StickerAttachment) o;
-        return Objects.equals(this.payload, other.payload);
+        return Objects.equals(this.payload, other.payload) &&
+            Objects.equals(this.width, other.width) &&
+            Objects.equals(this.height, other.height);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        result = 31 * result + (width != null ? width.hashCode() : 0);
+        result = 31 * result + (height != null ? height.hashCode() : 0);
         return result;
     }
 
@@ -83,6 +111,8 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
     public String toString() {
         return "StickerAttachment{"+ super.toString()
             + " payload='" + payload + '\''
+            + " width='" + width + '\''
+            + " height='" + height + '\''
             + '}';
     }
 }

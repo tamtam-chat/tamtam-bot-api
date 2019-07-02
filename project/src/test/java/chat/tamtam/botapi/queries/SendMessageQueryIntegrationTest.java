@@ -31,6 +31,9 @@ import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.SendMessageResult;
+import chat.tamtam.botapi.model.StickerAttachment;
+import chat.tamtam.botapi.model.StickerAttachmentRequest;
+import chat.tamtam.botapi.model.StickerAttachmentRequestPayload;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.UserWithPhoto;
@@ -320,6 +323,18 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         assertThat(result.getMessage().getSender(), is(nullValue()));
     }
 
+    @Test
+    public void shouldSendSticker() throws Exception {
+        StickerAttachmentRequestPayload payload = new StickerAttachmentRequestPayload("a309b");
+        AttachmentRequest sticker = new StickerAttachmentRequest(payload);
+        List<Message> messages = send(new NewMessageBody(null, Collections.singletonList(sticker), null));
+        for (Message message : messages) {
+            StickerAttachment attachment = (StickerAttachment) message.getBody().getAttachments().get(0);
+            StickerAttachmentRequestPayload newPayload = new StickerAttachmentRequestPayload(attachment.getPayload().getCode());
+            StickerAttachmentRequest stickerAttachmentRequest = new StickerAttachmentRequest(newPayload);
+            send(new NewMessageBody(null, Collections.singletonList(stickerAttachmentRequest), null));
+        }
+    }
 
     private List<Chat> getChatsForSend() throws Exception {
         List<Chat> chats = getChats();
