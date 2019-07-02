@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BotCommand implements TamTamSerializable {
 
+    @NotNull
     @Size(min = 1, max = 64)
     private final String name;
     @Nullable

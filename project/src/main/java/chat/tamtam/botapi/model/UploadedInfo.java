@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -30,39 +31,21 @@ import java.util.Objects;
  */
 public class UploadedInfo implements TamTamSerializable {
 
-    private final Long id;
-    private String token;
+    @NotNull
+    private final String token;
 
     @JsonCreator
-    public UploadedInfo(@JsonProperty("id") Long id) { 
-        this.id = id;
+    public UploadedInfo(@JsonProperty("token") String token) { 
+        this.token = token;
     }
 
     /**
-    * Uploaded file unique identifier
-    * @return id
-    **/
-    @JsonProperty("id")
-    public Long getId() {
-        return id;
-    }
-
-    public UploadedInfo token(String token) {
-        this.setToken(token);
-        return this;
-    }
-
-    /**
-    * Token is **required** in case you are trying to attach a media uploaded by another user
+    * Token is unique uploaded media identfier
     * @return token
     **/
     @JsonProperty("token")
     public String getToken() {
         return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     @Override
@@ -75,14 +58,12 @@ public class UploadedInfo implements TamTamSerializable {
         }
 
         UploadedInfo other = (UploadedInfo) o;
-        return Objects.equals(this.id, other.id) &&
-            Objects.equals(this.token, other.token);
+        return Objects.equals(this.token, other.token);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (token != null ? token.hashCode() : 0);
         return result;
     }
@@ -90,7 +71,6 @@ public class UploadedInfo implements TamTamSerializable {
     @Override
     public String toString() {
         return "UploadedInfo{"
-            + " id='" + id + '\''
             + " token='" + token + '\''
             + '}';
     }

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class UpdateList implements TamTamSerializable {
 
+    @NotNull
     private final List<Update> updates;
     @Nullable
     private final Long marker;

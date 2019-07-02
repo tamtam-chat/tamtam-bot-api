@@ -1,52 +1,23 @@
 package chat.tamtam.botapi.queries;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
-import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.exceptions.APIException;
-import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
-import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
-import chat.tamtam.botapi.model.AudioAttachment;
-import chat.tamtam.botapi.model.AudioAttachmentRequest;
-import chat.tamtam.botapi.model.Button;
-import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
-import chat.tamtam.botapi.model.ContactAttachmentRequest;
-import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
-import chat.tamtam.botapi.model.FileAttachment;
-import chat.tamtam.botapi.model.FileAttachmentRequest;
-import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
-import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
-import chat.tamtam.botapi.model.Intent;
-import chat.tamtam.botapi.model.LinkButton;
-import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.Message;
-import chat.tamtam.botapi.model.MessageLinkType;
-import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
-import chat.tamtam.botapi.model.NewMessageLink;
-import chat.tamtam.botapi.model.PhotoAttachment;
-import chat.tamtam.botapi.model.PhotoAttachmentRequest;
-import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
-import chat.tamtam.botapi.model.RequestContactButton;
-import chat.tamtam.botapi.model.RequestGeoLocationButton;
-import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
-import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
-import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
 
@@ -54,7 +25,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -83,7 +53,7 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
         for (Message createdMessage : createdMessages) {
             VideoAttachment attachment = (VideoAttachment) createdMessage.getBody().getAttachments().get(0);
             AttachmentRequest copyAttach = new VideoAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getId()));
+                    new UploadedInfo(attachment.getPayload().getToken()));
 
             doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach), null),
                     createdMessage.getRecipient().getChatId());
@@ -109,7 +79,7 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
         for (Message createdMessage : createdMessages) {
             VideoAttachment attachment = (VideoAttachment) createdMessage.getBody().getAttachments().get(0);
             VideoAttachmentRequest copyAttach = new VideoAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getId()).token(attachment.getPayload().getToken()));
+                    new UploadedInfo(attachment.getPayload().getToken()));
 
             List<Chat> client2Chats = getChats(client2);
             for (Chat c : Arrays.asList(/*getByType(client2Chats, ChatType.DIALOG),*/
@@ -136,7 +106,7 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
         for (Message createdMessage : createdMessages) {
             VideoAttachment attachment = (VideoAttachment) createdMessage.getBody().getAttachments().get(0);
             VideoAttachmentRequest copyAttach = new VideoAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getId()).token(attachment.getPayload().getToken()));
+                    new UploadedInfo(attachment.getPayload().getToken()));
 
             List<Chat> client2Chats = getChats(client2);
             doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
@@ -154,7 +124,7 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
         Chat chat = getByTitle(getChats(), "test chat #5"); // no bot 2 in this chat
         doSend(newMessage, chat.getChatId());
 
-        VideoAttachmentRequest copyAttach = new VideoAttachmentRequest(new UploadedInfo(uploadedInfo.getId()));
+        VideoAttachmentRequest copyAttach = new VideoAttachmentRequest(new UploadedInfo(uploadedInfo.getToken()));
         List<Chat> client2Chats = getChats(client2);
         doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
                 getByTitle(client2Chats, "test chat #7").getChatId());

@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -30,6 +31,7 @@ import java.util.Objects;
  */
 public class StickerAttachmentRequest extends AttachmentRequest implements TamTamSerializable {
 
+    @NotNull
     private final StickerAttachmentRequestPayload payload;
 
     @JsonCreator

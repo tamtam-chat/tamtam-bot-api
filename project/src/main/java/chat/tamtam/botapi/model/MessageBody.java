@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +34,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MessageBody implements TamTamSerializable {
 
+    @NotNull
     private final String mid;
+    @NotNull
     private final Long seq;
     @Nullable
     private final String text;
@@ -94,7 +97,7 @@ public class MessageBody implements TamTamSerializable {
     }
 
     /**
-    * In case this message is repled to, it is the unique identifier of the replied message
+    * In case this message is reply to another, it is the unique identifier of the replied message
     * @return replyTo
     **/
     @Nullable

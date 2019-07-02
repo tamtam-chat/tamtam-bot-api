@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -32,6 +33,7 @@ import java.util.Objects;
  */
 public class Keyboard implements TamTamSerializable {
 
+    @NotNull
     private final List<List<Button>> buttons;
 
     @JsonCreator

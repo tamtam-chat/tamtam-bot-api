@@ -37,11 +37,9 @@ import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachment;
 import chat.tamtam.botapi.model.ContactAttachmentPayload;
 import chat.tamtam.botapi.model.FileAttachment;
-import chat.tamtam.botapi.model.FileAttachmentPayload;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.model.Image;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
-import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.Keyboard;
 import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.LinkedMessage;
@@ -64,7 +62,6 @@ import chat.tamtam.botapi.model.SubscriptionRequestBody;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.User;
-import chat.tamtam.botapi.model.UserWithPhoto;
 import chat.tamtam.botapi.model.VideoAttachment;
 import spark.Request;
 import spark.Response;
@@ -81,10 +78,10 @@ public class TamTamService {
             new PhotoAttachmentPayload(ID_COUNTER.incrementAndGet(), "token", "url"));
     public static final String CHAT_ICON_URL = "iconurl";
     public static final VideoAttachment VIDEO_ATTACHMENT = new VideoAttachment(
-            new MediaAttachmentPayload(1L, "urlvideo"));
+            new MediaAttachmentPayload("token", "urlvideo"));
     public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(
-            new MediaAttachmentPayload(1L, "urlaudio"));
-    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload(1L, "token", "urlfile"), "name", 100L);
+            new MediaAttachmentPayload("token", "urlaudio"));
+    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new MediaAttachmentPayload("token",  "urlfile"), "name", 100L);
     public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
             new ContactAttachmentPayload("vcfinfo", null));
     public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text");

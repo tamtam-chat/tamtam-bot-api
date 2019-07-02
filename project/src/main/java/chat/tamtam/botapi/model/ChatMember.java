@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -34,9 +35,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ChatMember extends UserWithPhoto implements TamTamSerializable {
 
+    @NotNull
     private final Long lastAccessTime;
+    @NotNull
     private final Boolean isOwner;
+    @NotNull
     private final Boolean isAdmin;
+    @NotNull
     private final Long joinTime;
     @Nullable
     private final Set<ChatAdminPermission> permissions;

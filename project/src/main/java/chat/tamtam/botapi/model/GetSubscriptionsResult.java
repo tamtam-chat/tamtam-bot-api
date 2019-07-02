@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -32,6 +33,7 @@ import java.util.Objects;
  */
 public class GetSubscriptionsResult implements TamTamSerializable {
 
+    @NotNull
     private final List<Subscription> subscriptions;
 
     @JsonCreator
@@ -40,7 +42,7 @@ public class GetSubscriptionsResult implements TamTamSerializable {
     }
 
     /**
-    * Current subscriptions
+    * Current suscriptions
     * @return subscriptions
     **/
     @JsonProperty("subscriptions")
