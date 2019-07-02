@@ -57,6 +57,7 @@ import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.ShareAttachment;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.StickerAttachment;
+import chat.tamtam.botapi.model.StickerAttachmentPayload;
 import chat.tamtam.botapi.model.Subscription;
 import chat.tamtam.botapi.model.SubscriptionRequestBody;
 import chat.tamtam.botapi.model.UploadEndpoint;
@@ -96,8 +97,8 @@ public class TamTamService {
                     Arrays.asList(REQUEST_CONTACT_BUTTON, REQUEST_GEO_LOCATION_BUTTON),
                     Arrays.asList(LINK_BUTTON)
             )));
-    public static final StickerAttachment STICKER_ATTACHMENT = new StickerAttachment(new AttachmentPayload(
-            "stickerurl"));
+    public static final StickerAttachment STICKER_ATTACHMENT = new StickerAttachment(new StickerAttachmentPayload("code",
+            "stickerurl"), 128, 128);
     public static final ShareAttachment SHARE_ATTACHMENT = new ShareAttachment(new AttachmentPayload("shareurl"));
     public static final LocationAttachment LOCATION_ATTACHMENT = new LocationAttachment(
             ThreadLocalRandom.current().nextDouble(), ThreadLocalRandom.current().nextDouble());
