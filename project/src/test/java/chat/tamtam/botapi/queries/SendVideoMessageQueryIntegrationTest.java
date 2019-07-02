@@ -43,24 +43,6 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
     }
 
     @Test
-    public void shouldSendOwnVideoById() throws Exception {
-        String uploadUrl = getUploadUrl(UploadType.VIDEO);
-        File file = new File(getClass().getClassLoader().getResource("test.mp4").toURI());
-        UploadedInfo uploadedInfo = uploadAPI.uploadAV(uploadUrl, file).execute();
-        AttachmentRequest attach = new VideoAttachmentRequest(uploadedInfo);
-        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(attach), null);
-        List<Message> createdMessages = send(newMessage, getChatsForSend());
-        for (Message createdMessage : createdMessages) {
-            VideoAttachment attachment = (VideoAttachment) createdMessage.getBody().getAttachments().get(0);
-            AttachmentRequest copyAttach = new VideoAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getToken()));
-
-            doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach), null),
-                    createdMessage.getRecipient().getChatId());
-        }
-    }
-
-    @Test
     public void shouldSendAnyAccessibleVideoUsingToken() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.VIDEO).execute();
         File videoFile = new File(getClass().getClassLoader().getResource("test.mp4").toURI());
