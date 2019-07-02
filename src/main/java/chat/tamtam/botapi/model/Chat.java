@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -34,19 +35,25 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Chat implements TamTamSerializable {
 
+    @NotNull
     private final Long chatId;
+    @NotNull
     private final ChatType type;
+    @NotNull
     private final ChatStatus status;
     @Nullable
     private final String title;
     @Nullable
     private final Image icon;
+    @NotNull
     private final Long lastEventTime;
+    @NotNull
     private final Integer participantsCount;
     @Nullable
     private Long ownerId;
     @Nullable
     private Map<String, Long> participants;
+    @NotNull
     private final Boolean isPublic;
     @Nullable
     private String link;

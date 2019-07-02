@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -31,6 +32,7 @@ import javax.validation.constraints.Size;
  */
 public class LinkButton extends Button implements TamTamSerializable {
 
+    @NotNull
     @Size(max = 256)
     private final String url;
 

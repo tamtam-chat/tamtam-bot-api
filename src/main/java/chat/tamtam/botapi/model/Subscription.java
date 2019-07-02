@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +36,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Subscription implements TamTamSerializable {
 
+    @NotNull
     private final String url;
+    @NotNull
     private final Long time;
     @Nullable
     private final Set<String> updateTypes;

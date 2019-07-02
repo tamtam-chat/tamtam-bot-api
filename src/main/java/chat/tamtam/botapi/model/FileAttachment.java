@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -30,12 +31,15 @@ import java.util.Objects;
  */
 public class FileAttachment extends Attachment implements TamTamSerializable {
 
-    private final FileAttachmentPayload payload;
+    @NotNull
+    private final MediaAttachmentPayload payload;
+    @NotNull
     private final String filename;
+    @NotNull
     private final Long size;
 
     @JsonCreator
-    public FileAttachment(@JsonProperty("payload") FileAttachmentPayload payload, @JsonProperty("filename") String filename, @JsonProperty("size") Long size) { 
+    public FileAttachment(@JsonProperty("payload") MediaAttachmentPayload payload, @JsonProperty("filename") String filename, @JsonProperty("size") Long size) { 
         super();
         this.payload = payload;
         this.filename = filename;
@@ -51,7 +55,7 @@ public class FileAttachment extends Attachment implements TamTamSerializable {
     * @return payload
     **/
     @JsonProperty("payload")
-    public FileAttachmentPayload getPayload() {
+    public MediaAttachmentPayload getPayload() {
         return payload;
     }
 

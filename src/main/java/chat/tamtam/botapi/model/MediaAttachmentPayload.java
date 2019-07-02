@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -30,40 +31,22 @@ import java.util.Objects;
  */
 public class MediaAttachmentPayload extends AttachmentPayload implements TamTamSerializable {
 
-    private final Long id;
-    private String token;
+    @NotNull
+    private final String token;
 
     @JsonCreator
-    public MediaAttachmentPayload(@JsonProperty("id") Long id, @JsonProperty("url") String url) { 
+    public MediaAttachmentPayload(@JsonProperty("token") String token, @JsonProperty("url") String url) { 
         super(url);
-        this.id = id;
+        this.token = token;
     }
 
     /**
-    * Unique identifier of media attachment
-    * @return id
-    **/
-    @JsonProperty("id")
-    public Long getId() {
-        return id;
-    }
-
-    public MediaAttachmentPayload token(String token) {
-        this.setToken(token);
-        return this;
-    }
-
-    /**
-    * Use &#x60;token&#x60; along with &#x60;id&#x60; in case when you are trying to reuse the same attachment in other message
+    * Use &#x60;token&#x60; in case when you are trying to reuse the same attachment in other message
     * @return token
     **/
     @JsonProperty("token")
     public String getToken() {
         return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     @Override
@@ -76,15 +59,13 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
         }
 
         MediaAttachmentPayload other = (MediaAttachmentPayload) o;
-        return Objects.equals(this.id, other.id) &&
-            Objects.equals(this.token, other.token) &&
+        return Objects.equals(this.token, other.token) &&
             super.equals(o);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (token != null ? token.hashCode() : 0);
         return result;
     }
@@ -92,7 +73,6 @@ public class MediaAttachmentPayload extends AttachmentPayload implements TamTamS
     @Override
     public String toString() {
         return "MediaAttachmentPayload{"+ super.toString()
-            + " id='" + id + '\''
             + " token='" + token + '\''
             + '}';
     }

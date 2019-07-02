@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -30,7 +31,9 @@ import java.util.Objects;
  */
 public class NewMessageLink implements TamTamSerializable {
 
+    @NotNull
     private final MessageLinkType type;
+    @NotNull
     private final String mid;
 
     @JsonCreator

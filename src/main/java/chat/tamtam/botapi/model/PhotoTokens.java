@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -33,6 +34,7 @@ import java.util.Objects;
  */
 public class PhotoTokens implements TamTamSerializable {
 
+    @NotNull
     private final Map<String, PhotoToken> photos;
 
     @JsonCreator

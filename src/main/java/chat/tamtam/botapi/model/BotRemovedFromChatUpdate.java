@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -30,7 +31,9 @@ import java.util.Objects;
  */
 public class BotRemovedFromChatUpdate extends Update implements TamTamSerializable {
 
+    @NotNull
     private final Long chatId;
+    @NotNull
     private final User user;
 
     @JsonCreator

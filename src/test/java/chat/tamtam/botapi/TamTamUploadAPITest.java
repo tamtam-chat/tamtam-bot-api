@@ -22,7 +22,6 @@ import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.PhotoToken;
 import chat.tamtam.botapi.model.PhotoTokens;
-import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.queries.QueryTest;
 import chat.tamtam.botapi.queries.upload.TamTamUploadAVQuery;
@@ -33,7 +32,6 @@ import spark.Response;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static spark.Spark.halt;
 import static spark.Spark.post;
@@ -70,7 +68,7 @@ public class TamTamUploadAPITest extends QueryTest {
             LOG.info("Uploaded {} bytes", bytes);
         }
 
-        return new UploadedFileInfo(1L).token("token");
+        return new UploadedInfo("token");
     }
 
     private static Object serverUploadImage(Request request, Response response) throws Exception {
@@ -102,23 +100,23 @@ public class TamTamUploadAPITest extends QueryTest {
             LOG.info("Uploaded {} bytes", bytes);
         }
 
-        return new UploadedInfo(1L);
+        return new UploadedInfo("token");
     }
 
     @Test
     public void uploadFile() throws APIException, ClientException {
         String fileName = "test.txt";
         InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
-        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(FILE_UPLOAD_URL, fileName,
+        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(FILE_UPLOAD_URL, fileName,
                 is).execute();
-        assertThat(uploadedFileInfo.getFileId(), is(notNullValue()));
+        assertThat(uploadedFileInfo.getToken(), is(notNullValue()));
     }
 
     @Test
     public void uploadFile1() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(FILE_UPLOAD_URL, file).execute();
-        assertThat(uploadedFileInfo.getFileId(), is(notNullValue()));
+        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(FILE_UPLOAD_URL, file).execute();
+        assertThat(uploadedFileInfo.getToken(), is(notNullValue()));
     }
 
     @Test
@@ -141,14 +139,14 @@ public class TamTamUploadAPITest extends QueryTest {
         String fileName = "test.mp4";
         InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
         UploadedInfo uploadedFileInfo = uploadAPI.uploadAV(AV_UPLOAD_URL, fileName, is).execute();
-        assertThat(uploadedFileInfo.getId(), is(greaterThan(0L)));
+        assertThat(uploadedFileInfo.getToken(), is(notNullValue()));
     }
 
     @Test
     public void uploadAV1() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("test.mp4").toURI());
         UploadedInfo uploadedFileInfo = uploadAPI.uploadAV(AV_UPLOAD_URL, file).execute();
-        assertThat(uploadedFileInfo.getId(), is(greaterThan(0L)));
+        assertThat(uploadedFileInfo.getToken(), is(notNullValue()));
     }
 
     @Test(expected = ClientException.class)

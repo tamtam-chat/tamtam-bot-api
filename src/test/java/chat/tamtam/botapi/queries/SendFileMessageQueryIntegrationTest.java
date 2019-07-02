@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
-import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
@@ -20,7 +19,7 @@ import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
-import chat.tamtam.botapi.model.UploadedFileInfo;
+import chat.tamtam.botapi.model.UploadedInfo;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -35,7 +34,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
         String fileName = "test.txt";
         File file = new File(getClass().getClassLoader().getResource(fileName).toURI());
-        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
+        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
         AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
         List<Message> messages = send(newMessage);
@@ -51,15 +50,14 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldSendOwnFileReusingId() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
         File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
+        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
         AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
         List<Message> createdMessages = send(newMessage);
         for (Message createdMessage : createdMessages) {
             FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
             FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                    new UploadedFileInfo(attachment.getPayload().getFileId()).token(
-                            attachment.getPayload().getToken()));
+                    new UploadedInfo(attachment.getPayload().getToken()));
 
             doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach), null),
                     createdMessage.getRecipient().getChatId());
@@ -70,7 +68,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldSendAnyAccessibleFileUsingToken() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
         File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
+        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
         AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
         List<Chat> chats = getChats();
@@ -85,8 +83,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Message createdMessage : createdMessages) {
             FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
             FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                    new UploadedFileInfo(attachment.getPayload().getFileId()).token(
-                            attachment.getPayload().getToken()));
+                    new UploadedInfo(attachment.getPayload().getToken()));
 
             List<Chat> client2Chats = getChats(client2);
             for (Chat c : Arrays.asList(/*getByType(client2Chats, ChatType.DIALOG),*/
@@ -102,7 +99,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldNOTSendFileIfItIsNotAccessible() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
         File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
+        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
         AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
         List<Chat> chats = getChats();
@@ -113,8 +110,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Message createdMessage : createdMessages) {
             FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
             FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                    new UploadedFileInfo(attachment.getPayload().getFileId()).token(
-                            attachment.getPayload().getToken()));
+                    new UploadedInfo(attachment.getPayload().getToken()));
 
             List<Chat> client2Chats = getChats(client2);
             doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
@@ -126,14 +122,13 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldNOTSendFileByIdIfNotOwner() throws Exception {
         UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
         File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedFileInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
+        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
         AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
         Chat chat = getByTitle(getChats(), "test chat #5"); // no bot 2 in this chat
         doSend(newMessage, chat.getChatId());
 
-        FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                new UploadedFileInfo(uploadedFileInfo.getFileId()));
+        FileAttachmentRequest copyAttach = new FileAttachmentRequest(new UploadedInfo(uploadedFileInfo.getToken()));
         List<Chat> client2Chats = getChats(client2);
         doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
                 getByTitle(client2Chats, "test chat #7").getChatId());

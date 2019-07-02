@@ -25,17 +25,17 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import chat.tamtam.botapi.client.TamTamClient;
-import chat.tamtam.botapi.model.UploadedFileInfo;
+import chat.tamtam.botapi.model.UploadedInfo;
 
 /**
  * @author alexandrchuprin
  */
-public class TamTamUploadFileQuery extends TamTamUploadQuery<UploadedFileInfo> {
+public class TamTamUploadFileQuery extends TamTamUploadQuery<UploadedInfo> {
     public TamTamUploadFileQuery(TamTamClient tamTamClient, String url, File file) throws FileNotFoundException {
-        super(tamTamClient, UploadedFileInfo.class, url, file);
+        super(tamTamClient, UploadedInfo.class, url, file);
     }
 
     public TamTamUploadFileQuery(TamTamClient tamTamClient, String url, String fileName, InputStream input) {
-        super(tamTamClient, UploadedFileInfo.class, url, fileName, input);
+        super(tamTamClient, UploadedInfo.class, url, fileName, input);
     }
 }

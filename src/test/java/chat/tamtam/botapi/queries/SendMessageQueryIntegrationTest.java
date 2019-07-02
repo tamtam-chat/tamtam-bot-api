@@ -1,20 +1,13 @@
 package chat.tamtam.botapi.queries;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
-import chat.tamtam.botapi.client.TamTamClient;
-import chat.tamtam.botapi.exceptions.APIException;
-import chat.tamtam.botapi.exceptions.AttachmentNotReadyException;
-import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
@@ -24,16 +17,12 @@ import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
 import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
-import chat.tamtam.botapi.model.FileAttachment;
-import chat.tamtam.botapi.model.FileAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
-import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageLinkType;
-import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.NewMessageLink;
 import chat.tamtam.botapi.model.PhotoAttachment;
@@ -42,13 +31,9 @@ import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.SendMessageResult;
-import chat.tamtam.botapi.model.UploadEndpoint;
 import chat.tamtam.botapi.model.UploadType;
-import chat.tamtam.botapi.model.UploadedFileInfo;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.UserWithPhoto;
-import chat.tamtam.botapi.model.VideoAttachment;
-import chat.tamtam.botapi.model.VideoAttachmentRequest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -234,7 +219,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Message createdMessage : createdMessages) {
             AudioAttachment attachment = (AudioAttachment) createdMessage.getBody().getAttachments().get(0);
             AudioAttachmentRequest copyAttach = new AudioAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getId()));
+                    new UploadedInfo(attachment.getPayload().getToken()));
 
             doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach), null),
                     createdMessage.getRecipient().getChatId());

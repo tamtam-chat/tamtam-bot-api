@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -70,6 +71,7 @@ public class Update implements TamTamSerializable {
         CHAT_TITLE_CHANGED
     ));
 
+    @NotNull
     private final Long timestamp;
 
     @JsonCreator

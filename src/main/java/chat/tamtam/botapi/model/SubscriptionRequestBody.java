@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -33,6 +34,7 @@ import java.util.Set;
  */
 public class SubscriptionRequestBody implements TamTamSerializable {
 
+    @NotNull
     private final String url;
     private Set<String> updateTypes;
     private String version;
