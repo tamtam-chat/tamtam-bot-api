@@ -1,3 +1,5 @@
+on:
+  tags: true
 language: java
 dist: trusty
 jdk:
