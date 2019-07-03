@@ -65,7 +65,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Message createdMessage : createdMessages) {
             FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
             FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getToken()));
+                    new UploadedInfo().token(attachment.getPayload().getToken()));
 
             List<Chat> client2Chats = getChats(client2);
             for (Chat c : Arrays.asList(/*getByType(client2Chats, ChatType.DIALOG),*/
@@ -92,7 +92,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Message createdMessage : createdMessages) {
             FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
             FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getToken()));
+                    new UploadedInfo().token(attachment.getPayload().getToken()));
 
             List<Chat> client2Chats = getChats(client2);
             doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
@@ -110,7 +110,7 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
         Chat chat = getByTitle(getChats(), "test chat #5"); // no bot 2 in this chat
         doSend(newMessage, chat.getChatId());
 
-        FileAttachmentRequest copyAttach = new FileAttachmentRequest(new UploadedInfo(uploadedFileInfo.getToken()));
+        FileAttachmentRequest copyAttach = new FileAttachmentRequest(new UploadedInfo().token(uploadedFileInfo.getToken()));
         List<Chat> client2Chats = getChats(client2);
         doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
                 getByTitle(client2Chats, "test chat #7").getChatId());

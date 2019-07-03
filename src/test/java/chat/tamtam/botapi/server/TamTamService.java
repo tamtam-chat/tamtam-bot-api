@@ -37,6 +37,7 @@ import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachment;
 import chat.tamtam.botapi.model.ContactAttachmentPayload;
 import chat.tamtam.botapi.model.FileAttachment;
+import chat.tamtam.botapi.model.FileAttachmentPayload;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.model.Image;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
@@ -82,7 +83,7 @@ public class TamTamService {
             new MediaAttachmentPayload("token", "urlvideo"));
     public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(
             new MediaAttachmentPayload("token", "urlaudio"));
-    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new MediaAttachmentPayload("token",  "urlfile"), "name", 100L);
+    public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload("token",  "urlfile"), "name", 100L);
     public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
             new ContactAttachmentPayload("vcfinfo", null));
     public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text");

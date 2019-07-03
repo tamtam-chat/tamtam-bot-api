@@ -222,7 +222,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Message createdMessage : createdMessages) {
             AudioAttachment attachment = (AudioAttachment) createdMessage.getBody().getAttachments().get(0);
             AudioAttachmentRequest copyAttach = new AudioAttachmentRequest(
-                    new UploadedInfo(attachment.getPayload().getToken()));
+                    new UploadedInfo().token(attachment.getPayload().getToken()));
 
             doSend(new NewMessageBody("resend with attach", Collections.singletonList(copyAttach), null),
                     createdMessage.getRecipient().getChatId());

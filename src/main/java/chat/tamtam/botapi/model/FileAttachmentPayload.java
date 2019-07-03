@@ -20,33 +20,33 @@
 
 package chat.tamtam.botapi.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 
 /**
- * This is information you will recieve as soon as audio/video is uploaded
+ * FileAttachmentPayload
  */
-public class UploadedInfo implements TamTamSerializable {
+public class FileAttachmentPayload extends AttachmentPayload implements TamTamSerializable {
 
-    private String token;
+    @NotNull
+    private final String token;
 
-    public UploadedInfo token(String token) {
-        this.setToken(token);
-        return this;
+    @JsonCreator
+    public FileAttachmentPayload(@JsonProperty("token") String token, @JsonProperty("url") String url) { 
+        super(url);
+        this.token = token;
     }
 
     /**
-    * Token is unique uploaded media identfier
+    * Use &#x60;token&#x60; in case when you are trying to reuse the same attachment in other message
     * @return token
     **/
     @JsonProperty("token")
     public String getToken() {
         return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     @Override
@@ -58,20 +58,21 @@ public class UploadedInfo implements TamTamSerializable {
           return false;
         }
 
-        UploadedInfo other = (UploadedInfo) o;
-        return Objects.equals(this.token, other.token);
+        FileAttachmentPayload other = (FileAttachmentPayload) o;
+        return Objects.equals(this.token, other.token) &&
+            super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        int result = 1;
+        int result = super.hashCode();
         result = 31 * result + (token != null ? token.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "UploadedInfo{"
+        return "FileAttachmentPayload{"+ super.toString()
             + " token='" + token + '\''
             + '}';
     }

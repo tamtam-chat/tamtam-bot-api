@@ -68,7 +68,7 @@ public class TamTamUploadAPITest extends QueryTest {
             LOG.info("Uploaded {} bytes", bytes);
         }
 
-        return new UploadedInfo("token");
+        return new UploadedInfo().token("token");
     }
 
     private static Object serverUploadImage(Request request, Response response) throws Exception {
@@ -100,7 +100,7 @@ public class TamTamUploadAPITest extends QueryTest {
             LOG.info("Uploaded {} bytes", bytes);
         }
 
-        return new UploadedInfo("token");
+        return new UploadedInfo().token("token");
     }
 
     @Test
