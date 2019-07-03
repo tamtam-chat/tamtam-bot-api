@@ -32,14 +32,14 @@ import javax.validation.constraints.NotNull;
 public class FileAttachment extends Attachment implements TamTamSerializable {
 
     @NotNull
-    private final MediaAttachmentPayload payload;
+    private final FileAttachmentPayload payload;
     @NotNull
     private final String filename;
     @NotNull
     private final Long size;
 
     @JsonCreator
-    public FileAttachment(@JsonProperty("payload") MediaAttachmentPayload payload, @JsonProperty("filename") String filename, @JsonProperty("size") Long size) { 
+    public FileAttachment(@JsonProperty("payload") FileAttachmentPayload payload, @JsonProperty("filename") String filename, @JsonProperty("size") Long size) { 
         super();
         this.payload = payload;
         this.filename = filename;
@@ -55,7 +55,7 @@ public class FileAttachment extends Attachment implements TamTamSerializable {
     * @return payload
     **/
     @JsonProperty("payload")
-    public MediaAttachmentPayload getPayload() {
+    public FileAttachmentPayload getPayload() {
         return payload;
     }
 
