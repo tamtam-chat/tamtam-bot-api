@@ -336,6 +336,15 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         }
     }
 
+    @Test
+    public void shouldSendWithSpecialCharacter() throws Exception {
+        String text = randomText(3999) + "<";
+        NewMessageBody newMessage = new NewMessageBody(text, null, null);
+        Chat dialog = getByType(getChats(), ChatType.DIALOG);
+        SendMessageResult result = doSend(newMessage, dialog.getChatId());
+        assertThat(result.getMessage().getBody().getText(), is(text));
+    }
+
     private List<Chat> getChatsForSend() throws Exception {
         List<Chat> chats = getChats();
         Chat dialog = getByType(chats, ChatType.DIALOG);
