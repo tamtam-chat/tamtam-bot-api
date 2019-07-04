@@ -28,7 +28,7 @@ import javax.validation.constraints.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * New message recepient. Could be user or chat
+ * New message recipient. Could be user or chat
  */
 public class Recipient implements TamTamSerializable {
 
