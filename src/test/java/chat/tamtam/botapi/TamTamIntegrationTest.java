@@ -71,6 +71,7 @@ import chat.tamtam.botapi.queries.SendMessageQuery;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -251,7 +252,7 @@ public abstract class TamTamIntegrationTest {
 
             @Override
             public void visit(StickerAttachmentRequest model) {
-                assertThat(model.getPayload().getCode(), is(((StickerAttachment) attachment).getPayload().getCode()));
+                compare(model, (StickerAttachment) attachment);
             }
 
             @Override
@@ -264,6 +265,13 @@ public abstract class TamTamIntegrationTest {
 
             }
         });
+    }
+
+    private static void compare(StickerAttachmentRequest model, StickerAttachment attachment) {
+        assertThat(model.getPayload().getCode(), is(attachment.getPayload().getCode()));
+        assertThat(attachment.getPayload().getUrl(), is(notNullValue()));
+        assertThat(attachment.getWidth(), is(greaterThan(0)));
+        assertThat(attachment.getHeight(), is(greaterThan(0)));
     }
 
     protected static void compare(LinkedMessage linkedMessage, NewMessageLink link) {

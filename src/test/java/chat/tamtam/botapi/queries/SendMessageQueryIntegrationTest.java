@@ -23,6 +23,7 @@ import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageLinkType;
+import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.NewMessageLink;
 import chat.tamtam.botapi.model.PhotoAttachment;
@@ -325,15 +326,12 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void shouldSendSticker() throws Exception {
-        StickerAttachmentRequestPayload payload = new StickerAttachmentRequestPayload("a309b");
-        AttachmentRequest sticker = new StickerAttachmentRequest(payload);
-        List<Message> messages = send(new NewMessageBody(null, Collections.singletonList(sticker), null));
-        for (Message message : messages) {
-            StickerAttachment attachment = (StickerAttachment) message.getBody().getAttachments().get(0);
-            StickerAttachmentRequestPayload newPayload = new StickerAttachmentRequestPayload(attachment.getPayload().getCode());
-            StickerAttachmentRequest stickerAttachmentRequest = new StickerAttachmentRequest(newPayload);
-            send(new NewMessageBody(null, Collections.singletonList(stickerAttachmentRequest), null));
-        }
+        Chat chat = getByTitle(getChats(client), "SendMessageQueryIntegrationTest#shouldSendSticker");
+        MessageList messageList = new GetMessagesQuery(client).chatId(chat.getChatId()).count(1).execute();
+        Message message = messageList.getMessages().get(0);
+        StickerAttachment stickerAttach = (StickerAttachment) message.getBody().getAttachments().get(0);
+        AttachmentRequest stickerAR = new StickerAttachmentRequest(new StickerAttachmentRequestPayload(stickerAttach.getPayload().getCode()));
+        send(new NewMessageBody(null, Collections.singletonList(stickerAR), null));
     }
 
     @Test
