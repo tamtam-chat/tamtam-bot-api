@@ -1,11 +1,14 @@
 package chat.tamtam.botapi.queries;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
+import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatPatch;
+import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -15,9 +18,16 @@ import static org.junit.Assert.fail;
  * @author alexandrchuprin
  */
 public class EditChatQueryItegrationTest extends TamTamIntegrationTest {
+
+    Chat chat;
+
+    @Before
+    public void setUp() throws Exception {
+        chat = getByTitle(getChats(client), "EditChatQueryItegrationTest");
+    }
+
     @Test
     public void shouldChangeTitle() throws Exception {
-        Chat chat = getByTitle(getChats(client), "EditChatQueryItegrationTest");
         long chatId = chat.getChatId();
         String originalTitle = chat.getTitle();
         try {
@@ -66,8 +76,31 @@ public class EditChatQueryItegrationTest extends TamTamIntegrationTest {
         setInvalidChatTitle(title);
     }
 
+    @Test
+    public void shouldChangeIconByUrl() throws Exception {
+        long chatId = chat.getChatId();
+        PhotoAttachmentRequestPayload iconPayload = new PhotoAttachmentRequestPayload();
+        iconPayload.url("https://web.tamtam.chat/-/images/auth/devices.1504333530.png");
+        ChatPatch patch = new ChatPatch().icon(iconPayload);
+        new EditChatQuery(client, patch, chatId).execute();
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenIconUrlIsEmpty() throws Exception {
+        try {
+            long chatId = chat.getChatId();
+            PhotoAttachmentRequestPayload iconPayload = new PhotoAttachmentRequestPayload();
+            iconPayload.url("   ");
+            ChatPatch patch = new ChatPatch().icon(iconPayload);
+            new EditChatQuery(client, patch, chatId).execute();
+            fail("Should fall in catch block");
+        } catch (APIException e) {
+            assertThat(e.getStatusCode(), is(400));
+        }
+    }
+
     private void setInvalidChatTitle(String title) throws Exception {
-        Chat chat = getByTitle(getChats(client), "EditChatQueryItegrationTest");
+        Chat chat = this.chat;
         long chatId = chat.getChatId();
         String originalTitle = chat.getTitle();
         try {
