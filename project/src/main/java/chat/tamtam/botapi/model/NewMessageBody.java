@@ -68,7 +68,7 @@ public class NewMessageBody implements TamTamSerializable {
     }
 
     /**
-    * Use &#x60;attachments&#x60; property instead. Will be removed in the next major release.  Single message attachment.
+    * Use &#x60;attachments&#x60; property instead. Will be removed in the next major release.  Single message attachment
     * @return attachment
     **/
     @Nullable
@@ -82,7 +82,7 @@ public class NewMessageBody implements TamTamSerializable {
     }
 
     /**
-    * Message attachments. See &#x60;AttachmentRequest&#x60; and it&#39;s inheritors for full information.
+    * Message attachments. See &#x60;AttachmentRequest&#x60; and it&#39;s inheritors for full information
     * @return attachments
     **/
     @Nullable

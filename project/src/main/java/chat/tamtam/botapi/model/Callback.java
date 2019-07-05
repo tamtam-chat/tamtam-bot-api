@@ -35,16 +35,14 @@ public class Callback implements TamTamSerializable {
     private final Long timestamp;
     @NotNull
     private final String callbackId;
-    @NotNull
-    private final String payload;
+    private String payload;
     @NotNull
     private final User user;
 
     @JsonCreator
-    public Callback(@JsonProperty("timestamp") Long timestamp, @JsonProperty("callback_id") String callbackId, @JsonProperty("payload") String payload, @JsonProperty("user") User user) { 
+    public Callback(@JsonProperty("timestamp") Long timestamp, @JsonProperty("callback_id") String callbackId, @JsonProperty("user") User user) { 
         this.timestamp = timestamp;
         this.callbackId = callbackId;
-        this.payload = payload;
         this.user = user;
     }
 
@@ -66,6 +64,11 @@ public class Callback implements TamTamSerializable {
         return callbackId;
     }
 
+    public Callback payload(String payload) {
+        this.setPayload(payload);
+        return this;
+    }
+
     /**
     * Button payload
     * @return payload
@@ -73,6 +76,10 @@ public class Callback implements TamTamSerializable {
     @JsonProperty("payload")
     public String getPayload() {
         return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
     /**

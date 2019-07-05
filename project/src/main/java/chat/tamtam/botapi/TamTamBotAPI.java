@@ -180,7 +180,7 @@ public class TamTamBotAPI {
 
     /**
     * Edit current bot info
-    * Edits current bot info. Fill only the fields you want to update. All remaning fields will stay untouched.
+    * Edits current bot info. Fill only the fields you want to update. All remaining fields will stay untouched
     * @param botPatch  (required)
     * @return {@link BotInfo}
     * @throws ClientException if fails to make API call
@@ -210,7 +210,7 @@ public class TamTamBotAPI {
 
     /**
     * Get all chats
-    * Returns information about chats that bot participated in: a result list and marker points to the next page.
+    * Returns information about chats that bot participated in: a result list and marker points to the next page
     * @return {@link ChatList}
     */
     public GetChatsQuery getChats() { 
@@ -258,7 +258,7 @@ public class TamTamBotAPI {
 
     /**
     * Get current bot info
-    * Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).
+    * Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any)
     * @return {@link BotInfo}
     */
     public GetMyInfoQuery getMyInfo() { 
@@ -267,7 +267,7 @@ public class TamTamBotAPI {
 
     /**
     * Get subscriptions
-    * In case your bot gets data via WebHook, the method returns list of all subscriptions.
+    * In case your bot gets data via WebHook, the method returns list of all subscriptions
     * @return {@link GetSubscriptionsResult}
     */
     public GetSubscriptionsQuery getSubscriptions() { 

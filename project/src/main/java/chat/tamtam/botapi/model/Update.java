@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 
 
 /**
- * &#x60;Update&#x60; object repsesents different types of events that happened in chat. See its inheritors
+ * &#x60;Update&#x60; object represents different types of events that happened in chat. See its inheritors
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "update_type", visible = true, defaultImpl = Update.class, include = JsonTypeInfo.As.EXISTING_PROPERTY)
 @JsonSubTypes({
@@ -84,7 +84,7 @@ public class Update implements TamTamSerializable {
     }
 
     /**
-    * Unix-time when event has occured
+    * Unix-time when event has occurred
     * @return timestamp
     **/
     @JsonProperty("timestamp")

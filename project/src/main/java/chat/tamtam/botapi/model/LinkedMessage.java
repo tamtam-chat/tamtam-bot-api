@@ -33,18 +33,14 @@ public class LinkedMessage implements TamTamSerializable {
 
     @NotNull
     private final MessageLinkType type;
-    @NotNull
-    private final User sender;
-    @NotNull
-    private final Long chatId;
+    private User sender;
+    private Long chatId;
     @NotNull
     private final MessageBody message;
 
     @JsonCreator
-    public LinkedMessage(@JsonProperty("type") MessageLinkType type, @JsonProperty("sender") User sender, @JsonProperty("chat_id") Long chatId, @JsonProperty("message") MessageBody message) { 
+    public LinkedMessage(@JsonProperty("type") MessageLinkType type, @JsonProperty("message") MessageBody message) { 
         this.type = type;
-        this.sender = sender;
-        this.chatId = chatId;
         this.message = message;
     }
 
@@ -57,8 +53,13 @@ public class LinkedMessage implements TamTamSerializable {
         return type;
     }
 
+    public LinkedMessage sender(User sender) {
+        this.setSender(sender);
+        return this;
+    }
+
     /**
-    * User sent this message
+    * User sent this message. Can be &#x60;null&#x60; if message has been posted on behalf of a channel
     * @return sender
     **/
     @JsonProperty("sender")
@@ -66,13 +67,26 @@ public class LinkedMessage implements TamTamSerializable {
         return sender;
     }
 
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public LinkedMessage chatId(Long chatId) {
+        this.setChatId(chatId);
+        return this;
+    }
+
     /**
-    * Chat where message was originally posted
+    * Chat where message has been originally posted. For forwarded messages only
     * @return chatId
     **/
     @JsonProperty("chat_id")
     public Long getChatId() {
         return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 
     /**

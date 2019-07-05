@@ -58,7 +58,7 @@ public class MessageCallbackUpdate extends Update implements TamTamSerializable 
     }
 
     /**
-    * Original message containing inline keyboard. Can be &#x60;null&#x60; in case it had been deleted by the moment a bot got this update.
+    * Original message containing inline keyboard. Can be &#x60;null&#x60; in case it had been deleted by the moment a bot got this update
     * @return message
     **/
     @Nullable

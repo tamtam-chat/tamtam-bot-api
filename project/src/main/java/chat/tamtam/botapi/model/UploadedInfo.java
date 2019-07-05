@@ -25,7 +25,7 @@ import java.util.Objects;
 
 
 /**
- * This is information you will recieve as soon as audio/video is uploaded
+ * This is information you will receive as soon as audio/video is uploaded
  */
 public class UploadedInfo implements TamTamSerializable {
 

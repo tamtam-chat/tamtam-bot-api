@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
- * After pressing this type of button client sends new message with attachment of curent user contact
+ * After pressing this type of button client sends new message with attachment of current user contact
  */
 public class RequestContactButton extends Button implements TamTamSerializable {
 

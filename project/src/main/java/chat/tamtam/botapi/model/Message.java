@@ -57,7 +57,7 @@ public class Message implements TamTamSerializable {
     }
 
     /**
-    * User that sent this message. Can be &#x60;null&#x60; if message has been posted on behalf of a channel.
+    * User that sent this message. Can be &#x60;null&#x60; if message has been posted on behalf of a channel
     * @return sender
     **/
     @JsonProperty("sender")
@@ -107,7 +107,7 @@ public class Message implements TamTamSerializable {
     }
 
     /**
-    * Body of created message. Text + attachments. Could be null if message contains only forwarded message.
+    * Body of created message. Text + attachments. Could be null if message contains only forwarded message
     * @return body
     **/
     @JsonProperty("body")
@@ -121,7 +121,7 @@ public class Message implements TamTamSerializable {
     }
 
     /**
-    * Message staistics. Available only for channels in [GET:/messages](#operation/getMessages) context
+    * Message statistics. Available only for channels in [GET:/messages](#operation/getMessages) context
     * @return stat
     **/
     @Nullable
