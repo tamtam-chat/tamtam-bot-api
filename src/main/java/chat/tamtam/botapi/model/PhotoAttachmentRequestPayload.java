@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 public class PhotoAttachmentRequestPayload implements TamTamSerializable {
 
     @Nullable
+    @Size(min = 1)
     private String url;
     @Nullable
     private String token;
