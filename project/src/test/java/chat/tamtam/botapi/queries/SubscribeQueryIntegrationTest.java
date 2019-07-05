@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -18,6 +19,8 @@ import chat.tamtam.botapi.model.SubscriptionRequestBody;
 import chat.tamtam.botapi.model.Update;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -29,7 +32,7 @@ public class SubscribeQueryIntegrationTest extends TamTamIntegrationTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        url = "https://tamtam.chat/" + now();
+        url = "https://" + randomText(16) + ".com";
     }
 
     @Test
@@ -96,5 +99,26 @@ public class SubscribeQueryIntegrationTest extends TamTamIntegrationTest {
         SubscriptionRequestBody body = new SubscriptionRequestBody(url);
         body.setUpdateTypes(Collections.singleton("invalid_type"));
         new SubscribeQuery(client, body).execute();
+    }
+
+    @Test
+    public void shouldUnsubscribeAnotherBotWithTheSameWebhook() throws Exception {
+        try {
+            SubscriptionRequestBody requestBody = new SubscriptionRequestBody(url);
+            new SubscribeQuery(client, requestBody).execute();
+            new SubscribeQuery(client2, requestBody).execute();
+
+            Set<String> bot1subscriptions = new GetSubscriptionsQuery(client).execute()
+                    .getSubscriptions().stream().map(Subscription::getUrl).collect(Collectors.toSet());
+
+            Set<String> bot2subscriptions = new GetSubscriptionsQuery(client2).execute()
+                    .getSubscriptions().stream().map(Subscription::getUrl).collect(Collectors.toSet());
+
+            assertThat(bot1subscriptions, is(empty()));
+            assertThat(bot2subscriptions, hasItem(url));
+        } finally {
+            new UnsubscribeQuery(client, url).execute();
+            new UnsubscribeQuery(client2, url).execute();
+        }
     }
 }

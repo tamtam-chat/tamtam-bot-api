@@ -24,19 +24,27 @@ package chat.tamtam.botapi.exceptions;
  * @author alexandrchuprin
  */
 public class APIException extends Exception {
+    private final int statusCode;
+
     public APIException(String message) {
-        super(message);
+        this(400, message);
     }
 
     public APIException(int statusCode) {
-        super("Unexpected server error: " + statusCode);
+        this(503, "Unexpected server error: " + statusCode);
     }
 
     public APIException(int statusCode, String responseBody) {
         super("Server error " + statusCode + ": " + responseBody);
+        this.statusCode = statusCode;
     }
 
-    public APIException(String errorCode, String message) {
+    public APIException(int statusCode, String errorCode, String message) {
         super("API exception " + errorCode + ": " + message);
+        this.statusCode = statusCode;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
     }
 }
