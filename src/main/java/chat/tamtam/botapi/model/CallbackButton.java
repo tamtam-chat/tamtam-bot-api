@@ -63,7 +63,7 @@ public class CallbackButton extends Button implements TamTamSerializable {
     }
 
     /**
-    * Intent of button. Affects clients representation.
+    * Intent of button. Affects clients representation
     * @return intent
     **/
     @JsonProperty("intent")

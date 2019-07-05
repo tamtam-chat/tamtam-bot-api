@@ -52,7 +52,7 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
     }
 
     /**
-    * Chat identifier where event has occured
+    * Chat identifier where event has occurred
     * @return chatId
     **/
     @JsonProperty("chat_id")

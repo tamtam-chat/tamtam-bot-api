@@ -121,7 +121,7 @@ public class Chat implements TamTamSerializable {
     }
 
     /**
-    * Time of last event occured in chat
+    * Time of last event occurred in chat
     * @return lastEventTime
     **/
     @JsonProperty("last_event_time")

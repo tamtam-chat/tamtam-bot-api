@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 
 
 /**
- * This is information you will recieve as soon as an image uploaded
+ * This is information you will receive as soon as an image uploaded
  */
 public class PhotoTokens implements TamTamSerializable {
 

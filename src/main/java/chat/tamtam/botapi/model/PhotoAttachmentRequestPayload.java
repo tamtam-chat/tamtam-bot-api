@@ -29,7 +29,7 @@ import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Request to attach image. All fields are mutually exclusive.
+ * Request to attach image. All fields are mutually exclusive
  */
 public class PhotoAttachmentRequestPayload implements TamTamSerializable {
 

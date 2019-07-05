@@ -248,7 +248,7 @@ public class TamTamService {
 
         MessageBody body = new MessageBody("mid." + id, id, hasText ? "text" + id : null, attachments);
         Message message = new Message(recipient, System.currentTimeMillis(), body).sender(sender);
-        message.link(new LinkedMessage(MessageLinkType.FORWARD, sender, id, body));
+        message.link(new LinkedMessage(MessageLinkType.FORWARD, body).sender(sender).chatId(id));
         message.stat(new MessageStat(2));
         body.replyTo("replyTo");
 

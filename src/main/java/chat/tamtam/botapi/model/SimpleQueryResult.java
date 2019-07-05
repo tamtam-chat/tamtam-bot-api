@@ -33,6 +33,7 @@ public class SimpleQueryResult implements TamTamSerializable {
 
     @NotNull
     private final Boolean success;
+    private String message;
 
     @JsonCreator
     public SimpleQueryResult(@JsonProperty("success") Boolean success) { 
@@ -48,6 +49,24 @@ public class SimpleQueryResult implements TamTamSerializable {
         return success;
     }
 
+    public SimpleQueryResult message(String message) {
+        this.setMessage(message);
+        return this;
+    }
+
+    /**
+    * Explanatory message if the result is not successful
+    * @return message
+    **/
+    @JsonProperty("message")
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -58,13 +77,15 @@ public class SimpleQueryResult implements TamTamSerializable {
         }
 
         SimpleQueryResult other = (SimpleQueryResult) o;
-        return Objects.equals(this.success, other.success);
+        return Objects.equals(this.success, other.success) &&
+            Objects.equals(this.message, other.message);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (success != null ? success.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
     }
 
@@ -72,6 +93,7 @@ public class SimpleQueryResult implements TamTamSerializable {
     public String toString() {
         return "SimpleQueryResult{"
             + " success='" + success + '\''
+            + " message='" + message + '\''
             + '}';
     }
 }

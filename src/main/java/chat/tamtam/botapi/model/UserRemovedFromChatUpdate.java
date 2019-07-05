@@ -52,7 +52,7 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
     }
 
     /**
-    * Chat identifier where event has occured
+    * Chat identifier where event has occurred
     * @return chatId
     **/
     @JsonProperty("chat_id")
