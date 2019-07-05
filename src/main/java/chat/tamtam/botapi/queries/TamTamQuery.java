@@ -153,7 +153,7 @@ public class TamTamQuery<T> {
                     throw new APIException(response.getStatusCode());
                 }
 
-                throw ExceptionMapper.map(error);
+                throw ExceptionMapper.map(response.getStatusCode(), error);
             } catch (SerializationException e) {
                 throw new APIException(response.getStatusCode(), responseBody);
             }

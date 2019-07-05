@@ -20,6 +20,8 @@
 
 package chat.tamtam.botapi.exceptions;
 
+import chat.tamtam.botapi.model.Error;
+
 /**
  * @author alexandrchuprin
  */
@@ -27,7 +29,7 @@ public class ExceptionMapper {
     private ExceptionMapper() {
     }
 
-    public static APIException map(chat.tamtam.botapi.model.Error error) {
+    public static APIException map(int statusCode, Error error) {
         String message = error.getMessage();
         switch (error.getCode()) {
             case "attachment.not.ready":
@@ -43,6 +45,6 @@ public class ExceptionMapper {
                 return new ChatAccessForbiddenException(message);
         }
 
-        return new APIException(error.getCode(), message);
+        return new APIException(statusCode, error.getCode(), message);
     }
 }
