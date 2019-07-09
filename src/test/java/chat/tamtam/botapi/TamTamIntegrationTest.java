@@ -3,6 +3,7 @@ package chat.tamtam.botapi;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -152,11 +153,12 @@ public abstract class TamTamIntegrationTest {
         return sent;
     }
 
-    protected SendMessageResult doSend(NewMessageBody newMessage, Long chatId) throws Exception {
+    protected SendMessageResult doSend(NewMessageBody newMessage, Long chatId) throws APIException, ClientException {
         return doSend(client, newMessage, chatId);
     }
 
-    protected SendMessageResult doSend(TamTamClient client, NewMessageBody newMessage, Long chatId) throws Exception {
+    protected SendMessageResult doSend(TamTamClient client, NewMessageBody newMessage, Long chatId) throws APIException,
+            ClientException {
         do {
             try {
                 SendMessageResult sendMessageResult = new SendMessageQuery(client, newMessage).chatId(chatId).execute();
@@ -190,7 +192,11 @@ public abstract class TamTamIntegrationTest {
                 return sendMessageResult;
             } catch (AttachmentNotReadyException e) {
                 // it is ok, try again
-                Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                try {
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
         } while (true);
     }
@@ -265,6 +271,14 @@ public abstract class TamTamIntegrationTest {
 
             }
         });
+    }
+
+    protected List<Chat> getChatsForSend() throws Exception {
+        List<Chat> chats = getChats();
+        Chat dialog = getByType(chats, ChatType.DIALOG);
+        Chat chat = getByTitle(chats, "test chat #4");
+        Chat channel = getByTitle(chats, "test channel #1");
+        return Arrays.asList(dialog, chat, channel);
     }
 
     private static void compare(StickerAttachmentRequest model, StickerAttachment attachment) {

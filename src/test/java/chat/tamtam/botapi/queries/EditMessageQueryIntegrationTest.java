@@ -11,7 +11,6 @@ import org.junit.experimental.categories.Category;
 
 import chat.tamtam.botapi.IntegrationTest;
 import chat.tamtam.botapi.TamTamIntegrationTest;
-import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
@@ -23,6 +22,7 @@ import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.SendMessageResult;
+import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.UploadType;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -144,7 +144,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
         }
     }
 
-    @Test(expected = APIException.class)
+    @Test
     public void cannotRemoveBothTextAndAttaches() throws Exception {
         for (Chat chat : chats) {
             List<AttachmentRequest> attachmentRequests = Collections.singletonList(photoAR);
@@ -153,11 +153,13 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList(), null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            SimpleQueryResult queryResult = botAPI.editMessage(editedMessageBody,
+                    result.getMessage().getBody().getMid()).execute();
+            assertThat(queryResult.isSuccess(), is(false));
         }
     }
 
-    @Test(expected = APIException.class)
+    @Test
     public void cannotRemoveTextWhenThereIsNoAttaches() throws Exception {
         for (Chat chat : chats) {
             String text = randomText();
@@ -165,17 +167,21 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody("", null, null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            SimpleQueryResult queryResult = botAPI.editMessage(editedMessageBody,
+                    result.getMessage().getBody().getMid()).execute();
+            assertThat(queryResult.isSuccess(), is(false));
         }
     }
 
-    @Test(expected = APIException.class)
+    @Test
     public void cannotRemoveAttachesWhenThereIsNoText() throws Exception {
         for (Chat chat : chats) {
             NewMessageBody newMessageBody = new NewMessageBody("", Collections.singletonList(photoAR), null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
             NewMessageBody editedMessageBody = new NewMessageBody("", Collections.emptyList(), null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
+            SimpleQueryResult queryResult = botAPI.editMessage(editedMessageBody,
+                    result.getMessage().getBody().getMid()).execute();
+            assertThat(queryResult.isSuccess(), is(false));
         }
     }
 

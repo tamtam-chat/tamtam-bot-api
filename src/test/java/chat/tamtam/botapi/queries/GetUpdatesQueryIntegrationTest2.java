@@ -52,6 +52,10 @@ public class GetUpdatesQueryIntegrationTest2 extends TamTamIntegrationTest {
         BotInfo bot3 = new GetMyInfoQuery(client3).execute();
         User bot3user = new User(bot3.getUserId(), bot3.getName(), bot3.getUsername());
 
+        // consume all pending updates to make sure queue is empty before test
+        flush(client);
+        flush(client2);
+
         Function<Long, Long> getUpdates = (marker) -> {
             LOG.info("Marker: " + marker);
             try {
@@ -141,5 +145,10 @@ public class GetUpdatesQueryIntegrationTest2 extends TamTamIntegrationTest {
 
     private void addUser(TamTamClient client, Long chatId, Long userId) throws Exception {
         new AddMembersQuery(client, new UserIdsList(Collections.singletonList(userId)), chatId).execute();
+    }
+
+    private void flush(TamTamClient client) throws APIException, ClientException {
+        Long marker = new GetUpdatesQuery(this.client).timeout(2).execute().getMarker();
+        new GetUpdatesQuery(client).marker(marker).timeout(2).execute();
     }
 }
