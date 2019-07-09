@@ -111,12 +111,4 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
         doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
                 getByTitle(client2Chats, "test chat #7").getChatId());
     }
-
-    private List<Chat> getChatsForSend() throws Exception {
-        List<Chat> chats = getChats();
-        Chat dialog = getByType(chats, ChatType.DIALOG);
-        Chat chat = getByTitle(chats, "test chat #4");
-        Chat channel = getByTitle(chats, "test channel #1");
-        return Arrays.asList(dialog, chat, channel);
-    }
 }

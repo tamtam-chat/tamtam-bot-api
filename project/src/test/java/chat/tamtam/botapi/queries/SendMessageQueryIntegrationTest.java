@@ -343,14 +343,6 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         assertThat(result.getMessage().getBody().getText(), is(text));
     }
 
-    private List<Chat> getChatsForSend() throws Exception {
-        List<Chat> chats = getChats();
-        Chat dialog = getByType(chats, ChatType.DIALOG);
-        Chat chat = getByTitle(chats, "test chat #4");
-        Chat channel = getByTitle(chats, "test channel #1");
-        return Arrays.asList(dialog, chat, channel);
-    }
-
     private List<Message> send(NewMessageBody newMessage) throws Exception {
         return send(newMessage, getChatsForSend());
     }
