@@ -48,21 +48,21 @@ TamTamBotAPI botAPI = new TamTamBotAPI(client);
 
 ### Making requests
 `TamTamBotAPI` provides access to all methods supported by the API. All methods return `TamTamQuery` object that can be executed **synchronous** or **asynchronous**.
- 
+
 For example:
 
 ```java
-Long fileId = …;
+String fileToken = …;
 Long userId = …;
 
-AttachmentRequest fileAttachment = new FileAttachmentRequest(new UploadedFileInfo(fileId));
+AttachmentRequest fileAttachment = new FileAttachmentRequest(new UploadedInfo(fileToken));
 List<AttachmentRequest> attachments = Collections.singletonList(fileAttachment);
-NewMessageBody body = new NewMessageBody("hello world!", attachments);
+NewMessageBody body = new NewMessageBody("hello world!", attachments, null);
 SendMessageQuery sendMessageQuery = botAPI.sendMessage(body).userId(userId);
-    
+
 // Sync
 SendMessageResult result = sendMessageQuery.execute();
-    
+
 // Async
 Future<SendMessageResult> futureResult = sendMessageQuery.enqueue();
 ```
@@ -81,7 +81,7 @@ String uploadUrl = endpoint.getUrl();
 
 ```java
 TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
-UploadedFileInfo uploadedInfo = uploadAPI.uploadFile(uploadUrl, new File("%FILE_PATH%")).execute();
+UploadedInfo uploadedInfo = uploadAPI.uploadFile(uploadUrl, new File("%FILE_PATH%")).execute();
 ```
 
 #### Important notice
