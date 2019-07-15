@@ -60,7 +60,7 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
     }
 
     /**
-    * Sticker wigth
+    * Sticker width
     * @return width
     **/
     @JsonProperty("width")
