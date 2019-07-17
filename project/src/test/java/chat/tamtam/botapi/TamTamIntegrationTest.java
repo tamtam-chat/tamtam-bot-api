@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -182,7 +183,7 @@ public abstract class TamTamIntegrationTest {
                 if (link != null) {
                     LinkedMessage linkedMessage = lastMessage.getLink();
                     assertThat(linkedMessage, is(notNullValue()));
-                    compare(linkedMessage, link);
+                    compare(client, linkedMessage, link);
                 }
 
                 Chat chat = getChat(client, chatId);
@@ -288,14 +289,20 @@ public abstract class TamTamIntegrationTest {
         assertThat(attachment.getHeight(), is(greaterThan(0)));
     }
 
-    protected static void compare(LinkedMessage linkedMessage, NewMessageLink link) {
-        if (link.getType() == MessageLinkType.REPLY) {
-            assertThat(getMessageId(linkedMessage.getMessage().getMid()),
-                    is(getMessageId(link.getMid())));
-        } else {
-            assertThat(linkedMessage.getMessage().getMid(), is(link.getMid()));
-        }
+    protected static void compare(TamTamClient client, LinkedMessage linkedMessage,
+                                  NewMessageLink link) throws APIException, ClientException {
         assertThat(linkedMessage.getType(), is(link.getType()));
+
+        if (link.getType() == MessageLinkType.REPLY) {
+            Message message = new GetMessagesQuery(client).messageIds(
+                    Collections.singleton(link.getMid())).execute().getMessages().get(0);
+            assertThat(linkedMessage.getMessage().getSeq(), is(message.getBody().getSeq()));
+            assertThat(linkedMessage.getMessage().getText(), is(message.getBody().getText()));
+            assertThat(linkedMessage.getMessage().getAttachments(), is(message.getBody().getAttachments()));
+            return;
+        }
+
+        assertThat(linkedMessage.getMessage().getMid(), is(link.getMid()));
     }
 
     protected static long now() {
@@ -321,7 +328,10 @@ public abstract class TamTamIntegrationTest {
     }
 
     private static String getMessageId(String mid) {
-        return mid.substring("mid.".length() + 16);
+        if (mid.startsWith("mid.")) {
+            return mid.substring("mid.".length() + 16);
+        }
+        return mid;
     }
 
     protected Message getLast(Chat chat) throws Exception {
