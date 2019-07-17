@@ -77,45 +77,6 @@ public class SendFileMessageQueryIntegrationTest extends TamTamIntegrationTest {
         }
     }
 
-    @Test(expected = APIException.class)
-    public void shouldNOTSendFileIfItIsNotAccessible() throws Exception {
-        UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
-        File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
-        AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
-        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
-        List<Chat> chats = getChats();
-        Chat chat = getByTitle(chats, "test chat #5"); // no bot 2 in this chat
-        List<Chat> chatsToSend = Collections.singletonList(chat);
-
-        List<Message> createdMessages = send(newMessage, chatsToSend);
-        for (Message createdMessage : createdMessages) {
-            FileAttachment attachment = (FileAttachment) createdMessage.getBody().getAttachments().get(0);
-            FileAttachmentRequest copyAttach = new FileAttachmentRequest(
-                    new UploadedInfo().token(attachment.getPayload().getToken()));
-
-            List<Chat> client2Chats = getChats(client2);
-            doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
-                    getByTitle(client2Chats, "test chat #7").getChatId());
-        }
-    }
-
-    @Test(expected = APIException.class)
-    public void shouldNOTSendFileByIdIfNotOwner() throws Exception {
-        UploadEndpoint uploadEndpoint = botAPI.getUploadUrl(UploadType.FILE).execute();
-        File file = new File(getClass().getClassLoader().getResource("test.txt").toURI());
-        UploadedInfo uploadedFileInfo = uploadAPI.uploadFile(uploadEndpoint.getUrl(), file).execute();
-        AttachmentRequest request = new FileAttachmentRequest(uploadedFileInfo);
-        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
-        Chat chat = getByTitle(getChats(), "test chat #5"); // no bot 2 in this chat
-        doSend(newMessage, chat.getChatId());
-
-        FileAttachmentRequest copyAttach = new FileAttachmentRequest(new UploadedInfo().token(uploadedFileInfo.getToken()));
-        List<Chat> client2Chats = getChats(client2);
-        doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
-                getByTitle(client2Chats, "test chat #7").getChatId());
-    }
-
     private List<Message> send(NewMessageBody newMessage) throws Exception {
         return send(newMessage, getChatsForSend());
     }
