@@ -39,7 +39,7 @@ public class StickerAttachment extends Attachment implements TamTamSerializable 
     private final Integer height;
 
     @JsonCreator
-    public StickerAttachment(@JsonProperty("payload") StickerAttachmentPayload payload, @JsonProperty("width") Integer width, @JsonProperty("height") Integer height) { 
+    public StickerAttachment(@JsonProperty("payload") StickerAttachmentPayload payload, @JsonProperty("width") Integer width, @JsonProperty("height") Integer height) {
         super();
         this.payload = payload;
         this.width = width;
