@@ -94,7 +94,7 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldGetAllMessagesInDialog() throws Exception {
         List<Chat> chats = getChats();
-        Chat dialog = getByType(chats, ChatType.DIALOG);
+        Chat dialog = getBy(chats, c -> c.getType() == ChatType.DIALOG && c.getChatId() != (me.getUserId() ^ bot3.getUserId()));
 
         List<String> posted = new ArrayList<>();
         long start = now();

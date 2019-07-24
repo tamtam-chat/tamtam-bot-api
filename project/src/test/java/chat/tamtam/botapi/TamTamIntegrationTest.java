@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -98,11 +99,13 @@ public abstract class TamTamIntegrationTest {
 
     protected BotInfo me;
     protected BotInfo bot2;
+    protected BotInfo bot3;
 
     @Before
     public void setUp() throws Exception {
         me = getMe();
         bot2 = new GetMyInfoQuery(client2).execute();
+        bot3 = new GetMyInfoQuery(client3).execute();
         LOG.info("Endpoint: {}", client.getEndpoint());
     }
 
@@ -164,11 +167,11 @@ public abstract class TamTamIntegrationTest {
             try {
                 SendMessageResult sendMessageResult = new SendMessageQuery(client, newMessage).chatId(chatId).execute();
                 assertThat(sendMessageResult, is(notNullValue()));
-                MessageList messageList = new GetMessagesQuery(client).chatId(chatId).execute();
-                Message lastMessage = messageList.getMessages().get(0);
+                String messageId = sendMessageResult.getMessage().getBody().getMid();
+                Message lastMessage = getMessage(client, messageId);
                 String text = newMessage.getText();
                 assertThat(lastMessage.getBody().getText(), is(text == null ? "" : text));
-                assertThat(lastMessage.getBody().getMid(), is(sendMessageResult.getMessage().getBody().getMid()));
+                assertThat(lastMessage.getBody().getMid(), is(messageId));
 
                 List<AttachmentRequest> attachments = newMessage.getAttachments();
                 if (attachments != null) {
@@ -208,6 +211,14 @@ public abstract class TamTamIntegrationTest {
                 .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
                 .findFirst()
                 .orElseThrow(notFound(type.getValue()));
+    }
+
+    protected Chat getBy(List<Chat> chats, Predicate<Chat> filter) throws Exception {
+        return chats.stream()
+                .filter(filter)
+                .filter(c -> c.getStatus() == ChatStatus.ACTIVE)
+                .findFirst()
+                .orElseThrow(notFound(filter.toString()));
     }
 
     protected Chat getByTitle(List<Chat> chats, String title) throws Exception {
@@ -280,6 +291,11 @@ public abstract class TamTamIntegrationTest {
         Chat chat = getByTitle(chats, "test chat #4");
         Chat channel = getByTitle(chats, "test channel #1");
         return Arrays.asList(dialog, chat, channel);
+    }
+
+    protected Message getMessage(TamTamClient client, String messageId) throws APIException,
+            ClientException {
+        return new GetMessagesQuery(client).messageIds(Collections.singleton(messageId)).execute().getMessages().get(0);
     }
 
     private static void compare(StickerAttachmentRequest model, StickerAttachment attachment) {
