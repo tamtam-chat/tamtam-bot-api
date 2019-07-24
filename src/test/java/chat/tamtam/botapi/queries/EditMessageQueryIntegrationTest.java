@@ -11,11 +11,13 @@ import org.junit.experimental.categories.Category;
 
 import chat.tamtam.botapi.IntegrationTest;
 import chat.tamtam.botapi.TamTamIntegrationTest;
+import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
 import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
+import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.PhotoAttachmentRequest;
@@ -65,8 +67,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             NewMessageBody newMessageBody = new NewMessageBody(randomText(), Collections.singletonList(photoAR), null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
             NewMessageBody editedMessageBody = new NewMessageBody("edited message text", null, null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
-            MessageBody lastMessage = getLast(chat).getBody();
+            String messageId = result.getMessage().getBody().getMid();
+            botAPI.editMessage(editedMessageBody, messageId).execute();
+            MessageBody lastMessage = getMessage(client, messageId).getBody();
 
             assertThat(lastMessage.getText(), is(editedMessageBody.getText()));
             compare(photoAR, lastMessage.getAttachments().get(0));
@@ -83,8 +86,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
             List<AttachmentRequest> editAttachmentRequests = Collections.singletonList(photoAR2);
             NewMessageBody editedMessageBody = new NewMessageBody(null, editAttachmentRequests, null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
-            MessageBody lastMessage = getLast(chat).getBody();
+            String messageId = result.getMessage().getBody().getMid();
+            botAPI.editMessage(editedMessageBody, messageId).execute();
+            MessageBody lastMessage = getMessage(client, messageId).getBody();
 
             assertThat(lastMessage.getText(), is(text));
             compare(editAttachmentRequests, lastMessage.getAttachments());
@@ -102,8 +106,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             List<AttachmentRequest> editAttachmentRequests = Collections.singletonList(photoAR2);
             String newText = "edited " + text;
             NewMessageBody editedMessageBody = new NewMessageBody(newText, editAttachmentRequests, null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
-            MessageBody lastMessage = getLast(chat).getBody();
+            String messageId = result.getMessage().getBody().getMid();
+            botAPI.editMessage(editedMessageBody, messageId).execute();
+            MessageBody lastMessage = getMessage(client, messageId).getBody();
 
             assertThat(lastMessage.getText(), is(newText));
             compare(editAttachmentRequests, lastMessage.getAttachments());
@@ -119,8 +124,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody(null, Collections.emptyList(), null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
-            MessageBody lastMessage = getLast(chat).getBody();
+            String messageId = result.getMessage().getBody().getMid();
+            botAPI.editMessage(editedMessageBody, messageId).execute();
+            MessageBody lastMessage = getMessage(client, messageId).getBody();
 
             assertThat("chatType: " + chat.getType(), lastMessage.getText(), is(text));
             assertThat("chatType: " + chat.getType(), lastMessage.getAttachments(), is(nullValue()));
@@ -136,8 +142,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
             NewMessageBody editedMessageBody = new NewMessageBody("", null, null);
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
-            MessageBody lastMessage = getLast(chat).getBody();
+            String messageId = result.getMessage().getBody().getMid();
+            botAPI.editMessage(editedMessageBody, messageId).execute();
+            MessageBody lastMessage = getMessage(client, messageId).getBody();
 
             assertThat(lastMessage.getText().length(), is(0));
             compare(attachmentRequests, lastMessage.getAttachments());
@@ -198,8 +205,9 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             NewMessageBody editedMessageBody = new NewMessageBody(null, null, null)
                     .attachment(contactAR);
 
-            botAPI.editMessage(editedMessageBody, result.getMessage().getBody().getMid()).execute();
-            MessageBody lastMessage = getLast(chat).getBody();
+            String messageId = result.getMessage().getBody().getMid();
+            botAPI.editMessage(editedMessageBody, messageId).execute();
+            MessageBody lastMessage = getMessage(client, messageId).getBody();
 
             assertThat(lastMessage.getText(), is(text));
             compare(Collections.singletonList(contactAR), lastMessage.getAttachments());
