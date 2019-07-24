@@ -148,7 +148,7 @@ public class GetUpdatesQueryIntegrationTest2 extends TamTamIntegrationTest {
     }
 
     private void flush(TamTamClient client) throws APIException, ClientException {
-        Long marker = new GetUpdatesQuery(this.client).timeout(2).execute().getMarker();
+        Long marker = new GetUpdatesQuery(client).timeout(2).execute().getMarker();
         new GetUpdatesQuery(client).marker(marker).timeout(2).execute();
     }
 }
