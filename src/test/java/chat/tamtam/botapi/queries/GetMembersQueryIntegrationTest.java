@@ -1,11 +1,14 @@
 package chat.tamtam.botapi.queries;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -79,6 +82,26 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
         assertThat(bot2Membership.isAdmin(), is(false));
         assertThat(bot2Membership.getPermissions(), is(nullValue()));
     }
+
+    @Test
+    public void shouldGetAllMembers() throws Exception {
+        Long chatId = getByTitle(getChats(), "GetMembershipQueryIntegrationTest#shouldReturnAllMembers").getChatId();
+        Long marker = null;
+        List<ChatMember> result = new ArrayList<>();
+        do {
+            ChatMembersList membersList = new GetMembersQuery(client, chatId).count(1).marker(marker).execute();
+
+            result.addAll(membersList.getMembers().stream().filter(cm -> cm.getName().toLowerCase().contains("bot"))
+                    .collect(Collectors.toList()));
+
+            marker = membersList.getMarker();
+        } while (marker != null);
+
+        assertThat(result.stream().map(ChatMember::getUserId).collect(Collectors.toList()),
+                is(Stream.of(me.getUserId(), bot2.getUserId(), bot3.getUserId())
+                        .sorted(Comparator.reverseOrder()).collect(Collectors.toList())));
+    }
+
 
     @Test(expected = ChatAccessForbiddenException.class)
     public void shouldThrowExceptionNotChannelAdmin() throws Exception {
