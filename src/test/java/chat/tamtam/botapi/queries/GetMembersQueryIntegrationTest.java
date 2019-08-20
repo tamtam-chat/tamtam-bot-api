@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -66,10 +68,10 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldGetMembersByIds() throws Exception {
         List<Chat> chats = getChats();
         Chat chat = getByTitle(chats, "test chat #1");
-        HashSet<Long> ids = new HashSet<>(Arrays.asList(me.getUserId(), bot2.getUserId()));
+        Set<Long> ids = new LinkedHashSet<>(Arrays.asList(me.getUserId(), bot2.getUserId()));
         ChatMembersList members = new GetMembersQuery(client, chat.getChatId()).userIds(ids).execute();
         assertThat(members.getMarker(), is(nullValue()));
-        assertThat(members.getMembers().size(), is(ids.size()));
+        assertThat(members.getMembers().stream().map(ChatMember::getUserId).collect(Collectors.toCollection(LinkedHashSet::new)), is(ids));
 
         Map<Long, ChatMember> byId = members.getMembers().stream().collect(
                 Collectors.toMap(ChatMember::getUserId, Function.identity()));
