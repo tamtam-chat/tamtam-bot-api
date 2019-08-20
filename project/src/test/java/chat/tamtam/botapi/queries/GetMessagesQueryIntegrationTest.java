@@ -1,10 +1,13 @@
 package chat.tamtam.botapi.queries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,6 +15,7 @@ import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
+import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.Message;
@@ -19,7 +23,6 @@ import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SendMessageResult;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
@@ -32,22 +35,28 @@ import static org.junit.Assert.assertThat;
 public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldGetMessagesByIds() throws Exception {
-        String text = "GetMessagesQueryIntegrationTest " + randomText();
-        String text2 = "GetMessagesQueryIntegrationTest " + randomText();
         List<Chat> chats = getChats();
         Chat dialog = getByType(chats, ChatType.DIALOG);
         Chat chat = getByTitle(chats, "test chat #1");
-        SendMessageResult sendMessageResult = botAPI.sendMessage(new NewMessageBody(text, null, null)).chatId(
-                dialog.getChatId()).execute();
-        SendMessageResult sendMessageResult2 = botAPI.sendMessage(new NewMessageBody(text2, null, null)).chatId(
-                chat.getChatId()).execute();
-        Set<String> ids = new HashSet<>();
-        ids.add(sendMessageResult.getMessage().getBody().getMid());
-        ids.add(sendMessageResult2.getMessage().getBody().getMid());
+
+        List<String> texts = Stream.generate(this::randomText).limit(10).collect(Collectors.toList());
+        Set<String> ids = texts.stream()
+                .map(t -> new NewMessageBody(t, null, null))
+                .map(nmb -> sendMessage(nmb, ThreadLocalRandom.current().nextBoolean() ? chat.getChatId() : dialog.getChatId()))
+                .map(smr -> smr.getMessage().getBody().getMid())
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
         MessageList messageList = new GetMessagesQuery(client).messageIds(ids).execute();
-        assertThat(messageList.getMessages().stream().map(m -> m.getBody().getText()).collect(Collectors.toSet()),
-                hasItems(text, text2));
+        assertThat(messageList.getMessages().stream().map(m -> m.getBody().getText()).collect(Collectors.toList()),
+                is(texts));
+    }
+
+    private SendMessageResult sendMessage(NewMessageBody nmb, Long chatId) {
+        try {
+            return botAPI.sendMessage(nmb).chatId(chatId).execute();
+        } catch (APIException | ClientException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
