@@ -292,7 +292,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
             NewMessageBody replyBody = new NewMessageBody(randomText(16), null, link);
             Message reply = send(replyBody, Collections.singletonList(chat)).get(0);
 
-            assertThat(reply.getLink().getMessage().getText(), is(forward.getBody().getText()));
+            assertThat(reply.getLink().getMessage().getSeq(), is(forward.getBody().getSeq()));
         }
     }
 
