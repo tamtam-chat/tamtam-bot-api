@@ -263,13 +263,36 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldSendReply() throws Exception {
         for (Chat chat : getChatsForSend()) {
-            NewMessageBody messageToForward = new NewMessageBody("message to reply", null, null);
-            List<Message> sent = send(messageToForward, Collections.singletonList(chat));
-            for (Message message : sent) {
-                String mid = message.getBody().getMid();
-                NewMessageLink link = new NewMessageLink(MessageLinkType.REPLY, mid);
-                send(new NewMessageBody("Reply", null, link), Collections.singletonList(chat));
-            }
+            NewMessageBody message1body = new NewMessageBody(randomText(16), null, null);
+            Message message1 = send(message1body, Collections.singletonList(chat)).get(0);
+
+            NewMessageBody reply1Body = new NewMessageBody(randomText(16), null, new NewMessageLink(MessageLinkType.REPLY, message1.getBody().getMid()));
+            Message reply1 = send(reply1Body, Collections.singletonList(chat)).get(0);
+            assertThat(reply1.getLink().getMessage().getText(), is(message1.getBody().getText()));
+
+            NewMessageLink link = new NewMessageLink(MessageLinkType.REPLY, reply1.getBody().getMid());
+            NewMessageBody reply2body = new NewMessageBody(randomText(16), null, link);
+            Message reply2 = send(reply2body, Collections.singletonList(chat)).get(0);
+
+            assertThat(reply2.getLink().getMessage().getText(), is(reply1.getBody().getText()));
+        }
+    }
+
+    @Test
+    public void shouldSendReplyOnForward() throws Exception {
+        for (Chat chat : getChatsForSend()) {
+            NewMessageBody message1body = new NewMessageBody(randomText(16), null, null);
+            Message message = send(message1body, Collections.singletonList(chat)).get(0);
+
+            NewMessageBody forwardBody = new NewMessageBody(null, null, new NewMessageLink(MessageLinkType.FORWARD, message.getBody().getMid()));
+            Message forward = send(forwardBody, Collections.singletonList(chat)).get(0);
+            assertThat(forward.getLink().getMessage().getText(), is(message.getBody().getText()));
+
+            NewMessageLink link = new NewMessageLink(MessageLinkType.REPLY, forward.getBody().getMid());
+            NewMessageBody replyBody = new NewMessageBody(randomText(16), null, link);
+            Message reply = send(replyBody, Collections.singletonList(chat)).get(0);
+
+            assertThat(reply.getLink().getMessage().getText(), is(forward.getBody().getText()));
         }
     }
 
