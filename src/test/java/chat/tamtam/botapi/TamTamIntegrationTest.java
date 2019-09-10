@@ -87,6 +87,7 @@ public abstract class TamTamIntegrationTest {
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
     private static final String TOKEN_3 = getToken("TAMTAM_BOTAPI_TOKEN_3");
+    private static final Boolean IS_TRAVIS = Boolean.valueOf(System.getenv("TRAVIS"));
 
     private final OkHttpTransportClient transportClient = new OkHttpTransportClient();
     private final JacksonSerializer serializer = new JacksonSerializer();
@@ -106,7 +107,9 @@ public abstract class TamTamIntegrationTest {
         me = getMe();
         bot2 = new GetMyInfoQuery(client2).execute();
         bot3 = new GetMyInfoQuery(client3).execute();
-        LOG.info("Endpoint: {}", client.getEndpoint());
+        if (!IS_TRAVIS) {
+            LOG.info("Endpoint: {}", client.getEndpoint());
+        }
     }
 
     protected BotInfo getMe() throws APIException, ClientException {
