@@ -5,9 +5,7 @@ dist: trusty
 jdk:
   - oraclejdk8
 env:
-  matrix:
-    - TAMTAM_BOTAPI_ENDPOINT=https://botapi.tamtam.chat
-    - TAMTAM_BOTAPI_ENDPOINT=$TAMTAM_BOTAPI_ENDPOINT_STAGING
+  - TAMTAM_BOTAPI_ENDPOINT=$TAMTAM_BOTAPI_ENDPOINT_STAGING
 install: mvn install -B -V
 script:
   - mvn test -P stage
