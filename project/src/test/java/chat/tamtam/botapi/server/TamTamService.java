@@ -92,7 +92,7 @@ public class TamTamService {
             "request location");
     public static final LinkButton LINK_BUTTON = new LinkButton("https://mail.ru", "link");
     public static final InlineKeyboardAttachment INLINE_KEYBOARD_ATTACHMENT = new InlineKeyboardAttachment(
-            "callbackId" + ID_COUNTER.incrementAndGet(), new Keyboard(
+            new Keyboard(
             Arrays.asList(
                     Collections.singletonList(CALLBACK_BUTTON),
                     Arrays.asList(REQUEST_CONTACT_BUTTON, REQUEST_GEO_LOCATION_BUTTON),
@@ -197,6 +197,12 @@ public class TamTamService {
     public Object leaveChat(Request request, Response response) {
         Long chatId = Long.valueOf(request.params("chatId"));
         return SUCCESSFULL;
+    }
+
+    public Object getAdmins(Request request, Response response) {
+        List<ChatMember> chatMembers = Stream.generate(TamTamService::newChatMember).limit(50).collect(
+                Collectors.toList());
+        return new ChatMembersList(chatMembers, null);
     }
 
     public Object removeMembers(Request request, Response response) throws Exception {

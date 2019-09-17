@@ -232,7 +232,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Test
     public void shouldSendContact() throws Exception {
-        UserWithPhoto me = getMe();
+        UserWithPhoto me = getBot1();
         ContactAttachmentRequestPayload payload = new ContactAttachmentRequestPayload(me.getName(), me.getUserId(), null, "+79991234567");
         AttachmentRequest request = new ContactAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
@@ -315,9 +315,9 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         Chat dialog = getByType(getChats(), ChatType.DIALOG);
         NewMessageBody newMessage = new NewMessageBody(randomText(), null, null);
         SendMessageResult result = doSend(newMessage, dialog.getChatId());
-        assertThat(result.getMessage().getSender().getUserId(), is(me.getUserId()));
+        assertThat(result.getMessage().getSender().getUserId(), is(bot1.getUserId()));
         assertThat(result.getMessage().getRecipient().getChatId(), is(dialog.getChatId()));
-        assertThat(result.getMessage().getRecipient().getUserId(), is(not(me.getUserId())));
+        assertThat(result.getMessage().getRecipient().getUserId(), is(not(bot1.getUserId())));
     }
 
     @Test
@@ -325,7 +325,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         Chat chat = getByTitle(getChats(), "test chat #4");
         NewMessageBody newMessage = new NewMessageBody(randomText(), null, null);
         SendMessageResult result = doSend(newMessage, chat.getChatId());
-        assertThat(result.getMessage().getSender().getUserId(), is(me.getUserId()));
+        assertThat(result.getMessage().getSender().getUserId(), is(bot1.getUserId()));
         assertThat(result.getMessage().getRecipient().getChatId(), is(chat.getChatId()));
         assertThat(result.getMessage().getRecipient().getUserId(), is(nullValue()));
     }
@@ -335,8 +335,8 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         Chat channel = getByTitle(getChats(), "test channel #3");
         NewMessageBody newMessage = new NewMessageBody(randomText(), null, null);
         SendMessageResult result = doSend(newMessage, channel.getChatId());
-        assertThat(result.getMessage().getSender().getUserId(), is(me.getUserId()));
-        assertThat(result.getMessage().getSender().getName(), is(me.getName()));
+        assertThat(result.getMessage().getSender().getUserId(), is(bot1.getUserId()));
+        assertThat(result.getMessage().getSender().getName(), is(bot1.getName()));
     }
 
     @Test

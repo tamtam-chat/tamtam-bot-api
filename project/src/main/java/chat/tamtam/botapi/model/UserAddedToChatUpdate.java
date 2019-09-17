@@ -23,8 +23,10 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.jetbrains.annotations.Nullable;
 
 /**
  * You will receive this update when user has been added to chat where bot is administrator
@@ -32,18 +34,17 @@ import javax.validation.constraints.NotNull;
 public class UserAddedToChatUpdate extends Update implements TamTamSerializable {
 
     @NotNull
-    private final Long chatId;
+    private final @Valid Long chatId;
     @NotNull
-    private final User user;
-    @NotNull
-    private final Long inviterId;
+    private final @Valid User user;
+    @Nullable
+    private @Valid Long inviterId;
 
     @JsonCreator
-    public UserAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("inviter_id") Long inviterId, @JsonProperty("timestamp") Long timestamp) { 
+    public UserAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
         this.user = user;
-        this.inviterId = inviterId;
     }
 
     @Override
@@ -69,13 +70,23 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
         return user;
     }
 
+    public UserAddedToChatUpdate inviterId(@Nullable Long inviterId) {
+        this.setInviterId(inviterId);
+        return this;
+    }
+
     /**
-    * User who added user to chat
+    * User who added user to chat. Can be &#x60;null&#x60; in case when user joined chat by link
     * @return inviterId
     **/
+    @Nullable
     @JsonProperty("inviter_id")
     public Long getInviterId() {
         return inviterId;
+    }
+
+    public void setInviterId(@Nullable Long inviterId) {
+        this.inviterId = inviterId;
     }
 
     @JsonProperty("update_type")

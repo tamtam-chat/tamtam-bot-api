@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
@@ -36,14 +37,14 @@ public class NewMessageBody implements TamTamSerializable {
 
     @Nullable
     @Size(max = 4000)
-    private final String text;
+    private final @Valid String text;
     @Nullable
-    private AttachmentRequest attachment;
+    private @Valid AttachmentRequest attachment;
     @Nullable
-    private final List<AttachmentRequest> attachments;
+    private final List<@Valid AttachmentRequest> attachments;
     @Nullable
-    private final NewMessageLink link;
-    private Boolean notify;
+    private final @Valid NewMessageLink link;
+    private @Valid Boolean notify;
 
     @JsonCreator
     public NewMessageBody(@Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<AttachmentRequest> attachments, @Nullable @JsonProperty("link") NewMessageLink link) { 

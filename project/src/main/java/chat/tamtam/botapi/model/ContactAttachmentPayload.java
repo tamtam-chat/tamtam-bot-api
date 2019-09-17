@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -32,9 +33,9 @@ import org.jetbrains.annotations.Nullable;
 public class ContactAttachmentPayload implements TamTamSerializable {
 
     @Nullable
-    private final String vcfInfo;
+    private final @Valid String vcfInfo;
     @Nullable
-    private final User tamInfo;
+    private final @Valid User tamInfo;
 
     @JsonCreator
     public ContactAttachmentPayload(@Nullable @JsonProperty("vcfInfo") String vcfInfo, @Nullable @JsonProperty("tamInfo") User tamInfo) { 

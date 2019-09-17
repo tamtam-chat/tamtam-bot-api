@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -47,6 +48,7 @@ import javax.validation.constraints.NotNull;
   @JsonSubTypes.Type(value = BotStartedUpdate.class, name = Update.BOT_STARTED),
   @JsonSubTypes.Type(value = ChatTitleChangedUpdate.class, name = Update.CHAT_TITLE_CHANGED),
 })
+@KnownInstance(ofClass = Update.class, discriminator = "update_type")
 public class Update implements TamTamSerializable {
     public static final String MESSAGE_CREATED = "message_created";
     public static final String MESSAGE_CALLBACK = "message_callback";
@@ -72,7 +74,7 @@ public class Update implements TamTamSerializable {
     ));
 
     @NotNull
-    private final Long timestamp;
+    private final @Valid Long timestamp;
 
     @JsonCreator
     public Update(@JsonProperty("timestamp") Long timestamp) { 

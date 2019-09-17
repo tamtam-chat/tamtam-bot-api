@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
@@ -32,17 +33,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Message implements TamTamSerializable {
 
-    private User sender;
+    private @Valid User sender;
     @NotNull
-    private final Recipient recipient;
+    private final @Valid Recipient recipient;
     @NotNull
-    private final Long timestamp;
+    private final @Valid Long timestamp;
     @Nullable
-    private LinkedMessage link;
+    private @Valid LinkedMessage link;
     @NotNull
-    private final MessageBody body;
+    private final @Valid MessageBody body;
     @Nullable
-    private MessageStat stat;
+    private @Valid MessageStat stat;
 
     @JsonCreator
     public Message(@JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @JsonProperty("body") MessageBody body) { 
@@ -57,7 +58,7 @@ public class Message implements TamTamSerializable {
     }
 
     /**
-    * User that sent this message. Can be &#x60;null&#x60; if message has been posted on behalf of a channel
+    * User who sent this message. Can be &#x60;null&#x60; if message has been posted on behalf of a channel
     * @return sender
     **/
     @JsonProperty("sender")

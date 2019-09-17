@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
@@ -36,10 +37,10 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
 
     @Nullable
     @Size(max = 32)
-    private List<BotCommand> commands;
+    private List<@Valid BotCommand> commands;
     @Nullable
     @Size(max = 16000)
-    private String description;
+    private @Valid String description;
 
     @JsonCreator
     public BotInfo(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 

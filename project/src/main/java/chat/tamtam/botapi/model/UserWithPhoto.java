@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +32,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class UserWithPhoto extends User implements TamTamSerializable {
 
-    private String avatarUrl;
-    private String fullAvatarUrl;
+    private @Valid String avatarUrl;
+    private @Valid String fullAvatarUrl;
 
     @JsonCreator
     public UserWithPhoto(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 

@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -32,9 +33,9 @@ import javax.validation.constraints.NotNull;
 public class LocationAttachment extends Attachment implements TamTamSerializable {
 
     @NotNull
-    private final Double latitude;
+    private final @Valid Double latitude;
     @NotNull
-    private final Double longitude;
+    private final @Valid Double longitude;
 
     @JsonCreator
     public LocationAttachment(@JsonProperty("latitude") Double latitude, @JsonProperty("longitude") Double longitude) { 

@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -31,11 +32,11 @@ import javax.validation.constraints.NotNull;
  */
 public class Error implements TamTamSerializable {
 
-    private String error;
+    private @Valid String error;
     @NotNull
-    private final String code;
+    private final @Valid String code;
     @NotNull
-    private final String message;
+    private final @Valid String message;
 
     @JsonCreator
     public Error(@JsonProperty("code") String code, @JsonProperty("message") String message) { 

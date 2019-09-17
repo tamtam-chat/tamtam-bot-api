@@ -22,6 +22,7 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 
 
 /**
@@ -29,7 +30,7 @@ import java.util.Objects;
  */
 public class UploadedInfo implements TamTamSerializable {
 
-    private String token;
+    private @Valid String token;
 
     public UploadedInfo token(String token) {
         this.setToken(token);

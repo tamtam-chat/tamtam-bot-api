@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -32,29 +33,17 @@ import javax.validation.constraints.NotNull;
 public class InlineKeyboardAttachment extends Attachment implements TamTamSerializable {
 
     @NotNull
-    private final String callbackId;
-    @NotNull
-    private final Keyboard payload;
+    private final @Valid Keyboard payload;
 
     @JsonCreator
-    public InlineKeyboardAttachment(@JsonProperty("callback_id") String callbackId, @JsonProperty("payload") Keyboard payload) { 
+    public InlineKeyboardAttachment(@JsonProperty("payload") Keyboard payload) { 
         super();
-        this.callbackId = callbackId;
         this.payload = payload;
     }
 
     @Override
     public void visit(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    /**
-    * Unique identifier of keyboard
-    * @return callbackId
-    **/
-    @JsonProperty("callback_id")
-    public String getCallbackId() {
-        return callbackId;
     }
 
     /**
@@ -81,14 +70,12 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
         }
 
         InlineKeyboardAttachment other = (InlineKeyboardAttachment) o;
-        return Objects.equals(this.callbackId, other.callbackId) &&
-            Objects.equals(this.payload, other.payload);
+        return Objects.equals(this.payload, other.payload);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = 31 * result + (callbackId != null ? callbackId.hashCode() : 0);
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
         return result;
     }
@@ -96,7 +83,6 @@ public class InlineKeyboardAttachment extends Attachment implements TamTamSerial
     @Override
     public String toString() {
         return "InlineKeyboardAttachment{"+ super.toString()
-            + " callbackId='" + callbackId + '\''
             + " payload='" + payload + '\''
             + '}';
     }

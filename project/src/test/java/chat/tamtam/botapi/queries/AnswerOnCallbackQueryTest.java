@@ -20,8 +20,6 @@
 
 package chat.tamtam.botapi.queries;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.junit.Test;
 
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
@@ -45,7 +43,6 @@ public class AnswerOnCallbackQueryTest extends QueryTest {
 
         CallbackAnswer callbackAnswer = new CallbackAnswer();
         callbackAnswer.notification("some notification");
-        callbackAnswer.userId(ThreadLocalRandom.current().nextLong());
         SimpleQueryResult response2 = api.answerOnCallback(callbackAnswer, callbackId).execute();
         assertThat(response2.isSuccess(), is(true));
     }

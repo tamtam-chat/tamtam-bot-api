@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -32,9 +33,9 @@ import javax.validation.constraints.NotNull;
 public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
 
     @NotNull
-    private final Long chatId;
+    private final @Valid Long chatId;
     @NotNull
-    private final User user;
+    private final @Valid User user;
 
     @JsonCreator
     public BotAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 

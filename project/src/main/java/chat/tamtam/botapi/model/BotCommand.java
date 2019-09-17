@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -35,10 +36,10 @@ public class BotCommand implements TamTamSerializable {
 
     @NotNull
     @Size(min = 1, max = 64)
-    private final String name;
+    private final @Valid String name;
     @Nullable
     @Size(min = 1, max = 128)
-    private String description;
+    private @Valid String description;
 
     @JsonCreator
     public BotCommand(@JsonProperty("name") String name) { 

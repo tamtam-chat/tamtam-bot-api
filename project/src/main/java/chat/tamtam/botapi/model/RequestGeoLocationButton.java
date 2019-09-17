@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 
 
 /**
@@ -30,7 +31,7 @@ import java.util.Objects;
  */
 public class RequestGeoLocationButton extends Button implements TamTamSerializable {
 
-    private Boolean quick;
+    private @Valid Boolean quick;
 
     @JsonCreator
     public RequestGeoLocationButton(@JsonProperty("text") String text) { 

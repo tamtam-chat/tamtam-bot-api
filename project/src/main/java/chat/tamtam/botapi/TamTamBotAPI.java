@@ -41,6 +41,7 @@ import chat.tamtam.botapi.queries.DeleteMessageQuery;
 import chat.tamtam.botapi.queries.EditChatQuery;
 import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.queries.EditMyInfoQuery;
+import chat.tamtam.botapi.queries.GetAdminsQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
 import chat.tamtam.botapi.queries.GetMembersQuery;
@@ -194,6 +195,21 @@ public class TamTamBotAPI {
     }
 
     /**
+    * Get chat admins
+    * Returns all chat administrators. Bot must be **adminstrator** in requested chat.
+    * @param chatId Chat identifier (required)
+    * @return {@link ChatMembersList}
+    * @throws ClientException if fails to make API call
+    */
+    public GetAdminsQuery getAdmins(Long chatId) throws ClientException { 
+        if (chatId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling getAdmins");
+        }
+
+        return new GetAdminsQuery(client, chatId);
+    }
+
+    /**
     * Get chat
     * Returns info about chat.
     * @param chatId Requested chat identifier (required)
@@ -276,7 +292,7 @@ public class TamTamBotAPI {
 
     /**
     * Get updates
-    * You can use this method for getting updates in case your bot is not subscribed to WebHook. The method is based on long polling.  Every update has its own sequence number. &#x60;marker&#x60; property in response points to the next upcoming update.  All previous updates are considered as *committed* after passing &#x60;marker&#x60; parameter. If &#x60;marker&#x60; parameter is **not passed**, your bot will get all updates happened before the last commitment.
+    * You can use this method for getting updates in case your bot is not subscribed to WebHook. The method is based on long polling.  Every update has its own sequence number. &#x60;marker&#x60; property in response points to the next upcoming update.  All previous updates are considered as *committed* after passing &#x60;marker&#x60; parameter. If &#x60;marker&#x60; parameter is **not passed**, your bot will get all updates happened after the last commitment.
     * @return {@link UpdateList}
     */
     public GetUpdatesQuery getUpdates() { 
@@ -355,7 +371,7 @@ public class TamTamBotAPI {
 
     /**
     * Send message
-    * Sends a message to a chat. As a result for this method new message identifier returns. ### Attaching media Attaching media to messages is a three-step process.  At first step, you should [obtain a URL to upload](#operation/getUploadUrl) your media files.  At the second, you should upload binary of appropriate format to URL you obtained at the previous step. See [upload](https://dev.tamtam.chat/#operation/getUploadUrl) section for details.  Finally, if the upload process was successful, you will receive JSON-object in a response body.  Use this object to create attachment. Construct an object with two properties:  - &#x60;type&#x60; with the value set to appropriate media type  - and &#x60;payload&#x60; filled with the JSON you&#39;ve got.   For example, you can attach a video to message this way:  1. Get URL to upload. Execute following: &#x60;&#x60;&#x60;shell curl -X POST \\   &#39;https://botapi.tamtam.chat/uploads?access_token&#x3D;%access_token%&amp;type&#x3D;video&#39; &#x60;&#x60;&#x60; As the result it will return URL for the next step. &#x60;&#x60;&#x60;json {     \&quot;url\&quot;: \&quot;http://vu.mycdn.me/upload.do…\&quot; } &#x60;&#x60;&#x60;   2. Use this url to upload your binary:  &#x60;&#x60;&#x60;shell curl -i -X POST      -H \&quot;Content-Type: multipart/form-data\&quot;      -F \&quot;data&#x3D;@movie.mp4\&quot; \&quot;http://vu.mycdn.me/upload.do…\&quot; &#x60;&#x60;&#x60; As the result it will return JSON you can attach to message: &#x60;&#x60;&#x60;json {     \&quot;id\&quot;: 1234567890 } &#x60;&#x60;&#x60; 3. Send message with attach: &#x60;&#x60;&#x60;json {  \&quot;text\&quot;: \&quot;Message with video\&quot;,  \&quot;attachments\&quot;: [   {    \&quot;type\&quot;: \&quot;video\&quot;,    \&quot;payload\&quot;: {        \&quot;id\&quot;: 1173574260020    }   }  ] } &#x60;&#x60;&#x60;  **Important notice**:  It may take time for the server to process your file (audio/video or any binary). While a file is not processed you can&#39;t attach it. It means the last step will fail with &#x60;400&#x60; error. Try to send a message again until you&#39;ll get a successful result.
+    * Sends a message to a chat. As a result for this method new message identifier returns. ### Attaching media Attaching media to messages is a three-step process.  At first step, you should [obtain a URL to upload](#operation/getUploadUrl) your media files.  At the second, you should upload binary of appropriate format to URL you obtained at the previous step. See [upload](https://dev.tamtam.chat/#operation/getUploadUrl) section for details.  Finally, if the upload process was successful, you will receive JSON-object in a response body.  Use this object to create attachment. Construct an object with two properties: - &#x60;type&#x60; with the value set to appropriate media type - and &#x60;payload&#x60; filled with the JSON you&#39;ve got.  For example, you can attach a video to message this way:  1. Get URL to upload. Execute following: &#x60;&#x60;&#x60;shell curl -X POST &#39;https://botapi.tamtam.chat/uploads?access_token&#x3D;%access_token%&amp;type&#x3D;video&#39; &#x60;&#x60;&#x60; As the result it will return URL for the next step. &#x60;&#x60;&#x60;json {     \&quot;url\&quot;: \&quot;http://vu.mycdn.me/upload.do…\&quot; } &#x60;&#x60;&#x60;  2. Use this url to upload your binary: &#x60;&#x60;&#x60;shell curl -i -X POST   -H \&quot;Content-Type: multipart/form-data\&quot;   -F \&quot;data&#x3D;@movie.mp4\&quot; \&quot;http://vu.mycdn.me/upload.do…\&quot; &#x60;&#x60;&#x60; As the result it will return JSON you can attach to message: &#x60;&#x60;&#x60;json   {     \&quot;token\&quot;: \&quot;_3Rarhcf1PtlMXy8jpgie8Ai_KARnVFYNQTtmIRWNh4\&quot;   } &#x60;&#x60;&#x60; 3. Send message with attach: &#x60;&#x60;&#x60;json {     \&quot;text\&quot;: \&quot;Message with video\&quot;,     \&quot;attachments\&quot;: [         {             \&quot;type\&quot;: \&quot;video\&quot;,             \&quot;payload\&quot;: {                 \&quot;token\&quot;: \&quot;_3Rarhcf1PtlMXy8jpgie8Ai_KARnVFYNQTtmIRWNh4\&quot;             }         }     ] } &#x60;&#x60;&#x60;  **Important notice**:  It may take time for the server to process your file (audio/video or any binary). While a file is not processed you can&#39;t attach it. It means the last step will fail with &#x60;400&#x60; error. Try to send a message again until you&#39;ll get a successful result.
     * @param newMessageBody  (required)
     * @return {@link SendMessageResult}
     * @throws ClientException if fails to make API call

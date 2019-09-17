@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
@@ -33,11 +34,11 @@ import org.jetbrains.annotations.Nullable;
 public class User implements TamTamSerializable {
 
     @NotNull
-    private final Long userId;
+    private final @Valid Long userId;
     @NotNull
-    private final String name;
+    private final @Valid String name;
     @Nullable
-    private final String username;
+    private final @Valid String username;
 
     @JsonCreator
     public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 

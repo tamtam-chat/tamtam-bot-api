@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -36,19 +37,19 @@ public class BotPatch implements TamTamSerializable {
 
     @Nullable
     @Size(min = 1, max = 64)
-    private String name;
+    private @Valid String name;
     @Nullable
-    @Pattern(regexp = "[a-z]+[a-z0-9-_]*")
+    @Pattern(regexp = "[a-zA-Z]+[a-zA-Z0-9-_]*")
     @Size(min = 4, max = 64)
-    private String username;
+    private @Valid String username;
     @Nullable
     @Size(min = 1, max = 16000)
-    private String description;
+    private @Valid String description;
     @Nullable
     @Size(max = 32)
-    private List<BotCommand> commands;
+    private List<@Valid BotCommand> commands;
     @Nullable
-    private PhotoAttachmentRequestPayload photo;
+    private @Valid PhotoAttachmentRequestPayload photo;
 
     public BotPatch name(@Nullable String name) {
         this.setName(name);

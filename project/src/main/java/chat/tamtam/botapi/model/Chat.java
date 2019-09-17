@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
@@ -36,29 +37,31 @@ import org.jetbrains.annotations.Nullable;
 public class Chat implements TamTamSerializable {
 
     @NotNull
-    private final Long chatId;
+    private final @Valid Long chatId;
     @NotNull
-    private final ChatType type;
+    private final @Valid ChatType type;
     @NotNull
-    private final ChatStatus status;
+    private final @Valid ChatStatus status;
     @Nullable
-    private final String title;
+    private final @Valid String title;
     @Nullable
-    private final Image icon;
+    private final @Valid Image icon;
     @NotNull
-    private final Long lastEventTime;
+    private final @Valid Long lastEventTime;
     @NotNull
-    private final Integer participantsCount;
+    private final @Valid Integer participantsCount;
     @Nullable
-    private Long ownerId;
+    private @Valid Long ownerId;
     @Nullable
-    private Map<String, Long> participants;
+    private Map<String, @Valid Long> participants;
     @NotNull
-    private final Boolean isPublic;
+    private final @Valid Boolean isPublic;
     @Nullable
-    private String link;
+    private @Valid String link;
     @Nullable
-    private final Object description;
+    private final @Valid Object description;
+    @Nullable
+    private @Valid UserWithPhoto dialogWithUser;
 
     @JsonCreator
     public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @Nullable @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") Object description) { 
@@ -223,6 +226,25 @@ public class Chat implements TamTamSerializable {
         return description;
     }
 
+    public Chat dialogWithUser(@Nullable UserWithPhoto dialogWithUser) {
+        this.setDialogWithUser(dialogWithUser);
+        return this;
+    }
+
+    /**
+    * Another user in conversation. For &#x60;dialog&#x60; type chats only
+    * @return dialogWithUser
+    **/
+    @Nullable
+    @JsonProperty("dialog_with_user")
+    public UserWithPhoto getDialogWithUser() {
+        return dialogWithUser;
+    }
+
+    public void setDialogWithUser(@Nullable UserWithPhoto dialogWithUser) {
+        this.dialogWithUser = dialogWithUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -244,7 +266,8 @@ public class Chat implements TamTamSerializable {
             Objects.equals(this.participants, other.participants) &&
             Objects.equals(this.isPublic, other.isPublic) &&
             Objects.equals(this.link, other.link) &&
-            Objects.equals(this.description, other.description);
+            Objects.equals(this.description, other.description) &&
+            Objects.equals(this.dialogWithUser, other.dialogWithUser);
     }
 
     @Override
@@ -262,6 +285,7 @@ public class Chat implements TamTamSerializable {
         result = 31 * result + (isPublic != null ? isPublic.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (dialogWithUser != null ? dialogWithUser.hashCode() : 0);
         return result;
     }
 
@@ -280,6 +304,7 @@ public class Chat implements TamTamSerializable {
             + " isPublic='" + isPublic + '\''
             + " link='" + link + '\''
             + " description='" + description + '\''
+            + " dialogWithUser='" + dialogWithUser + '\''
             + '}';
     }
 }

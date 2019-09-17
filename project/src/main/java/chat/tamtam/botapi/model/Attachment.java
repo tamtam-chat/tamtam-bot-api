@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.Valid;
 
 
 /**
@@ -43,6 +44,7 @@ import java.util.Set;
   @JsonSubTypes.Type(value = ShareAttachment.class, name = Attachment.SHARE),
   @JsonSubTypes.Type(value = LocationAttachment.class, name = Attachment.LOCATION),
 })
+@KnownInstance(ofClass = Attachment.class, discriminator = "type")
 public class Attachment implements TamTamSerializable {
     public static final String IMAGE = "image";
     public static final String VIDEO = "video";

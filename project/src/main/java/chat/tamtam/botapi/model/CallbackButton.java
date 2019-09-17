@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -34,8 +35,8 @@ public class CallbackButton extends Button implements TamTamSerializable {
 
     @NotNull
     @Size(max = 1024)
-    private final String payload;
-    private Intent intent;
+    private final @Valid String payload;
+    private @Valid Intent intent;
 
     @JsonCreator
     public CallbackButton(@JsonProperty("payload") String payload, @JsonProperty("text") String text) { 

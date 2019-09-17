@@ -46,16 +46,13 @@ public class TamTamServer {
         post("/chats/:chatId/members", service::addMembers, service::serialize);
         delete("/chats/:chatId/members", service::removeMembers, service::serialize);
         delete("/chats/:chatId/members/me", service::leaveChat, service::serialize);
+        get("/chats/:chatId/members/admins", service::getAdmins, service::serialize);
         post("/chats/:chatId/actions", service::sendAction, service::serialize);
-
         put("/messages", service::editMessage, service::serialize);
-
         post("/answers", service::answer, service::serialize);
-
         get("/subscriptions", service::getSubscriptions, service::serialize);
         post("/subscriptions", service::addSubscription, service::serialize);
         delete("/subscriptions", service::removeSubscription, service::serialize);
-
         post("/uploads", service::getUploadUrl, service::serialize);
 
         awaitInitialization();
