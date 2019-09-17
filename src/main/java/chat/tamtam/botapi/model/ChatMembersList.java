@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
@@ -35,9 +36,9 @@ import org.jetbrains.annotations.Nullable;
 public class ChatMembersList implements TamTamSerializable {
 
     @NotNull
-    private final List<ChatMember> members;
+    private final List<@Valid ChatMember> members;
     @Nullable
-    private final Long marker;
+    private final @Valid Long marker;
 
     @JsonCreator
     public ChatMembersList(@JsonProperty("members") List<ChatMember> members, @Nullable @JsonProperty("marker") Long marker) { 

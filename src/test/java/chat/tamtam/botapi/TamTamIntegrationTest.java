@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -51,7 +52,6 @@ import chat.tamtam.botapi.model.LinkedMessage;
 import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageLinkType;
-import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.NewMessageLink;
 import chat.tamtam.botapi.model.PhotoAttachment;
@@ -64,18 +64,21 @@ import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.UploadType;
+import chat.tamtam.botapi.model.UserIdsList;
 import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
+import chat.tamtam.botapi.queries.AddMembersQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
 import chat.tamtam.botapi.queries.GetMessagesQuery;
-import chat.tamtam.botapi.queries.GetMyInfoQuery;
+import chat.tamtam.botapi.queries.RemoveMemberQuery;
 import chat.tamtam.botapi.queries.SendMessageQuery;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @author alexandrchuprin
@@ -84,12 +87,13 @@ import static org.junit.Assert.assertThat;
 public abstract class TamTamIntegrationTest {
     protected static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
+    protected static final boolean IS_TRAVIS = Boolean.parseBoolean(System.getenv("TRAVIS"));
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
     private static final String TOKEN_3 = getToken("TAMTAM_BOTAPI_TOKEN_3");
 
     private final OkHttpTransportClient transportClient = new OkHttpTransportClient();
-    private final JacksonSerializer serializer = new JacksonSerializer();
+    protected final JacksonSerializer serializer = new JacksonSerializer();
 
     protected TamTamClient client = new TamTamClient(TOKEN_1, transportClient, serializer);
     protected TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
@@ -97,19 +101,19 @@ public abstract class TamTamIntegrationTest {
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 
-    protected BotInfo me;
-    protected BotInfo bot2;
-    protected BotInfo bot3;
+    protected TestBot bot1;
+    protected TestBot bot2;
+    protected TestBot3 bot3;
 
     @Before
     public void setUp() throws Exception {
-        me = getMe();
-        bot2 = new GetMyInfoQuery(client2).execute();
-        bot3 = new GetMyInfoQuery(client3).execute();
+        bot1 = new TestBot(client, IS_TRAVIS);
+        bot2 = new TestBot(client2, IS_TRAVIS);
+        bot3 = new TestBot3(client3, client, IS_TRAVIS);
         LOG.info("Endpoint: {}", client.getEndpoint());
     }
 
-    protected BotInfo getMe() throws APIException, ClientException {
+    protected BotInfo getBot1() throws APIException, ClientException {
         return botAPI.getMyInfo().execute();
     }
 
@@ -293,9 +297,30 @@ public abstract class TamTamIntegrationTest {
         return Arrays.asList(dialog, chat, channel);
     }
 
-    protected Message getMessage(TamTamClient client, String messageId) throws APIException,
-            ClientException {
-        return new GetMessagesQuery(client).messageIds(Collections.singleton(messageId)).execute().getMessages().get(0);
+    protected void removeUser(TamTamClient client, Long commonChatId, Long userId) {
+        try {
+            new RemoveMemberQuery(client, commonChatId, userId).execute();
+        } catch (APIException | ClientException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    protected void addUser(TamTamClient client, Long chatId, Long userId) throws Exception {
+        new AddMembersQuery(client, new UserIdsList(Collections.singletonList(userId)), chatId).execute();
+    }
+
+    protected Message getMessage(TamTamClient client, String messageId) throws APIException, ClientException {
+        return new GetMessagesQuery(client)
+                .messageIds(Collections.singleton(messageId))
+                .execute()
+                .getMessages()
+                .get(0);
+    }
+
+    protected void await(CountDownLatch updateReceived) throws InterruptedException {
+        if (!updateReceived.await(10, TimeUnit.SECONDS)) {
+            fail();
+        }
     }
 
     private static void compare(StickerAttachmentRequest model, StickerAttachment attachment) {
@@ -366,7 +391,7 @@ public abstract class TamTamIntegrationTest {
                 .toString();
     }
 
-    private static String getToken(String envVar) {
+    static String getToken(String envVar) {
         String tokenEnv = System.getenv(envVar);
         if (tokenEnv != null) {
             return tokenEnv;

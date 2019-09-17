@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
@@ -36,15 +37,15 @@ import org.jetbrains.annotations.Nullable;
 public class ChatMember extends UserWithPhoto implements TamTamSerializable {
 
     @NotNull
-    private final Long lastAccessTime;
+    private final @Valid Long lastAccessTime;
     @NotNull
-    private final Boolean isOwner;
+    private final @Valid Boolean isOwner;
     @NotNull
-    private final Boolean isAdmin;
+    private final @Valid Boolean isAdmin;
     @NotNull
-    private final Long joinTime;
+    private final @Valid Long joinTime;
     @Nullable
-    private final Set<ChatAdminPermission> permissions;
+    private final Set<@Valid ChatAdminPermission> permissions;
 
     @JsonCreator
     public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("is_admin") Boolean isAdmin, @JsonProperty("join_time") Long joinTime, @Nullable @JsonProperty("permissions") Set<ChatAdminPermission> permissions, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 

@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.Valid;
 
 
 /**
@@ -42,6 +43,7 @@ import java.util.Set;
   @JsonSubTypes.Type(value = InlineKeyboardAttachmentRequest.class, name = AttachmentRequest.INLINE_KEYBOARD),
   @JsonSubTypes.Type(value = LocationAttachmentRequest.class, name = AttachmentRequest.LOCATION),
 })
+@KnownInstance(ofClass = AttachmentRequest.class, discriminator = "type")
 public class AttachmentRequest implements TamTamSerializable {
     public static final String IMAGE = "image";
     public static final String VIDEO = "video";

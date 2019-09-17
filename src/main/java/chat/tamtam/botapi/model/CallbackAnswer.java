@@ -22,6 +22,7 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -30,28 +31,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CallbackAnswer implements TamTamSerializable {
 
-    private Long userId;
     @Nullable
-    private NewMessageBody message;
+    private @Valid NewMessageBody message;
     @Nullable
-    private String notification;
-
-    public CallbackAnswer userId(Long userId) {
-        this.setUserId(userId);
-        return this;
-    }
-
-    /**
-    * @return userId
-    **/
-    @JsonProperty("user_id")
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    private @Valid String notification;
 
     public CallbackAnswer message(@Nullable NewMessageBody message) {
         this.setMessage(message);
@@ -101,15 +84,13 @@ public class CallbackAnswer implements TamTamSerializable {
         }
 
         CallbackAnswer other = (CallbackAnswer) o;
-        return Objects.equals(this.userId, other.userId) &&
-            Objects.equals(this.message, other.message) &&
+        return Objects.equals(this.message, other.message) &&
             Objects.equals(this.notification, other.notification);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (message != null ? message.hashCode() : 0);
         result = 31 * result + (notification != null ? notification.hashCode() : 0);
         return result;
@@ -118,7 +99,6 @@ public class CallbackAnswer implements TamTamSerializable {
     @Override
     public String toString() {
         return "CallbackAnswer{"
-            + " userId='" + userId + '\''
             + " message='" + message + '\''
             + " notification='" + notification + '\''
             + '}';

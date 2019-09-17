@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -32,14 +33,14 @@ import javax.validation.constraints.NotNull;
 public class StickerAttachment extends Attachment implements TamTamSerializable {
 
     @NotNull
-    private final StickerAttachmentPayload payload;
+    private final @Valid StickerAttachmentPayload payload;
     @NotNull
-    private final Integer width;
+    private final @Valid Integer width;
     @NotNull
-    private final Integer height;
+    private final @Valid Integer height;
 
     @JsonCreator
-    public StickerAttachment(@JsonProperty("payload") StickerAttachmentPayload payload, @JsonProperty("width") Integer width, @JsonProperty("height") Integer height) {
+    public StickerAttachment(@JsonProperty("payload") StickerAttachmentPayload payload, @JsonProperty("width") Integer width, @JsonProperty("height") Integer height) { 
         super();
         this.payload = payload;
         this.width = width;

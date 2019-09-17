@@ -22,6 +22,7 @@ package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
@@ -32,10 +33,10 @@ import org.jetbrains.annotations.Nullable;
 public class ChatPatch implements TamTamSerializable {
 
     @Nullable
-    private PhotoAttachmentRequestPayload icon;
+    private @Valid PhotoAttachmentRequestPayload icon;
     @Nullable
     @Size(min = 1, max = 200)
-    private String title;
+    private @Valid String title;
 
     public ChatPatch icon(@Nullable PhotoAttachmentRequestPayload icon) {
         this.setIcon(icon);

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -37,14 +38,14 @@ import org.jetbrains.annotations.Nullable;
 public class Subscription implements TamTamSerializable {
 
     @NotNull
-    private final String url;
+    private final @Valid String url;
     @NotNull
-    private final Long time;
+    private final @Valid Long time;
     @Nullable
-    private final Set<String> updateTypes;
+    private final Set<@Valid String> updateTypes;
     @Nullable
     @Pattern(regexp = "[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}")
-    private final String version;
+    private final @Valid String version;
 
     @JsonCreator
     public Subscription(@JsonProperty("url") String url, @JsonProperty("time") Long time, @Nullable @JsonProperty("update_types") Set<String> updateTypes, @Nullable @JsonProperty("version") String version) { 

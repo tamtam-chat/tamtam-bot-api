@@ -70,7 +70,9 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         public void visit(MessageCreatedUpdate model) {
                             Message message = model.getMessage();
                             MessageBody body = message.getBody();
-                            LOG.info("Got update: " + body.getMid() + ", text: " + body.getText());
+                            if (!IS_TRAVIS) {
+                                LOG.info("Got update: " + body.getMid() + ", text: " + body.getText());
+                            }
                             receivedMessages.add(body.getMid());
                         }
                     });

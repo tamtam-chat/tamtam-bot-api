@@ -12,6 +12,8 @@ import org.junit.experimental.categories.Category;
 import chat.tamtam.botapi.IntegrationTest;
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.client.TamTamClient;
+import chat.tamtam.botapi.exceptions.APIException;
+import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
@@ -200,7 +202,8 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
-            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name", me.getUserId(), null, "+79991234567");
+            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name",
+                    bot1.getUserId(), null, "+79991234567");
             ContactAttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
             NewMessageBody editedMessageBody = new NewMessageBody(null, null, null)
                     .attachment(contactAR);

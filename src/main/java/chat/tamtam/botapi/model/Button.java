@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -42,6 +43,7 @@ import javax.validation.constraints.Size;
   @JsonSubTypes.Type(value = RequestGeoLocationButton.class, name = Button.REQUEST_GEO_LOCATION),
   @JsonSubTypes.Type(value = RequestContactButton.class, name = Button.REQUEST_CONTACT),
 })
+@KnownInstance(ofClass = Button.class, discriminator = "type")
 public class Button implements TamTamSerializable {
     public static final String CALLBACK = "callback";
     public static final String LINK = "link";
@@ -56,7 +58,7 @@ public class Button implements TamTamSerializable {
 
     @NotNull
     @Size(max = 128)
-    private final String text;
+    private final @Valid String text;
 
     @JsonCreator
     public Button(@JsonProperty("text") String text) { 

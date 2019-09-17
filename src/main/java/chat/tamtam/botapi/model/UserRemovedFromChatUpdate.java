@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -32,18 +33,16 @@ import javax.validation.constraints.NotNull;
 public class UserRemovedFromChatUpdate extends Update implements TamTamSerializable {
 
     @NotNull
-    private final Long chatId;
+    private final @Valid Long chatId;
     @NotNull
-    private final User user;
-    @NotNull
-    private final Long adminId;
+    private final @Valid User user;
+    private @Valid Long adminId;
 
     @JsonCreator
-    public UserRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("admin_id") Long adminId, @JsonProperty("timestamp") Long timestamp) { 
+    public UserRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
         this.user = user;
-        this.adminId = adminId;
     }
 
     @Override
@@ -69,13 +68,22 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
         return user;
     }
 
+    public UserRemovedFromChatUpdate adminId(Long adminId) {
+        this.setAdminId(adminId);
+        return this;
+    }
+
     /**
-    * Administrator who removed user from chat
+    * Administrator who removed user from chat. Can be &#x60;null&#x60; in case when user left chat
     * @return adminId
     **/
     @JsonProperty("admin_id")
     public Long getAdminId() {
         return adminId;
+    }
+
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 
     @JsonProperty("update_type")

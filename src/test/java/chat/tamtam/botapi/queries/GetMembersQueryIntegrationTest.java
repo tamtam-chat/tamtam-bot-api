@@ -39,7 +39,7 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
                 .collect(Collectors.toMap(ChatMember::getUserId, Function.identity()));
 
         assertThat(members.size(), is(3));
-        assertThat(members.get(me.getUserId()).isAdmin(), is(true));
+        assertThat(members.get(bot1.getUserId()).isAdmin(), is(true));
         assertThat(members.get(bot2.getUserId()).isAdmin(), is(false));
     }
 
@@ -52,7 +52,7 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
                 .collect(Collectors.toMap(ChatMember::getUserId, Function.identity()));
 
         assertThat(members.size(), is(3));
-        assertThat(members.get(me.getUserId()).isAdmin(), is(false));
+        assertThat(members.get(bot1.getUserId()).isAdmin(), is(false));
         assertThat(members.get(bot2.getUserId()).isAdmin(), is(false));
     }
 
@@ -68,7 +68,7 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldGetMembersByIds() throws Exception {
         List<Chat> chats = getChats();
         Chat chat = getByTitle(chats, "test chat #1");
-        Set<Long> ids = new LinkedHashSet<>(Arrays.asList(me.getUserId(), bot2.getUserId()));
+        HashSet<Long> ids = new LinkedHashSet<>(Arrays.asList(bot1.getUserId(), bot2.getUserId()));
         ChatMembersList members = new GetMembersQuery(client, chat.getChatId()).userIds(ids).execute();
         assertThat(members.getMarker(), is(nullValue()));
         assertThat(members.getMembers().stream().map(ChatMember::getUserId).collect(Collectors.toCollection(LinkedHashSet::new)), is(ids));
@@ -76,11 +76,11 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
         Map<Long, ChatMember> byId = members.getMembers().stream().collect(
                 Collectors.toMap(ChatMember::getUserId, Function.identity()));
 
-        ChatMember myMembership = byId.get(me.getUserId());
+        ChatMember myMembership = byId.get(bot1.getUserId());
         ChatMember bot2Membership = byId.get(bot2.getUserId());
         assertThat(myMembership.getPermissions(), is(not(empty())));
         assertThat(myMembership.isAdmin(), is(true));
-        assertThat(myMembership.getUsername(), is(me.getUsername()));
+        assertThat(myMembership.getUsername(), is(bot1.getUsername()));
         assertThat(bot2Membership.isAdmin(), is(false));
         assertThat(bot2Membership.getPermissions(), is(nullValue()));
     }
@@ -100,7 +100,7 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
         } while (marker != null);
 
         assertThat(result.stream().map(ChatMember::getUserId).collect(Collectors.toList()),
-                is(Stream.of(me.getUserId(), bot2.getUserId(), bot3.getUserId())
+                is(Stream.of(bot1.getUserId(), bot2.getUserId(), bot3.getUserId())
                         .sorted(Comparator.reverseOrder()).collect(Collectors.toList())));
     }
 
@@ -109,7 +109,7 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldThrowExceptionNotChannelAdmin() throws Exception {
         List<Chat> chats = getChats();
         Chat chat = getByTitle(chats, "test channel #2");
-        HashSet<Long> ids = new HashSet<>(Arrays.asList(me.getUserId(), bot2.getUserId()));
+        HashSet<Long> ids = new HashSet<>(Arrays.asList(bot1.getUserId(), bot2.getUserId()));
         new GetMembersQuery(client, chat.getChatId()).userIds(ids).execute();
     }
 
@@ -117,7 +117,7 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldThrowExceptionIfNotChatMember() throws Exception {
         List<Chat> chats = getChats();
         Chat chat = getByTitle(chats, "test chat #5");
-        HashSet<Long> ids = new HashSet<>(Arrays.asList(me.getUserId(), bot2.getUserId()));
+        HashSet<Long> ids = new HashSet<>(Arrays.asList(bot1.getUserId(), bot2.getUserId()));
         new GetMembersQuery(client2, chat.getChatId()).userIds(ids).execute();
     }
 
@@ -125,7 +125,7 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldThrowExceptionIfNotChannelMember() throws Exception {
         List<Chat> chats = getChats();
         Chat chat = getByTitle(chats, "test channel #3");
-        HashSet<Long> ids = new HashSet<>(Arrays.asList(me.getUserId(), bot2.getUserId()));
+        HashSet<Long> ids = new HashSet<>(Arrays.asList(bot1.getUserId(), bot2.getUserId()));
         new GetMembersQuery(client2, chat.getChatId()).userIds(ids).execute();
     }
 }

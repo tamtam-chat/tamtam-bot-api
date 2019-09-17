@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -32,8 +33,8 @@ import javax.validation.constraints.NotNull;
 public class SimpleQueryResult implements TamTamSerializable {
 
     @NotNull
-    private final Boolean success;
-    private String message;
+    private final @Valid Boolean success;
+    private @Valid String message;
 
     @JsonCreator
     public SimpleQueryResult(@JsonProperty("success") Boolean success) { 

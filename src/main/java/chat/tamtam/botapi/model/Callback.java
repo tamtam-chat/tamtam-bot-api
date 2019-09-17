@@ -23,6 +23,7 @@ package chat.tamtam.botapi.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -32,12 +33,12 @@ import javax.validation.constraints.NotNull;
 public class Callback implements TamTamSerializable {
 
     @NotNull
-    private final Long timestamp;
+    private final @Valid Long timestamp;
     @NotNull
-    private final String callbackId;
-    private String payload;
+    private final @Valid String callbackId;
+    private @Valid String payload;
     @NotNull
-    private final User user;
+    private final @Valid User user;
 
     @JsonCreator
     public Callback(@JsonProperty("timestamp") Long timestamp, @JsonProperty("callback_id") String callbackId, @JsonProperty("user") User user) { 

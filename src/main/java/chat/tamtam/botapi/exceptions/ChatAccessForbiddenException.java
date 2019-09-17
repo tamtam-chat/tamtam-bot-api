@@ -5,6 +5,6 @@ package chat.tamtam.botapi.exceptions;
  */
 public class ChatAccessForbiddenException extends APIException {
     public ChatAccessForbiddenException(String message) {
-        super(message);
+        super(403, message);
     }
 }

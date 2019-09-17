@@ -5,15 +5,14 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
+import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.BotCommand;
 import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.BotPatch;
-import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 
 import static org.hamcrest.CoreMatchers.not;
@@ -36,7 +35,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        originalMe.compareAndSet(null, me);
+        originalMe.compareAndSet(null, bot1.getBotInfo());
         newName = "TT Integration Test Bot " + now();
         newUsername = randomText(16);
         newDescription = randomText(64);
@@ -52,7 +51,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
             BotPatch patch = new BotPatch().name(newName);
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             assertThat(botInfo.getName(), is(newName));
-            assertThat(getMe().getName(), is(newName));
+            assertThat(getBot1().getName(), is(newName));
         });
     }
 
@@ -62,7 +61,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
             BotPatch patch = new BotPatch().username(newUsername);
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             assertThat(botInfo.getUsername(), is(newUsername));
-            assertThat(getMe().getUsername(), is(newUsername));
+            assertThat(getBot1().getUsername(), is(newUsername));
         });
     }
 
@@ -72,7 +71,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
             BotPatch patch = new BotPatch().description(newDescription);
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             assertThat(botInfo.getDescription(), is(newDescription));
-            assertThat(getMe().getDescription(), is(newDescription));
+            assertThat(getBot1().getDescription(), is(newDescription));
         });
     }
 
@@ -82,7 +81,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
             BotPatch patch = new BotPatch().commands(commands);
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             assertThat(botInfo.getCommands(), is(commands));
-            assertThat(getMe().getCommands(), is(commands));
+            assertThat(getBot1().getCommands(), is(commands));
         });
     }
 
@@ -92,7 +91,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
             BotPatch patch = new BotPatch().commands(Collections.emptyList());
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             assertThat(botInfo.getCommands(), is(nullValue()));
-            assertThat(getMe().getCommands(), is(nullValue()));
+            assertThat(getBot1().getCommands(), is(nullValue()));
         });
     }
 
@@ -101,8 +100,8 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
         doEdit(() -> {
             BotPatch patch = new BotPatch().photo(photo);
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
-            assertThat(botInfo.getAvatarUrl(), is(not(me.getAvatarUrl())));
-            assertThat(getMe().getAvatarUrl(), is(not(me.getAvatarUrl())));
+            assertThat(botInfo.getAvatarUrl(), is(not(bot1.getAvatarUrl())));
+            assertThat(getBot1().getAvatarUrl(), is(not(bot1.getAvatarUrl())));
         });
     }
 
@@ -117,12 +116,12 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
                     .username(newUsername);
 
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
-            BotInfo updatedMe = getMe();
+            BotInfo updatedMe = getBot1();
             assertThat(botInfo, is(updatedMe));
             assertThat(updatedMe.getName(), is(newName));
             assertThat(updatedMe.getUsername(), is(newUsername));
             assertThat(updatedMe.getDescription(), is(newDescription));
-            assertThat(updatedMe.getAvatarUrl(), is(not(me.getAvatarUrl())));
+            assertThat(updatedMe.getAvatarUrl(), is(not(bot1.getAvatarUrl())));
             assertThat(updatedMe.getCommands(), is(commands));
         });
     }

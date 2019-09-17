@@ -23,6 +23,7 @@ import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SendMessageResult;
 
+import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
@@ -103,20 +104,23 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldGetAllMessagesInDialog() throws Exception {
         List<Chat> chats = getChats();
-        Chat dialog = getBy(chats, c -> c.getType() == ChatType.DIALOG && c.getChatId() != (me.getUserId() ^ bot3.getUserId()));
+        Chat dialog = getBy(chats, c -> c.getType() == ChatType.DIALOG && c.getChatId() != (bot1.getUserId() ^ bot3.getUserId()));
 
         List<String> posted = new ArrayList<>();
         long start = now();
+        Long dialogChatId = dialog.getChatId();
         for (int i = 0; i < 30; i++) {
             String text = randomText();
-            new SendMessageQuery(client, new NewMessageBody(text, null, null)).chatId(dialog.getChatId()).execute();
-            posted.add(text);
+            new SendMessageQuery(client, new NewMessageBody(text, null, null)).chatId(dialogChatId).execute();
+            posted.add(0, text);
+            sleep(1);
         }
 
+        sleep(1000);
         long from = now();
         List<String> fetched = new ArrayList<>();
         do {
-            MessageList messageList = new GetMessagesQuery(client).chatId(dialog.getChatId()).count(10).from(from).to(start).execute();
+            MessageList messageList = new GetMessagesQuery(client).chatId(dialogChatId).count(10).from(from).to(start).execute();
             List<Message> messages = messageList.getMessages();
             if (messages.isEmpty()) {
                 break;
@@ -128,7 +132,6 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
             }
         } while (from > start);
 
-        Collections.reverse(posted);
         assertThat(fetched, is(posted));
     }
 

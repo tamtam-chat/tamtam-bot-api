@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -34,7 +35,7 @@ import javax.validation.constraints.NotNull;
 public class MessageList implements TamTamSerializable {
 
     @NotNull
-    private final List<Message> messages;
+    private final List<@Valid Message> messages;
 
     @JsonCreator
     public MessageList(@JsonProperty("messages") List<Message> messages) { 
