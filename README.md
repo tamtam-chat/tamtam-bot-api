@@ -18,7 +18,7 @@ git subtree merge -P project github/master
 ```
 
 # Release process
-- Fetch all changes made in GitHub repo
+- Fetch all changes made in GitHub repo: `git subtree pull -P project github master`
 - `cd project`
 - `mvn release:prepare`
 - Go to parent dir: `cd ..`
