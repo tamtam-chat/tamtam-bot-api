@@ -23,7 +23,6 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
         FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor() {
             @Override
             public void visit(BotStartedUpdate model) {
-                assertThat(model.getPayload(), is(payload));
                 assertThat(model.getUser().getUserId(), is(bot3.getUserId()));
                 updateReceived.countDown();
             }
@@ -44,7 +43,6 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
                     @Override
                     public void visit(BotStartedUpdate model) {
                         assertThat(model.getUser().getUserId(), is(bot1.getUserId()));
-                        assertThat(model.getPayload(), is(payload));
                         updateReceived.countDown();
                     }
                 });
