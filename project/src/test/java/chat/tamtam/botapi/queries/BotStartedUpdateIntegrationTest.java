@@ -1,8 +1,8 @@
 package chat.tamtam.botapi.queries;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import chat.tamtam.botapi.model.BotStartedUpdate;
@@ -10,7 +10,6 @@ import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * @author alexandrchuprin
@@ -34,6 +33,7 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
         await(updateReceived);
     }
 
+    @Ignore
     @Test
     public void shouldGetWebhookUpdate() throws Exception {
         String payload = randomText();
