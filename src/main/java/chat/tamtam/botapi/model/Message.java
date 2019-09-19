@@ -44,6 +44,8 @@ public class Message implements TamTamSerializable {
     private final @Valid MessageBody body;
     @Nullable
     private @Valid MessageStat stat;
+    @Nullable
+    private @Valid String url;
 
     @JsonCreator
     public Message(@JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @JsonProperty("body") MessageBody body) { 
@@ -135,6 +137,25 @@ public class Message implements TamTamSerializable {
         this.stat = stat;
     }
 
+    public Message url(@Nullable String url) {
+        this.setUrl(url);
+        return this;
+    }
+
+    /**
+    * Message public URL. Can be &#x60;null&#x60; for dialogs or non-public chats/channels
+    * @return url
+    **/
+    @Nullable
+    @JsonProperty("url")
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(@Nullable String url) {
+        this.url = url;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -150,7 +171,8 @@ public class Message implements TamTamSerializable {
             Objects.equals(this.timestamp, other.timestamp) &&
             Objects.equals(this.link, other.link) &&
             Objects.equals(this.body, other.body) &&
-            Objects.equals(this.stat, other.stat);
+            Objects.equals(this.stat, other.stat) &&
+            Objects.equals(this.url, other.url);
     }
 
     @Override
@@ -162,6 +184,7 @@ public class Message implements TamTamSerializable {
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (body != null ? body.hashCode() : 0);
         result = 31 * result + (stat != null ? stat.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 
@@ -174,6 +197,7 @@ public class Message implements TamTamSerializable {
             + " link='" + link + '\''
             + " body='" + body + '\''
             + " stat='" + stat + '\''
+            + " url='" + url + '\''
             + '}';
     }
 }
