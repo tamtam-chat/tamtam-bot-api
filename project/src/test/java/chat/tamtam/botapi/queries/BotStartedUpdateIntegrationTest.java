@@ -33,7 +33,6 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
         await(updateReceived);
     }
 
-    @Ignore
     @Test
     public void shouldGetWebhookUpdate() throws Exception {
         String payload = randomText();
@@ -49,6 +48,7 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
 
         bot1.addConsumer(consumer);
         bot3.startYourself(bot1.getUserId(), payload);
+
         await(updateReceived);
     }
 }

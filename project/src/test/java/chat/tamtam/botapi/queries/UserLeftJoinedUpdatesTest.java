@@ -4,32 +4,38 @@ import java.util.concurrent.CountDownLatch;
 
 import org.junit.Test;
 
-import chat.tamtam.botapi.VisitedUpdatesTracer;
-import chat.tamtam.botapi.model.BotAddedToChatUpdate;
-import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
-import chat.tamtam.botapi.model.NoopUpdateVisitor;
-import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
  */
-public class UserAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
+public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
     @Test
     public void shouldGetUpdatesInChat() throws Exception {
-        test("UserAddedRemovedUpdatesTest#shouldGetUpdatesInChat");
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInChat");
     }
 
     @Test
-    public void shouldGetUpdatesInChannel() throws Exception {
-        test("UserAddedRemovedUpdatesTest#shouldGetUpdatesInChannel");
+    public void shouldGetUpdatesInPublicChat() throws Exception {
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPublicChat");
+    }
+
+    @Test
+    public void shouldGetUpdatesInPrivateChannel() throws Exception {
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPrivateChannel");
+    }
+
+    @Test
+    public void shouldGetUpdatesInPublicChannel() throws Exception {
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPublicChannel");
     }
 
     private void test(String chatTitle) throws Exception {
@@ -39,11 +45,11 @@ public class UserAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
 
         CountDownLatch bot3added = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);
-        VisitedUpdatesTracer bot2updates = new VisitedUpdatesTracer(new NoopUpdateVisitor() {
+        FailByDefaultUpdateVisitor bot1updates = new FailByDefaultUpdateVisitor() {
             @Override
             public void visit(UserAddedToChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
-                assertThat(model.getInviterId(), is(bot1.getUserId()));
+                assertThat(model.getInviterId(), is(nullValue()));
                 assertThat(model.getUser(), is(bot3user));
                 bot3added.countDown();
             }
@@ -51,19 +57,19 @@ public class UserAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
             @Override
             public void visit(UserRemovedFromChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
-                assertThat(model.getAdminId(), is(bot1.getUserId()));
+                assertThat(model.getAdminId(), is(nullValue()));
                 assertThat(model.getUser(), is(bot3user));
                 bot3removed.countDown();
             }
-        });
+        };
 
-        bot2.addConsumer(bot2updates);
+        bot1.addConsumer(bot1updates);
 
         try {
-            addUser(client, commonChatId, bot3.getUserId());
+            bot3.joinChat(commonChat.getLink());
             await(bot3added);
         } finally {
-            removeUser(client, commonChatId, bot3.getUserId());
+            bot3.leaveChat(commonChatId);
             await(bot3removed);
         }
     }
