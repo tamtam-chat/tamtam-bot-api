@@ -38,12 +38,11 @@ public class ChatMembersList implements TamTamSerializable {
     @NotNull
     private final List<@Valid ChatMember> members;
     @Nullable
-    private final @Valid Long marker;
+    private @Valid Long marker;
 
     @JsonCreator
-    public ChatMembersList(@JsonProperty("members") List<ChatMember> members, @Nullable @JsonProperty("marker") Long marker) { 
+    public ChatMembersList(@JsonProperty("members") List<ChatMember> members) { 
         this.members = members;
-        this.marker = marker;
     }
 
     /**
@@ -55,6 +54,11 @@ public class ChatMembersList implements TamTamSerializable {
         return members;
     }
 
+    public ChatMembersList marker(@Nullable Long marker) {
+        this.setMarker(marker);
+        return this;
+    }
+
     /**
     * Pointer to the next data page
     * @return marker
@@ -63,6 +67,10 @@ public class ChatMembersList implements TamTamSerializable {
     @JsonProperty("marker")
     public Long getMarker() {
         return marker;
+    }
+
+    public void setMarker(@Nullable Long marker) {
+        this.marker = marker;
     }
 
     @Override
