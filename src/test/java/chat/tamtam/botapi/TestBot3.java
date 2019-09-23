@@ -45,6 +45,14 @@ public class TestBot3 extends TestBot {
         sendCommand(command);
     }
 
+    public void joinChat(String link) throws APIException, ClientException {
+        sendCommand(String.format("/join_chat %s", link));
+    }
+
+    public void leaveChat(Long chatId) throws APIException, ClientException {
+        sendCommand(String.format("/leave_chat %d", chatId));
+    }
+
     private void sendCommand(String command) throws APIException, ClientException {
         NewMessageBody body = new NewMessageBody(command, null, null);
         new SendMessageQuery(controlBot, body).chatId(controlChat.getChatId()).execute();

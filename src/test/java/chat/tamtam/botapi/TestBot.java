@@ -7,7 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,6 @@ import chat.tamtam.botapi.model.UpdateList;
  */
 public class TestBot {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final AtomicLong ID = new AtomicLong();
     private static final Update POISON_PILL = new Update(System.currentTimeMillis());
 
     protected final TamTamBotAPI api;
@@ -36,8 +35,9 @@ public class TestBot {
     private final AtomicBoolean isStopped = new AtomicBoolean();
     private final Set<Update.Visitor> consumers = ConcurrentHashMap.newKeySet();
     private final BlockingQueue<Update> updates = new ArrayBlockingQueue<>(100);
+    private final AtomicReference<Long> marker = new AtomicReference<>();
 
-    public TestBot(TamTamClient botClient, boolean isTravis) throws APIException, ClientException {
+    TestBot(TamTamClient botClient, boolean isTravis) throws APIException, ClientException {
         this.api = new TamTamBotAPI(botClient);
         this.me = api.getMyInfo().execute();
         this.hashedName = isTravis ? TamTamIntegrationTest.randomText(16) : me.getName();
@@ -95,8 +95,7 @@ public class TestBot {
     }
 
     private void flush() {
-        Long marker = pollOnce(null);
-        pollOnce(marker);
+        marker.set(pollOnce(null));
     }
 
     private void consumeUpdates() {
@@ -120,9 +119,8 @@ public class TestBot {
     }
 
     private void poll() {
-        Long marker = null;
         do {
-            marker = pollOnce(marker);
+            marker.set(pollOnce(marker.get()));
         } while (!Thread.currentThread().isInterrupted() && !isStopped.get());
     }
 

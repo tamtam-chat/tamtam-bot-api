@@ -318,7 +318,7 @@ public abstract class TamTamIntegrationTest {
     }
 
     protected void await(CountDownLatch updateReceived) throws InterruptedException {
-        if (!updateReceived.await(10, TimeUnit.SECONDS)) {
+        if (!updateReceived.await(2, TimeUnit.SECONDS)) {
             fail();
         }
     }
