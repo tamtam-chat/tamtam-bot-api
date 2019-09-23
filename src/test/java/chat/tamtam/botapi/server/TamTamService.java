@@ -185,7 +185,7 @@ public class TamTamService {
         Long from = marker == null ? 0L : Long.valueOf(marker);
         Long to = Math.min(chatMembers.size(), from + count);
         List<ChatMember> result = chatMembers.subList(from.intValue(), to.intValue());
-        return new ChatMembersList(result, to == chatMembers.size() ? null : to);
+        return new ChatMembersList(result).marker(to == chatMembers.size() ? null : to);
     }
 
     public Object getUploadUrl(Request request, Response response) {
@@ -202,7 +202,7 @@ public class TamTamService {
     public Object getAdmins(Request request, Response response) {
         List<ChatMember> chatMembers = Stream.generate(TamTamService::newChatMember).limit(50).collect(
                 Collectors.toList());
-        return new ChatMembersList(chatMembers, null);
+        return new ChatMembersList(chatMembers);
     }
 
     public Object removeMembers(Request request, Response response) throws Exception {

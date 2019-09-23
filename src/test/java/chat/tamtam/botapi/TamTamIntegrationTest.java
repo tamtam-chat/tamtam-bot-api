@@ -77,6 +77,7 @@ import chat.tamtam.botapi.queries.SendMessageQuery;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -87,7 +88,7 @@ import static org.junit.Assert.fail;
 public abstract class TamTamIntegrationTest {
     protected static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
-    protected static final boolean IS_TRAVIS = Boolean.parseBoolean(System.getenv("TRAVIS"));
+    private static final boolean IS_TRAVIS = Boolean.parseBoolean(System.getenv("TRAVIS"));
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
     private static final String TOKEN_3 = getToken("TAMTAM_BOTAPI_TOKEN_3");
@@ -110,7 +111,7 @@ public abstract class TamTamIntegrationTest {
         bot1 = new TestBot(client, IS_TRAVIS);
         bot2 = new TestBot(client2, IS_TRAVIS);
         bot3 = new TestBot3(client3, client, IS_TRAVIS);
-        LOG.info("Endpoint: {}", client.getEndpoint());
+        info("Endpoint: {}", client.getEndpoint());
     }
 
     protected BotInfo getBot1() throws APIException, ClientException {
@@ -196,6 +197,12 @@ public abstract class TamTamIntegrationTest {
                 Chat chat = getChat(client, chatId);
                 if (chat.getType() == ChatType.CHANNEL) {
                     assertThat(lastMessage.getRecipient().getChatType(), is(ChatType.CHANNEL));
+                }
+
+                if (chat.isPublic()) {
+                    assertThat(lastMessage.getUrl().length(), is(greaterThan(0)));
+                } else {
+                    assertThat(lastMessage.getUrl(), is(nullValue()));
                 }
                 return sendMessageResult;
             } catch (AttachmentNotReadyException e) {
@@ -320,6 +327,12 @@ public abstract class TamTamIntegrationTest {
     protected void await(CountDownLatch updateReceived) throws InterruptedException {
         if (!updateReceived.await(2, TimeUnit.SECONDS)) {
             fail();
+        }
+    }
+
+    protected static void info(String text, Object... objects) {
+        if (!IS_TRAVIS) {
+            LOG.info(text, objects);
         }
     }
 
