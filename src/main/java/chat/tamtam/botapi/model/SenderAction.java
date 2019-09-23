@@ -31,10 +31,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum SenderAction implements TamTamEnum {
     
     TYPING_ON("typing_on"),
-    TYPING_OFF("typing_off"),
     SENDING_PHOTO("sending_photo"),
     SENDING_VIDEO("sending_video"),
     SENDING_AUDIO("sending_audio"),
+    SENDING_FILE("sending_file"),
     MARK_SEEN("mark_seen");
 
     private String value;
