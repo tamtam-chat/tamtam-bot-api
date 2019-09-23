@@ -1,10 +1,6 @@
 package chat.tamtam.botapi.queries;
 
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -14,7 +10,6 @@ import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
-import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
@@ -33,7 +28,7 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
     }
 
     @Test
-    public void shouldGetUpdatesInPublicChat() throws Exception {
+    public void shouldGetUpdatesInPrivateChatWithLink() throws Exception {
         test("BotAddedRemovedUpdatesTest#shouldGetUpdatesInPrivateChatWithLink");
     }
 
@@ -106,9 +101,5 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
 
         addUser(client, commonChatId, bot3.getUserId());
         await(bot3removed);
-
-        Set<String> testable = Stream.of(Update.BOT_ADDED, Update.BOT_REMOVED).collect(Collectors.toSet());
-        assertThat(bot2updates.getVisited(), is(testable));
-        assertThat(bot3updates.getVisited(), is(testable));
     }
 }

@@ -1,5 +1,7 @@
 package chat.tamtam.botapi;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.Nullable;
 
 import chat.tamtam.botapi.client.TamTamClient;
@@ -46,7 +48,7 @@ public class TestBot3 extends TestBot {
     }
 
     public void joinChat(String link) throws APIException, ClientException {
-        sendCommand(String.format("/join_chat %s", link));
+        sendCommand(String.format("/join_chat %s", Objects.requireNonNull(link, "link")));
     }
 
     public void leaveChat(Long chatId) throws APIException, ClientException {

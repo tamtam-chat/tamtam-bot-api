@@ -1,31 +1,21 @@
 package chat.tamtam.botapi.queries;
 
-import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import javax.xml.stream.util.StreamReaderDelegate;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.Chat;
-import chat.tamtam.botapi.model.ChatStatus;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
@@ -42,7 +32,6 @@ import static org.junit.Assert.assertThat;
  * @author alexandrchuprin
  */
 public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
     public void shouldGetUpdates() throws Exception {
@@ -56,7 +45,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         flush();
 
         Function<Long, Long> getUpdates = (marker) -> {
-            LOG.info("Marker: " + marker);
+            info("Marker: " + marker);
             try {
                 UpdateList updateList = new GetUpdatesQuery(client)
                         .timeout(10)
@@ -70,9 +59,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         public void visit(MessageCreatedUpdate model) {
                             Message message = model.getMessage();
                             MessageBody body = message.getBody();
-                            if (!IS_TRAVIS) {
-                                LOG.info("Got update: " + body.getMid() + ", text: " + body.getText());
-                            }
+                            info("Got update: " + body.getMid() + ", text: " + body.getText());
                             receivedMessages.add(body.getMid());
                         }
                     });
@@ -93,7 +80,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                         String messageId = sentMessages.get(ThreadLocalRandom.current().nextInt(sentMessages.size()));
                         EditMessageQuery editMessageQuery = new EditMessageQuery(client2, body, messageId);
                         editMessageQuery.execute();
-                        LOG.info("Message {} edited", messageId);
+                        info("Message {} edited", messageId);
                         continue;
                     }
 
@@ -105,7 +92,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
 
                     String messageId = sendMessageResult.getMessage().getBody().getMid();
                     sentMessages.add(messageId);
-                    LOG.info("Message {} sent: {}", messageId, text);
+                    info("Message {} sent: {}", messageId, text);
                     Thread.sleep(TimeUnit.SECONDS.toMillis(1));
                 }
             } catch (Exception e) {
