@@ -268,13 +268,13 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
             NewMessageBody reply1Body = new NewMessageBody(randomText(16), null, new NewMessageLink(MessageLinkType.REPLY, message1.getBody().getMid()));
             Message reply1 = send(reply1Body, Collections.singletonList(chat)).get(0);
-            assertThat(reply1.getLink().getMessage().getText(), is(message1.getBody().getText()));
+            assertThat(reply1.getLink().getMessage(), is(message1.getBody()));
 
             NewMessageLink link = new NewMessageLink(MessageLinkType.REPLY, reply1.getBody().getMid());
             NewMessageBody reply2body = new NewMessageBody(randomText(16), null, link);
             Message reply2 = send(reply2body, Collections.singletonList(chat)).get(0);
 
-            assertThat(reply2.getLink().getMessage().getText(), is(reply1.getBody().getText()));
+            assertThat(reply2.getLink().getMessage(), is(reply1.getBody()));
         }
     }
 
@@ -286,13 +286,13 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
             NewMessageBody forwardBody = new NewMessageBody(null, null, new NewMessageLink(MessageLinkType.FORWARD, message.getBody().getMid()));
             Message forward = send(forwardBody, Collections.singletonList(chat)).get(0);
-            assertThat(forward.getLink().getMessage().getText(), is(message.getBody().getText()));
+            assertThat(forward.getLink().getMessage(), is(message.getBody()));
 
             NewMessageLink link = new NewMessageLink(MessageLinkType.REPLY, forward.getBody().getMid());
             NewMessageBody replyBody = new NewMessageBody(randomText(16), null, link);
             Message reply = send(replyBody, Collections.singletonList(chat)).get(0);
 
-            assertThat(reply.getLink().getMessage().getSeq(), is(forward.getBody().getSeq()));
+            assertThat(reply.getLink().getMessage(), is(forward.getBody()));
         }
     }
 
