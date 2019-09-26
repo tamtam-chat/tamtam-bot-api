@@ -76,11 +76,14 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
 
         bot1.addConsumer(new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
 
-        addUser(client, commonChatId, bot2.getUserId());
-        await(bot2added);
+        try {
+            addUser(client, commonChatId, bot2.getUserId());
+            await(bot2added);
+        } finally {
+            removeUser(client, commonChatId, bot2.getUserId());
+            await(bot2removed);
+        }
 
-        removeUser(client, commonChatId, bot2.getUserId());
-        await(bot2removed);
 
         await(expectedUpdates);
         Set<String> testable = Stream.of(Update.USER_ADDED, Update.USER_REMOVED).collect(Collectors.toSet());
