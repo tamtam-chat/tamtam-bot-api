@@ -57,7 +57,6 @@ public class GetAdminsQueryIntegrationTest extends TamTamIntegrationTest {
         try {
             new GetAdminsQuery(client, chat.getChatId()).execute();
         } catch (APIException e) {
-            e.printStackTrace();
             assertThat(e.getStatusCode(), is(403));
         }
     }

@@ -19,6 +19,8 @@ import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.UpdateList;
 
+import static chat.tamtam.botapi.TamTamIntegrationTest.info;
+
 /**
  * @author alexandrchuprin
  */
@@ -76,6 +78,7 @@ public class TestBot {
         LOG.info("Stopping bot {}", hashedName);
         isStopped.set(true);
         try {
+            poller.interrupt();
             poller.join();
             updates.offer(POISON_PILL);
             consumerThread.join();
@@ -130,11 +133,15 @@ public class TestBot {
             UpdateList updateList = api.getUpdates().marker(marker).timeout(5).execute();
             for (Update update : updateList.getUpdates()) {
                 updates.offer(update);
-                LOG.info("Bot " + hashedName + " got update: {}", update);
+                info("Bot " + hashedName + " got update: {}", update);
             }
             error = 0;
             return updateList.getMarker();
         } catch (APIException | ClientException e) {
+            if (e.getCause() instanceof InterruptedException) {
+                return marker;
+            }
+
             error++;
             LOG.error(e.getMessage(), e);
             try {
