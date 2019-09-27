@@ -43,14 +43,14 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
 
         CountDownLatch bot2added = new CountDownLatch(1);
         CountDownLatch bot2removed = new CountDownLatch(1);
-        CountDownLatch expectedUpdates = new CountDownLatch(2);
+        CountDownLatch bot3expectedUpdates = new CountDownLatch(2);
         VisitedUpdatesTracer bot3updates = new VisitedUpdatesTracer(new NoopUpdateVisitor() {
             @Override
             public void visit(UserAddedToChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
                 assertThat(model.getInviterId(), is(bot1.getUserId()));
                 assertThat(model.getUser(), is(bot2user));
-                expectedUpdates.countDown();
+                bot3expectedUpdates.countDown();
             }
 
             @Override
@@ -58,7 +58,7 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
                 assertThat(model.getChatId(), is(commonChatId));
                 assertThat(model.getAdminId(), is(bot1.getUserId()));
                 assertThat(model.getUser(), is(bot2user));
-                expectedUpdates.countDown();
+                bot3expectedUpdates.countDown();
             }
         });
 
@@ -85,8 +85,6 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
         }
 
 
-        await(expectedUpdates);
-        Set<String> testable = Stream.of(Update.USER_ADDED, Update.USER_REMOVED).collect(Collectors.toSet());
-        assertThat(bot3updates.getVisited(), is(testable));
+        await(bot3expectedUpdates);
     }
 }
