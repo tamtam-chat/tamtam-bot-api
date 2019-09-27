@@ -106,6 +106,8 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
             posted.add(text);
         }
 
+        Thread.sleep(1000);
+
         long from = now();
         List<String> fetched = new ArrayList<>();
         do {
