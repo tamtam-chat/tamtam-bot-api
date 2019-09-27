@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +99,7 @@ public abstract class TamTamIntegrationTest {
 
     protected TamTamClient client = new TamTamClient(TOKEN_1, transportClient, serializer);
     protected TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
-    protected TamTamClient client3 = new TamTamClient(TOKEN_3, transportClient, serializer);
+    private TamTamClient client3 = new TamTamClient(TOKEN_3, transportClient, serializer);
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 
@@ -106,12 +107,16 @@ public abstract class TamTamIntegrationTest {
     protected TestBot bot2;
     protected TestBot3 bot3;
 
+    @BeforeClass
+    public static void beforeClass() {
+        info("Endpoint: {}", System.getenv("TAMTAM_BOTAPI_ENDPOINT"));
+    }
+
     @Before
     public void setUp() throws Exception {
         bot1 = new TestBot(client, IS_TRAVIS);
         bot2 = new TestBot(client2, IS_TRAVIS);
         bot3 = new TestBot3(client3, client, IS_TRAVIS);
-        info("Endpoint: {}", client.getEndpoint());
     }
 
     protected BotInfo getBot1() throws APIException, ClientException {
@@ -324,8 +329,12 @@ public abstract class TamTamIntegrationTest {
                 .get(0);
     }
 
-    protected void await(CountDownLatch updateReceived) throws InterruptedException {
-        if (!updateReceived.await(2, TimeUnit.SECONDS)) {
+    protected void await(CountDownLatch latch) throws InterruptedException {
+        await(latch, 2);
+    }
+
+    protected void await(CountDownLatch latch, int seconds) throws InterruptedException {
+        if (!latch.await(seconds, TimeUnit.SECONDS)) {
             fail();
         }
     }
@@ -343,8 +352,8 @@ public abstract class TamTamIntegrationTest {
         assertThat(attachment.getHeight(), is(greaterThan(0)));
     }
 
-    protected static void compare(TamTamClient client, LinkedMessage linkedMessage,
-                                  NewMessageLink link) throws APIException, ClientException {
+    private static void compare(TamTamClient client, LinkedMessage linkedMessage,
+                                NewMessageLink link) throws APIException, ClientException {
         assertThat(linkedMessage.getType(), is(link.getType()));
 
         if (link.getType() == MessageLinkType.REPLY) {
@@ -381,17 +390,6 @@ public abstract class TamTamIntegrationTest {
         return "http:" + url;
     }
 
-    private static String getMessageId(String mid) {
-        if (mid.startsWith("mid.")) {
-            return mid.substring("mid.".length() + 16);
-        }
-        return mid;
-    }
-
-    protected Message getLast(Chat chat) throws Exception {
-        return botAPI.getMessages().chatId(chat.getChatId()).count(1).execute().getMessages().get(0);
-    }
-
     protected String randomText() {
         return getClass().getSimpleName() + "\n" + UUID.randomUUID().toString();
     }
@@ -404,7 +402,7 @@ public abstract class TamTamIntegrationTest {
                 .toString();
     }
 
-    static String getToken(String envVar) {
+    private static String getToken(String envVar) {
         String tokenEnv = System.getenv(envVar);
         if (tokenEnv != null) {
             return tokenEnv;

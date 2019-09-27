@@ -2,7 +2,6 @@ package chat.tamtam.botapi.queries;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import chat.tamtam.botapi.model.BotStartedUpdate;
@@ -49,6 +48,6 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
         bot1.addConsumer(consumer);
         bot3.startYourself(bot1.getUserId(), payload);
 
-        await(updateReceived);
+        await(updateReceived, 10);
     }
 }

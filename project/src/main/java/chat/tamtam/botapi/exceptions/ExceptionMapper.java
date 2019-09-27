@@ -32,6 +32,8 @@ public class ExceptionMapper {
     public static APIException map(int statusCode, Error error) {
         String message = error.getMessage();
         switch (error.getCode()) {
+            case "proto.payload":
+                return new BadRequestException(message);
             case "attachment.not.ready":
                 return new AttachmentNotReadyException();
             case "too.many.requests":
@@ -45,6 +47,6 @@ public class ExceptionMapper {
                 return new ChatAccessForbiddenException(message);
         }
 
-        return new APIException(statusCode, error.getCode(), message);
+        return new APIException(statusCode, message);
     }
 }

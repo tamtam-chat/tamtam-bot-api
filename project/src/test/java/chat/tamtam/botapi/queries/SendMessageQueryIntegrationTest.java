@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
+import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.AudioAttachmentRequest;
@@ -120,9 +121,9 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         for (Chat c : list) {
             try {
                 doSend(newMessage, c.getChatId());
-            } catch (Exception e) {
+            } catch (APIException e) {
                 exceptions++;
-                LOG.error(e.getMessage(), e);
+                assertThat(e.getMessage(), is("text: size must be between 0 and 4000"));
             }
         }
 
