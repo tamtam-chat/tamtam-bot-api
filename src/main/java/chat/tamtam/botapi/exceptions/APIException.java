@@ -30,18 +30,13 @@ public class APIException extends Exception {
         this(400, message);
     }
 
+    public APIException(int statusCode, String message) {
+        super(message);
+        this.statusCode = statusCode;
+    }
+
     public APIException(int statusCode) {
         this(503, "Unexpected server error: " + statusCode);
-    }
-
-    public APIException(int statusCode, String responseBody) {
-        super("Server error " + statusCode + ": " + responseBody);
-        this.statusCode = statusCode;
-    }
-
-    public APIException(int statusCode, String errorCode, String message) {
-        super("API exception " + errorCode + ": " + message);
-        this.statusCode = statusCode;
     }
 
     public int getStatusCode() {
