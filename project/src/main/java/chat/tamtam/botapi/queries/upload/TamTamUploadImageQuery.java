@@ -20,8 +20,6 @@
 
 package chat.tamtam.botapi.queries.upload;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import chat.tamtam.botapi.client.TamTamClient;
@@ -31,10 +29,6 @@ import chat.tamtam.botapi.model.PhotoTokens;
  * @author alexandrchuprin
  */
 public class TamTamUploadImageQuery extends TamTamUploadQuery<PhotoTokens> {
-    public TamTamUploadImageQuery(TamTamClient tamTamClient, String url, File file) throws FileNotFoundException {
-        super(tamTamClient, PhotoTokens.class, url, file);
-    }
-
     public TamTamUploadImageQuery(TamTamClient tamTamClient, String url, String fileName, InputStream input) {
         super(tamTamClient, PhotoTokens.class, url, fileName, input);
     }

@@ -59,7 +59,7 @@ public class TamTamUploadAPITest extends QueryTest {
         Path tempFile = Files.createTempFile("", "");
         tempFile.toFile().deleteOnExit();
         request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-        try (InputStream input = request.raw().getPart("v1").getInputStream()) {
+        try (InputStream input = request.raw().getInputStream()) {
             long bytes = Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
             if (bytes <= 0) {
                 halt(400);
@@ -91,7 +91,7 @@ public class TamTamUploadAPITest extends QueryTest {
         Path tempFile = Files.createTempFile("", "");
         tempFile.toFile().deleteOnExit();
         request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-        try (InputStream input = request.raw().getPart("v1").getInputStream()) {
+        try (InputStream input = request.raw().getInputStream()) {
             long bytes = Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
             if (bytes <= 0) {
                 halt(400);

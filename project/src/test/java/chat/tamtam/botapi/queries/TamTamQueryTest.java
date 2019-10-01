@@ -179,7 +179,7 @@ public class TamTamQueryTest extends QueryTest {
     public void shouldWrapTransportException() throws Exception {
         TamTamTransportClient transport = mock(TamTamTransportClient.class);
         TamTamSerializer serializer = mock(TamTamSerializer.class);
-        when(transport.post(anyString(), any())).thenThrow(new TransportClientException("test exception"));
+        when(transport.post(anyString(), any(byte[].class))).thenThrow(new TransportClientException("test exception"));
         TamTamClient clientMock = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer);
         new TamTamQuery<>(clientMock, "/me", User.class, TamTamQuery.Method.POST).execute();
     }
@@ -209,7 +209,7 @@ public class TamTamQueryTest extends QueryTest {
     public void shouldWrapInterruptedException() throws Exception {
         TamTamTransportClient transport = mock(TamTamTransportClient.class);
         TamTamSerializer serializer = mock(TamTamSerializer.class);
-        when(transport.post(anyString(), any())).thenReturn(INTERRUPTING_FUTURE);
+        when(transport.post(anyString(), any(byte[].class))).thenReturn(INTERRUPTING_FUTURE);
 
         TamTamClient clientMock = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer);
         new TamTamQuery<>(clientMock, "/me", User.class, TamTamQuery.Method.POST).execute();

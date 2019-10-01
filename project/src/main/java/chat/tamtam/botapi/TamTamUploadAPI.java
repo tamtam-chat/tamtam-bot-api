@@ -21,6 +21,7 @@
 package chat.tamtam.botapi;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -48,14 +49,14 @@ public class TamTamUploadAPI {
     }
 
     public TamTamUploadImageQuery uploadImage(String url, File file) throws FileNotFoundException {
-        return new TamTamUploadImageQuery(client, url, file);
+        return new TamTamUploadImageQuery(client, url, file.getName(), new FileInputStream(file));
     }
 
     public TamTamUploadImageQuery uploadImage(String url, String fileName, InputStream inputStream) {
         return new TamTamUploadImageQuery(client, url, fileName, inputStream);
     }
 
-    public TamTamUploadAVQuery uploadAV(String url, File file) throws FileNotFoundException {
+    public TamTamUploadAVQuery uploadAV(String url, File file) {
         return new TamTamUploadAVQuery(client, url, file);
     }
 
