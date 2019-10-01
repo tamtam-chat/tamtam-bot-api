@@ -20,10 +20,7 @@
 
 package chat.tamtam.botapi.queries.upload;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.concurrent.Future;
 
@@ -37,17 +34,15 @@ import chat.tamtam.botapi.queries.TamTamQuery;
  * @author alexandrchuprin
  */
 public abstract class TamTamUploadQuery<T> extends TamTamQuery<T> {
-    private static final int TWO_MB = 2 * 1024 * 1024;
-
     private final TamTamClient tamTamClient;
     private final String url;
-    private final String fileName;
-    private final InputStream input;
+    private final UploadExec uploadExec;
 
-    public TamTamUploadQuery(TamTamClient tamTamClient, Class<T> responseType, String url, File file) throws
-            FileNotFoundException {
-        this(tamTamClient, responseType, url, file.getName(),
-                new BufferedInputStream(new FileInputStream(file), TWO_MB));
+    public TamTamUploadQuery(TamTamClient tamTamClient, Class<T> responseType, String url, File file) {
+        super(tamTamClient, url, responseType);
+        this.tamTamClient = tamTamClient;
+        this.url = url;
+        this.uploadExec = new FileUploadExec(file);
     }
 
     public TamTamUploadQuery(TamTamClient tamTamClient, Class<T> responseType, String url, String fileName,
@@ -55,16 +50,55 @@ public abstract class TamTamUploadQuery<T> extends TamTamQuery<T> {
         super(tamTamClient, url, responseType);
         this.tamTamClient = tamTamClient;
         this.url = url;
-        this.fileName = fileName;
-        this.input = input;
+        this.uploadExec = new StreamUploadExec(fileName, input);
     }
 
     @Override
     protected Future<ClientResponse> call() throws ClientException {
         try {
-            return tamTamClient.getTransport().post(url, fileName, input);
-        } catch (TransportClientException e) {
+            return uploadExec.call();
+        } catch (InterruptedException e) {
             throw new ClientException(e);
+        }
+    }
+
+    interface UploadExec {
+        Future<ClientResponse> call() throws ClientException, InterruptedException;
+    }
+
+    private class FileUploadExec implements UploadExec {
+        private final File file;
+
+        private FileUploadExec(File file) {
+            this.file = file;
+        }
+
+        @Override
+        public Future<ClientResponse> call() throws ClientException, InterruptedException {
+            try {
+                return tamTamClient.getTransport().post(url, file);
+            } catch (TransportClientException e) {
+                throw new ClientException(e);
+            }
+        }
+    }
+
+    private class StreamUploadExec implements UploadExec {
+        private final String fileName;
+        private final InputStream input;
+
+        StreamUploadExec(String fileName, InputStream input) {
+            this.fileName = fileName;
+            this.input = input;
+        }
+
+        @Override
+        public Future<ClientResponse> call() throws ClientException {
+            try {
+                return tamTamClient.getTransport().post(url, fileName, input);
+            } catch (TransportClientException e) {
+                throw new ClientException(e);
+            }
         }
     }
 }

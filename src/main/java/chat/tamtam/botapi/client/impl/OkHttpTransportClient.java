@@ -20,14 +20,19 @@
 
 package chat.tamtam.botapi.client.impl;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -58,6 +63,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType BINARY_CONTENT_TYPE = MediaType.parse("application/octet-stream");
     private static final int FOUR_KB = 4 * 1024;
+    private static final int TWO_MB = 2_048_000;
 
     private final OkHttpClient httpClient;
 
@@ -84,6 +90,55 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     @Override
     public Future<ClientResponse> post(String url, @Nullable byte[] body) {
         return newCall(new Request.Builder().url(url).post(wrapBody(body)).build());
+    }
+
+    @Override
+    public Future<ClientResponse> post(String url, File file) throws TransportClientException, InterruptedException {
+        Objects.requireNonNull(url, "Filename must not be null");
+        Objects.requireNonNull(file, "inputStream must not be null");
+        LOG.info("Started uploading to url {}", url);
+
+        String filename = file.getName();
+        long total = file.length();
+        Future<ClientResponse> response = null;
+
+        MediaType mediaType;
+        try {
+            mediaType = guessMediaType(file);
+        } catch (IOException e) {
+            throw new TransportClientException("Failed to guess content type of file", e);
+        }
+
+        try (BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(file))) {
+            byte[] buffer = new byte[TWO_MB];
+            int read;
+            long pos = -1;
+            while ((read = fileInput.read(buffer)) != -1) {
+                RequestBody body = RequestBody.create(mediaType, buffer, 0, read);
+                String range = String.format("bytes %d-%d/%d", pos + 1, pos = pos + read, total);
+                Request request = new Request.Builder()
+                        .header("Content-Range", range)
+                        .header("X-Requested-With", "XMLHttpRequest")
+                        .header("Content-Disposition", "attachment; filename=" + filename)
+                        .url(url)
+                        .post(body)
+                        .build();
+
+                response = newCall(request);
+                // server does not support parallel upload so we should block here
+                response.get();
+            }
+        } catch (IOException | ExecutionException e) {
+            throw new TransportClientException(e);
+        } finally {
+            LOG.info("Finished uploading to url {}", url);
+        }
+
+        if (response == null) {
+            throw new TransportClientException("File is empty");
+        }
+
+        return response;
     }
 
     @Override
@@ -124,13 +179,22 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     }
 
     @Override
-    public Future<ClientResponse> delete(String url) throws TransportClientException {
+    public Future<ClientResponse> delete(String url) {
         return newCall(new Request.Builder().url(url).delete().build());
     }
 
     @Override
-    public Future<ClientResponse> patch(String url, @Nullable byte[] requestBody) throws TransportClientException {
+    public Future<ClientResponse> patch(String url, @Nullable byte[] requestBody) {
         return newCall(new Request.Builder().url(url).patch(wrapBody(requestBody)).build());
+    }
+
+    private static MediaType guessMediaType(File file) throws IOException {
+        String contentType = Files.probeContentType(file.toPath());
+        if (contentType == null) {
+            return BINARY_CONTENT_TYPE;
+        }
+
+        return MediaType.parse(contentType);
     }
 
     private static RequestBody wrapBody(@Nullable byte[] requestBody) {
