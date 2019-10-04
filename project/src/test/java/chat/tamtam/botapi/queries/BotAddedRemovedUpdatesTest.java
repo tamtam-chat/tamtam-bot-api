@@ -96,10 +96,15 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
         bot1.addConsumer(new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
         bot2.addConsumer(bot2updates);
 
-        addUser(client, commonChatId, bot2.getUserId());
-        await(bot2removed);
+        try {
+            addUser(client, commonChatId, bot2.getUserId());
+            await(bot2removed);
 
-        addUser(client, commonChatId, bot3.getUserId());
-        await(bot3removed);
+            addUser(client, commonChatId, bot3.getUserId());
+            await(bot3removed);
+        } finally {
+            removeUser(client, commonChatId, bot2.getUserId());
+            removeUser(client, commonChatId, bot3.getUserId());
+        }
     }
 }
