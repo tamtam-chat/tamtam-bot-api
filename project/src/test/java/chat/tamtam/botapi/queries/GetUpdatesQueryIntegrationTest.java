@@ -37,8 +37,8 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
     public void shouldGetUpdates() throws Exception {
         Chat commonChat = getByTitle(getChats(), "test chat #6");
         Long commonChatId = commonChat.getChatId();
-        List<String> sentMessages = new CopyOnWriteArrayList<>();
-        List<String> receivedMessages = new CopyOnWriteArrayList<>();
+        List<Message> sentMessages = new CopyOnWriteArrayList<>();
+        List<Message> receivedMessages = new CopyOnWriteArrayList<>();
         CountDownLatch sendFinished = new CountDownLatch(1);
 
         // consume all pending updates to make sure queue is empty before test
@@ -60,7 +60,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                             Message message = model.getMessage();
                             MessageBody body = message.getBody();
                             info("Got update: " + body.getMid() + ", text: " + body.getText());
-                            receivedMessages.add(body.getMid());
+                            receivedMessages.add(message);
                         }
                     });
                 }
@@ -77,7 +77,8 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                 while (count-- > 0) {
                     if (ThreadLocalRandom.current().nextBoolean() && !sentMessages.isEmpty()) {
                         NewMessageBody body = new NewMessageBody("edited message", null, null);
-                        String messageId = sentMessages.get(ThreadLocalRandom.current().nextInt(sentMessages.size()));
+                        Message message = sentMessages.get(ThreadLocalRandom.current().nextInt(sentMessages.size()));
+                        String messageId = message.getBody().getMid();
                         EditMessageQuery editMessageQuery = new EditMessageQuery(client2, body, messageId);
                         editMessageQuery.execute();
                         info("Message {} edited", messageId);
@@ -91,7 +92,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
                             .execute();
 
                     String messageId = sendMessageResult.getMessage().getBody().getMid();
-                    sentMessages.add(messageId);
+                    sentMessages.add(sendMessageResult.getMessage());
                     info("Message {} sent: {}", messageId, text);
                     Thread.sleep(TimeUnit.SECONDS.toMillis(1));
                 }
