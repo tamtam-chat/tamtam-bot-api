@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
@@ -25,6 +26,7 @@ import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.MessageCallbackUpdate;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
+import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SendMessageResult;
 
@@ -59,6 +61,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
         bot3.startAnotherBot(bot1.getUserId(), null);
 
         ArrayBlockingQueue<Callback> callbacks = new ArrayBlockingQueue<>(chats.size());
+        CountDownLatch done = new CountDownLatch(1);
         FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor() {
             @Override
             public void visit(MessageCallbackUpdate model) {
@@ -72,7 +75,10 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
 
             @Override
             public void visit(MessageCreatedUpdate model) {
-                // it is ok, ignoring it
+                // bot 3 will reply to bot 1 that it has received `message_edited` update
+                // will wait to finish test
+                assertThat(model.getMessage().getSender().getUserId(), is(bot3.getUserId()));
+                done.countDown();
             }
         };
 
@@ -107,6 +113,8 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
                 assertThat(editedMessage.getText(), is(editedText));
                 compare(Collections.singletonList(contactAR), editedMessage.getAttachments());
             }
+
+            await(done);
         } finally {
             bot1.removeConsumer(consumer);
         }
