@@ -43,8 +43,6 @@ public class MessageBody implements TamTamSerializable {
     private final @Valid String text;
     @Nullable
     private final List<@Valid Attachment> attachments;
-    @Nullable
-    private @Valid String replyTo;
 
     @JsonCreator
     public MessageBody(@JsonProperty("mid") String mid, @JsonProperty("seq") Long seq, @Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<Attachment> attachments) { 
@@ -92,25 +90,6 @@ public class MessageBody implements TamTamSerializable {
         return attachments;
     }
 
-    public MessageBody replyTo(@Nullable String replyTo) {
-        this.setReplyTo(replyTo);
-        return this;
-    }
-
-    /**
-    * In case this message is reply to another, it is the unique identifier of the replied message
-    * @return replyTo
-    **/
-    @Nullable
-    @JsonProperty("reply_to")
-    public String getReplyTo() {
-        return replyTo;
-    }
-
-    public void setReplyTo(@Nullable String replyTo) {
-        this.replyTo = replyTo;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -124,8 +103,7 @@ public class MessageBody implements TamTamSerializable {
         return Objects.equals(this.mid, other.mid) &&
             Objects.equals(this.seq, other.seq) &&
             Objects.equals(this.text, other.text) &&
-            Objects.equals(this.attachments, other.attachments) &&
-            Objects.equals(this.replyTo, other.replyTo);
+            Objects.equals(this.attachments, other.attachments);
     }
 
     @Override
@@ -135,7 +113,6 @@ public class MessageBody implements TamTamSerializable {
         result = 31 * result + (seq != null ? seq.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
-        result = 31 * result + (replyTo != null ? replyTo.hashCode() : 0);
         return result;
     }
 
@@ -146,7 +123,6 @@ public class MessageBody implements TamTamSerializable {
             + " seq='" + seq + '\''
             + " text='" + text + '\''
             + " attachments='" + attachments + '\''
-            + " replyTo='" + replyTo + '\''
             + '}';
     }
 }

@@ -26,6 +26,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.jetbrains.annotations.Nullable;
 
 /**
  * ShareAttachment
@@ -34,6 +35,12 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
 
     @NotNull
     private final @Valid AttachmentPayload payload;
+    @Nullable
+    private @Valid String title;
+    @Nullable
+    private @Valid String description;
+    @Nullable
+    private @Valid PhotoAttachment image;
 
     @JsonCreator
     public ShareAttachment(@JsonProperty("payload") AttachmentPayload payload) { 
@@ -54,6 +61,63 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
         return payload;
     }
 
+    public ShareAttachment title(@Nullable String title) {
+        this.setTitle(title);
+        return this;
+    }
+
+    /**
+    * Link preview title
+    * @return title
+    **/
+    @Nullable
+    @JsonProperty("title")
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(@Nullable String title) {
+        this.title = title;
+    }
+
+    public ShareAttachment description(@Nullable String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    /**
+    * Link preview description
+    * @return description
+    **/
+    @Nullable
+    @JsonProperty("description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@Nullable String description) {
+        this.description = description;
+    }
+
+    public ShareAttachment image(@Nullable PhotoAttachment image) {
+        this.setImage(image);
+        return this;
+    }
+
+    /**
+    * Link preview image
+    * @return image
+    **/
+    @Nullable
+    @JsonProperty("image")
+    public PhotoAttachment getImage() {
+        return image;
+    }
+
+    public void setImage(@Nullable PhotoAttachment image) {
+        this.image = image;
+    }
+
     @JsonProperty("type")
     @Override
     public String getType() {
@@ -70,13 +134,19 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
         }
 
         ShareAttachment other = (ShareAttachment) o;
-        return Objects.equals(this.payload, other.payload);
+        return Objects.equals(this.payload, other.payload) &&
+            Objects.equals(this.title, other.title) &&
+            Objects.equals(this.description, other.description) &&
+            Objects.equals(this.image, other.image);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
         return result;
     }
 
@@ -84,6 +154,9 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
     public String toString() {
         return "ShareAttachment{"+ super.toString()
             + " payload='" + payload + '\''
+            + " title='" + title + '\''
+            + " description='" + description + '\''
+            + " image='" + image + '\''
             + '}';
     }
 }

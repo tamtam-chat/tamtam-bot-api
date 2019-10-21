@@ -374,7 +374,7 @@ public abstract class TamTamIntegrationTest {
 
     @NotNull
     protected PhotoAttachmentRequest getPhotoAttachmentRequest() throws Exception {
-        String uploadUrl = getUploadUrl(UploadType.PHOTO);
+        String uploadUrl = getUploadUrl(UploadType.IMAGE);
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
         PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());

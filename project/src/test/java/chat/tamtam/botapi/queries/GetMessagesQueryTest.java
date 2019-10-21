@@ -75,7 +75,6 @@ public class GetMessagesQueryTest extends QueryTest {
 
         assertThat(response.getMessages().size(), is(greaterThan(0)));
         for (Message message : response.getMessages()) {
-            assertThat(message.getBody().getReplyTo(), is(notNullValue()));
             for (Attachment attachment : message.getBody().getAttachments()) {
                 attachment.visit(new FailByDefaultAttachmentVisitor() {
                     @Override

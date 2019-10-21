@@ -168,7 +168,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldSendPhotoAsSingleAttach() throws Exception {
         AttachmentRequest attach = getPhotoAttachmentRequest();
-        NewMessageBody newMessage = new NewMessageBody(null, null, null).attachment(attach);
+        NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(attach), null);
         send(newMessage);
     }
 
