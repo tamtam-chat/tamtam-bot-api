@@ -28,6 +28,7 @@ import chat.tamtam.botapi.model.SendMessageResult;
 public class SendMessageQuery extends TamTamQuery<SendMessageResult> { 
     private final QueryParam<Long> userId = new QueryParam<>("user_id", this);
     private final QueryParam<Long> chatId = new QueryParam<>("chat_id", this);
+    private final QueryParam<Boolean> disableLinkPreview = new QueryParam<>("disable_link_preview", this);
 
     public SendMessageQuery(TamTamClient client, NewMessageBody newMessageBody) {
         super(client, "/messages", newMessageBody, SendMessageResult.class, Method.POST);
@@ -39,6 +40,10 @@ public class SendMessageQuery extends TamTamQuery<SendMessageResult> {
     }
     public SendMessageQuery chatId(Long value) {
         this.chatId.setValue(value);
+        return this;
+    }
+    public SendMessageQuery disableLinkPreview(Boolean value) {
+        this.disableLinkPreview.setValue(value);
         return this;
     }
 }

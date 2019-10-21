@@ -45,12 +45,12 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        String uploadUrl = getUploadUrl(UploadType.PHOTO);
+        String uploadUrl = getUploadUrl(UploadType.IMAGE);
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
         photoAR = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos()));
 
-        String uploadUrl2 = getUploadUrl(UploadType.PHOTO);
+        String uploadUrl2 = getUploadUrl(UploadType.IMAGE);
         File file2 = new File(getClass().getClassLoader().getResource("test2.png").toURI());
         PhotoTokens photoTokens2 = uploadAPI.uploadImage(uploadUrl2, file2).execute();
         photoAR2 = new PhotoAttachmentRequest(new PhotoAttachmentRequestPayload().photos(photoTokens2.getPhotos()));
@@ -205,8 +205,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name",
                     bot1.getUserId(), null, "+79991234567");
             ContactAttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
-            NewMessageBody editedMessageBody = new NewMessageBody(null, null, null)
-                    .attachment(contactAR);
+            NewMessageBody editedMessageBody = new NewMessageBody(null, Collections.singletonList(contactAR), null);
 
             String messageId = result.getMessage().getBody().getMid();
             botAPI.editMessage(editedMessageBody, messageId).execute();

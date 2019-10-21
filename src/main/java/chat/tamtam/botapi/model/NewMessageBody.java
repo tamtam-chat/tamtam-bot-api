@@ -39,8 +39,6 @@ public class NewMessageBody implements TamTamSerializable {
     @Size(max = 4000)
     private final @Valid String text;
     @Nullable
-    private @Valid AttachmentRequest attachment;
-    @Nullable
     private final List<@Valid AttachmentRequest> attachments;
     @Nullable
     private final @Valid NewMessageLink link;
@@ -61,25 +59,6 @@ public class NewMessageBody implements TamTamSerializable {
     @JsonProperty("text")
     public String getText() {
         return text;
-    }
-
-    public NewMessageBody attachment(@Nullable AttachmentRequest attachment) {
-        this.setAttachment(attachment);
-        return this;
-    }
-
-    /**
-    * Use &#x60;attachments&#x60; property instead. Will be removed in the next major release.  Single message attachment
-    * @return attachment
-    **/
-    @Nullable
-    @JsonProperty("attachment")
-    public AttachmentRequest getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(@Nullable AttachmentRequest attachment) {
-        this.attachment = attachment;
     }
 
     /**
@@ -108,7 +87,7 @@ public class NewMessageBody implements TamTamSerializable {
     }
 
     /**
-    * If false, chat participants wouldn&#39;t be notified
+    * If false, chat participants would not be notified
     * @return notify
     **/
     @JsonProperty("notify")
@@ -131,7 +110,6 @@ public class NewMessageBody implements TamTamSerializable {
 
         NewMessageBody other = (NewMessageBody) o;
         return Objects.equals(this.text, other.text) &&
-            Objects.equals(this.attachment, other.attachment) &&
             Objects.equals(this.attachments, other.attachments) &&
             Objects.equals(this.link, other.link) &&
             Objects.equals(this.notify, other.notify);
@@ -141,7 +119,6 @@ public class NewMessageBody implements TamTamSerializable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (attachment != null ? attachment.hashCode() : 0);
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (notify != null ? notify.hashCode() : 0);
@@ -152,7 +129,6 @@ public class NewMessageBody implements TamTamSerializable {
     public String toString() {
         return "NewMessageBody{"
             + " text='" + text + '\''
-            + " attachment='" + attachment + '\''
             + " attachments='" + attachments + '\''
             + " link='" + link + '\''
             + " notify='" + notify + '\''

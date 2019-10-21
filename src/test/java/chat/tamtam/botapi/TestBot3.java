@@ -57,7 +57,7 @@ public class TestBot3 extends TestBot {
 
     private void sendCommand(String command) throws APIException, ClientException {
         NewMessageBody body = new NewMessageBody(command, null, null);
-        new SendMessageQuery(controlBot, body).chatId(controlChat.getChatId()).execute();
+        new SendMessageQuery(controlBot, body).chatId(controlChat.getChatId()).disableLinkPreview(true).execute();
     }
 
     private Chat findControlChat() throws APIException, ClientException {

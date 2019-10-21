@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum UploadType implements TamTamEnum {
     
-    PHOTO("photo"),
+    IMAGE("image"),
     VIDEO("video"),
     AUDIO("audio"),
     FILE("file");

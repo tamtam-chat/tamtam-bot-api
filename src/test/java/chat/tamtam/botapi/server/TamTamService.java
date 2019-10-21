@@ -256,7 +256,6 @@ public class TamTamService {
         Message message = new Message(recipient, System.currentTimeMillis(), body).sender(sender);
         message.link(new LinkedMessage(MessageLinkType.FORWARD, body).sender(sender).chatId(id));
         message.stat(new MessageStat(2));
-        body.replyTo("replyTo");
 
         return message;
     }
