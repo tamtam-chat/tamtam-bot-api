@@ -62,6 +62,10 @@ public class Chat implements TamTamSerializable {
     private final @Valid Object description;
     @Nullable
     private @Valid UserWithPhoto dialogWithUser;
+    @Nullable
+    private @Valid Integer messagesCount;
+    @Nullable
+    private @Valid String chatMessageId;
 
     @JsonCreator
     public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @Nullable @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") Object description) { 
@@ -245,6 +249,44 @@ public class Chat implements TamTamSerializable {
         this.dialogWithUser = dialogWithUser;
     }
 
+    public Chat messagesCount(@Nullable Integer messagesCount) {
+        this.setMessagesCount(messagesCount);
+        return this;
+    }
+
+    /**
+    * Messages count in chat. Only for group chats and channels. **Not available** for dialogs
+    * @return messagesCount
+    **/
+    @Nullable
+    @JsonProperty("messages_count")
+    public Integer getMessagesCount() {
+        return messagesCount;
+    }
+
+    public void setMessagesCount(@Nullable Integer messagesCount) {
+        this.messagesCount = messagesCount;
+    }
+
+    public Chat chatMessageId(@Nullable String chatMessageId) {
+        this.setChatMessageId(chatMessageId);
+        return this;
+    }
+
+    /**
+    * Identifier of message that contains &#x60;chat&#x60; button initialized chat
+    * @return chatMessageId
+    **/
+    @Nullable
+    @JsonProperty("chat_message_id")
+    public String getChatMessageId() {
+        return chatMessageId;
+    }
+
+    public void setChatMessageId(@Nullable String chatMessageId) {
+        this.chatMessageId = chatMessageId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -267,7 +309,9 @@ public class Chat implements TamTamSerializable {
             Objects.equals(this.isPublic, other.isPublic) &&
             Objects.equals(this.link, other.link) &&
             Objects.equals(this.description, other.description) &&
-            Objects.equals(this.dialogWithUser, other.dialogWithUser);
+            Objects.equals(this.dialogWithUser, other.dialogWithUser) &&
+            Objects.equals(this.messagesCount, other.messagesCount) &&
+            Objects.equals(this.chatMessageId, other.chatMessageId);
     }
 
     @Override
@@ -286,6 +330,8 @@ public class Chat implements TamTamSerializable {
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (dialogWithUser != null ? dialogWithUser.hashCode() : 0);
+        result = 31 * result + (messagesCount != null ? messagesCount.hashCode() : 0);
+        result = 31 * result + (chatMessageId != null ? chatMessageId.hashCode() : 0);
         return result;
     }
 
@@ -305,6 +351,8 @@ public class Chat implements TamTamSerializable {
             + " link='" + link + '\''
             + " description='" + description + '\''
             + " dialogWithUser='" + dialogWithUser + '\''
+            + " messagesCount='" + messagesCount + '\''
+            + " chatMessageId='" + chatMessageId + '\''
             + '}';
     }
 }

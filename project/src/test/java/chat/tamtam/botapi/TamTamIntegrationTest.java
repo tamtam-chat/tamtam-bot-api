@@ -38,6 +38,7 @@ import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.model.ChatButton;
 import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.model.ChatStatus;
 import chat.tamtam.botapi.model.ChatType;
@@ -454,6 +455,14 @@ public abstract class TamTamIntegrationTest {
             @Override
             public void visit(RequestContactButton model) {
                 assertThat(model, is(expectedButton));
+            }
+
+            @Override
+            public void visit(ChatButton model) {
+                ChatButton cb = (ChatButton) expectedButton;
+                assertThat(model.getChatDescription(), is(cb.getChatDescription()));
+                assertThat(model.getChatTitle(), is(cb.getChatTitle()));
+                assertThat(model.getStartPayload(), is(cb.getStartPayload()));
             }
 
             @Override

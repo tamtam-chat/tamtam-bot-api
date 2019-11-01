@@ -40,7 +40,7 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
     @Nullable
     private @Valid String description;
     @Nullable
-    private @Valid PhotoAttachment image;
+    private @Valid String imageUrl;
 
     @JsonCreator
     public ShareAttachment(@JsonProperty("payload") AttachmentPayload payload) { 
@@ -99,23 +99,23 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
         this.description = description;
     }
 
-    public ShareAttachment image(@Nullable PhotoAttachment image) {
-        this.setImage(image);
+    public ShareAttachment imageUrl(@Nullable String imageUrl) {
+        this.setImageUrl(imageUrl);
         return this;
     }
 
     /**
     * Link preview image
-    * @return image
+    * @return imageUrl
     **/
     @Nullable
-    @JsonProperty("image")
-    public PhotoAttachment getImage() {
-        return image;
+    @JsonProperty("image_url")
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(@Nullable PhotoAttachment image) {
-        this.image = image;
+    public void setImageUrl(@Nullable String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @JsonProperty("type")
@@ -137,7 +137,7 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
         return Objects.equals(this.payload, other.payload) &&
             Objects.equals(this.title, other.title) &&
             Objects.equals(this.description, other.description) &&
-            Objects.equals(this.image, other.image);
+            Objects.equals(this.imageUrl, other.imageUrl);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (image != null ? image.hashCode() : 0);
+        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
         return result;
     }
 
@@ -156,7 +156,7 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
             + " payload='" + payload + '\''
             + " title='" + title + '\''
             + " description='" + description + '\''
-            + " image='" + image + '\''
+            + " imageUrl='" + imageUrl + '\''
             + '}';
     }
 }

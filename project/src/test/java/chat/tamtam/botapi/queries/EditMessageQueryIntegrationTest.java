@@ -202,8 +202,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
-            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name",
-                    bot1.getUserId(), null, "+79991234567");
+            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name").vcfPhone("+79991234567").contactId(bot1.getUserId());
             ContactAttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
             NewMessageBody editedMessageBody = new NewMessageBody(null, Collections.singletonList(contactAR), null);
 

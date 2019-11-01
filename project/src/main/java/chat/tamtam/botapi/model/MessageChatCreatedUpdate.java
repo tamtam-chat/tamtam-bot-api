@@ -25,28 +25,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Bot gets this type of update as soon as user pressed &#x60;Start&#x60; button
+ * Bot will get this update when chat has been created as soon as first user clicked chat button
  */
-public class BotStartedUpdate extends Update implements TamTamSerializable {
+public class MessageChatCreatedUpdate extends Update implements TamTamSerializable {
 
     @NotNull
-    private final @Valid Long chatId;
+    private final @Valid Chat chat;
     @NotNull
-    private final @Valid User user;
+    private final @Valid String messageId;
     @Nullable
-    @Size(max = 512)
-    private @Valid String payload;
+    private @Valid String startPayload;
 
     @JsonCreator
-    public BotStartedUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
+    public MessageChatCreatedUpdate(@JsonProperty("chat") Chat chat, @JsonProperty("message_id") String messageId, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
-        this.chatId = chatId;
-        this.user = user;
+        this.chat = chat;
+        this.messageId = messageId;
     }
 
     @Override
@@ -55,46 +53,45 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
     }
 
     /**
-    * Dialog identifier where event has occurred
-    * @return chatId
+    * @return chat
     **/
-    @JsonProperty("chat_id")
-    public Long getChatId() {
-        return chatId;
+    @JsonProperty("chat")
+    public Chat getChat() {
+        return chat;
     }
 
     /**
-    * User pressed the &#39;Start&#39; button
-    * @return user
+    * Message identifier where the button has been clicked
+    * @return messageId
     **/
-    @JsonProperty("user")
-    public User getUser() {
-        return user;
+    @JsonProperty("message_id")
+    public String getMessageId() {
+        return messageId;
     }
 
-    public BotStartedUpdate payload(@Nullable String payload) {
-        this.setPayload(payload);
+    public MessageChatCreatedUpdate startPayload(@Nullable String startPayload) {
+        this.setStartPayload(startPayload);
         return this;
     }
 
     /**
-    * Additional data from deep-link passed on bot startup
-    * @return payload
+    * Payload from chat button
+    * @return startPayload
     **/
     @Nullable
-    @JsonProperty("payload")
-    public String getPayload() {
-        return payload;
+    @JsonProperty("start_payload")
+    public String getStartPayload() {
+        return startPayload;
     }
 
-    public void setPayload(@Nullable String payload) {
-        this.payload = payload;
+    public void setStartPayload(@Nullable String startPayload) {
+        this.startPayload = startPayload;
     }
 
     @JsonProperty("update_type")
     @Override
     public String getType() {
-        return Update.BOT_STARTED;
+        return Update.MESSAGE_CHAT_CREATED;
     }
 
     @Override
@@ -106,28 +103,28 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
           return false;
         }
 
-        BotStartedUpdate other = (BotStartedUpdate) o;
-        return Objects.equals(this.chatId, other.chatId) &&
-            Objects.equals(this.user, other.user) &&
-            Objects.equals(this.payload, other.payload) &&
+        MessageChatCreatedUpdate other = (MessageChatCreatedUpdate) o;
+        return Objects.equals(this.chat, other.chat) &&
+            Objects.equals(this.messageId, other.messageId) &&
+            Objects.equals(this.startPayload, other.startPayload) &&
             super.equals(o);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        result = 31 * result + (chat != null ? chat.hashCode() : 0);
+        result = 31 * result + (messageId != null ? messageId.hashCode() : 0);
+        result = 31 * result + (startPayload != null ? startPayload.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "BotStartedUpdate{"+ super.toString()
-            + " chatId='" + chatId + '\''
-            + " user='" + user + '\''
-            + " payload='" + payload + '\''
+        return "MessageChatCreatedUpdate{"+ super.toString()
+            + " chat='" + chat + '\''
+            + " messageId='" + messageId + '\''
+            + " startPayload='" + startPayload + '\''
             + '}';
     }
 }

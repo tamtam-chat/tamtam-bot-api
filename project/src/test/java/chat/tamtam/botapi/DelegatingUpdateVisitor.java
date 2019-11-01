@@ -5,6 +5,7 @@ import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.BotStartedUpdate;
 import chat.tamtam.botapi.model.ChatTitleChangedUpdate;
 import chat.tamtam.botapi.model.MessageCallbackUpdate;
+import chat.tamtam.botapi.model.MessageChatCreatedUpdate;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.MessageRemovedUpdate;
@@ -69,6 +70,11 @@ public class DelegatingUpdateVisitor implements Update.Visitor {
 
     @Override
     public void visit(ChatTitleChangedUpdate model) {
+        delegate.visit(model);
+    }
+
+    @Override
+    public void visit(MessageChatCreatedUpdate model) {
         delegate.visit(model);
     }
 

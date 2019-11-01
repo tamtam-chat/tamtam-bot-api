@@ -55,6 +55,11 @@ public class NoopUpdateVisitor implements Update.Visitor {
     }
 
     @Override
+    public void visit(MessageChatCreatedUpdate model) {
+
+    }
+
+    @Override
     public void visitDefault(Update model) {
 
     }
