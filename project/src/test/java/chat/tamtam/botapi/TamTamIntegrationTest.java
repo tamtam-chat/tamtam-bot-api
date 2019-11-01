@@ -330,7 +330,7 @@ public abstract class TamTamIntegrationTest {
     }
 
     protected void await(CountDownLatch latch) throws InterruptedException {
-        await(latch, 2);
+        await(latch, 10);
     }
 
     protected void await(CountDownLatch latch, int seconds) throws InterruptedException {
