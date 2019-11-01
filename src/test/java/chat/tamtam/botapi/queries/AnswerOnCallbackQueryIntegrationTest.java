@@ -99,8 +99,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
                 bot3.pressCallbackButton(messageId, payload);
 
                 String editedText = randomText();
-                ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload(randomText(16),
-                        bot1.getUserId(), null, "+79991234567");
+                ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload(randomText(16)).contactId(bot1.getUserId()).vcfPhone("+79991234567");
                 AttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
                 NewMessageBody answerMessage = new NewMessageBody(editedText, Collections.singletonList(contactAR), null);
 

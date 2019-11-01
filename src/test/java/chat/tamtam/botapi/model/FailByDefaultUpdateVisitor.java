@@ -57,6 +57,11 @@ public class FailByDefaultUpdateVisitor implements Update.Visitor {
     }
 
     @Override
+    public void visit(MessageChatCreatedUpdate model) {
+        fail();
+    }
+
+    @Override
     public void visitDefault(Update model) {
         fail();
     }

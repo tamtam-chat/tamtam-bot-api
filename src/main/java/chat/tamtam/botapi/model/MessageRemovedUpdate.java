@@ -34,11 +34,17 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
 
     @NotNull
     private final @Valid String messageId;
+    @NotNull
+    private final @Valid Long chatId;
+    @NotNull
+    private final @Valid Long userId;
 
     @JsonCreator
-    public MessageRemovedUpdate(@JsonProperty("message_id") String messageId, @JsonProperty("timestamp") Long timestamp) { 
+    public MessageRemovedUpdate(@JsonProperty("message_id") String messageId, @JsonProperty("chat_id") Long chatId, @JsonProperty("user_id") Long userId, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.messageId = messageId;
+        this.chatId = chatId;
+        this.userId = userId;
     }
 
     @Override
@@ -53,6 +59,24 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
     @JsonProperty("message_id")
     public String getMessageId() {
         return messageId;
+    }
+
+    /**
+    * Chat identifier where message has been deleted
+    * @return chatId
+    **/
+    @JsonProperty("chat_id")
+    public Long getChatId() {
+        return chatId;
+    }
+
+    /**
+    * User who deleted this message
+    * @return userId
+    **/
+    @JsonProperty("user_id")
+    public Long getUserId() {
+        return userId;
     }
 
     @JsonProperty("update_type")
@@ -72,6 +96,8 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
 
         MessageRemovedUpdate other = (MessageRemovedUpdate) o;
         return Objects.equals(this.messageId, other.messageId) &&
+            Objects.equals(this.chatId, other.chatId) &&
+            Objects.equals(this.userId, other.userId) &&
             super.equals(o);
     }
 
@@ -79,6 +105,8 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (messageId != null ? messageId.hashCode() : 0);
+        result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
         return result;
     }
 
@@ -86,6 +114,8 @@ public class MessageRemovedUpdate extends Update implements TamTamSerializable {
     public String toString() {
         return "MessageRemovedUpdate{"+ super.toString()
             + " messageId='" + messageId + '\''
+            + " chatId='" + chatId + '\''
+            + " userId='" + userId + '\''
             + '}';
     }
 }

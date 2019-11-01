@@ -85,7 +85,7 @@ public class TamTamService {
             new MediaAttachmentPayload("token", "urlaudio"));
     public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload("token",  "urlfile"), "name", 100L);
     public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
-            new ContactAttachmentPayload("vcfinfo", null));
+            new ContactAttachmentPayload().vcfInfo("vcfinfo"));
     public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text");
     public static final RequestContactButton REQUEST_CONTACT_BUTTON = new RequestContactButton("request contact");
     public static final RequestGeoLocationButton REQUEST_GEO_LOCATION_BUTTON = new RequestGeoLocationButton(

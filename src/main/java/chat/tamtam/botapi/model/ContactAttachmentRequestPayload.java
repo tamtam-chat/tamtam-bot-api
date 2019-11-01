@@ -35,18 +35,15 @@ public class ContactAttachmentRequestPayload implements TamTamSerializable {
     @Nullable
     private final @Valid String name;
     @Nullable
-    private final @Valid Long contactId;
+    private @Valid Long contactId;
     @Nullable
-    private final @Valid String vcfInfo;
+    private @Valid String vcfInfo;
     @Nullable
-    private final @Valid String vcfPhone;
+    private @Valid String vcfPhone;
 
     @JsonCreator
-    public ContactAttachmentRequestPayload(@Nullable @JsonProperty("name") String name, @Nullable @JsonProperty("contactId") Long contactId, @Nullable @JsonProperty("vcfInfo") String vcfInfo, @Nullable @JsonProperty("vcfPhone") String vcfPhone) { 
+    public ContactAttachmentRequestPayload(@Nullable @JsonProperty("name") String name) { 
         this.name = name;
-        this.contactId = contactId;
-        this.vcfInfo = vcfInfo;
-        this.vcfPhone = vcfPhone;
     }
 
     /**
@@ -59,14 +56,28 @@ public class ContactAttachmentRequestPayload implements TamTamSerializable {
         return name;
     }
 
+    public ContactAttachmentRequestPayload contactId(@Nullable Long contactId) {
+        this.setContactId(contactId);
+        return this;
+    }
+
     /**
-    * Contact identifier
+    * Contact identifier if it is reigstered TamTam user
     * @return contactId
     **/
     @Nullable
-    @JsonProperty("contactId")
+    @JsonProperty("contact_id")
     public Long getContactId() {
         return contactId;
+    }
+
+    public void setContactId(@Nullable Long contactId) {
+        this.contactId = contactId;
+    }
+
+    public ContactAttachmentRequestPayload vcfInfo(@Nullable String vcfInfo) {
+        this.setVcfInfo(vcfInfo);
+        return this;
     }
 
     /**
@@ -74,9 +85,18 @@ public class ContactAttachmentRequestPayload implements TamTamSerializable {
     * @return vcfInfo
     **/
     @Nullable
-    @JsonProperty("vcfInfo")
+    @JsonProperty("vcf_info")
     public String getVcfInfo() {
         return vcfInfo;
+    }
+
+    public void setVcfInfo(@Nullable String vcfInfo) {
+        this.vcfInfo = vcfInfo;
+    }
+
+    public ContactAttachmentRequestPayload vcfPhone(@Nullable String vcfPhone) {
+        this.setVcfPhone(vcfPhone);
+        return this;
     }
 
     /**
@@ -84,9 +104,13 @@ public class ContactAttachmentRequestPayload implements TamTamSerializable {
     * @return vcfPhone
     **/
     @Nullable
-    @JsonProperty("vcfPhone")
+    @JsonProperty("vcf_phone")
     public String getVcfPhone() {
         return vcfPhone;
+    }
+
+    public void setVcfPhone(@Nullable String vcfPhone) {
+        this.vcfPhone = vcfPhone;
     }
 
     @Override

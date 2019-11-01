@@ -234,7 +234,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldSendContact() throws Exception {
         UserWithPhoto me = getBot1();
-        ContactAttachmentRequestPayload payload = new ContactAttachmentRequestPayload(me.getName(), me.getUserId(), null, "+79991234567");
+        ContactAttachmentRequestPayload payload = new ContactAttachmentRequestPayload(me.getName()).vcfPhone("+79991234567").contactId(me.getUserId());
         AttachmentRequest request = new ContactAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
         send(newMessage);

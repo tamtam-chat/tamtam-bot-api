@@ -20,7 +20,6 @@
 
 package chat.tamtam.botapi.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -33,14 +32,13 @@ import org.jetbrains.annotations.Nullable;
 public class ContactAttachmentPayload implements TamTamSerializable {
 
     @Nullable
-    private final @Valid String vcfInfo;
+    private @Valid String vcfInfo;
     @Nullable
-    private final @Valid User tamInfo;
+    private @Valid User tamInfo;
 
-    @JsonCreator
-    public ContactAttachmentPayload(@Nullable @JsonProperty("vcfInfo") String vcfInfo, @Nullable @JsonProperty("tamInfo") User tamInfo) { 
-        this.vcfInfo = vcfInfo;
-        this.tamInfo = tamInfo;
+    public ContactAttachmentPayload vcfInfo(@Nullable String vcfInfo) {
+        this.setVcfInfo(vcfInfo);
+        return this;
     }
 
     /**
@@ -48,9 +46,18 @@ public class ContactAttachmentPayload implements TamTamSerializable {
     * @return vcfInfo
     **/
     @Nullable
-    @JsonProperty("vcfInfo")
+    @JsonProperty("vcf_info")
     public String getVcfInfo() {
         return vcfInfo;
+    }
+
+    public void setVcfInfo(@Nullable String vcfInfo) {
+        this.vcfInfo = vcfInfo;
+    }
+
+    public ContactAttachmentPayload tamInfo(@Nullable User tamInfo) {
+        this.setTamInfo(tamInfo);
+        return this;
     }
 
     /**
@@ -58,9 +65,13 @@ public class ContactAttachmentPayload implements TamTamSerializable {
     * @return tamInfo
     **/
     @Nullable
-    @JsonProperty("tamInfo")
+    @JsonProperty("tam_info")
     public User getTamInfo() {
         return tamInfo;
+    }
+
+    public void setTamInfo(@Nullable User tamInfo) {
+        this.tamInfo = tamInfo;
     }
 
     @Override
