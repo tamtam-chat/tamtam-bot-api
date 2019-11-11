@@ -26,10 +26,15 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 
 public class RemoveMemberQuery extends TamTamQuery<SimpleQueryResult> { 
     private final QueryParam<Long> userId = new QueryParam<Long>("user_id", this).required();
+    private final QueryParam<Boolean> block = new QueryParam<>("block", this);
 
     public RemoveMemberQuery(TamTamClient client, Long chatId, Long userId) {
         super(client, substitute("/chats/{chatId}/members", chatId), null, SimpleQueryResult.class, Method.DELETE);
         this.userId.setValue(userId);
     }
 
+    public RemoveMemberQuery block(Boolean value) {
+        this.block.setValue(value);
+        return this;
+    }
 }
