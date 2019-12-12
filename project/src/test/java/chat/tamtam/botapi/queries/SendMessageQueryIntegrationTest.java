@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
@@ -379,6 +380,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldSendMessageWithURL() throws Exception {
         NewMessageBody nmb = new NewMessageBody("https://tamtam.chat", null, null);
         List<Message> sent = send(nmb);

@@ -24,9 +24,9 @@ public class GetChatsQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldGetAllChats() throws Exception {
         List<Chat> chats = new ArrayList<>();
-        Long marker;
+        Long marker = null;
         do {
-            ChatList chatList = botAPI.getChats().execute();
+            ChatList chatList = botAPI.getChats().marker(marker).execute();
             chats.addAll(chatList.getChats());
             marker = chatList.getMarker();
         } while (marker != null);

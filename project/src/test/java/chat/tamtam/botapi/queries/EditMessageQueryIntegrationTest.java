@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -224,6 +225,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldEditMessageWithShareAttachment() throws Exception {
         ShareAttachmentPayload payload = new ShareAttachmentPayload();
         payload.url("https://tt.me");
@@ -248,7 +250,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
                     NewMessageBody newMessage = new NewMessageBody(null, attaches, null);
                     try {
                         new EditMessageQuery(client, newMessage, messageId).execute();
-                        compare(messageId, newMessage, getMessage(client, messageId));
+                        compare(client, messageId, newMessage, getMessage(client, messageId));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
