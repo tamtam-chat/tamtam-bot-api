@@ -18,18 +18,19 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 2;
-    private static final int BUILD = 0;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.client.TamTamClient;
 
-    private Version() {
+import chat.tamtam.botapi.model.ConstructorAnswer;
+import chat.tamtam.botapi.model.SimpleQueryResult;
+
+public class ConstructQuery extends TamTamQuery<SimpleQueryResult> { 
+    private final QueryParam<String> sessionId = new QueryParam<String>("session_id", this).required();
+
+    public ConstructQuery(TamTamClient client, ConstructorAnswer constructorAnswer, String sessionId) {
+        super(client, "/answers/constructor", constructorAnswer, SimpleQueryResult.class, Method.POST);
+        this.sessionId.setValue(sessionId);
     }
 
-    public static String get() {
-        return VERSION;
-    }
 }

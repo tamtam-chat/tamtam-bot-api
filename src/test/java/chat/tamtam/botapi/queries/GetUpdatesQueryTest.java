@@ -58,10 +58,10 @@ public class GetUpdatesQueryTest extends QueryTest {
         MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(randomChat.getChatId(), null), now);
         MessageEditedUpdate messageEditedUpdate = new MessageEditedUpdate(message(randomChat.getChatId(), null), now);
         MessageRemovedUpdate messageRemovedUpdate = new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(),
-                randomChat.getChatId(), user.getUserId(), now);
+                ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), now);
         Callback callback = new Callback(now, "calbackId", random(users.values())).payload("payload");
         MessageCallbackUpdate messageCallbackUpdate = new MessageCallbackUpdate(
-                callback, message(randomChat.getChatId(), null), now);
+                callback, message(randomChat.getChatId(), null), now).userLocale("ru-RU");
         UserAddedToChatUpdate userAddedToChatUpdate = new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
                 user, System.currentTimeMillis()).inviterId(ID_COUNTER.incrementAndGet());
         UserRemovedFromChatUpdate userRemovedFromChatUpdate = new UserRemovedFromChatUpdate(

@@ -1,9 +1,11 @@
 package chat.tamtam.botapi.queries;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Test;
 
@@ -15,6 +17,7 @@ import chat.tamtam.botapi.model.AudioAttachmentRequest;
 import chat.tamtam.botapi.model.Button;
 import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
+import chat.tamtam.botapi.model.ChatButton;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
 import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
@@ -33,6 +36,7 @@ import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.SendMessageResult;
+import chat.tamtam.botapi.model.ShareAttachment;
 import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.StickerAttachmentRequestPayload;
@@ -40,9 +44,9 @@ import chat.tamtam.botapi.model.UploadType;
 import chat.tamtam.botapi.model.UploadedInfo;
 import chat.tamtam.botapi.model.UserWithPhoto;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
@@ -149,6 +153,13 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                 ),
                 Collections.singletonList(
                         new RequestGeoLocationButton("geo location").quick(true)
+                ),
+                Collections.singletonList(
+                        new ChatButton("chat button")
+                                .chatTitle("new chat title " + ID_COUNTER.incrementAndGet())
+                                .chatDescription(randomText())
+                                .startPayload(randomText())
+                                .uuid(ThreadLocalRandom.current().nextInt())
                 )
         );
 
@@ -234,7 +245,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldSendContact() throws Exception {
         UserWithPhoto me = getBot1();
-        ContactAttachmentRequestPayload payload = new ContactAttachmentRequestPayload(me.getName()).vcfPhone("+79991234567").contactId(me.getUserId());
+        ContactAttachmentRequestPayload payload = new ContactAttachmentRequestPayload(me.getName()).contactId(me.getUserId()).vcfPhone("+79991234567");
         AttachmentRequest request = new ContactAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody(null, Collections.singletonList(request), null);
         send(newMessage);
@@ -365,6 +376,31 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
         Chat dialog = getByType(getChats(), ChatType.DIALOG);
         SendMessageResult result = doSend(newMessage, dialog.getChatId());
         assertThat(result.getMessage().getBody().getText(), is(text));
+    }
+
+    @Test
+    public void shouldSendMessageWithURL() throws Exception {
+        NewMessageBody nmb = new NewMessageBody("https://tamtam.chat", null, null);
+        List<Message> sent = send(nmb);
+        for (Message message : sent) {
+            assertThat(message.getBody().getAttachments().get(0), is(instanceOf(ShareAttachment.class)));
+        }
+    }
+
+    @Test
+    public void shouldNotParseURLInText() throws Exception {
+        NewMessageBody nmb = new NewMessageBody("https://tamtam.chat", null, null);
+        List<Message> sent = new ArrayList<>();
+        for (Chat chat : getChatsForSend()) {
+            SendMessageResult result = new SendMessageQuery(client, nmb).disableLinkPreview(true).chatId(
+                    chat.getChatId()).execute();
+
+            sent.add(result.getMessage());
+        }
+
+        for (Message message : sent) {
+            assertThat(message.getBody().getAttachments(), is(nullValue()));
+        }
     }
 
     private List<Message> send(NewMessageBody newMessage) throws Exception {

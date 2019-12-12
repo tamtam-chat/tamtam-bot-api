@@ -18,18 +18,32 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 2;
-    private static final int BUILD = 0;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.model.Message;
+import org.junit.Test;
+import org.junit.Ignore;
 
-    private Version() {
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GetMessageByIdQueryTest extends QueryTest {
+    
+    @Test
+    public void getMessageByIdTest() throws Exception {
+        String messageId = null;
+        GetMessageByIdQuery query = new GetMessageByIdQuery(client, messageId);
+        Message response = query.execute();
+
+        assertThat(response, is(not(nullValue())));
     }
-
-    public static String get() {
-        return VERSION;
-    }
+    
 }

@@ -47,6 +47,8 @@ import javax.validation.constraints.NotNull;
   @JsonSubTypes.Type(value = UserRemovedFromChatUpdate.class, name = Update.USER_REMOVED),
   @JsonSubTypes.Type(value = BotStartedUpdate.class, name = Update.BOT_STARTED),
   @JsonSubTypes.Type(value = ChatTitleChangedUpdate.class, name = Update.CHAT_TITLE_CHANGED),
+  @JsonSubTypes.Type(value = MessageConstructionRequest.class, name = Update.MESSAGE_CONSTRUCTION_REQUEST),
+  @JsonSubTypes.Type(value = MessageConstructedUpdate.class, name = Update.MESSAGE_CONSTRUCTED),
   @JsonSubTypes.Type(value = MessageChatCreatedUpdate.class, name = Update.MESSAGE_CHAT_CREATED),
 })
 @KnownInstance(ofClass = Update.class, discriminator = "update_type")
@@ -61,6 +63,8 @@ public class Update implements TamTamSerializable {
     public static final String USER_REMOVED = "user_removed";
     public static final String BOT_STARTED = "bot_started";
     public static final String CHAT_TITLE_CHANGED = "chat_title_changed";
+    public static final String MESSAGE_CONSTRUCTION_REQUEST = "message_construction_request";
+    public static final String MESSAGE_CONSTRUCTED = "message_constructed";
     public static final String MESSAGE_CHAT_CREATED = "message_chat_created";
     public static final Set<String> TYPES = new HashSet<>(Arrays.asList(
         MESSAGE_CREATED, 
@@ -73,6 +77,8 @@ public class Update implements TamTamSerializable {
         USER_REMOVED, 
         BOT_STARTED, 
         CHAT_TITLE_CHANGED, 
+        MESSAGE_CONSTRUCTION_REQUEST, 
+        MESSAGE_CONSTRUCTED, 
         MESSAGE_CHAT_CREATED
     ));
 
@@ -140,6 +146,8 @@ public class Update implements TamTamSerializable {
         void visit(UserRemovedFromChatUpdate model);
         void visit(BotStartedUpdate model);
         void visit(ChatTitleChangedUpdate model);
+        void visit(MessageConstructionRequest model);
+        void visit(MessageConstructedUpdate model);
         void visit(MessageChatCreatedUpdate model);
         void visitDefault(Update model);
     }

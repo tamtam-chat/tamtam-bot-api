@@ -77,7 +77,7 @@ public class SendMessageAttachmentsIntegrationTest extends TamTamIntegrationTest
         send(newMessage, getChatsForSend());
     }
 
-    private void sendAndVerify(NewMessageBody newMessageBody) throws APIException, ClientException {
+    private void sendAndVerify(NewMessageBody newMessageBody) throws Exception {
         int exceptions = 0;
         List<Chat> chats = getChatsCanSend();
         for (Chat chat : chats) {

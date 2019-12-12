@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -51,6 +52,7 @@ import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
 import chat.tamtam.botapi.model.Intent;
 import chat.tamtam.botapi.model.LinkButton;
 import chat.tamtam.botapi.model.LinkedMessage;
+import chat.tamtam.botapi.model.LocationAttachment;
 import chat.tamtam.botapi.model.LocationAttachmentRequest;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageLinkType;
@@ -63,6 +65,8 @@ import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.SendMessageResult;
+import chat.tamtam.botapi.model.ShareAttachment;
+import chat.tamtam.botapi.model.ShareAttachmentRequest;
 import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.UploadType;
@@ -79,6 +83,8 @@ import chat.tamtam.botapi.queries.SendMessageQuery;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -90,6 +96,7 @@ import static org.junit.Assert.fail;
 public abstract class TamTamIntegrationTest {
     protected static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
+    private static final AtomicBoolean ONCE = new AtomicBoolean();
     private static final boolean IS_TRAVIS = Boolean.parseBoolean(System.getenv("TRAVIS"));
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
@@ -100,7 +107,7 @@ public abstract class TamTamIntegrationTest {
 
     protected TamTamClient client = new TamTamClient(TOKEN_1, transportClient, serializer);
     protected TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
-    private TamTamClient client3 = new TamTamClient(TOKEN_3, transportClient, serializer);
+    protected TamTamClient client3 = new TamTamClient(TOKEN_3, transportClient, serializer);
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 
@@ -118,6 +125,11 @@ public abstract class TamTamIntegrationTest {
         bot1 = new TestBot(client, IS_TRAVIS);
         bot2 = new TestBot(client2, IS_TRAVIS);
         bot3 = new TestBot3(client3, client, IS_TRAVIS);
+        if (!ONCE.getAndSet(true)) {
+            info("Bot 1: {}", bot1);
+            info("Bot 2: {}", bot2);
+            info("Bot 3: {}", bot3);
+        }
     }
 
     protected BotInfo getBot1() throws APIException, ClientException {
@@ -168,48 +180,18 @@ public abstract class TamTamIntegrationTest {
         return sent;
     }
 
-    protected SendMessageResult doSend(NewMessageBody newMessage, Long chatId) throws APIException, ClientException {
+    protected SendMessageResult doSend(NewMessageBody newMessage, Long chatId) throws Exception {
         return doSend(client, newMessage, chatId);
     }
 
-    protected SendMessageResult doSend(TamTamClient client, NewMessageBody newMessage, Long chatId) throws APIException,
-            ClientException {
+    protected SendMessageResult doSend(TamTamClient client, NewMessageBody newMessage, Long chatId) throws Exception {
         do {
             try {
                 SendMessageResult sendMessageResult = new SendMessageQuery(client, newMessage).chatId(chatId).execute();
                 assertThat(sendMessageResult, is(notNullValue()));
                 String messageId = sendMessageResult.getMessage().getBody().getMid();
                 Message lastMessage = getMessage(client, messageId);
-                String text = newMessage.getText();
-                assertThat(lastMessage.getBody().getText(), is(text == null ? "" : text));
-                assertThat(lastMessage.getBody().getMid(), is(messageId));
-
-                List<AttachmentRequest> attachments = newMessage.getAttachments();
-                if (attachments != null) {
-                    for (int i = 0; i < attachments.size(); i++) {
-                        AttachmentRequest request = attachments.get(i);
-                        Attachment attachment = lastMessage.getBody().getAttachments().get(i);
-                        compare(request, attachment);
-                    }
-                }
-
-                NewMessageLink link = newMessage.getLink();
-                if (link != null) {
-                    LinkedMessage linkedMessage = lastMessage.getLink();
-                    assertThat(linkedMessage, is(notNullValue()));
-                    compare(client, linkedMessage, link);
-                }
-
-                Chat chat = getChat(client, chatId);
-                if (chat.getType() == ChatType.CHANNEL) {
-                    assertThat(lastMessage.getRecipient().getChatType(), is(ChatType.CHANNEL));
-                }
-
-                if (chat.isPublic()) {
-                    assertThat(lastMessage.getUrl().length(), is(greaterThan(0)));
-                } else {
-                    assertThat(lastMessage.getUrl(), is(nullValue()));
-                }
+                compare(messageId, newMessage, lastMessage);
                 return sendMessageResult;
             } catch (AttachmentNotReadyException e) {
                 // it is ok, try again
@@ -220,6 +202,41 @@ public abstract class TamTamIntegrationTest {
                 }
             }
         } while (true);
+    }
+
+    protected void compare(String messageId, NewMessageBody newMessage, Message lastMessage) throws Exception {
+        String text = newMessage.getText();
+        assertThat(lastMessage.getBody().getMid(), is(messageId));
+        if (text != null) {
+            assertThat(lastMessage.getBody().getText(), is(text));
+        }
+
+        List<AttachmentRequest> attachments = newMessage.getAttachments();
+        if (attachments != null) {
+            for (int i = 0; i < attachments.size(); i++) {
+                AttachmentRequest request = attachments.get(i);
+                Attachment attachment = lastMessage.getBody().getAttachments().get(i);
+                compare(request, attachment);
+            }
+        }
+
+        NewMessageLink link = newMessage.getLink();
+        if (link != null) {
+            LinkedMessage linkedMessage = lastMessage.getLink();
+            assertThat(linkedMessage, is(notNullValue()));
+            compare(client, linkedMessage, link);
+        }
+
+        Chat chat = getChat(client, lastMessage.getRecipient().getChatId());
+        if (chat.getType() == ChatType.CHANNEL) {
+            assertThat(lastMessage.getRecipient().getChatType(), is(ChatType.CHANNEL));
+        }
+
+        if (chat.isPublic()) {
+            assertThat(lastMessage.getUrl().length(), is(greaterThan(0)));
+        } else {
+            assertThat(lastMessage.getUrl(), is(nullValue()));
+        }
     }
 
     protected Chat getByType(List<Chat> chats, ChatType type) throws Exception {
@@ -277,7 +294,12 @@ public abstract class TamTamIntegrationTest {
 
             @Override
             public void visit(LocationAttachmentRequest model) {
+                compare(model, (LocationAttachment) attachment);
+            }
 
+            @Override
+            public void visit(ShareAttachmentRequest model) {
+                compare(model, ((ShareAttachment) attachment));
             }
 
             @Override
@@ -492,7 +514,23 @@ public abstract class TamTamIntegrationTest {
     }
 
     private static void compare(ContactAttachmentRequest request, ContactAttachment attachment) {
-        assertThat(attachment.getPayload().getVcfInfo(), is(attachment.getPayload().getVcfInfo()));
+        if (request.getPayload().getVcfInfo() != null) {
+            assertThat(attachment.getPayload().getVcfInfo(), is(request.getPayload().getVcfInfo()));
+        }
+    }
+
+    private static void compare(ShareAttachmentRequest request, ShareAttachment attachment) {
+        assertThat(attachment.getPayload().getUrl(), not(isEmptyString()));
+        assertThat(attachment.getPayload().getToken(), not(isEmptyString()));
+        assertThat(attachment.getTitle(), not(isEmptyString()));
+        if (request.getPayload().getUrl() != null) {
+            assertThat(request.getPayload().getUrl(), is(attachment.getPayload().getUrl()));
+        }
+    }
+
+    private static void compare(LocationAttachmentRequest request, LocationAttachment attachment) {
+        assertThat(request.getLatitude(), is(attachment.getLatitude()));
+        assertThat(request.getLongitude(), is(attachment.getLongitude()));
     }
 
     private static void compareTokens(String token1, String token2) {

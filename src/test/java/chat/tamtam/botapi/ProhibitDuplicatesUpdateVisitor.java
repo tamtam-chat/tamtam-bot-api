@@ -8,6 +8,8 @@ import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.BotStartedUpdate;
 import chat.tamtam.botapi.model.ChatTitleChangedUpdate;
 import chat.tamtam.botapi.model.MessageCallbackUpdate;
+import chat.tamtam.botapi.model.MessageConstructedUpdate;
+import chat.tamtam.botapi.model.MessageConstructionRequest;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.MessageRemovedUpdate;
@@ -25,6 +27,18 @@ public class ProhibitDuplicatesUpdateVisitor extends DelegatingUpdateVisitor {
 
     ProhibitDuplicatesUpdateVisitor(Update.Visitor delegate) {
         super(delegate);
+    }
+
+    @Override
+    public void visit(MessageConstructionRequest model) {
+        saveAndCheck(model);
+        super.visit(model);
+    }
+
+    @Override
+    public void visit(MessageConstructedUpdate model) {
+        saveAndCheck(model);
+        super.visit(model);
     }
 
     @Override

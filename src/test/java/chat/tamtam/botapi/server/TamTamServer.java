@@ -49,6 +49,7 @@ public class TamTamServer {
         get("/chats/:chatId/members/admins", service::getAdmins, service::serialize);
         post("/chats/:chatId/actions", service::sendAction, service::serialize);
         put("/messages", service::editMessage, service::serialize);
+        get("/messages/:messageId", service::getMessage, service::serialize);
         post("/answers", service::answer, service::serialize);
         get("/subscriptions", service::getSubscriptions, service::serialize);
         post("/subscriptions", service::addSubscription, service::serialize);

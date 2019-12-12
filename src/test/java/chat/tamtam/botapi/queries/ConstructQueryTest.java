@@ -18,18 +18,29 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 2;
-    private static final int BUILD = 0;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.model.ConstructorAnswer;
+import chat.tamtam.botapi.model.SimpleQueryResult;
+import org.junit.Test;
+import org.junit.Ignore;
+import static org.junit.Assert.fail;
 
-    private Version() {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ConstructQueryTest extends QueryTest {
+    @Ignore
+    @Test
+    public void constructTest() throws Exception {
+        ConstructorAnswer constructorAnswer = null;
+        String sessionId = null;
+        ConstructQuery query = new ConstructQuery(client, constructorAnswer, sessionId);
+        SimpleQueryResult response = query.execute();
+
+        fail("Verify result!");
     }
-
-    public static String get() {
-        return VERSION;
-    }
+    
 }

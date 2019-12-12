@@ -46,6 +46,8 @@ public class Message implements TamTamSerializable {
     private @Valid MessageStat stat;
     @Nullable
     private @Valid String url;
+    @Nullable
+    private @Valid User constructor;
 
     @JsonCreator
     public Message(@JsonProperty("recipient") Recipient recipient, @JsonProperty("timestamp") Long timestamp, @JsonProperty("body") MessageBody body) { 
@@ -156,6 +158,25 @@ public class Message implements TamTamSerializable {
         this.url = url;
     }
 
+    public Message constructor(@Nullable User constructor) {
+        this.setConstructor(constructor);
+        return this;
+    }
+
+    /**
+    * Bot-constructor created this message
+    * @return constructor
+    **/
+    @Nullable
+    @JsonProperty("constructor")
+    public User getConstructor() {
+        return constructor;
+    }
+
+    public void setConstructor(@Nullable User constructor) {
+        this.constructor = constructor;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -172,7 +193,8 @@ public class Message implements TamTamSerializable {
             Objects.equals(this.link, other.link) &&
             Objects.equals(this.body, other.body) &&
             Objects.equals(this.stat, other.stat) &&
-            Objects.equals(this.url, other.url);
+            Objects.equals(this.url, other.url) &&
+            Objects.equals(this.constructor, other.constructor);
     }
 
     @Override
@@ -185,6 +207,7 @@ public class Message implements TamTamSerializable {
         result = 31 * result + (body != null ? body.hashCode() : 0);
         result = 31 * result + (stat != null ? stat.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (constructor != null ? constructor.hashCode() : 0);
         return result;
     }
 
@@ -198,6 +221,7 @@ public class Message implements TamTamSerializable {
             + " body='" + body + '\''
             + " stat='" + stat + '\''
             + " url='" + url + '\''
+            + " constructor='" + constructor + '\''
             + '}';
     }
 }

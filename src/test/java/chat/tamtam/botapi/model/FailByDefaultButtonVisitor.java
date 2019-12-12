@@ -8,31 +8,35 @@ import static org.junit.Assert.fail;
 public class FailByDefaultButtonVisitor implements Button.Visitor {
     @Override
     public void visit(CallbackButton model) {
-        fail("Should not happens");
+        shouldNotHappens();
     }
 
     @Override
     public void visit(LinkButton model) {
-        fail("Should not happens");
+        shouldNotHappens();
     }
 
     @Override
     public void visit(RequestGeoLocationButton model) {
-        fail("Should not happens");
+        shouldNotHappens();
     }
 
     @Override
     public void visit(RequestContactButton model) {
-        fail("Should not happens");
+        shouldNotHappens();
     }
 
     @Override
     public void visit(ChatButton model) {
-        fail("Should not happens");
+        shouldNotHappens();
     }
 
     @Override
     public void visitDefault(Button model) {
+        shouldNotHappens();
+    }
+
+    private static void shouldNotHappens() {
         fail("Should not happens");
     }
 }
