@@ -67,6 +67,7 @@ public class SendVideoMessageQueryIntegrationTest extends TamTamIntegrationTest 
             for (Chat c : Arrays.asList(/*getByType(client2Chats, ChatType.DIALOG),*/
                     getByTitle(client2Chats, "test chat #7"), getByTitle(client2Chats, "test channel #5"))) {
 
+                info("Sending to " + c.getChatId());
                 doSend(client2, new NewMessageBody("resent with attach", Collections.singletonList(copyAttach), null),
                         c.getChatId());
             }

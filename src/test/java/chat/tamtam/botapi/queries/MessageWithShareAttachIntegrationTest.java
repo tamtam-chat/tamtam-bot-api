@@ -3,6 +3,7 @@ package chat.tamtam.botapi.queries;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
@@ -18,6 +19,7 @@ import chat.tamtam.botapi.model.ShareAttachmentRequest;
 /**
  * @author alexandrchuprin
  */
+@Ignore
 public class MessageWithShareAttachIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldSendMessageWithShareAttachment() throws Exception {

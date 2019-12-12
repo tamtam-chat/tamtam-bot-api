@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -101,6 +102,7 @@ public abstract class TamTamIntegrationTest {
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
     private static final String TOKEN_3 = getToken("TAMTAM_BOTAPI_TOKEN_3");
+    private static final ConcurrentHashMap<String, List<Chat>> CHATS_BY_CLIENT = new ConcurrentHashMap<>();
 
     private final OkHttpTransportClient transportClient = new OkHttpTransportClient();
     protected final JacksonSerializer serializer = new JacksonSerializer();
@@ -140,9 +142,24 @@ public abstract class TamTamIntegrationTest {
         return getChats(client);
     }
 
-    protected List<Chat> getChats(TamTamClient client) throws APIException, ClientException {
-        ChatList chatList = new GetChatsQuery(client).count(100).execute();
-        return chatList.getChats();
+    protected List<Chat> getChats(TamTamClient client) {
+        return CHATS_BY_CLIENT.computeIfAbsent(client.getAccessToken(), (k) -> {
+            Long marker;
+            List<Chat> chats = new ArrayList<>();
+            do {
+                ChatList chatList;
+                try {
+                    chatList = new GetChatsQuery(client).count(100).execute();
+                } catch (APIException | ClientException e) {
+                    throw new RuntimeException(e);
+                }
+
+                chats.addAll(chatList.getChats());
+                marker = chatList.getMarker();
+            } while (marker != null);
+
+            return chats;
+        });
     }
 
     protected Chat getChat(long chatId) throws APIException, ClientException {
@@ -191,7 +208,7 @@ public abstract class TamTamIntegrationTest {
                 assertThat(sendMessageResult, is(notNullValue()));
                 String messageId = sendMessageResult.getMessage().getBody().getMid();
                 Message lastMessage = getMessage(client, messageId);
-                compare(messageId, newMessage, lastMessage);
+                compare(client, messageId, newMessage, lastMessage);
                 return sendMessageResult;
             } catch (AttachmentNotReadyException e) {
                 // it is ok, try again
@@ -204,7 +221,8 @@ public abstract class TamTamIntegrationTest {
         } while (true);
     }
 
-    protected void compare(String messageId, NewMessageBody newMessage, Message lastMessage) throws Exception {
+    protected void compare(TamTamClient client, String messageId, NewMessageBody newMessage,
+                           Message lastMessage) throws Exception {
         String text = newMessage.getText();
         assertThat(lastMessage.getBody().getMid(), is(messageId));
         if (text != null) {
