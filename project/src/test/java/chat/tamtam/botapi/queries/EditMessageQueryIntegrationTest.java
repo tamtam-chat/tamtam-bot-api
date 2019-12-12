@@ -11,14 +11,16 @@ import org.junit.experimental.categories.Category;
 
 import chat.tamtam.botapi.IntegrationTest;
 import chat.tamtam.botapi.TamTamIntegrationTest;
-import chat.tamtam.botapi.client.TamTamClient;
-import chat.tamtam.botapi.exceptions.APIException;
-import chat.tamtam.botapi.exceptions.ClientException;
+import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AttachmentRequest;
+import chat.tamtam.botapi.model.CallbackButton;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.ContactAttachmentRequest;
 import chat.tamtam.botapi.model.ContactAttachmentRequestPayload;
+import chat.tamtam.botapi.model.FailByDefaultAttachmentVisitor;
+import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequest;
+import chat.tamtam.botapi.model.InlineKeyboardAttachmentRequestPayload;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageBody;
 import chat.tamtam.botapi.model.NewMessageBody;
@@ -26,6 +28,9 @@ import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.SendMessageResult;
+import chat.tamtam.botapi.model.ShareAttachment;
+import chat.tamtam.botapi.model.ShareAttachmentPayload;
+import chat.tamtam.botapi.model.ShareAttachmentRequest;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.UploadType;
 
@@ -202,7 +207,10 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
             NewMessageBody newMessageBody = new NewMessageBody(text, attachmentRequests, null);
             SendMessageResult result = botAPI.sendMessage(newMessageBody).chatId(chat.getChatId()).execute();
 
-            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name").vcfPhone("+79991234567").contactId(bot1.getUserId());
+            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload("test name")
+                    .contactId(bot1.getUserId())
+                    .vcfPhone("+79991234567");
+
             ContactAttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
             NewMessageBody editedMessageBody = new NewMessageBody(null, Collections.singletonList(contactAR), null);
 
@@ -212,6 +220,40 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
             assertThat(lastMessage.getText(), is(text));
             compare(Collections.singletonList(contactAR), lastMessage.getAttachments());
+        }
+    }
+
+    @Test
+    public void shouldEditMessageWithShareAttachment() throws Exception {
+        ShareAttachmentPayload payload = new ShareAttachmentPayload();
+        payload.url("https://tt.me");
+        AttachmentRequest attach = new ShareAttachmentRequest(payload);
+        NewMessageBody newMessage = new NewMessageBody(randomText(), Collections.singletonList(attach), null);
+        List<Message> messages = send(newMessage, getChatsForSend());
+        for (Message message : messages) {
+            String messageId = message.getBody().getMid();
+            Attachment attachment = message.getBody().getAttachments().get(0);
+            attachment.visit(new FailByDefaultAttachmentVisitor() {
+                @Override
+                public void visit(ShareAttachment model) {
+                    // send same attach by token
+                    ShareAttachmentPayload payload = new ShareAttachmentPayload();
+                    payload.token(model.getPayload().getToken());
+                    AttachmentRequest shareAttach = new ShareAttachmentRequest(payload);
+                    InlineKeyboardAttachmentRequestPayload kPayload = new InlineKeyboardAttachmentRequestPayload(
+                            Collections.singletonList(
+                                    Collections.singletonList(new CallbackButton("payload", randomText(10)))));
+                    InlineKeyboardAttachmentRequest keyboardAttach = new InlineKeyboardAttachmentRequest(kPayload);
+                    List<AttachmentRequest> attaches = Arrays.asList(shareAttach, keyboardAttach);
+                    NewMessageBody newMessage = new NewMessageBody(null, attaches, null);
+                    try {
+                        new EditMessageQuery(client, newMessage, messageId).execute();
+                        compare(messageId, newMessage, getMessage(client, messageId));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
         }
     }
 }

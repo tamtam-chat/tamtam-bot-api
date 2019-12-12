@@ -37,6 +37,8 @@ import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.model.ChatMember;
 import chat.tamtam.botapi.model.ChatMembersList;
 import chat.tamtam.botapi.model.ChatPatch;
+import chat.tamtam.botapi.queries.ConstructQuery;
+import chat.tamtam.botapi.model.ConstructorAnswer;
 import chat.tamtam.botapi.queries.DeleteMessageQuery;
 import chat.tamtam.botapi.queries.EditChatQuery;
 import chat.tamtam.botapi.queries.EditMessageQuery;
@@ -46,6 +48,7 @@ import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
 import chat.tamtam.botapi.queries.GetMembersQuery;
 import chat.tamtam.botapi.queries.GetMembershipQuery;
+import chat.tamtam.botapi.queries.GetMessageByIdQuery;
 import chat.tamtam.botapi.queries.GetMessagesQuery;
 import chat.tamtam.botapi.queries.GetMyInfoQuery;
 import chat.tamtam.botapi.queries.GetSubscriptionsQuery;
@@ -53,6 +56,7 @@ import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.queries.GetUpdatesQuery;
 import chat.tamtam.botapi.queries.GetUploadUrlQuery;
 import chat.tamtam.botapi.queries.LeaveChatQuery;
+import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.queries.RemoveMemberQuery;
@@ -122,6 +126,26 @@ public class TamTamBotAPI {
         }
 
         return new AnswerOnCallbackQuery(client, callbackAnswer, callbackId);
+    }
+
+    /**
+    * Construct message
+    * Sends answer on construction request. Answer can contain any prepared message and/or keyboard to help user interact with bot.
+    * @param constructorAnswer  (required)
+    * @param sessionId Constructor session identifier (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public ConstructQuery construct(ConstructorAnswer constructorAnswer, String sessionId) throws ClientException { 
+        if (sessionId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'session_id' when calling construct");
+        }
+
+        if (constructorAnswer == null) {
+            throw new RequiredParameterMissingException("Missing the required request body when calling construct");
+        }
+
+        return new ConstructQuery(client, constructorAnswer, sessionId);
     }
 
     /**
@@ -196,7 +220,7 @@ public class TamTamBotAPI {
 
     /**
     * Get chat admins
-    * Returns all chat administrators. Bot must be **adminstrator** in requested chat.
+    * Returns all chat administrators. Bot must be **administrator** in requested chat.
     * @param chatId Chat identifier (required)
     * @return {@link ChatMembersList}
     * @throws ClientException if fails to make API call
@@ -261,6 +285,21 @@ public class TamTamBotAPI {
         }
 
         return new GetMembershipQuery(client, chatId);
+    }
+
+    /**
+    * Get message
+    * Returns single message by its identifier.
+    * @param messageId Message identifier (&#x60;mid&#x60;) to get single message in chat (required)
+    * @return {@link Message}
+    * @throws ClientException if fails to make API call
+    */
+    public GetMessageByIdQuery getMessageById(String messageId) throws ClientException { 
+        if (messageId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'messageId' when calling getMessageById");
+        }
+
+        return new GetMessageByIdQuery(client, messageId);
     }
 
     /**

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class ShareAttachment extends Attachment implements TamTamSerializable {
 
     @NotNull
-    private final @Valid AttachmentPayload payload;
+    private final @Valid ShareAttachmentPayload payload;
     @Nullable
     private @Valid String title;
     @Nullable
@@ -43,7 +43,7 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
     private @Valid String imageUrl;
 
     @JsonCreator
-    public ShareAttachment(@JsonProperty("payload") AttachmentPayload payload) { 
+    public ShareAttachment(@JsonProperty("payload") ShareAttachmentPayload payload) { 
         super();
         this.payload = payload;
     }
@@ -57,7 +57,7 @@ public class ShareAttachment extends Attachment implements TamTamSerializable {
     * @return payload
     **/
     @JsonProperty("payload")
-    public AttachmentPayload getPayload() {
+    public ShareAttachmentPayload getPayload() {
         return payload;
     }
 

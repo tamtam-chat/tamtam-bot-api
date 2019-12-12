@@ -6,6 +6,8 @@ import chat.tamtam.botapi.model.BotStartedUpdate;
 import chat.tamtam.botapi.model.ChatTitleChangedUpdate;
 import chat.tamtam.botapi.model.MessageCallbackUpdate;
 import chat.tamtam.botapi.model.MessageChatCreatedUpdate;
+import chat.tamtam.botapi.model.MessageConstructedUpdate;
+import chat.tamtam.botapi.model.MessageConstructionRequest;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.MessageRemovedUpdate;
@@ -21,6 +23,21 @@ public class DelegatingUpdateVisitor implements Update.Visitor {
 
     public DelegatingUpdateVisitor(Update.Visitor delegate) {
         this.delegate = delegate;
+    }
+
+    @Override
+    public void visit(MessageConstructionRequest model) {
+        delegate.visit(model);
+    }
+
+    @Override
+    public void visit(MessageConstructedUpdate model) {
+        delegate.visit(model);
+    }
+
+    @Override
+    public void visit(MessageChatCreatedUpdate model) {
+        delegate.visit(model);
     }
 
     @Override
@@ -70,11 +87,6 @@ public class DelegatingUpdateVisitor implements Update.Visitor {
 
     @Override
     public void visit(ChatTitleChangedUpdate model) {
-        delegate.visit(model);
-    }
-
-    @Override
-    public void visit(MessageChatCreatedUpdate model) {
         delegate.visit(model);
     }
 

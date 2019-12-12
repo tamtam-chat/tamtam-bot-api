@@ -8,6 +8,7 @@ import chat.tamtam.botapi.exceptions.SerializationException;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.Update;
+import chat.tamtam.botapi.model.User;
 
 /**
  * @author alexandrchuprin
@@ -36,7 +37,8 @@ public class GetUpdatesIntegrationTest extends TamTamIntegrationTest {
 
         @Override
         public void visit(MessageCreatedUpdate model) {
-            Long senderId = model.getMessage().getSender().getUserId();
+            User sender = model.getMessage().getSender();
+            Long senderId = sender.getUserId();
             if (senderId.equals(bot3.getUserId())) {
                 Update update;
                 try {
@@ -48,6 +50,10 @@ public class GetUpdatesIntegrationTest extends TamTamIntegrationTest {
                 return;
             }
 
+            onMessageCreated(model);
+        }
+
+        protected void onMessageCreated(MessageCreatedUpdate model) {
             super.visit(model);
         }
     }

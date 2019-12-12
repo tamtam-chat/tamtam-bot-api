@@ -55,6 +55,16 @@ public class NoopUpdateVisitor implements Update.Visitor {
     }
 
     @Override
+    public void visit(MessageConstructionRequest model) {
+
+    }
+
+    @Override
+    public void visit(MessageConstructedUpdate model) {
+
+    }
+
+    @Override
     public void visit(MessageChatCreatedUpdate model) {
 
     }

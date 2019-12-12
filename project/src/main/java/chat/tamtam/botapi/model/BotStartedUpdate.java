@@ -41,6 +41,7 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
     @Nullable
     @Size(max = 512)
     private @Valid String payload;
+    private @Valid String userLocale;
 
     @JsonCreator
     public BotStartedUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
@@ -91,6 +92,24 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
         this.payload = payload;
     }
 
+    public BotStartedUpdate userLocale(String userLocale) {
+        this.setUserLocale(userLocale);
+        return this;
+    }
+
+    /**
+    * Current user locale in IETF BCP 47 format
+    * @return userLocale
+    **/
+    @JsonProperty("user_locale")
+    public String getUserLocale() {
+        return userLocale;
+    }
+
+    public void setUserLocale(String userLocale) {
+        this.userLocale = userLocale;
+    }
+
     @JsonProperty("update_type")
     @Override
     public String getType() {
@@ -110,6 +129,7 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
         return Objects.equals(this.chatId, other.chatId) &&
             Objects.equals(this.user, other.user) &&
             Objects.equals(this.payload, other.payload) &&
+            Objects.equals(this.userLocale, other.userLocale) &&
             super.equals(o);
     }
 
@@ -119,6 +139,7 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        result = 31 * result + (userLocale != null ? userLocale.hashCode() : 0);
         return result;
     }
 
@@ -128,6 +149,7 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
             + " chatId='" + chatId + '\''
             + " user='" + user + '\''
             + " payload='" + payload + '\''
+            + " userLocale='" + userLocale + '\''
             + '}';
     }
 }

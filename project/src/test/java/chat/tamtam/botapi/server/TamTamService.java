@@ -8,6 +8,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -56,6 +57,7 @@ import chat.tamtam.botapi.model.Recipient;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
 import chat.tamtam.botapi.model.ShareAttachment;
+import chat.tamtam.botapi.model.ShareAttachmentPayload;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.StickerAttachmentPayload;
@@ -72,20 +74,20 @@ import spark.Response;
  * @author alexandrchuprin
  */
 public class TamTamService {
-    public static final String ACCESS_TOKEN = "dummyaccesstoken";
-    private static final SimpleQueryResult SUCCESSFULL = new SimpleQueryResult(true);
-    private static final SimpleQueryResult NOT_SUCCESSFULL = new SimpleQueryResult(false);
+    public static final String ACCESS_TOKEN = "dummyAccessToken";
+    private static final SimpleQueryResult SUCCESSFUL = new SimpleQueryResult(true);
+    private static final SimpleQueryResult NOT_SUCCESSFUL = new SimpleQueryResult(false);
     private static final AtomicLong ID_COUNTER = new AtomicLong();
     public static final PhotoAttachment PHOTO_ATTACHMENT = new PhotoAttachment(
             new PhotoAttachmentPayload(ID_COUNTER.incrementAndGet(), "token", "url"));
-    public static final String CHAT_ICON_URL = "iconurl";
+    public static final String CHAT_ICON_URL = "iconUrl";
     public static final VideoAttachment VIDEO_ATTACHMENT = new VideoAttachment(
-            new MediaAttachmentPayload("token", "urlvideo"));
+            new MediaAttachmentPayload("token", "urlVideo"));
     public static final AudioAttachment AUDIO_ATTACHMENT = new AudioAttachment(
-            new MediaAttachmentPayload("token", "urlaudio"));
+            new MediaAttachmentPayload("token", "urlAudio"));
     public static final FileAttachment FILE_ATTACHMENT = new FileAttachment(new FileAttachmentPayload("token",  "urlfile"), "name", 100L);
     public static final ContactAttachment CONTACT_ATTACHMENT = new ContactAttachment(
-            new ContactAttachmentPayload().vcfInfo("vcfinfo"));
+            new ContactAttachmentPayload().vcfInfo("vcfInfo"));
     public static final CallbackButton CALLBACK_BUTTON = new CallbackButton("payload", "text");
     public static final RequestContactButton REQUEST_CONTACT_BUTTON = new RequestContactButton("request contact");
     public static final RequestGeoLocationButton REQUEST_GEO_LOCATION_BUTTON = new RequestGeoLocationButton(
@@ -100,7 +102,7 @@ public class TamTamService {
             )));
     public static final StickerAttachment STICKER_ATTACHMENT = new StickerAttachment(new StickerAttachmentPayload("code",
             "stickerurl"), 128, 128);
-    public static final ShareAttachment SHARE_ATTACHMENT = new ShareAttachment(new AttachmentPayload("shareurl"));
+    public static final ShareAttachment SHARE_ATTACHMENT = new ShareAttachment(new ShareAttachmentPayload().url("shareurl"));
     public static final LocationAttachment LOCATION_ATTACHMENT = new LocationAttachment(
             ThreadLocalRandom.current().nextDouble(), ThreadLocalRandom.current().nextDouble());
 
@@ -142,11 +144,11 @@ public class TamTamService {
     }
 
     public Object addMembers(Request request, Response response) {
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public Object answer(Request request, Response response) {
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public Object editChat(Request request, Response response) throws Exception {
@@ -162,7 +164,7 @@ public class TamTamService {
     }
 
     public Object editMessage(Request request, Response response) {
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public Object getChat(Request request, Response response) {
@@ -196,7 +198,7 @@ public class TamTamService {
 
     public Object leaveChat(Request request, Response response) {
         Long chatId = Long.valueOf(request.params("chatId"));
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public Object getAdmins(Request request, Response response) {
@@ -208,27 +210,27 @@ public class TamTamService {
     public Object removeMembers(Request request, Response response) throws Exception {
         Long chatId = Long.valueOf(request.params("chatId"));
         Long userId = Long.valueOf(request.queryParams("user_id"));
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public Object sendAction(Request request, Response response) throws Exception {
         Long chatId = Long.valueOf(request.params("chatId"));
         ActionRequestBody actionRequestBody = serializer.deserialize(request.body(), ActionRequestBody.class);
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public Object addSubscription(Request request, Response response) throws Exception {
         SubscriptionRequestBody subscription = serializer.deserialize(request.body(), SubscriptionRequestBody.class);
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public Object removeSubscription(Request request, Response response) {
         String url = request.queryParams("url");
         if (url == null) {
-            return NOT_SUCCESSFULL;
+            return NOT_SUCCESSFUL;
         }
 
-        return SUCCESSFULL;
+        return SUCCESSFUL;
     }
 
     public String serialize(Object o) throws SerializationException {
@@ -258,6 +260,11 @@ public class TamTamService {
         message.stat(new MessageStat(2));
 
         return message;
+    }
+
+    public Object getMessage(Request request, Response response) {
+        Objects.requireNonNull(request.params("messageId"), "messageId");
+        return message(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet());
     }
 
     private static ChatMember newChatMember() {

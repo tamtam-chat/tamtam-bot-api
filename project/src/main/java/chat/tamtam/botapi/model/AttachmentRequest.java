@@ -42,6 +42,7 @@ import javax.validation.Valid;
   @JsonSubTypes.Type(value = ContactAttachmentRequest.class, name = AttachmentRequest.CONTACT),
   @JsonSubTypes.Type(value = InlineKeyboardAttachmentRequest.class, name = AttachmentRequest.INLINE_KEYBOARD),
   @JsonSubTypes.Type(value = LocationAttachmentRequest.class, name = AttachmentRequest.LOCATION),
+  @JsonSubTypes.Type(value = ShareAttachmentRequest.class, name = AttachmentRequest.SHARE),
 })
 @KnownInstance(ofClass = AttachmentRequest.class, discriminator = "type")
 public class AttachmentRequest implements TamTamSerializable {
@@ -53,6 +54,7 @@ public class AttachmentRequest implements TamTamSerializable {
     public static final String CONTACT = "contact";
     public static final String INLINE_KEYBOARD = "inline_keyboard";
     public static final String LOCATION = "location";
+    public static final String SHARE = "share";
     public static final Set<String> TYPES = new HashSet<>(Arrays.asList(
         IMAGE, 
         VIDEO, 
@@ -61,7 +63,8 @@ public class AttachmentRequest implements TamTamSerializable {
         STICKER, 
         CONTACT, 
         INLINE_KEYBOARD, 
-        LOCATION
+        LOCATION, 
+        SHARE
     ));
 
 
@@ -89,6 +92,7 @@ public class AttachmentRequest implements TamTamSerializable {
         void visit(ContactAttachmentRequest model);
         void visit(InlineKeyboardAttachmentRequest model);
         void visit(LocationAttachmentRequest model);
+        void visit(ShareAttachmentRequest model);
         void visitDefault(AttachmentRequest model);
     }
 }

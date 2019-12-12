@@ -153,4 +153,9 @@ public class TestBot {
 
         return marker;
     }
+
+    @Override
+    public String toString() {
+        return me.toString();
+    }
 }
