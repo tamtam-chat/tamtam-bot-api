@@ -20,6 +20,8 @@
 
 package chat.tamtam.botapi.client;
 
+import java.io.InputStream;
+
 import org.jetbrains.annotations.Nullable;
 
 import chat.tamtam.botapi.exceptions.SerializationException;
@@ -32,5 +34,14 @@ public interface TamTamSerializer {
     byte[] serialize(@Nullable Object object) throws SerializationException;
 
     @Nullable
+    String serializeToString(@Nullable Object object) throws SerializationException;
+
+    @Nullable
     <T> T deserialize(@Nullable String data, Class<T> responseType) throws SerializationException;
+
+    @Nullable
+    <T> T deserialize(@Nullable InputStream data, Class<T> responseType) throws SerializationException;
+
+    @Nullable
+    <T> T deserialize(@Nullable byte[] data, Class<T> responseType) throws SerializationException;
 }

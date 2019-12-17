@@ -21,6 +21,7 @@
 package chat.tamtam.botapi.client.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +66,21 @@ public class JacksonSerializer implements TamTamSerializer {
 
     @Nullable
     @Override
+    public String serializeToString(@Nullable Object object) throws SerializationException {
+        if (object == null) {
+            return null;
+        }
+
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new SerializationException(e);
+        }
+
+    }
+
+    @Nullable
+    @Override
     public <T> T deserialize(String data, Class<T> responseType) throws SerializationException {
         if (data == null || data.isEmpty()) {
             return null;
@@ -74,6 +90,34 @@ public class JacksonSerializer implements TamTamSerializer {
             ObjectReader reader = mapper.reader();
             JsonNode json = reader.readTree(data);
             return reader.treeToValue(json, responseType);
+        } catch (IOException e) {
+            throw new SerializationException(e);
+        }
+    }
+
+    @Nullable
+    @Override
+    public <T> T deserialize(@Nullable InputStream data, Class<T> responseType) throws SerializationException {
+        if (data == null) {
+            return null;
+        }
+
+        try {
+            return mapper.readValue(data, responseType);
+        } catch (IOException e) {
+            throw new SerializationException(e);
+        }
+    }
+
+    @Nullable
+    @Override
+    public <T> T deserialize(@Nullable byte[] data, Class<T> responseType) throws SerializationException {
+        if (data == null || data.length == 0) {
+            return null;
+        }
+
+        try {
+            return mapper.readValue(data, responseType);
         } catch (IOException e) {
             throw new SerializationException(e);
         }
