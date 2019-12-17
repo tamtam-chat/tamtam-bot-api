@@ -21,7 +21,7 @@ public class JacksonSerializerTest {
 
     @Test
     public void shouldReturnNullOnEmptyInput() throws Exception {
-        assertThat(serializer.deserialize(null, Object.class), is(nullValue()));
+        assertThat(serializer.deserialize((byte[]) null, Object.class), is(nullValue()));
         assertThat(serializer.deserialize("", Object.class), is(nullValue()));
     }
 
