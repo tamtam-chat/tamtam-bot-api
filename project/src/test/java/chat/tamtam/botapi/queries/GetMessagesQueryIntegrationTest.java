@@ -98,7 +98,7 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
         Chat dialog = getBy(chats, c -> c.getType() == ChatType.DIALOG && c.getChatId() != (bot1.getUserId() ^ bot3.getUserId()));
 
         List<String> posted = new ArrayList<>();
-        long start = now();
+        long start = now() - 1000;
         Long dialogChatId = dialog.getChatId();
         for (int i = 0; i < 30; i++) {
             String text = randomText();
@@ -106,7 +106,7 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
             posted.add(text);
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(2000);
 
         long from = now();
         List<String> fetched = new ArrayList<>();
