@@ -183,6 +183,7 @@
                         <configuration>
                             <groups>chat.tamtam.botapi.IntegrationTest</groups>
                             <excludedGroups>chat.tamtam.botapi.UnitTest</excludedGroups>
+                            <skipAfterFailureCount>1</skipAfterFailureCount>
                         </configuration>
                     </plugin>
                 </plugins>
