@@ -19,7 +19,6 @@ import chat.tamtam.botapi.model.ShareAttachmentRequest;
 /**
  * @author alexandrchuprin
  */
-@Ignore
 public class MessageWithShareAttachIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldSendMessageWithShareAttachment() throws Exception {

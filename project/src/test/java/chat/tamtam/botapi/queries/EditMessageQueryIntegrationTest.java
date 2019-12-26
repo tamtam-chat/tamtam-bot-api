@@ -225,7 +225,6 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     }
 
     @Test
-    @Ignore
     public void shouldEditMessageWithShareAttachment() throws Exception {
         ShareAttachmentPayload payload = new ShareAttachmentPayload();
         payload.url("https://tt.me");
