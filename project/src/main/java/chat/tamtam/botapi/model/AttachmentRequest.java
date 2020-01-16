@@ -68,8 +68,14 @@ public class AttachmentRequest implements TamTamSerializable {
     ));
 
 
+
+
     public void visit(Visitor visitor) {
         visitor.visitDefault(this);
+    }
+
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.mapDefault(this);
     }
 
     @JsonProperty("type")
@@ -94,5 +100,18 @@ public class AttachmentRequest implements TamTamSerializable {
         void visit(LocationAttachmentRequest model);
         void visit(ShareAttachmentRequest model);
         void visitDefault(AttachmentRequest model);
+    }
+
+    public interface Mapper<T> {
+        T map(PhotoAttachmentRequest model);
+        T map(VideoAttachmentRequest model);
+        T map(AudioAttachmentRequest model);
+        T map(FileAttachmentRequest model);
+        T map(StickerAttachmentRequest model);
+        T map(ContactAttachmentRequest model);
+        T map(InlineKeyboardAttachmentRequest model);
+        T map(LocationAttachmentRequest model);
+        T map(ShareAttachmentRequest model);
+        T mapDefault(AttachmentRequest model);
     }
 }

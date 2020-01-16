@@ -46,6 +46,11 @@ public class CallbackConstructorInput extends ConstructorInput implements TamTam
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * Pressed button payload
     * @return payload

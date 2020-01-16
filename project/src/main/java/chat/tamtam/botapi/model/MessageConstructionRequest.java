@@ -58,6 +58,11 @@ public class MessageConstructionRequest extends Update implements TamTamSerializ
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * User who initiated this request
     * @return user
