@@ -55,6 +55,11 @@ public class ChatButton extends Button implements TamTamSerializable {
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     public ChatButton chatTitle(@Nullable String chatTitle) {
         this.setChatTitle(chatTitle);
         return this;

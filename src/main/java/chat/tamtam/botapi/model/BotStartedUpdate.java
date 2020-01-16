@@ -55,6 +55,11 @@ public class BotStartedUpdate extends Update implements TamTamSerializable {
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * Dialog identifier where event has occurred
     * @return chatId

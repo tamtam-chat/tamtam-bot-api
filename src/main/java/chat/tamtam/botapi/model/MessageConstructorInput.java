@@ -48,6 +48,11 @@ public class MessageConstructorInput extends ConstructorInput implements TamTamS
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * Messages sent by user during construction process. Typically it is single element array but sometimes it can contains multiple messages. Can be empty on initial request when user just opened constructor
     * @return messages

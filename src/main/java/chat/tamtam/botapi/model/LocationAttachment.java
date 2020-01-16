@@ -49,6 +49,11 @@ public class LocationAttachment extends Attachment implements TamTamSerializable
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * @return latitude
     **/

@@ -46,6 +46,11 @@ public class AudioAttachmentRequest extends AttachmentRequest implements TamTamS
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * @return payload
     **/

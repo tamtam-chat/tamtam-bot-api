@@ -68,8 +68,14 @@ public class Button implements TamTamSerializable {
         this.text = text;
     }
 
+
+
     public void visit(Visitor visitor) {
         visitor.visitDefault(this);
+    }
+
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.mapDefault(this);
     }
 
     /**
@@ -120,5 +126,14 @@ public class Button implements TamTamSerializable {
         void visit(RequestContactButton model);
         void visit(ChatButton model);
         void visitDefault(Button model);
+    }
+
+    public interface Mapper<T> {
+        T map(CallbackButton model);
+        T map(LinkButton model);
+        T map(RequestGeoLocationButton model);
+        T map(RequestContactButton model);
+        T map(ChatButton model);
+        T mapDefault(Button model);
     }
 }

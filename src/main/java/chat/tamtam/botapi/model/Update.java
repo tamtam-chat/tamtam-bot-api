@@ -90,8 +90,14 @@ public class Update implements TamTamSerializable {
         this.timestamp = timestamp;
     }
 
+
+
     public void visit(Visitor visitor) {
         visitor.visitDefault(this);
+    }
+
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.mapDefault(this);
     }
 
     /**
@@ -150,5 +156,22 @@ public class Update implements TamTamSerializable {
         void visit(MessageConstructedUpdate model);
         void visit(MessageChatCreatedUpdate model);
         void visitDefault(Update model);
+    }
+
+    public interface Mapper<T> {
+        T map(MessageCreatedUpdate model);
+        T map(MessageCallbackUpdate model);
+        T map(MessageEditedUpdate model);
+        T map(MessageRemovedUpdate model);
+        T map(BotAddedToChatUpdate model);
+        T map(BotRemovedFromChatUpdate model);
+        T map(UserAddedToChatUpdate model);
+        T map(UserRemovedFromChatUpdate model);
+        T map(BotStartedUpdate model);
+        T map(ChatTitleChangedUpdate model);
+        T map(MessageConstructionRequest model);
+        T map(MessageConstructedUpdate model);
+        T map(MessageChatCreatedUpdate model);
+        T mapDefault(Update model);
     }
 }

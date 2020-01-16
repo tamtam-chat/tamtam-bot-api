@@ -46,6 +46,11 @@ public class MessageEditedUpdate extends Update implements TamTamSerializable {
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * Edited message
     * @return message

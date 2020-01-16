@@ -46,6 +46,11 @@ public class FileAttachmentRequest extends AttachmentRequest implements TamTamSe
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * @return payload
     **/

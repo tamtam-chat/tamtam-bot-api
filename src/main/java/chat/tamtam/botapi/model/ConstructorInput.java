@@ -47,8 +47,14 @@ public class ConstructorInput implements TamTamSerializable {
     ));
 
 
+
+
     public void visit(Visitor visitor) {
         visitor.visitDefault(this);
+    }
+
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.mapDefault(this);
     }
 
     @JsonProperty("input_type")
@@ -66,5 +72,11 @@ public class ConstructorInput implements TamTamSerializable {
         void visit(CallbackConstructorInput model);
         void visit(MessageConstructorInput model);
         void visitDefault(ConstructorInput model);
+    }
+
+    public interface Mapper<T> {
+        T map(CallbackConstructorInput model);
+        T map(MessageConstructorInput model);
+        T mapDefault(ConstructorInput model);
     }
 }

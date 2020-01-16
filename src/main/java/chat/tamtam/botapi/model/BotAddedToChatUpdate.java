@@ -49,6 +49,11 @@ public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
         visitor.visit(this);
     }
 
+    @Override
+    public <T> T map(Mapper<T> mapper) {
+        return mapper.map(this);
+    }
+
     /**
     * Chat id where bot was added
     * @return chatId
