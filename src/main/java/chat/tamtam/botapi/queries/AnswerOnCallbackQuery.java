@@ -21,12 +21,11 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.CallbackAnswer;
-import chat.tamtam.botapi.model.SimpleQueryResult;
+import chat.tamtam.botapi.model.CallbackAnswer;import chat.tamtam.botapi.model.SimpleQueryResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class AnswerOnCallbackQuery extends TamTamQuery<SimpleQueryResult> { 
-    private final QueryParam<String> callbackId = new QueryParam<String>("callback_id", this).required();
+    public final QueryParam<String> callbackId = new QueryParam<String>("callback_id", this).required();
 
     public AnswerOnCallbackQuery(TamTamClient client, CallbackAnswer callbackAnswer, String callbackId) {
         super(client, "/answers", callbackAnswer, SimpleQueryResult.class, Method.POST);

@@ -26,6 +26,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.jetbrains.annotations.Nullable;
 
 /**
  * You will get this &#x60;update&#x60; as soon as message is created
@@ -34,6 +35,8 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
 
     @NotNull
     private final @Valid Message message;
+    @Nullable
+    private @Valid String userLocale;
 
     @JsonCreator
     public MessageCreatedUpdate(@JsonProperty("message") Message message, @JsonProperty("timestamp") Long timestamp) { 
@@ -60,6 +63,25 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
         return message;
     }
 
+    public MessageCreatedUpdate userLocale(@Nullable String userLocale) {
+        this.setUserLocale(userLocale);
+        return this;
+    }
+
+    /**
+    * Current user locale in IETF BCP 47 format. Available only in dialogs
+    * @return userLocale
+    **/
+    @Nullable
+    @JsonProperty("user_locale")
+    public String getUserLocale() {
+        return userLocale;
+    }
+
+    public void setUserLocale(@Nullable String userLocale) {
+        this.userLocale = userLocale;
+    }
+
     @JsonProperty("update_type")
     @Override
     public String getType() {
@@ -77,6 +99,7 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
 
         MessageCreatedUpdate other = (MessageCreatedUpdate) o;
         return Objects.equals(this.message, other.message) &&
+            Objects.equals(this.userLocale, other.userLocale) &&
             super.equals(o);
     }
 
@@ -84,6 +107,7 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (userLocale != null ? userLocale.hashCode() : 0);
         return result;
     }
 
@@ -91,6 +115,7 @@ public class MessageCreatedUpdate extends Update implements TamTamSerializable {
     public String toString() {
         return "MessageCreatedUpdate{"+ super.toString()
             + " message='" + message + '\''
+            + " userLocale='" + userLocale + '\''
             + '}';
     }
 }

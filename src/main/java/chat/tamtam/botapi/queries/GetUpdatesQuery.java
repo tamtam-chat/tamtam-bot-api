@@ -21,16 +21,14 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import java.util.Set;
-import chat.tamtam.botapi.model.UpdateList;
-import java.util.Collection;
+import java.util.Set;import chat.tamtam.botapi.model.UpdateList;import java.util.Collection;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class GetUpdatesQuery extends TamTamQuery<UpdateList> { 
-    private final QueryParam<Integer> limit = new QueryParam<>("limit", this);
-    private final QueryParam<Integer> timeout = new QueryParam<>("timeout", this);
-    private final QueryParam<Long> marker = new QueryParam<>("marker", this);
-    private final QueryParam<Collection<String>> types = new CollectionQueryParam<>("types", this);
+    public final QueryParam<Integer> limit = new QueryParam<>("limit", this);
+    public final QueryParam<Integer> timeout = new QueryParam<>("timeout", this);
+    public final QueryParam<Long> marker = new QueryParam<>("marker", this);
+    public final QueryParam<Collection<String>> types = new CollectionQueryParam<>("types", this);
 
     public GetUpdatesQuery(TamTamClient client) {
         super(client, "/updates", null, UpdateList.class, Method.GET);
@@ -40,14 +38,17 @@ public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
         this.limit.setValue(value);
         return this;
     }
+
     public GetUpdatesQuery timeout(Integer value) {
         this.timeout.setValue(value);
         return this;
     }
+
     public GetUpdatesQuery marker(Long value) {
         this.marker.setValue(value);
         return this;
     }
+
     public GetUpdatesQuery types(Set<String> value) {
         this.types.setValue(value);
         return this;

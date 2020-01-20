@@ -21,14 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.ActionRequestBody;
-import chat.tamtam.botapi.model.SimpleQueryResult;
+import chat.tamtam.botapi.model.ActionRequestBody;import chat.tamtam.botapi.model.SimpleQueryResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class SendActionQuery extends TamTamQuery<SimpleQueryResult> { 
 
     public SendActionQuery(TamTamClient client, ActionRequestBody actionRequestBody, Long chatId) {
         super(client, substitute("/chats/{chatId}/actions", chatId), actionRequestBody, SimpleQueryResult.class, Method.POST);
     }
-
 }

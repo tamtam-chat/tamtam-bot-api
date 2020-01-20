@@ -21,12 +21,11 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.ConstructorAnswer;
-import chat.tamtam.botapi.model.SimpleQueryResult;
+import chat.tamtam.botapi.model.ConstructorAnswer;import chat.tamtam.botapi.model.SimpleQueryResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class ConstructQuery extends TamTamQuery<SimpleQueryResult> { 
-    private final QueryParam<String> sessionId = new QueryParam<String>("session_id", this).required();
+    public final QueryParam<String> sessionId = new QueryParam<String>("session_id", this).required();
 
     public ConstructQuery(TamTamClient client, ConstructorAnswer constructorAnswer, String sessionId) {
         super(client, "/answers/constructor", constructorAnswer, SimpleQueryResult.class, Method.POST);

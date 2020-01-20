@@ -21,13 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
 import chat.tamtam.botapi.model.SimpleQueryResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class LeaveChatQuery extends TamTamQuery<SimpleQueryResult> { 
 
     public LeaveChatQuery(TamTamClient client, Long chatId) {
         super(client, substitute("/chats/{chatId}/members/me", chatId), null, SimpleQueryResult.class, Method.DELETE);
     }
-
 }

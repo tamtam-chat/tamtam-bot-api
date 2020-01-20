@@ -21,13 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
 import chat.tamtam.botapi.model.ChatMember;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class GetMembershipQuery extends TamTamQuery<ChatMember> { 
 
     public GetMembershipQuery(TamTamClient client, Long chatId) {
         super(client, substitute("/chats/{chatId}/members/me", chatId), null, ChatMember.class, Method.GET);
     }
-
 }

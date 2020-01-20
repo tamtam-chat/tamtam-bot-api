@@ -21,14 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.BotInfo;
-import chat.tamtam.botapi.model.BotPatch;
+import chat.tamtam.botapi.model.BotInfo;import chat.tamtam.botapi.model.BotPatch;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class EditMyInfoQuery extends TamTamQuery<BotInfo> { 
 
     public EditMyInfoQuery(TamTamClient client, BotPatch botPatch) {
         super(client, "/me", botPatch, BotInfo.class, Method.PATCH);
     }
-
 }

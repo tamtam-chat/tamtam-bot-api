@@ -21,11 +21,11 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
 import chat.tamtam.botapi.model.SimpleQueryResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class DeleteMessageQuery extends TamTamQuery<SimpleQueryResult> { 
-    private final QueryParam<String> messageId = new QueryParam<String>("message_id", this).required();
+    public final QueryParam<String> messageId = new QueryParam<String>("message_id", this).required();
 
     public DeleteMessageQuery(TamTamClient client, String messageId) {
         super(client, "/messages", null, SimpleQueryResult.class, Method.DELETE);

@@ -21,15 +21,13 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.ChatMembersList;
-import java.util.Set;
-import java.util.Collection;
+import chat.tamtam.botapi.model.ChatMembersList;import java.util.Set;import java.util.Collection;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class GetMembersQuery extends TamTamQuery<ChatMembersList> { 
-    private final QueryParam<Collection<Long>> userIds = new CollectionQueryParam<>("user_ids", this);
-    private final QueryParam<Long> marker = new QueryParam<>("marker", this);
-    private final QueryParam<Integer> count = new QueryParam<>("count", this);
+    public final QueryParam<Collection<Long>> userIds = new CollectionQueryParam<>("user_ids", this);
+    public final QueryParam<Long> marker = new QueryParam<>("marker", this);
+    public final QueryParam<Integer> count = new QueryParam<>("count", this);
 
     public GetMembersQuery(TamTamClient client, Long chatId) {
         super(client, substitute("/chats/{chatId}/members", chatId), null, ChatMembersList.class, Method.GET);
@@ -39,10 +37,12 @@ public class GetMembersQuery extends TamTamQuery<ChatMembersList> {
         this.userIds.setValue(value);
         return this;
     }
+
     public GetMembersQuery marker(Long value) {
         this.marker.setValue(value);
         return this;
     }
+
     public GetMembersQuery count(Integer value) {
         this.count.setValue(value);
         return this;
