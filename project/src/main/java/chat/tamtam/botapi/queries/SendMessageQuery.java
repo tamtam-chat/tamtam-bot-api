@@ -21,14 +21,13 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.NewMessageBody;
-import chat.tamtam.botapi.model.SendMessageResult;
+import chat.tamtam.botapi.model.NewMessageBody;import chat.tamtam.botapi.model.SendMessageResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class SendMessageQuery extends TamTamQuery<SendMessageResult> { 
-    private final QueryParam<Long> userId = new QueryParam<>("user_id", this);
-    private final QueryParam<Long> chatId = new QueryParam<>("chat_id", this);
-    private final QueryParam<Boolean> disableLinkPreview = new QueryParam<>("disable_link_preview", this);
+    public final QueryParam<Long> userId = new QueryParam<>("user_id", this);
+    public final QueryParam<Long> chatId = new QueryParam<>("chat_id", this);
+    public final QueryParam<Boolean> disableLinkPreview = new QueryParam<>("disable_link_preview", this);
 
     public SendMessageQuery(TamTamClient client, NewMessageBody newMessageBody) {
         super(client, "/messages", newMessageBody, SendMessageResult.class, Method.POST);
@@ -38,10 +37,12 @@ public class SendMessageQuery extends TamTamQuery<SendMessageResult> {
         this.userId.setValue(value);
         return this;
     }
+
     public SendMessageQuery chatId(Long value) {
         this.chatId.setValue(value);
         return this;
     }
+
     public SendMessageQuery disableLinkPreview(Boolean value) {
         this.disableLinkPreview.setValue(value);
         return this;

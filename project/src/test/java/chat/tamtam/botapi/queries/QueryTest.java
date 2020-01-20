@@ -18,7 +18,7 @@ import chat.tamtam.botapi.server.TamTamService;
 public class QueryTest extends TamTamService {
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
 
-    private OkHttpTransportClient transport = new OkHttpTransportClient();
+    protected OkHttpTransportClient transport = new OkHttpTransportClient();
     JacksonSerializer serializer = new JacksonSerializer();
     public final TamTamClient client = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer) {
         @Override

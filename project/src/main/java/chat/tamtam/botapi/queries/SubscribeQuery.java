@@ -21,14 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.SimpleQueryResult;
-import chat.tamtam.botapi.model.SubscriptionRequestBody;
+import chat.tamtam.botapi.model.SimpleQueryResult;import chat.tamtam.botapi.model.SubscriptionRequestBody;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class SubscribeQuery extends TamTamQuery<SimpleQueryResult> { 
 
     public SubscribeQuery(TamTamClient client, SubscriptionRequestBody subscriptionRequestBody) {
         super(client, "/subscriptions", subscriptionRequestBody, SimpleQueryResult.class, Method.POST);
     }
-
 }

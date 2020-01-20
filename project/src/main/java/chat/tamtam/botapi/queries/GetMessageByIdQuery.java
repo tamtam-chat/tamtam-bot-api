@@ -21,13 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
 import chat.tamtam.botapi.model.Message;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class GetMessageByIdQuery extends TamTamQuery<Message> { 
 
     public GetMessageByIdQuery(TamTamClient client, String messageId) {
         super(client, substitute("/messages/{messageId}", messageId), null, Message.class, Method.GET);
     }
-
 }

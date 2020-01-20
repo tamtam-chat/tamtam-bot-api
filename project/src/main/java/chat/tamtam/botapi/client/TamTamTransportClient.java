@@ -20,6 +20,7 @@
 
 package chat.tamtam.botapi.client;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.InputStream;
 import java.util.concurrent.Future;
@@ -31,7 +32,7 @@ import chat.tamtam.botapi.exceptions.TransportClientException;
 /**
  * @author alexandrchuprin
  */
-public interface TamTamTransportClient {
+public interface TamTamTransportClient extends Closeable {
     Future<ClientResponse> get(String url) throws TransportClientException;
 
     Future<ClientResponse> post(String url, @Nullable byte[] body) throws TransportClientException;
@@ -45,4 +46,8 @@ public interface TamTamTransportClient {
     Future<ClientResponse> delete(String url) throws TransportClientException;
 
     Future<ClientResponse> patch(String url, @Nullable byte[] requestBody) throws TransportClientException;
+
+    enum Method {
+        GET, POST, PUT, HEAD, DELETE, PATCH, OPTIONS
+    }
 }

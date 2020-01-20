@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import chat.tamtam.botapi.client.ClientResponse;
 import chat.tamtam.botapi.client.TamTamTransportClient;
 import chat.tamtam.botapi.exceptions.TransportClientException;
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Interceptor;
@@ -186,6 +187,16 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     @Override
     public Future<ClientResponse> patch(String url, @Nullable byte[] requestBody) {
         return newCall(new Request.Builder().url(url).patch(wrapBody(requestBody)).build());
+    }
+
+    @Override
+    public void close() throws IOException {
+        httpClient.dispatcher().executorService().shutdown();
+        httpClient.connectionPool().evictAll();
+        Cache cache = httpClient.cache();
+        if (cache != null) {
+            cache.close();
+        }
     }
 
     private static MediaType guessMediaType(File file) throws IOException {

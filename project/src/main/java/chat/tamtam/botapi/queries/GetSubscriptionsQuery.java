@@ -21,13 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class GetSubscriptionsQuery extends TamTamQuery<GetSubscriptionsResult> { 
 
     public GetSubscriptionsQuery(TamTamClient client) {
         super(client, "/subscriptions", null, GetSubscriptionsResult.class, Method.GET);
     }
-
 }

@@ -27,6 +27,7 @@ import chat.tamtam.botapi.exceptions.ServiceNotAvailableException;
 import chat.tamtam.botapi.exceptions.TooManyRequestsException;
 import chat.tamtam.botapi.exceptions.TransportClientException;
 import chat.tamtam.botapi.model.User;
+import chat.tamtam.botapi.server.TamTamServer;
 import chat.tamtam.botapi.server.TamTamService;
 import okhttp3.HttpUrl;
 
@@ -102,67 +103,74 @@ public class TamTamQueryTest extends QueryTest {
 
     @Test(expected = ServiceNotAvailableException.class)
     public void shouldThrowServiceUnavailableException() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/serviceunavailable", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/serviceunavailable", Void.class,
+                TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = APIException.class)
     public void shouldThrowAPIException() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/internalerror", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/internalerror", Void.class,
+                TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = APIException.class)
     public void shouldThrowAPIException2() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/emptybody", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/emptybody", Void.class, TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = APIException.class)
     public void shouldParseError() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/errorbody", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/errorbody", Void.class, TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = TooManyRequestsException.class)
     public void shouldThrowTMRException() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/toomanyrequests", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/toomanyrequests", Void.class,
+                TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = AttachmentNotReadyException.class)
     public void shouldThrowANRException() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/attachnotready", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/attachnotready", Void.class,
+                TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = ChatAccessForbiddenException.class)
     public void shouldThrowAccessDeniedException() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/accessdenied", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/accessdenied", Void.class,
+                TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = SendMessageForbiddenException.class)
     public void shouldThrowSMFException() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(client, "/cannotsend", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(client, "/cannotsend", Void.class,
+                TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test(expected = ClientException.class)
     public void shouldThrowClientException() throws Exception {
-        TamTamQuery<Void> query = new TamTamQuery<>(invalidClient, "/me", Void.class, TamTamQuery.Method.GET);
+        TamTamQuery<Void> query = new TamTamQuery<>(invalidClient, "/me", Void.class, TamTamTransportClient.Method.GET);
         query.execute();
     }
 
     @Test
     public void testAsync() throws Exception {
-        Future<User> future = new TamTamQuery<>(client, "/ok", User.class, TamTamQuery.Method.GET).enqueue();
+        Future<User> future = new TamTamQuery<>(client, "/ok", User.class, TamTamTransportClient.Method.GET).enqueue();
         future.get();
     }
 
     @Test(expected = ClientException.class)
     public void testAsyncError() throws Throwable {
-        Future<User> future = new TamTamQuery<>(invalidClient, "/ok", User.class, TamTamQuery.Method.GET).enqueue();
+        Future<User> future = new TamTamQuery<>(invalidClient, "/ok", User.class,
+                TamTamTransportClient.Method.GET).enqueue();
         try {
             future.get();
         } catch (ExecutionException e) {
@@ -172,7 +180,7 @@ public class TamTamQueryTest extends QueryTest {
 
     @Test(expected = ClientException.class)
     public void shouldThrowExceptionOnUnsupportedMethodCall() throws Exception {
-        new TamTamQuery<>(client, "/me", User.class, TamTamQuery.Method.OPTIONS).execute();
+        new TamTamQuery<>(client, "/me", User.class, TamTamTransportClient.Method.OPTIONS).execute();
     }
 
     @Test(expected = ClientException.class)
@@ -181,17 +189,18 @@ public class TamTamQueryTest extends QueryTest {
         TamTamSerializer serializer = mock(TamTamSerializer.class);
         when(transport.post(anyString(), any(byte[].class))).thenThrow(new TransportClientException("test exception"));
         TamTamClient clientMock = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer);
-        new TamTamQuery<>(clientMock, "/me", User.class, TamTamQuery.Method.POST).execute();
+        new TamTamQuery<>(clientMock, "/me", User.class, TamTamTransportClient.Method.POST).execute();
     }
 
     @Test
     public void shouldAppendParamsToUrlIfItAlreadyHasParams() throws Exception {
-        TamTamQuery<User> query = new TamTamQuery<>(client, "/me?param=value", User.class, TamTamQuery.Method.GET);
+        TamTamQuery<User> query = new TamTamQuery<>(client, "/me?param=value", User.class,
+                TamTamTransportClient.Method.GET);
         String param2Name = "param2";
         String param2Value = "value2";
         QueryParam<String> param2 = new QueryParam<>(param2Name, query);
         param2.setValue(param2Value);
-        String url = query.buildURL();
+        String url = client.buildURL(query);
         HttpUrl parsed = HttpUrl.parse(url);
         assertThat(parsed.queryParameter("param"), is("value"));
         assertThat(parsed.queryParameter(param2Name), is(param2Value));
@@ -199,10 +208,10 @@ public class TamTamQueryTest extends QueryTest {
 
     @Test(expected = RequiredParameterMissingException.class)
     public void shouldThrowExceptionIfParamIsMissing() throws Exception {
-        TamTamQuery<User> query = new TamTamQuery<>(client, "/me", User.class, TamTamQuery.Method.GET);
+        TamTamQuery<User> query = new TamTamQuery<>(client, "/me", User.class, TamTamTransportClient.Method.GET);
         String param2Name = "param2";
         new QueryParam<String>(param2Name, query).required();
-        query.buildURL();
+        client.buildURL(query);
     }
 
     @Test(expected = ClientException.class)
@@ -212,19 +221,26 @@ public class TamTamQueryTest extends QueryTest {
         when(transport.post(anyString(), any(byte[].class))).thenReturn(INTERRUPTING_FUTURE);
 
         TamTamClient clientMock = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer);
-        new TamTamQuery<>(clientMock, "/me", User.class, TamTamQuery.Method.POST).execute();
+        new TamTamQuery<>(clientMock, "/me", User.class, TamTamTransportClient.Method.POST).execute();
     }
 
     @Test(expected = ClientException.class)
     public void shouldWrapEncodingException() throws Exception {
-        TamTamQuery<User> query = new TamTamQuery<User>(client, "/me", User.class, TamTamQuery.Method.POST) {
+        TamTamClient client = new TamTamClient(TamTamService.ACCESS_TOKEN, transport, serializer) {
+            @Override
+            public String getEndpoint() {
+                return TamTamServer.ENDPOINT;
+            }
+
             @Override
             protected String encodeParam(String paramValue) throws UnsupportedEncodingException {
                 throw new UnsupportedEncodingException("test");
             }
         };
 
+        TamTamQuery<User> query = new TamTamQuery<User>(client, "/me", User.class, TamTamTransportClient.Method.POST);
+
         new QueryParam<>("param", "value", query);
-        query.buildURL();
+        client.buildURL(query);
     }
 }

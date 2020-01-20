@@ -21,14 +21,12 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.client.TamTamClient;
-
-import chat.tamtam.botapi.model.Chat;
-import chat.tamtam.botapi.model.ChatPatch;
+import chat.tamtam.botapi.model.Chat;import chat.tamtam.botapi.model.ChatPatch;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
 public class EditChatQuery extends TamTamQuery<Chat> { 
 
     public EditChatQuery(TamTamClient client, ChatPatch chatPatch, Long chatId) {
         super(client, substitute("/chats/{chatId}", chatId), chatPatch, Chat.class, Method.PATCH);
     }
-
 }
