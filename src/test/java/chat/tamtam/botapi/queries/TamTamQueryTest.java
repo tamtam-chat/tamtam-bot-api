@@ -95,9 +95,9 @@ public class TamTamQueryTest extends QueryTest {
         get("/emptybody", ((request, response) -> halt(500, null)));
         get("/errorbody", ((request, response) -> halt(500, mapper.writeValueAsString(ERROR))));
         get("/toomanyrequests", ((request, response) -> halt(429, mapper.writeValueAsString(TOO_MANY_REQUESTS))));
-        get("/attachnotready", ((request, response) -> halt(429, mapper.writeValueAsString(ATTACH_NOT_READY_ERROR))));
+        get("/attachnotready", ((request, response) -> halt(400, mapper.writeValueAsString(ATTACH_NOT_READY_ERROR))));
         get("/accessdenied", ((request, response) -> halt(403, mapper.writeValueAsString(CHAT_DENIED_ERROR))));
-        get("/cannotsend", ((request, response) -> halt(429, mapper.writeValueAsString(CANNON_SEND_ERROR))));
+        get("/cannotsend", ((request, response) -> halt(403, mapper.writeValueAsString(CANNON_SEND_ERROR))));
         get("/ok", ((request, response) -> "{}"));
     }
 
