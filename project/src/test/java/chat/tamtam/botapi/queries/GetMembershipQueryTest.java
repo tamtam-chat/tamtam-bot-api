@@ -20,30 +20,29 @@
 
 package chat.tamtam.botapi.queries;
 
-import chat.tamtam.botapi.model.ChatMember;
-import chat.tamtam.botapi.queries.GetMembershipQuery;
-import spark.Spark;
-
 import org.junit.Test;
-import org.junit.Ignore;
+
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
+import chat.tamtam.botapi.model.ChatMember;
+import spark.Spark;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class GetMembershipQueryTest extends QueryTest {
+public class GetMembershipQueryTest extends UnitTestBase {
     @Test
     public void getMembershipTest() throws Exception {
         Long chatId = random(chats.values()).getChatId();
         Spark.get("/chats/:chatId/members/me", (req, resp) -> chatMembers.get(chatId).get(0), this::serialize);
-        GetMembershipQuery query = new GetMembershipQuery(client, chatId);
+        GetMembershipQuery query = api.getMembership(chatId);
         ChatMember response = query.execute();
         assertThat(response, is(chatMembers.get(chatId).get(0)));
     }
-    
+
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrow() throws Exception {
+        api.getMembership(null).execute();
+    }
+
+
 }

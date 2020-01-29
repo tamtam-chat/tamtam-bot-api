@@ -1,6 +1,7 @@
 package chat.tamtam.botapi;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.client.TamTamSerializer;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.mock;
 /**
  * @author alexandrchuprin
  */
+@Category(UnitTest.class)
 public class TamTamBotAPITest {
     @Test
     public void shouldConstructEqualObjects() {

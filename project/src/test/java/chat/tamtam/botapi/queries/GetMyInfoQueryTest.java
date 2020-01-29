@@ -22,15 +22,13 @@ package chat.tamtam.botapi.queries;
 
 import org.junit.Test;
 
-import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.BotInfo;
-import chat.tamtam.botapi.model.User;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static spark.Spark.get;
 
-public class GetMyInfoQueryTest extends QueryTest {
+public class GetMyInfoQueryTest extends UnitTestBase {
 
     @Test
     public void getMyInfoTest() throws Exception {

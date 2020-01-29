@@ -21,23 +21,17 @@
 package chat.tamtam.botapi.queries;
 
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
-import chat.tamtam.botapi.queries.AddMembersQuery;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.UserIdsList;
 import org.junit.Test;
-import org.junit.Ignore;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-public class AddMembersQueryTest extends QueryTest {
+public class AddMembersQueryTest extends UnitTestBase {
     
     @Test
     public void addMembersTest() throws Exception {

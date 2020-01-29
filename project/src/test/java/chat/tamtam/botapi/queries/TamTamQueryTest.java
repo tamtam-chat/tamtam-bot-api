@@ -43,7 +43,7 @@ import static spark.Spark.halt;
 /**
  * @author alexandrchuprin
  */
-public class TamTamQueryTest extends QueryTest {
+public class TamTamQueryTest extends UnitTestBase {
     private static final chat.tamtam.botapi.model.Error ERROR
             = new chat.tamtam.botapi.model.Error("error.code", "error");
 

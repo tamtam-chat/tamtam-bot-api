@@ -20,30 +20,29 @@
 
 package chat.tamtam.botapi.queries;
 
-import chat.tamtam.botapi.model.Message;
 import org.junit.Test;
-import org.junit.Ignore;
+
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
+import chat.tamtam.botapi.model.Message;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class GetMessageByIdQueryTest extends QueryTest {
+public class GetMessageByIdQueryTest extends UnitTestBase {
     
     @Test
     public void getMessageByIdTest() throws Exception {
-        String messageId = null;
-        GetMessageByIdQuery query = new GetMessageByIdQuery(client, messageId);
+        String messageId = "mid1";
+        GetMessageByIdQuery query = api.getMessageById(messageId);
         Message response = query.execute();
 
         assertThat(response, is(not(nullValue())));
     }
-    
+
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrow() throws Exception {
+        api.getMessageById(null).execute();
+    }
 }

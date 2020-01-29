@@ -25,22 +25,20 @@ import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatList;
 import chat.tamtam.botapi.model.ChatMember;
 import chat.tamtam.botapi.model.ChatMembersList;
-import chat.tamtam.botapi.queries.GetMembersQuery;
+
 import org.junit.Test;
-import org.junit.Ignore;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 
-public class GetMembersQueryTest extends QueryTest {
+public class GetMembersQueryTest extends UnitTestBase {
     
     @Test
     public void getMembersTest() throws Exception {
@@ -51,7 +49,11 @@ public class GetMembersQueryTest extends QueryTest {
         Integer count = 5;
         List<ChatMember> members = new ArrayList<>();
         do {
-            ChatMembersList response = api.getMembers(chatId).count(count).marker(marker).execute();
+            ChatMembersList response = api.getMembers(chatId)
+                    .count(count)
+                    .marker(marker)
+                    .userIds(new LinkedHashSet<>(Arrays.asList(1L, 2L)))
+                    .execute();
             marker = response.getMarker();
             members.addAll(response.getMembers());
         } while (marker != null);

@@ -30,7 +30,7 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class AnswerOnCallbackQueryTest extends QueryTest {
+public class AnswerOnCallbackQueryTest extends UnitTestBase {
 
     @Test
     public void answerOnCallbackTest() throws Exception {

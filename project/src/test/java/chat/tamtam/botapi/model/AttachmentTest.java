@@ -1,6 +1,9 @@
 package chat.tamtam.botapi.model;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import chat.tamtam.botapi.UnitTest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -8,6 +11,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author alexandrchuprin
  */
+@Category(UnitTest.class)
 public class AttachmentTest {
     @Test
     public void shouldVisitDefault() {

@@ -22,21 +22,26 @@ package chat.tamtam.botapi.queries;
 
 import org.junit.Test;
 
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.Chat;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class GetChatByLinkQueryTest extends QueryTest {
+public class GetChatByLinkQueryTest extends UnitTestBase {
 
     @Test
     public void getChatByLinkTest() throws Exception {
         String chatLink = "helpchat";
-        GetChatByLinkQuery query = new GetChatByLinkQuery(client, chatLink);
+        GetChatByLinkQuery query = api.getChatByLink(chatLink);
         Chat response = query.execute();
 
         assertThat(response, is(notNullValue()));
     }
 
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrow() throws Exception {
+        api.getChatByLink(null).execute();
+    }
 }

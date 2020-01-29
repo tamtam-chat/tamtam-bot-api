@@ -20,22 +20,15 @@
 
 package chat.tamtam.botapi.queries;
 
-import chat.tamtam.botapi.queries.GetSubscriptionsQuery;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import org.junit.Test;
-import org.junit.Ignore;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class GetSubscriptionsQueryTest extends QueryTest {
+public class GetSubscriptionsQueryTest extends UnitTestBase {
     
     @Test
     public void getSubscriptionsTest() throws Exception {

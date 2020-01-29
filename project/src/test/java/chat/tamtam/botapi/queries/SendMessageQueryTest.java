@@ -57,7 +57,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static spark.Spark.post;
 
-public class SendMessageQueryTest extends QueryTest {
+public class SendMessageQueryTest extends UnitTestBase {
 
     private static final PhotoAttachmentRequest PHOTO_ATTACHMENT_REQUEST = new PhotoAttachmentRequest(
             new PhotoAttachmentRequestPayload().photos(Collections.singletonMap("photokey", new PhotoToken("token"))));
@@ -92,21 +92,15 @@ public class SendMessageQueryTest extends QueryTest {
             String chatId = req.queryParams("chat_id");
             String userId = req.queryParams("user_id");
             NewMessageBody newMessage = serializer.deserialize(req.body(), NewMessageBody.class);
+            if (chatId != null) {
+                assertThat(req.queryParams("disable_link_preview"), is("true"));
+            }
             assertThat(newMessage, is(equalTo(sendingMessage)));
             visit(newMessage.getAttachments());
             return new SendMessageResult(message(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId)));
         }, this::serialize);
 
-        post("/messages", (req, resp) -> {
-            String chatId = req.queryParams("chat_id");
-            String userId = req.queryParams("user_id");
-            NewMessageBody newMessage = serializer.deserialize(req.body(), NewMessageBody.class);
-            assertThat(newMessage, is(equalTo(sendingMessage)));
-            visit(newMessage.getAttachments());
-            return new SendMessageResult(message(chatId == null ? null : Long.parseLong(chatId), userId == null ? null : Long.parseLong(userId)));
-        }, this::serialize);
-
-        SendMessageResult response = api.sendMessage(sendingMessage).chatId(1L).execute();
+        SendMessageResult response = api.sendMessage(sendingMessage).chatId(1L).disableLinkPreview(true).execute();
         assertThat(response.getMessage().getBody().getMid(), is(notNullValue()));
 
         SendMessageResult response2 = api.sendMessage(sendingMessage).userId(2L).execute();

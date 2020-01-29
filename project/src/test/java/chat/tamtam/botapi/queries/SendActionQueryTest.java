@@ -23,21 +23,14 @@ package chat.tamtam.botapi.queries;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.model.SenderAction;
-import chat.tamtam.botapi.queries.SendActionQuery;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import org.junit.Test;
-import org.junit.Ignore;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class SendActionQueryTest extends QueryTest {
+public class SendActionQueryTest extends UnitTestBase {
     
     @Test
     public void sendActionTest() throws Exception {

@@ -8,9 +8,11 @@ import java.util.concurrent.Future;
 
 import org.apache.log4j.Level;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import chat.tamtam.botapi.UnitTest;
 import chat.tamtam.botapi.client.ClientResponse;
 import chat.tamtam.botapi.exceptions.TransportClientException;
 import chat.tamtam.botapi.server.TamTamServer;
@@ -26,6 +28,7 @@ import static spark.Spark.get;
 /**
  * @author alexandrchuprin
  */
+@Category(UnitTest.class)
 public class OkHttpTransportClientTest {
     @Test(expected = TransportClientException.class)
     public void shouldThrowException() throws Exception {
