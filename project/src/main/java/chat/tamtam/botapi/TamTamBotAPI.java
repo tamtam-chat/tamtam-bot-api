@@ -44,6 +44,7 @@ import chat.tamtam.botapi.queries.EditChatQuery;
 import chat.tamtam.botapi.queries.EditMessageQuery;
 import chat.tamtam.botapi.queries.EditMyInfoQuery;
 import chat.tamtam.botapi.queries.GetAdminsQuery;
+import chat.tamtam.botapi.queries.GetChatByLinkQuery;
 import chat.tamtam.botapi.queries.GetChatQuery;
 import chat.tamtam.botapi.queries.GetChatsQuery;
 import chat.tamtam.botapi.queries.GetMembersQuery;
@@ -246,6 +247,21 @@ public class TamTamBotAPI {
         }
 
         return new GetChatQuery(client, chatId);
+    }
+
+    /**
+    * Get chat by link
+    * Returns info about dialog, chat or channel by its public link
+    * @param chatLink Public chat or user link (required)
+    * @return {@link Chat}
+    * @throws ClientException if fails to make API call
+    */
+    public GetChatByLinkQuery getChatByLink(String chatLink) throws ClientException { 
+        if (chatLink == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'chatLink' when calling getChatByLink");
+        }
+
+        return new GetChatByLinkQuery(client, chatLink);
     }
 
     /**
