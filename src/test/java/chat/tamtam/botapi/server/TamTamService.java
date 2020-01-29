@@ -168,8 +168,13 @@ public class TamTamService {
     }
 
     public Object getChat(Request request, Response response) {
-        Long chatId = Long.valueOf(request.params("chatId"));
-        return chats.get(chatId);
+        try {
+            Long chatId = Long.valueOf(request.params("chatId"));
+            return chats.get(chatId);
+        } catch (NumberFormatException e) {
+            String chatId = request.params("chatId");
+            return chats.values().iterator().next();
+        }
     }
 
     public Object getChats(Request request, Response response) {

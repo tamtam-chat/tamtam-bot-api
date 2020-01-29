@@ -31,13 +31,18 @@ public class ExceptionMapper {
 
     public static APIException map(int statusCode, Error error) {
         String message = error.getMessage();
+        switch (statusCode) {
+            case 404:
+                return new NotFoundException(message);
+            case 429:
+                return new TooManyRequestsException(message);
+        }
+
         switch (error.getCode()) {
             case "proto.payload":
                 return new BadRequestException(message);
             case "attachment.not.ready":
                 return new AttachmentNotReadyException();
-            case "too.many.requests":
-                return new TooManyRequestsException(message);
             case "access.denied":
                 return new AccessForbiddenException(message);
             case "chat.denied":

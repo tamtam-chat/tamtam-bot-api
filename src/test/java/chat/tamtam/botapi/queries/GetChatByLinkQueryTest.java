@@ -18,18 +18,25 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 2;
-    private static final int BUILD = 1;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import org.junit.Test;
 
-    private Version() {
+import chat.tamtam.botapi.model.Chat;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
+public class GetChatByLinkQueryTest extends QueryTest {
+
+    @Test
+    public void getChatByLinkTest() throws Exception {
+        String chatLink = "helpchat";
+        GetChatByLinkQuery query = new GetChatByLinkQuery(client, chatLink);
+        Chat response = query.execute();
+
+        assertThat(response, is(notNullValue()));
     }
 
-    public static String get() {
-        return VERSION;
-    }
 }
