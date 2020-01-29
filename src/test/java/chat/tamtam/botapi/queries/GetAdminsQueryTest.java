@@ -22,23 +22,27 @@ package chat.tamtam.botapi.queries;
 
 import org.junit.Test;
 
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.ChatMembersList;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-public class GetAdminsQueryTest extends QueryTest {
+public class GetAdminsQueryTest extends UnitTestBase {
 
     @Test
     public void getAdminsTest() throws Exception {
         Long chatId = ID_COUNTER.incrementAndGet();
-        GetAdminsQuery query = new GetAdminsQuery(client, chatId);
+        GetAdminsQuery query = api.getAdmins(chatId);
         ChatMembersList response = query.execute();
         assertThat(response.getMembers(), is(notNullValue()));
         assertThat(response.getMembers().size(), is(greaterThan(0)));
     }
 
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrow() throws Exception {
+        api.getAdmins(null).execute();
+    }
 }

@@ -28,13 +28,13 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class RemoveMemberQueryTest extends QueryTest {
+public class RemoveMemberQueryTest extends UnitTestBase {
 
     @Test
     public void removeMemberTest() throws Exception {
         Long chatId = 1L;
         Long userId = 2L;
-        SimpleQueryResult response = api.removeMember(chatId, userId).execute();
+        SimpleQueryResult response = api.removeMember(chatId, userId).block(true).execute();
         assertThat(response.isSuccess(), is(true));
     }
 

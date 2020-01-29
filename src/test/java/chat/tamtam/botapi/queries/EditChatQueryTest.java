@@ -25,14 +25,13 @@ import org.junit.Test;
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatPatch;
-import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-public class EditChatQueryTest extends QueryTest {
+public class EditChatQueryTest extends UnitTestBase {
 
     @Test
     public void editChatTest() throws Exception {

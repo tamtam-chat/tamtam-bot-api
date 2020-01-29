@@ -21,12 +21,15 @@
 package chat.tamtam.botapi.queries;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.Attachment;
 import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.Button;
@@ -48,19 +51,24 @@ import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.VideoAttachment;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static spark.Spark.get;
 
-public class GetMessagesQueryTest extends QueryTest {
+public class GetMessagesQueryTest extends UnitTestBase {
 
     @Test
     public void getMessagesTest() throws Exception {
         Long chatId = ID_COUNTER.incrementAndGet();
 
         get("/messages", (req, resp) -> {
+            String messageIds = req.queryParams("message_ids");
+            if (messageIds != null) {
+                Set<String> idsSet = Stream.of(messageIds.split(",")).collect(Collectors.toSet());
+                assertThat(idsSet, is(new HashSet(Arrays.asList("mid2", "mid1"))));
+                return new MessageList(Arrays.asList(message(chatId, null), message(chatId, null)));
+            }
+
             long chatIdParam = Long.parseLong(req.queryParams("chat_id"));
             assertThat(chatIdParam, is(chatId));
             return new MessageList(Arrays.asList(message(chatId, null), message(chatId, null)));
@@ -73,7 +81,16 @@ public class GetMessagesQueryTest extends QueryTest {
                 .to(ThreadLocalRandom.current().nextLong())
                 .execute();
 
+        MessageList response2 = api.getMessages()
+                .messageIds(new HashSet<>(Arrays.asList("mid1", "mid2")))
+                .count(ThreadLocalRandom.current().nextInt())
+                .from(ThreadLocalRandom.current().nextLong())
+                .to(ThreadLocalRandom.current().nextLong())
+                .execute();
+
         assertThat(response.getMessages().size(), is(greaterThan(0)));
+        assertThat(response2.getMessages().size(), is(greaterThan(0)));
+
         for (Message message : response.getMessages()) {
             for (Attachment attachment : message.getBody().getAttachments()) {
                 attachment.visit(new FailByDefaultAttachmentVisitor() {

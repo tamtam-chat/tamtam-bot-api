@@ -29,7 +29,7 @@ import chat.tamtam.botapi.server.TamTamService;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class GetChatQueryTest extends QueryTest {
+public class GetChatQueryTest extends UnitTestBase {
 
     @Test
     public void getChatTest() throws Exception {

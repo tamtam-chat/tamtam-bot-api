@@ -26,12 +26,7 @@ import org.junit.Test;
 import org.junit.Ignore;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class ConstructQueryTest extends QueryTest {
+public class ConstructQueryTest extends UnitTestBase {
     @Ignore
     @Test
     public void constructTest() throws Exception {

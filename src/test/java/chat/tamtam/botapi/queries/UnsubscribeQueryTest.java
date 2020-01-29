@@ -28,7 +28,7 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class UnsubscribeQueryTest extends QueryTest {
+public class UnsubscribeQueryTest extends UnitTestBase {
 
     @Test
     public void unsubscribeTest() throws Exception {

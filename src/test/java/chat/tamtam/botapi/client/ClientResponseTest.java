@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import chat.tamtam.botapi.UnitTest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -12,6 +15,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author alexandrchuprin
  */
+@Category(UnitTest.class)
 public class ClientResponseTest {
     @Test
     public void shouldReturnHeaders() {

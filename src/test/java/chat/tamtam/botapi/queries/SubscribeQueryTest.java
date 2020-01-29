@@ -31,7 +31,7 @@ import chat.tamtam.botapi.model.SubscriptionRequestBody;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SubscribeQueryTest extends QueryTest {
+public class SubscribeQueryTest extends UnitTestBase {
     
     @Test
     public void subscribeTest() throws Exception {

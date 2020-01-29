@@ -3,7 +3,10 @@ package chat.tamtam.botapi.queries;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.junit.experimental.categories.Category;
+
 import chat.tamtam.botapi.TamTamBotAPI;
+import chat.tamtam.botapi.UnitTest;
 import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.client.impl.JacksonSerializer;
 import chat.tamtam.botapi.client.impl.OkHttpTransportClient;
@@ -15,7 +18,8 @@ import chat.tamtam.botapi.server.TamTamService;
 /**
  * @author alexandrchuprin
  */
-public class QueryTest extends TamTamService {
+@Category(UnitTest.class)
+public class UnitTestBase extends TamTamService {
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
 
     protected OkHttpTransportClient transport = new OkHttpTransportClient();
@@ -41,7 +45,7 @@ public class QueryTest extends TamTamService {
         TamTamServer.start();
     }
 
-    public QueryTest() {
+    public UnitTestBase() {
         super(new JacksonSerializer());
     }
 

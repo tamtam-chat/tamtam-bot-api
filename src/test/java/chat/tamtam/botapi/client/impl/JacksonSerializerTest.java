@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.util.Collections;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import chat.tamtam.botapi.UnitTest;
 import chat.tamtam.botapi.exceptions.SerializationException;
 import chat.tamtam.botapi.model.MessageBody;
 
@@ -16,6 +18,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author alexandrchuprin
  */
+@Category(UnitTest.class)
 public class JacksonSerializerTest {
     private JacksonSerializer serializer = new JacksonSerializer();
 

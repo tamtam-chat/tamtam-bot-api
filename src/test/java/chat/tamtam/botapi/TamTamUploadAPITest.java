@@ -23,7 +23,7 @@ import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.PhotoToken;
 import chat.tamtam.botapi.model.PhotoTokens;
 import chat.tamtam.botapi.model.UploadedInfo;
-import chat.tamtam.botapi.queries.QueryTest;
+import chat.tamtam.botapi.queries.UnitTestBase;
 import chat.tamtam.botapi.queries.upload.TamTamUploadAVQuery;
 import chat.tamtam.botapi.queries.upload.TamTamUploadQuery;
 import chat.tamtam.botapi.server.TamTamService;
@@ -39,7 +39,7 @@ import static spark.Spark.post;
 /**
  * @author alexandrchuprin
  */
-public class TamTamUploadAPITest extends QueryTest {
+public class TamTamUploadAPITest extends UnitTestBase {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final String FILE_UPLOAD_URL = "http://localhost:4567/fileupload";
     protected static final String IMAGE_UPLOAD_URL = "http://localhost:4567/imageupload";

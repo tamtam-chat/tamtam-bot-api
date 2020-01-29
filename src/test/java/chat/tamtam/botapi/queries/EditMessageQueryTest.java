@@ -35,7 +35,7 @@ import chat.tamtam.botapi.model.StickerAttachmentRequestPayload;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class EditMessageQueryTest extends QueryTest {
+public class EditMessageQueryTest extends UnitTestBase {
 
     @Test
     public void editMessageTest() throws Exception {

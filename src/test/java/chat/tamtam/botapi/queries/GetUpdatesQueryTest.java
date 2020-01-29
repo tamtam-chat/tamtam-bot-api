@@ -30,10 +30,15 @@ import chat.tamtam.botapi.model.BotAddedToChatUpdate;
 import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.BotStartedUpdate;
 import chat.tamtam.botapi.model.Callback;
+import chat.tamtam.botapi.model.CallbackConstructorInput;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatTitleChangedUpdate;
+import chat.tamtam.botapi.model.ConstructedMessage;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 import chat.tamtam.botapi.model.MessageCallbackUpdate;
+import chat.tamtam.botapi.model.MessageChatCreatedUpdate;
+import chat.tamtam.botapi.model.MessageConstructedUpdate;
+import chat.tamtam.botapi.model.MessageConstructionRequest;
 import chat.tamtam.botapi.model.MessageCreatedUpdate;
 import chat.tamtam.botapi.model.MessageEditedUpdate;
 import chat.tamtam.botapi.model.MessageRemovedUpdate;
@@ -42,13 +47,14 @@ import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
+import chat.tamtam.botapi.model.UserWithPhoto;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static spark.Spark.get;
 
-public class GetUpdatesQueryTest extends QueryTest {
+public class GetUpdatesQueryTest extends UnitTestBase {
 
     @Test
     public void getUpdatesTest() throws Exception {
@@ -75,6 +81,12 @@ public class GetUpdatesQueryTest extends QueryTest {
                 user, System.currentTimeMillis());
         ChatTitleChangedUpdate chatTitleChangedUpdate = new ChatTitleChangedUpdate(ID_COUNTER.incrementAndGet(),
                 user, "title", System.currentTimeMillis());
+        MessageConstructionRequest messageConstructionRequest = new MessageConstructionRequest(
+                new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername()), "sessioId",
+                new CallbackConstructorInput("payload"), now);
+        MessageConstructedUpdate messageConstructedUpdate = new MessageConstructedUpdate("sessionId",
+                new ConstructedMessage(user, now, message(ID_COUNTER.incrementAndGet(), now).getBody()), now);
+        MessageChatCreatedUpdate messageChatCreatedUpdate = new MessageChatCreatedUpdate(randomChat(), "mId", now);
 
         List<Update> updates = Arrays.asList(
                 messageCreatedUpdate,
@@ -86,7 +98,10 @@ public class GetUpdatesQueryTest extends QueryTest {
                 botAddedToChatUpdate,
                 botRemovedFromChatUpdate,
                 botStartedUpdate,
-                chatTitleChangedUpdate
+                chatTitleChangedUpdate,
+                messageConstructionRequest,
+                messageConstructedUpdate,
+                messageChatCreatedUpdate
         );
 
         get("/updates", (request, response) -> new UpdateList(updates, null), this::serialize);
@@ -152,6 +167,21 @@ public class GetUpdatesQueryTest extends QueryTest {
                 @Override
                 public void visit(ChatTitleChangedUpdate model) {
                     assertThat(model, is(chatTitleChangedUpdate));
+                }
+
+                @Override
+                public void visit(MessageConstructionRequest model) {
+                    assertThat(model, is(messageConstructionRequest));
+                }
+
+                @Override
+                public void visit(MessageConstructedUpdate model) {
+                    assertThat(model, is(messageConstructedUpdate));
+                }
+
+                @Override
+                public void visit(MessageChatCreatedUpdate model) {
+                    assertThat(model, is(messageChatCreatedUpdate));
                 }
             });
         }

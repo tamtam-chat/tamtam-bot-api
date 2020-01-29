@@ -20,29 +20,22 @@
 
 package chat.tamtam.botapi.queries;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.Test;
+
+import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.BotCommand;
 import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.BotPatch;
-import chat.tamtam.botapi.model.PhotoAttachmentRequest;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
-
-import org.junit.Test;
-import org.junit.Ignore;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static spark.Spark.get;
 import static spark.Spark.patch;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
-public class EditMyInfoQueryTest extends QueryTest {
+public class EditMyInfoQueryTest extends UnitTestBase {
     
     @Test
     public void editMyInfoTest() throws Exception {
@@ -66,12 +59,17 @@ public class EditMyInfoQueryTest extends QueryTest {
                 .username("botusername")
                 .photo(new PhotoAttachmentRequestPayload().url("patchurl"));
 
-        EditMyInfoQuery query = new EditMyInfoQuery(client, botPatch);
+        EditMyInfoQuery query = api.editMyInfo(botPatch);
         BotInfo response = query.execute();
 
         assertThat(response.getCommands(), is(commands));
         assertThat(response.getName(), is(botname));
         assertThat(response.getDescription(), is(description));
     }
-    
+
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrow() throws Exception {
+        api.editMyInfo(null).execute();
+    }
+
 }

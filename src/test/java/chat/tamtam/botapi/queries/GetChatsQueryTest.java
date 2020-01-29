@@ -27,7 +27,7 @@ import chat.tamtam.botapi.model.ChatList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class GetChatsQueryTest extends QueryTest {
+public class GetChatsQueryTest extends UnitTestBase {
 
     @Test
     public void getChatsTest() throws Exception {

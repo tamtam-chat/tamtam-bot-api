@@ -29,7 +29,7 @@ import spark.Spark;
 
 import static org.hamcrest.core.Is.is;
 
-public class DeleteMessageQueryTest extends QueryTest {
+public class DeleteMessageQueryTest extends UnitTestBase {
     @Test(expected = RequiredParameterMissingException.class)
     public void shouldThrowExceptionOnMissingparam() throws Exception {
         String messageId = null;
@@ -41,8 +41,14 @@ public class DeleteMessageQueryTest extends QueryTest {
     public void shouldExecuteQuery() throws Exception {
         Spark.delete("/messages", (req, resp) -> new SimpleQueryResult(true), this::serialize);
         String messageId = "mid.123";
-        DeleteMessageQuery query = new DeleteMessageQuery(client, messageId);
+        DeleteMessageQuery query = api.deleteMessage(messageId);
         SimpleQueryResult result = query.execute();
         Assert.assertThat(result.isSuccess(), is(true));
     }
+
+    @Test(expected = RequiredParameterMissingException.class)
+    public void shouldThrow() throws Exception {
+        api.deleteMessage(null).execute();
+    }
+
 }

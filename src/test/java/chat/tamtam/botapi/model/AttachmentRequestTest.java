@@ -1,6 +1,14 @@
 package chat.tamtam.botapi.model;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import chat.tamtam.botapi.UnitTest;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -8,6 +16,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author alexandrchuprin
  */
+@Category(UnitTest.class)
 public class AttachmentRequestTest {
     @Test
     public void shouldVisitDefault() {
@@ -19,4 +28,5 @@ public class AttachmentRequestTest {
             }
         });
     }
+
 }

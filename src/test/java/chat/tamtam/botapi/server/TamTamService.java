@@ -23,7 +23,6 @@ import chat.tamtam.botapi.client.TamTamSerializer;
 import chat.tamtam.botapi.exceptions.SerializationException;
 import chat.tamtam.botapi.model.ActionRequestBody;
 import chat.tamtam.botapi.model.Attachment;
-import chat.tamtam.botapi.model.AttachmentPayload;
 import chat.tamtam.botapi.model.AudioAttachment;
 import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.CallbackButton;
@@ -69,6 +68,9 @@ import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.VideoAttachment;
 import spark.Request;
 import spark.Response;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author alexandrchuprin
@@ -186,6 +188,8 @@ public class TamTamService {
 
     public Object getMembers(Request request, Response response) {
         Long chatId = Long.valueOf(request.params("chatId"));
+        String userIds = request.queryParams("user_ids");
+        assertThat(userIds, is("1,2"));
         String marker = request.queryParams("marker");
         Integer count = getInt(request, "count").orElse(5);
         List<ChatMember> chatMembers = this.chatMembers.get(chatId);
@@ -215,6 +219,7 @@ public class TamTamService {
     public Object removeMembers(Request request, Response response) throws Exception {
         Long chatId = Long.valueOf(request.params("chatId"));
         Long userId = Long.valueOf(request.queryParams("user_id"));
+        assertThat(request.queryParams("block"), is("true"));
         return SUCCESSFUL;
     }
 

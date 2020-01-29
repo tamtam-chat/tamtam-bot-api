@@ -1,7 +1,9 @@
 package chat.tamtam.botapi.client;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import chat.tamtam.botapi.UnitTest;
 import chat.tamtam.botapi.server.TamTamService;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -11,6 +13,7 @@ import static org.mockito.Mockito.mock;
 /**
  * @author alexandrchuprin
  */
+@Category(UnitTest.class)
 public class TamTamClientTest {
     @Test
     public void shouldObtainEndpointFromEnvironment() {
