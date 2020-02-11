@@ -38,9 +38,6 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
     @Nullable
     @Size(max = 32)
     private List<@Valid BotCommand> commands;
-    @Nullable
-    @Size(max = 16000)
-    private @Valid String description;
 
     @JsonCreator
     public BotInfo(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
@@ -66,25 +63,6 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
         this.commands = commands;
     }
 
-    public BotInfo description(@Nullable String description) {
-        this.setDescription(description);
-        return this;
-    }
-
-    /**
-    * Bot description
-    * @return description
-    **/
-    @Nullable
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(@Nullable String description) {
-        this.description = description;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -96,7 +74,6 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
 
         BotInfo other = (BotInfo) o;
         return Objects.equals(this.commands, other.commands) &&
-            Objects.equals(this.description, other.description) &&
             super.equals(o);
     }
 
@@ -104,7 +81,6 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (commands != null ? commands.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
@@ -112,7 +88,6 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
     public String toString() {
         return "BotInfo{"+ super.toString()
             + " commands='" + commands + '\''
-            + " description='" + description + '\''
             + '}';
     }
 }

@@ -64,6 +64,7 @@ public class MessageConstructedUpdate extends Update implements TamTamSerializab
     }
 
     /**
+    * User message
     * @return message
     **/
     @JsonProperty("message")

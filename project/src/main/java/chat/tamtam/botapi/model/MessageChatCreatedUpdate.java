@@ -58,6 +58,7 @@ public class MessageChatCreatedUpdate extends Update implements TamTamSerializab
     }
 
     /**
+    * Created chat
     * @return chat
     **/
     @JsonProperty("chat")
