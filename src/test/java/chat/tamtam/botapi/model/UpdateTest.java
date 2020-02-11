@@ -41,7 +41,7 @@ public class UpdateTest extends UnitTestBase {
             new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername()), "sessioId",
             new CallbackConstructorInput("payload"), now);
     MessageConstructedUpdate messageConstructedUpdate = new MessageConstructedUpdate("sessionId",
-            new ConstructedMessage(user, now, message(ID_COUNTER.incrementAndGet(), now).getBody()), now);
+            new ConstructedMessage(now, message(ID_COUNTER.incrementAndGet(), now).getBody()).sender(user), now);
     MessageChatCreatedUpdate messageChatCreatedUpdate = new MessageChatCreatedUpdate(randomChat(), "mId", now);
 
     public UpdateTest() throws Exception {

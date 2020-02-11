@@ -251,8 +251,8 @@ public class TamTamBotAPI {
 
     /**
     * Get chat by link
-    * Returns info about dialog, chat or channel by its public link
-    * @param chatLink Public chat or user link (required)
+    * Returns chat/channel information by its public link or dialog with user by username
+    * @param chatLink Public chat link or username (required)
     * @return {@link Chat}
     * @throws ClientException if fails to make API call
     */

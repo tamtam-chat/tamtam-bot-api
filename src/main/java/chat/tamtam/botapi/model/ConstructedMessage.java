@@ -33,8 +33,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ConstructedMessage implements TamTamSerializable {
 
-    @NotNull
-    private final @Valid User sender;
+    private @Valid User sender;
     @NotNull
     private final @Valid Long timestamp;
     @Nullable
@@ -43,19 +42,27 @@ public class ConstructedMessage implements TamTamSerializable {
     private final @Valid MessageBody body;
 
     @JsonCreator
-    public ConstructedMessage(@JsonProperty("sender") User sender, @JsonProperty("timestamp") Long timestamp, @JsonProperty("body") MessageBody body) { 
-        this.sender = sender;
+    public ConstructedMessage(@JsonProperty("timestamp") Long timestamp, @JsonProperty("body") MessageBody body) { 
         this.timestamp = timestamp;
         this.body = body;
     }
 
+    public ConstructedMessage sender(User sender) {
+        this.setSender(sender);
+        return this;
+    }
+
     /**
-    * User who sent this message
+    * Author who sent this message. Can be &#x60;null&#x60; if message has been posted on behalf of a channel
     * @return sender
     **/
     @JsonProperty("sender")
     public User getSender() {
         return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
     /**
