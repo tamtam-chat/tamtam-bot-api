@@ -101,6 +101,12 @@ public class SubscribeQueryIntegrationTest extends TamTamIntegrationTest {
         new SubscribeQuery(client, body).execute();
     }
 
+    @Test(expected = APIException.class)
+    public void shouldThrowOnInvalidURL() throws Exception {
+        SubscriptionRequestBody body = new SubscriptionRequestBody("https://invalid url");
+        new SubscribeQuery(client, body).execute();
+    }
+
     @Test
     public void shouldUnsubscribeAnotherBotWithTheSameWebhook() throws Exception {
         try {
