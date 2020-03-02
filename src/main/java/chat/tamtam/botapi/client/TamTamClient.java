@@ -88,7 +88,7 @@ public class TamTamClient implements Closeable {
     public <T> Future<T> newCall(TamTamUploadQuery<T> query) throws ClientException {
         try {
             Future<ClientResponse> call = query.getUploadExec().newCall(getTransport());
-            return new FutureResult<>(call, rawResponse -> deserialize(rawResponse, query.getResponseType()));
+            return new FutureResult<>(call, rawResponse -> handleResponse(rawResponse, query.getResponseType()));
         } catch (InterruptedException e) {
             throw new ClientException(e);
         }
@@ -124,7 +124,7 @@ public class TamTamClient implements Closeable {
             throw new ClientException(e);
         }
 
-        return new FutureResult<>(call, rawResponse -> deserialize(rawResponse, query.getResponseType()));
+        return new FutureResult<>(call, rawResponse -> handleResponse(rawResponse, query.getResponseType()));
     }
 
     @Override
@@ -185,27 +185,29 @@ public class TamTamClient implements Closeable {
         return URLEncoder.encode(paramValue, StandardCharsets.UTF_8.name());
     }
 
-    public <T> T deserialize(ClientResponse response, Class<T> type) throws ClientException, APIException {
+    private <T> T handleResponse(ClientResponse response, Class<T> type) throws ClientException, APIException {
         String responseBody = response.getBodyAsString();
         if (response.getStatusCode() == 503) {
             throw new ServiceNotAvailableException(responseBody);
         }
 
         TamTamSerializer serializer = getSerializer();
-        if (response.getStatusCode() / 100 != 2) {
-            try {
-                Error error = serializer.deserialize(responseBody, Error.class);
-                if (error == null) {
-                    throw new APIException(response.getStatusCode());
-                }
-
-                throw ExceptionMapper.map(response.getStatusCode(), error);
-            } catch (SerializationException e) {
-                throw new APIException(response.getStatusCode(), responseBody);
-            }
+        if (response.getStatusCode() / 100 == 2) {
+            return serializer.deserialize(responseBody, type);
         }
 
-        return serializer.deserialize(responseBody, type);
+        Error error;
+        try {
+            error = serializer.deserialize(responseBody, Error.class);
+        } catch (SerializationException e) {
+            throw new ClientException("Failed to deserialize response: " + responseBody, e);
+        }
+
+        if (error == null) {
+            throw new APIException(response.getStatusCode());
+        }
+
+        throw ExceptionMapper.map(response.getStatusCode(), error);
     }
 
     private String createEndpoint() {
