@@ -256,6 +256,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
     }
 
     private static class CallbackFuture extends CompletableFuture<ClientResponse> implements Callback {
+        @Override
         public void onResponse(Call call, Response response) {
             try {
                 super.complete(toClientResponse(response));
@@ -264,6 +265,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
             }
         }
 
+        @Override
         public void onFailure(Call call, IOException e) {
             super.completeExceptionally(new TransportClientException(e));
         }
