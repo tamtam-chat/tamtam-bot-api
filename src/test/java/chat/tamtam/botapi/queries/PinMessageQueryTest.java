@@ -18,18 +18,33 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 3;
-    private static final int BUILD = 0;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.model.PinMessageBody;
+import chat.tamtam.botapi.model.SimpleQueryResult;
+import org.junit.Test;
+import org.junit.Ignore;
 
-    private Version() {
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class PinMessageQueryTest extends UnitTestBase {
+    
+    @Test
+    public void pinMessageTest() throws Exception {
+        Long chatId = ID_COUNTER.incrementAndGet();
+        String messageId = "mid123";
+        PinMessageBody body = new PinMessageBody(messageId).notify(true);
+        PinMessageQuery query = new PinMessageQuery(client, body, chatId);
+        SimpleQueryResult response = query.execute();
+
+        assertThat(response.isSuccess(), is(true));
     }
-
-    public static String get() {
-        return VERSION;
-    }
+    
 }

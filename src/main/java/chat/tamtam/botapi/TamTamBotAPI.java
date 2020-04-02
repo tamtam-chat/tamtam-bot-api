@@ -52,6 +52,8 @@ import chat.tamtam.botapi.queries.GetMembershipQuery;
 import chat.tamtam.botapi.queries.GetMessageByIdQuery;
 import chat.tamtam.botapi.queries.GetMessagesQuery;
 import chat.tamtam.botapi.queries.GetMyInfoQuery;
+import chat.tamtam.botapi.queries.GetPinnedMessageQuery;
+import chat.tamtam.botapi.model.GetPinnedMessageResult;
 import chat.tamtam.botapi.queries.GetSubscriptionsQuery;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.queries.GetUpdatesQuery;
@@ -60,6 +62,8 @@ import chat.tamtam.botapi.queries.LeaveChatQuery;
 import chat.tamtam.botapi.model.Message;
 import chat.tamtam.botapi.model.MessageList;
 import chat.tamtam.botapi.model.NewMessageBody;
+import chat.tamtam.botapi.model.PinMessageBody;
+import chat.tamtam.botapi.queries.PinMessageQuery;
 import chat.tamtam.botapi.queries.RemoveMemberQuery;
 import chat.tamtam.botapi.queries.SendActionQuery;
 import chat.tamtam.botapi.queries.SendMessageQuery;
@@ -68,6 +72,7 @@ import java.util.Set;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.queries.SubscribeQuery;
 import chat.tamtam.botapi.model.SubscriptionRequestBody;
+import chat.tamtam.botapi.queries.UnpinMessageQuery;
 import chat.tamtam.botapi.queries.UnsubscribeQuery;
 import chat.tamtam.botapi.model.UpdateList;
 import chat.tamtam.botapi.model.UploadEndpoint;
@@ -337,6 +342,21 @@ public class TamTamBotAPI {
     }
 
     /**
+    * Get pinned message
+    * Get pinned message in chat
+    * @param chatId Chat identifier to get its pinned message (required)
+    * @return {@link GetPinnedMessageResult}
+    * @throws ClientException if fails to make API call
+    */
+    public GetPinnedMessageQuery getPinnedMessage(Long chatId) throws ClientException { 
+        if (chatId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling getPinnedMessage");
+        }
+
+        return new GetPinnedMessageQuery(client, chatId);
+    }
+
+    /**
     * Get subscriptions
     * In case your bot gets data via WebHook, the method returns list of all subscriptions
     * @return {@link GetSubscriptionsResult}
@@ -382,6 +402,26 @@ public class TamTamBotAPI {
         }
 
         return new LeaveChatQuery(client, chatId);
+    }
+
+    /**
+    * Pin message
+    * Pins message in chat or channel
+    * @param pinMessageBody  (required)
+    * @param chatId Chat identifier where message should be pinned (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public PinMessageQuery pinMessage(PinMessageBody pinMessageBody, Long chatId) throws ClientException { 
+        if (pinMessageBody == null) {
+            throw new RequiredParameterMissingException("Missing the required request body when calling pinMessage");
+        }
+
+        if (chatId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling pinMessage");
+        }
+
+        return new PinMessageQuery(client, pinMessageBody, chatId);
     }
 
     /**
@@ -452,6 +492,21 @@ public class TamTamBotAPI {
         }
 
         return new SubscribeQuery(client, subscriptionRequestBody);
+    }
+
+    /**
+    * Unpin message
+    * Unpins message in chat or channel
+    * @param chatId Chat identifier to remove pinned message (required)
+    * @return {@link SimpleQueryResult}
+    * @throws ClientException if fails to make API call
+    */
+    public UnpinMessageQuery unpinMessage(Long chatId) throws ClientException { 
+        if (chatId == null) {
+            throw new RequiredParameterMissingException("Missing the required parameter 'chatId' when calling unpinMessage");
+        }
+
+        return new UnpinMessageQuery(client, chatId);
     }
 
     /**

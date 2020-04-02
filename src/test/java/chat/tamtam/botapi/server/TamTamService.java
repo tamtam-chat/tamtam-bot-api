@@ -38,6 +38,7 @@ import chat.tamtam.botapi.model.ContactAttachment;
 import chat.tamtam.botapi.model.ContactAttachmentPayload;
 import chat.tamtam.botapi.model.FileAttachment;
 import chat.tamtam.botapi.model.FileAttachmentPayload;
+import chat.tamtam.botapi.model.GetPinnedMessageResult;
 import chat.tamtam.botapi.model.GetSubscriptionsResult;
 import chat.tamtam.botapi.model.Image;
 import chat.tamtam.botapi.model.InlineKeyboardAttachment;
@@ -52,6 +53,7 @@ import chat.tamtam.botapi.model.MessageLinkType;
 import chat.tamtam.botapi.model.MessageStat;
 import chat.tamtam.botapi.model.PhotoAttachment;
 import chat.tamtam.botapi.model.PhotoAttachmentPayload;
+import chat.tamtam.botapi.model.PinMessageBody;
 import chat.tamtam.botapi.model.Recipient;
 import chat.tamtam.botapi.model.RequestContactButton;
 import chat.tamtam.botapi.model.RequestGeoLocationButton;
@@ -275,6 +277,24 @@ public class TamTamService {
     public Object getMessage(Request request, Response response) {
         Objects.requireNonNull(request.params("messageId"), "messageId");
         return message(ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet());
+    }
+
+    public Object getPinnedMessage(Request request, Response response) {
+        long chatId = Long.parseLong(request.params("chatId"));
+        Message msg = message(chatId, ID_COUNTER.incrementAndGet());
+        return new GetPinnedMessageResult().message(msg);
+    }
+
+    public Object pinMessage(Request request, Response response) throws Exception {
+        Objects.requireNonNull(request.params("chatId"), "chatId");
+        PinMessageBody body = serializer.deserialize(request.body(), PinMessageBody.class);
+        Objects.requireNonNull(body.getMessageId(), "messageId");
+        return new SimpleQueryResult(true);
+    }
+
+    public Object unpinMessage(Request request, Response response) {
+        long chatId = Long.parseLong(request.params("chatId"));
+        return new SimpleQueryResult(true);
     }
 
     private static ChatMember newChatMember() {

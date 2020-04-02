@@ -18,18 +18,15 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 3;
-    private static final int BUILD = 0;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import chat.tamtam.botapi.client.TamTamClient;
+import chat.tamtam.botapi.model.GetPinnedMessageResult;
+import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-    private Version() {
-    }
+public class GetPinnedMessageQuery extends TamTamQuery<GetPinnedMessageResult> { 
 
-    public static String get() {
-        return VERSION;
+    public GetPinnedMessageQuery(TamTamClient client, Long chatId) {
+        super(client, substitute("/chats/{chatId}/pin", chatId), null, GetPinnedMessageResult.class, Method.GET);
     }
 }

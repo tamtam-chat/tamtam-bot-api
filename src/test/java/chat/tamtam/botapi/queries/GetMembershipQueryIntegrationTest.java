@@ -32,6 +32,7 @@ public class GetMembershipQueryIntegrationTest extends TamTamIntegrationTest {
         ChatMember chatMember = query.execute();
         assertThat(chatMember.getPermissions().size(), is(greaterThan(0)));
         assertThat(chatMember.getPermissions(), hasItem(ChatAdminPermission.WRITE));
+        assertThat(chatMember.isBot(), is(true));
     }
 
     @Test

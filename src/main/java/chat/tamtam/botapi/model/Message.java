@@ -98,7 +98,7 @@ public class Message implements TamTamSerializable {
     }
 
     /**
-    * Forwarder or replied message
+    * Forwarded or replied message
     * @return link
     **/
     @Nullable

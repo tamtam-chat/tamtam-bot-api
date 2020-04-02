@@ -18,18 +18,26 @@
  * ------------------------------------------------------------------------
  */
 
-package chat.tamtam.botapi;
+package chat.tamtam.botapi.queries;
 
-public class Version {
-    private static final int MAJOR = 0;
-    private static final int MINOR = 3;
-    private static final int BUILD = 0;
-    private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
+import org.junit.Test;
 
-    private Version() {
+import chat.tamtam.botapi.model.GetPinnedMessageResult;
+
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+
+public class GetPinnedMessageQueryTest extends UnitTestBase {
+
+    @Test
+    public void getPinnedMessageTest() throws Exception {
+        Long chatId = ID_COUNTER.incrementAndGet();
+        GetPinnedMessageQuery query = new GetPinnedMessageQuery(client, chatId);
+        GetPinnedMessageResult response = query.execute();
+
+        assertThat(response.getMessage(), is(not(nullValue())));
     }
 
-    public static String get() {
-        return VERSION;
-    }
 }

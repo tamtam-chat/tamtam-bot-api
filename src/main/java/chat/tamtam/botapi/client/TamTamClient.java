@@ -200,7 +200,7 @@ public class TamTamClient implements Closeable {
         try {
             error = serializer.deserialize(responseBody, Error.class);
         } catch (SerializationException e) {
-            throw new ClientException("Failed to deserialize response: " + responseBody, e);
+            throw new APIException(response.getStatusCode(), responseBody);
         }
 
         if (error == null) {

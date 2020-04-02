@@ -39,6 +39,8 @@ public class User implements TamTamSerializable {
     private final @Valid String name;
     @Nullable
     private final @Valid String username;
+    @Nullable
+    private @Valid Boolean isBot;
 
     @JsonCreator
     public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
@@ -75,6 +77,25 @@ public class User implements TamTamSerializable {
         return username;
     }
 
+    public User isBot(@Nullable Boolean isBot) {
+        this.setIsBot(isBot);
+        return this;
+    }
+
+    /**
+    * &#x60;true&#x60; if user is bot
+    * @return isBot
+    **/
+    @Nullable
+    @JsonProperty("is_bot")
+    public Boolean isBot() {
+        return isBot;
+    }
+
+    public void setIsBot(@Nullable Boolean isBot) {
+        this.isBot = isBot;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -87,7 +108,8 @@ public class User implements TamTamSerializable {
         User other = (User) o;
         return Objects.equals(this.userId, other.userId) &&
             Objects.equals(this.name, other.name) &&
-            Objects.equals(this.username, other.username);
+            Objects.equals(this.username, other.username) &&
+            Objects.equals(this.isBot, other.isBot);
     }
 
     @Override
@@ -96,6 +118,7 @@ public class User implements TamTamSerializable {
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (isBot != null ? isBot.hashCode() : 0);
         return result;
     }
 
@@ -105,6 +128,7 @@ public class User implements TamTamSerializable {
             + " userId='" + userId + '\''
             + " name='" + name + '\''
             + " username='" + username + '\''
+            + " isBot='" + isBot + '\''
             + '}';
     }
 }
