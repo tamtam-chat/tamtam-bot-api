@@ -48,6 +48,9 @@ public class TamTamServer {
         delete("/chats/:chatId/members/me", service::leaveChat, service::serialize);
         get("/chats/:chatId/members/admins", service::getAdmins, service::serialize);
         post("/chats/:chatId/actions", service::sendAction, service::serialize);
+        get("/chats/:chatId/pin", service::getPinnedMessage, service::serialize);
+        put("/chats/:chatId/pin", service::pinMessage, service::serialize);
+        delete("/chats/:chatId/pin", service::unpinMessage, service::serialize);
         put("/messages", service::editMessage, service::serialize);
         get("/messages/:messageId", service::getMessage, service::serialize);
         post("/answers", service::answer, service::serialize);

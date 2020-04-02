@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
@@ -156,8 +155,7 @@ public class SendMessageQueryIntegrationTest extends TamTamIntegrationTest {
                         new RequestGeoLocationButton("geo location").quick(true)
                 ),
                 Collections.singletonList(
-                        new ChatButton("chat button")
-                                .chatTitle("new chat title " + ID_COUNTER.incrementAndGet())
+                        new ChatButton("new chat title " + ID_COUNTER.incrementAndGet(), "chat button")
                                 .chatDescription(randomText())
                                 .startPayload(randomText())
                                 .uuid(ThreadLocalRandom.current().nextInt())

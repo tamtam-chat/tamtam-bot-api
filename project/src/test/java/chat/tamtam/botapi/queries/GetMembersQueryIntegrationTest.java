@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -38,7 +38,15 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
 
         assertThat(members.size(), is(3));
         assertThat(members.get(bot1.getUserId()).isAdmin(), is(true));
+        assertThat(members.get(bot1.getUserId()).isBot(), is(true));
         assertThat(members.get(bot2.getUserId()).isAdmin(), is(false));
+
+        members.remove(bot1.getUserId());
+        members.remove(bot2.getUserId());
+
+        for (ChatMember member : members.values()) {
+            assertThat(member.isBot(), is(false));
+        }
     }
 
     @Test

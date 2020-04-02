@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +34,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ChatButton extends Button implements TamTamSerializable {
 
-    @Nullable
+    @NotNull
     @Size(max = 200)
-    private @Valid String chatTitle;
+    private final @Valid String chatTitle;
     @Nullable
     @Size(max = 400)
     private @Valid String chatDescription;
@@ -46,8 +47,9 @@ public class ChatButton extends Button implements TamTamSerializable {
     private @Valid Integer uuid;
 
     @JsonCreator
-    public ChatButton(@JsonProperty("text") String text) { 
+    public ChatButton(@JsonProperty("chat_title") String chatTitle, @JsonProperty("text") String text) { 
         super(text);
+        this.chatTitle = chatTitle;
     }
 
     @Override
@@ -60,23 +62,13 @@ public class ChatButton extends Button implements TamTamSerializable {
         return mapper.map(this);
     }
 
-    public ChatButton chatTitle(@Nullable String chatTitle) {
-        this.setChatTitle(chatTitle);
-        return this;
-    }
-
     /**
     * Title of chat to be created
     * @return chatTitle
     **/
-    @Nullable
     @JsonProperty("chat_title")
     public String getChatTitle() {
         return chatTitle;
-    }
-
-    public void setChatTitle(@Nullable String chatTitle) {
-        this.chatTitle = chatTitle;
     }
 
     public ChatButton chatDescription(@Nullable String chatDescription) {
