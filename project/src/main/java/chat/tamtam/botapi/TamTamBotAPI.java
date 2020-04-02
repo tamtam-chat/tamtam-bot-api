@@ -343,7 +343,7 @@ public class TamTamBotAPI {
 
     /**
     * Get pinned message
-    * Get pinned message in chat
+    * Get pinned message in chat or channel.
     * @param chatId Chat identifier to get its pinned message (required)
     * @return {@link GetPinnedMessageResult}
     * @throws ClientException if fails to make API call
@@ -406,7 +406,7 @@ public class TamTamBotAPI {
 
     /**
     * Pin message
-    * Pins message in chat or channel
+    * Pins message in chat or channel.
     * @param pinMessageBody  (required)
     * @param chatId Chat identifier where message should be pinned (required)
     * @return {@link SimpleQueryResult}
@@ -496,7 +496,7 @@ public class TamTamBotAPI {
 
     /**
     * Unpin message
-    * Unpins message in chat or channel
+    * Unpins message in chat or channel.
     * @param chatId Chat identifier to remove pinned message (required)
     * @return {@link SimpleQueryResult}
     * @throws ClientException if fails to make API call

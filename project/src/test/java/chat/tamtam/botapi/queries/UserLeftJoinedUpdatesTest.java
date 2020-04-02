@@ -41,7 +41,7 @@ public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
     private void test(String chatTitle) throws Exception {
         Chat commonChat = getByTitle(getChats(), chatTitle);
         Long commonChatId = commonChat.getChatId();
-        User bot3user = new User(bot3.getUserId(), bot3.getName(), bot3.getUsername());
+        User bot3user = new User(bot3.getUserId(), bot3.getName(), bot3.getUsername(), false);
 
         CountDownLatch bot3added = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);

@@ -48,8 +48,8 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
     private final Set<@Valid ChatAdminPermission> permissions;
 
     @JsonCreator
-    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("is_admin") Boolean isAdmin, @JsonProperty("join_time") Long joinTime, @Nullable @JsonProperty("permissions") Set<ChatAdminPermission> permissions, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
-        super(userId, name, username);
+    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("is_admin") Boolean isAdmin, @JsonProperty("join_time") Long joinTime, @Nullable @JsonProperty("permissions") Set<ChatAdminPermission> permissions, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot) { 
+        super(userId, name, username, isBot);
         this.lastAccessTime = lastAccessTime;
         this.isOwner = isOwner;
         this.isAdmin = isAdmin;
