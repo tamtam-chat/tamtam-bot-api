@@ -40,8 +40,8 @@ public class UserWithPhoto extends User implements TamTamSerializable {
     private @Valid String fullAvatarUrl;
 
     @JsonCreator
-    public UserWithPhoto(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
-        super(userId, name, username);
+    public UserWithPhoto(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot) { 
+        super(userId, name, username, isBot);
     }
 
     public UserWithPhoto description(@Nullable String description) {

@@ -40,8 +40,8 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
     private List<@Valid BotCommand> commands;
 
     @JsonCreator
-    public BotInfo(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
-        super(userId, name, username);
+    public BotInfo(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot) { 
+        super(userId, name, username, isBot);
     }
 
     public BotInfo commands(@Nullable List<BotCommand> commands) {

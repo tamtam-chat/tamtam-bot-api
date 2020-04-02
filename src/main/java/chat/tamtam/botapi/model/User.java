@@ -39,14 +39,15 @@ public class User implements TamTamSerializable {
     private final @Valid String name;
     @Nullable
     private final @Valid String username;
-    @Nullable
-    private @Valid Boolean isBot;
+    @NotNull
+    private final @Valid Boolean isBot;
 
     @JsonCreator
-    public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username) { 
+    public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot) { 
         this.userId = userId;
         this.name = name;
         this.username = username;
+        this.isBot = isBot;
     }
 
     /**
@@ -77,23 +78,13 @@ public class User implements TamTamSerializable {
         return username;
     }
 
-    public User isBot(@Nullable Boolean isBot) {
-        this.setIsBot(isBot);
-        return this;
-    }
-
     /**
     * &#x60;true&#x60; if user is bot
     * @return isBot
     **/
-    @Nullable
     @JsonProperty("is_bot")
     public Boolean isBot() {
         return isBot;
-    }
-
-    public void setIsBot(@Nullable Boolean isBot) {
-        this.isBot = isBot;
     }
 
     @Override

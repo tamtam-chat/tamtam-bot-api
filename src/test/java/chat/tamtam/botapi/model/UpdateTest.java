@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 @Category(UnitTest.class)
 public class UpdateTest extends UnitTestBase {
     long now = System.currentTimeMillis();
-    User user = new User(ID_COUNTER.incrementAndGet(), "user name", "username");
+    User user = new User(ID_COUNTER.incrementAndGet(), "user name", "username", false);
     MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(ID_COUNTER.incrementAndGet(), null),
             now);
     MessageEditedUpdate messageEditedUpdate = new MessageEditedUpdate(message(ID_COUNTER.incrementAndGet(), null), now);
@@ -38,7 +38,7 @@ public class UpdateTest extends UnitTestBase {
     ChatTitleChangedUpdate chatTitleChangedUpdate = new ChatTitleChangedUpdate(ID_COUNTER.incrementAndGet(),
             user, "title", System.currentTimeMillis());
     MessageConstructionRequest messageConstructionRequest = new MessageConstructionRequest(
-            new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername()), "sessioId",
+            new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername(), false), "sessioId",
             new CallbackConstructorInput("payload"), now);
     MessageConstructedUpdate messageConstructedUpdate = new MessageConstructedUpdate("sessionId",
             new ConstructedMessage(now, message(ID_COUNTER.incrementAndGet(), now).getBody()).sender(user), now);
