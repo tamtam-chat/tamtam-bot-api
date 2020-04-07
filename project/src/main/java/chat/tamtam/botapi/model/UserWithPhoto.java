@@ -63,25 +63,6 @@ public class UserWithPhoto extends User implements TamTamSerializable {
         this.description = description;
     }
 
-    public UserWithPhoto description(@Nullable String description) {
-        this.setDescription(description);
-        return this;
-    }
-
-    /**
-    * User description. Can be &#x60;null&#x60; if user did not fill it out
-    * @return description
-    **/
-    @Nullable
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(@Nullable String description) {
-        this.description = description;
-    }
-
     public UserWithPhoto avatarUrl(String avatarUrl) {
         this.setAvatarUrl(avatarUrl);
         return this;
