@@ -5,10 +5,11 @@ import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
-import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatPatch;
+import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
+import chat.tamtam.botapi.model.SendMessageResult;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -97,6 +98,16 @@ public class EditChatQueryItegrationTest extends TamTamIntegrationTest {
         } catch (APIException e) {
             assertThat(e.getStatusCode(), is(400));
         }
+    }
+
+    @Test
+    public void shouldPinMessage() throws Exception {
+        Long chatId = chat.getChatId();
+        SendMessageResult msg = botAPI.sendMessage(new NewMessageBody("to be pinned", null, null)).chatId(
+                chatId).execute();
+        ChatPatch patch = new ChatPatch().pin(msg.getMessage().getBody().getMid());
+        Chat chat = new EditChatQuery(client, patch, chatId).execute();
+        assertThat(chat.getPinnedMessage(), is(msg.getMessage()));
     }
 
     private void setInvalidChatTitle(String title) throws Exception {
