@@ -8,6 +8,8 @@ Library has been built based on [TamTam Bot API Schema](https://github.com/tamta
 
 Full documentation of API can be found [here](https://dev.tamtam.chat).
 
+⚠️ This library provides just a thin client to invoke API methods. Take a look at [tamtam-bot-sdk](https://github.com/tamtam-chat/tamtam-bot-sdk) framework to build bots.
+
 ## Requirements
 Minimum required version of Java is 8.
 
@@ -26,7 +28,7 @@ To start using this client add it as Maven dependency:
 <dependency>
     <groupId>chat.tamtam</groupId>
     <artifactId>tamtam-bot-api</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
 </dependency>
 ```
 
