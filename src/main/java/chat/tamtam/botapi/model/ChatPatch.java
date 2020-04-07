@@ -37,6 +37,10 @@ public class ChatPatch implements TamTamSerializable {
     @Nullable
     @Size(min = 1, max = 200)
     private @Valid String title;
+    @Nullable
+    private @Valid String pin;
+    @Nullable
+    private @Valid Boolean notify;
 
     public ChatPatch icon(@Nullable PhotoAttachmentRequestPayload icon) {
         this.setIcon(icon);
@@ -74,6 +78,44 @@ public class ChatPatch implements TamTamSerializable {
         this.title = title;
     }
 
+    public ChatPatch pin(@Nullable String pin) {
+        this.setPin(pin);
+        return this;
+    }
+
+    /**
+    * Identifier of message to be pinned in chat. In case you want to remove pin, use [unpin](#operation/unpinMessage) method
+    * @return pin
+    **/
+    @Nullable
+    @JsonProperty("pin")
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(@Nullable String pin) {
+        this.pin = pin;
+    }
+
+    public ChatPatch notify(@Nullable Boolean notify) {
+        this.setNotify(notify);
+        return this;
+    }
+
+    /**
+    * If &#x60;true&#x60;, participants will be notified with system message in chat/channel
+    * @return notify
+    **/
+    @Nullable
+    @JsonProperty("notify")
+    public Boolean isNotify() {
+        return notify;
+    }
+
+    public void setNotify(@Nullable Boolean notify) {
+        this.notify = notify;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,7 +127,9 @@ public class ChatPatch implements TamTamSerializable {
 
         ChatPatch other = (ChatPatch) o;
         return Objects.equals(this.icon, other.icon) &&
-            Objects.equals(this.title, other.title);
+            Objects.equals(this.title, other.title) &&
+            Objects.equals(this.pin, other.pin) &&
+            Objects.equals(this.notify, other.notify);
     }
 
     @Override
@@ -93,6 +137,8 @@ public class ChatPatch implements TamTamSerializable {
         int result = 1;
         result = 31 * result + (icon != null ? icon.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (pin != null ? pin.hashCode() : 0);
+        result = 31 * result + (notify != null ? notify.hashCode() : 0);
         return result;
     }
 
@@ -101,6 +147,8 @@ public class ChatPatch implements TamTamSerializable {
         return "ChatPatch{"
             + " icon='" + icon + '\''
             + " title='" + title + '\''
+            + " pin='" + pin + '\''
+            + " notify='" + notify + '\''
             + '}';
     }
 }
