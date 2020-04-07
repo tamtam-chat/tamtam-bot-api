@@ -40,7 +40,7 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
     private void test(String chatTitle) throws Exception {
         Chat commonChat = getByTitle(getChats(), chatTitle);
         Long commonChatId = commonChat.getChatId();
-        User bot1user = new User(bot1.getUserId(), bot1.getName(), bot1.getUsername(), false);
+        User bot1user = new User(bot1.getUserId(), bot1.getName(), bot1.getUsername(), true);
 
         CountDownLatch bot2removed = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);

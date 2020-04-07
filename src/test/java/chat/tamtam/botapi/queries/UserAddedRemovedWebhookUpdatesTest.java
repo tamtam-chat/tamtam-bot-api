@@ -39,7 +39,7 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
     private void test(String chatTitle) throws Exception {
         Chat commonChat = getByTitle(getChats(), chatTitle);
         Long commonChatId = commonChat.getChatId();
-        User bot2user = new User(bot2.getUserId(), bot2.getName(), bot2.getUsername(), false);
+        User bot2user = new User(bot2.getUserId(), bot2.getName(), bot2.getUsername(), true);
 
         CountDownLatch bot2added = new CountDownLatch(1);
         CountDownLatch bot2removed = new CountDownLatch(1);
