@@ -66,6 +66,8 @@ public class Chat implements TamTamSerializable {
     private @Valid Integer messagesCount;
     @Nullable
     private @Valid String chatMessageId;
+    @Nullable
+    private @Valid Message pinnedMessage;
 
     @JsonCreator
     public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @Nullable @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") Object description) { 
@@ -287,6 +289,25 @@ public class Chat implements TamTamSerializable {
         this.chatMessageId = chatMessageId;
     }
 
+    public Chat pinnedMessage(@Nullable Message pinnedMessage) {
+        this.setPinnedMessage(pinnedMessage);
+        return this;
+    }
+
+    /**
+    * Pinned message in chat or channel. Returned only when single chat is requested
+    * @return pinnedMessage
+    **/
+    @Nullable
+    @JsonProperty("pinned_message")
+    public Message getPinnedMessage() {
+        return pinnedMessage;
+    }
+
+    public void setPinnedMessage(@Nullable Message pinnedMessage) {
+        this.pinnedMessage = pinnedMessage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -311,7 +332,8 @@ public class Chat implements TamTamSerializable {
             Objects.equals(this.description, other.description) &&
             Objects.equals(this.dialogWithUser, other.dialogWithUser) &&
             Objects.equals(this.messagesCount, other.messagesCount) &&
-            Objects.equals(this.chatMessageId, other.chatMessageId);
+            Objects.equals(this.chatMessageId, other.chatMessageId) &&
+            Objects.equals(this.pinnedMessage, other.pinnedMessage);
     }
 
     @Override
@@ -332,6 +354,7 @@ public class Chat implements TamTamSerializable {
         result = 31 * result + (dialogWithUser != null ? dialogWithUser.hashCode() : 0);
         result = 31 * result + (messagesCount != null ? messagesCount.hashCode() : 0);
         result = 31 * result + (chatMessageId != null ? chatMessageId.hashCode() : 0);
+        result = 31 * result + (pinnedMessage != null ? pinnedMessage.hashCode() : 0);
         return result;
     }
 
@@ -353,6 +376,7 @@ public class Chat implements TamTamSerializable {
             + " dialogWithUser='" + dialogWithUser + '\''
             + " messagesCount='" + messagesCount + '\''
             + " chatMessageId='" + chatMessageId + '\''
+            + " pinnedMessage='" + pinnedMessage + '\''
             + '}';
     }
 }

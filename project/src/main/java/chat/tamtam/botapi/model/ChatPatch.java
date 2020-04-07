@@ -103,7 +103,7 @@ public class ChatPatch implements TamTamSerializable {
     }
 
     /**
-    * If &#x60;true&#x60;, participants will be notified with system message in chat/channel
+    * By default, participants will be notified about change with system message in chat/channel
     * @return notify
     **/
     @Nullable
