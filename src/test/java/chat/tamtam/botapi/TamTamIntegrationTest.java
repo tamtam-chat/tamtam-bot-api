@@ -98,7 +98,7 @@ public abstract class TamTamIntegrationTest {
     protected static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
     private static final AtomicBoolean ONCE = new AtomicBoolean();
-    private static final boolean IS_TRAVIS = Boolean.parseBoolean(System.getenv("TRAVIS"));
+    private static final boolean IS_TRAVIS = Boolean.parseBoolean(System.getenv("CI"));
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
     private static final String TOKEN_3 = getToken("TAMTAM_BOTAPI_TOKEN_3");

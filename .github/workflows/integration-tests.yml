@@ -3,6 +3,8 @@ name: Integration tests
 on:
   push:
     branches: [ master ]
+  schedule:
+    - cron: '0 9,19 * * *'
 
 jobs:
   build:
