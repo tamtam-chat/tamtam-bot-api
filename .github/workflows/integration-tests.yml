@@ -2,7 +2,7 @@ name: Integration tests
 
 on:
   push:
-    branches: [ "master", "infra/integration-tests-action"]
+    branches: [ master ]
 
 jobs:
   build:
