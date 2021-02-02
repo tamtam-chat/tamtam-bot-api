@@ -94,8 +94,7 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
         }));
 
 
-        try (AutoCloseable ignored = bot1.addConsumer(bot1.getUserId() ^ bot3.getUserId(),
-                new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
+        try (AutoCloseable ignored = addBot3Consumer(bot3updates);
              AutoCloseable ignore2 = bot2.addConsumer(commonChatId, bot2updates)) {
             addUser(client, commonChatId, bot2.getUserId());
             await(bot2removed);

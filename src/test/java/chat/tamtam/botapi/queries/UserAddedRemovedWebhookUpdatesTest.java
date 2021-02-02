@@ -70,8 +70,7 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
         };
 
         try (AutoCloseable ignored = bot2.addConsumer(commonChatId, visitor);
-             AutoCloseable ignored2 = bot1.addConsumer(bot1.getUserId() ^ bot3.getUserId(),
-                     new Bot1ToBot3RedirectingUpdateVisitor(bot3updates))) {
+             AutoCloseable ignored2 = addBot3Consumer(bot3updates)) {
             try {
                 addUser(client, commonChatId, bot2.getUserId());
                 await(bot2added);

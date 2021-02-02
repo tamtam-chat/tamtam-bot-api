@@ -11,6 +11,13 @@ import chat.tamtam.botapi.model.User;
  * @author alexandrchuprin
  */
 public class GetUpdatesIntegrationTest extends TamTamIntegrationTest {
+    protected static final long BOT_1_BOT_3_DIALOG = bot1.getUserId() ^ bot3.getUserId();
+
+    protected static AutoCloseable addBot3Consumer(Update.Visitor bot3updatesConsumer) {
+        return bot1.addConsumer(BOT_1_BOT_3_DIALOG,
+                new Bot1ToBot3RedirectingUpdateVisitor(bot3updatesConsumer));
+    }
+
     protected static class Bot1ToBot3RedirectingUpdateVisitor extends FailByDefaultUpdateVisitor {
         private final Update.Visitor bot3updates;
 

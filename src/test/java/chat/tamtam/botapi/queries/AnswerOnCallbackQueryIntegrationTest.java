@@ -1,17 +1,13 @@
 package chat.tamtam.botapi.queries;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
 import org.junit.Test;
 
-import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.model.AttachmentRequest;
 import chat.tamtam.botapi.model.BotStartedUpdate;
 import chat.tamtam.botapi.model.Callback;
@@ -35,25 +31,51 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author alexandrchuprin
  */
-public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest {
-    private List<Chat> chats;
-
-    @Before
-    public void setUp() throws Exception {
-        List<Chat> allChats = getChats();
-        chats = Arrays.asList(
-                getByTitle(allChats, "test chat #1"),
-                getByTitle(allChats, "test channel #1"),
-                getChat(bot1.getUserId() ^ bot3.getUserId())
-        );
+public class AnswerOnCallbackQueryIntegrationTest extends GetUpdatesIntegrationTest {
+    @Test
+    public void testInChat() throws Exception {
+        shouldEditMessageOnAnswer(getByTitle(getChats(), "test chat #1"));
     }
 
     @Test
-    public void shouldEditMessageOnAnswer() throws Exception {
+    public void testInChannel() throws Exception {
+        shouldEditMessageOnAnswer(getByTitle(getChats(), "test channel #1"));
+    }
+
+    @Test
+    public void testInDialog() throws Exception {
+        CountDownLatch done = new CountDownLatch(1);
+        FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor() {
+            @Override
+            public void visit(BotStartedUpdate model) {
+                // ignore
+            }
+
+            @Override
+            public void visit(MessageCallbackUpdate model) {
+                // ignore
+            }
+
+            @Override
+            public void visit(MessageCreatedUpdate model) {
+                // bot 3 will reply to bot 1 that it has received `message_edited` update
+                // will wait to finish test
+                assertThat(model.getMessage().getSender().getUserId(), is(bot3.getUserId()));
+                done.countDown();
+            }
+        };
+
+        try (AutoCloseable ignored = bot1.addConsumer(BOT_1_BOT_3_DIALOG, consumer)) {
+            shouldEditMessageOnAnswer(getChat(BOT_1_BOT_3_DIALOG));
+            await(done);
+        }
+
+    }
+
+    private void shouldEditMessageOnAnswer(Chat chat) throws Exception {
         bot3.startAnotherBot(bot1.getUserId(), null);
 
-        ArrayBlockingQueue<Callback> callbacks = new ArrayBlockingQueue<>(chats.size());
-        CountDownLatch done = new CountDownLatch(1);
+        ArrayBlockingQueue<Callback> callbacks = new ArrayBlockingQueue<>(1);
         FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor() {
             @Override
             public void visit(MessageCallbackUpdate model) {
@@ -67,47 +89,40 @@ public class AnswerOnCallbackQueryIntegrationTest extends TamTamIntegrationTest 
 
             @Override
             public void visit(MessageCreatedUpdate model) {
-                // bot 3 will reply to bot 1 that it has received `message_edited` update
-                // will wait to finish test
-                assertThat(model.getMessage().getSender().getUserId(), is(bot3.getUserId()));
-                done.countDown();
+                // ignore
             }
         };
 
 
-        for (Chat chat : chats) {
-            Long chatId = chat.getChatId();
-            try (AutoCloseable ignored = bot1.addConsumer(chatId, consumer)) {
-                // bot1 send message with button
-                String payload = randomText(16);
-                NewMessageBody body = originalMessage(payload);
-                SendMessageResult result = botAPI.sendMessage(body).chatId(chatId).execute();
-                String messageId = result.getMessage().getBody().getMid();
-                
-                // bot3 presses callback button
-                bot3.pressCallbackButton(messageId, payload);
+        Long chatId = chat.getChatId();
+        try (AutoCloseable ignored = bot1.addConsumer(chatId, consumer)) {
+            // bot1 send message with button
+            String payload = randomText(16);
+            NewMessageBody body = originalMessage(payload);
+            SendMessageResult result = botAPI.sendMessage(body).chatId(chatId).execute();
+            String messageId = result.getMessage().getBody().getMid();
 
-                String editedText = randomText();
-                ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload(randomText(16))
-                        .contactId(bot1.getUserId())
-                        .vcfPhone("+79991234567");
+            // bot3 presses callback button
+            bot3.pressCallbackButton(messageId, payload);
 
-                AttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
-                NewMessageBody answerMessage = new NewMessageBody(editedText, Collections.singletonList(contactAR),
-                        null);
+            String editedText = randomText();
+            ContactAttachmentRequestPayload arPayload = new ContactAttachmentRequestPayload(randomText(16))
+                    .contactId(bot1.getUserId())
+                    .vcfPhone("+79991234567");
 
-                CallbackAnswer answer = new CallbackAnswer().message(answerMessage);
-                Callback callback = callbacks.poll(10, TimeUnit.SECONDS);
-                new AnswerOnCallbackQuery(client, answer, callback.getCallbackId()).execute();
+            AttachmentRequest contactAR = new ContactAttachmentRequest(arPayload);
+            NewMessageBody answerMessage = new NewMessageBody(editedText, Collections.singletonList(contactAR),
+                    null);
 
-                MessageBody editedMessage = getMessage(client, messageId).getBody();
+            CallbackAnswer answer = new CallbackAnswer().message(answerMessage);
+            Callback callback = callbacks.poll(10, TimeUnit.SECONDS);
+            new AnswerOnCallbackQuery(client, answer, callback.getCallbackId()).execute();
 
-                assertThat(editedMessage.getText(), is(editedText));
-                compare(Collections.singletonList(contactAR), editedMessage.getAttachments());
-            }
+            MessageBody editedMessage = getMessage(client, messageId).getBody();
+
+            assertThat(editedMessage.getText(), is(editedText));
+            compare(Collections.singletonList(contactAR), editedMessage.getAttachments());
         }
-
-        await(done);
     }
 
     @NotNull
