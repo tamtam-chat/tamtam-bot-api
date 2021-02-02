@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -128,7 +127,7 @@ public abstract class TamTamIntegrationTest {
     }
 
     @BeforeClass
-    public static void beforeClass() throws APIException, ClientException {
+    public static void beforeClass() {
         info("Endpoint: {}", System.getenv("TAMTAM_BOTAPI_ENDPOINT"));
         if (!ONCE.compareAndSet(false, true)) {
             return;
@@ -140,12 +139,6 @@ public abstract class TamTamIntegrationTest {
         info("Bot 1: {}", bot1);
         info("Bot 2: {}", bot2);
         info("Bot 3: {}", bot3);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-//        bot1.stop();
-//        bot2.stop();
     }
 
     protected BotInfo getBot1() throws APIException, ClientException {
@@ -225,7 +218,8 @@ public abstract class TamTamIntegrationTest {
                 try {
                     Thread.sleep(TimeUnit.SECONDS.toMillis(5));
                 } catch (InterruptedException e1) {
-                    e1.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    throw e;
                 }
             }
         } while (true);

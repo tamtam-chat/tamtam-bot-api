@@ -29,7 +29,6 @@ import static chat.tamtam.botapi.TamTamIntegrationTest.info;
  */
 public class TestBot {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final Update POISON_PILL = new Update(System.currentTimeMillis());
 
     protected final TamTamBotAPI api;
     private final Thread poller;
@@ -76,21 +75,6 @@ public class TestBot {
         LOG.info("Bot " + hashedName + " started");
     }
 
-    public void stop() {
-        LOG.info("Stopping bot {}", hashedName);
-        isStopped.set(true);
-        try {
-            poller.interrupt();
-            poller.join();
-            updates.offer(POISON_PILL);
-            consumerThread.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        LOG.info("Bot " + hashedName + " stopped");
-    }
-
     public AutoCloseable addConsumer(long chatId, Update.Visitor consumer) {
         List<Update.Visitor> chatConsumers = consumers.computeIfAbsent(chatId, k -> new CopyOnWriteArrayList<>());
         chatConsumers.add(consumer);
@@ -108,10 +92,6 @@ public class TestBot {
                 update = updates.take();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                return;
-            }
-
-            if (update == POISON_PILL) {
                 return;
             }
 
