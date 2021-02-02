@@ -32,7 +32,7 @@ import chat.tamtam.botapi.model.BotPatch;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static spark.Spark.patch;
 
 public class EditMyInfoQueryTest extends UnitTestBase {

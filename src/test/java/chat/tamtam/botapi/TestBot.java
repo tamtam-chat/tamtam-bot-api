@@ -1,10 +1,13 @@
 package chat.tamtam.botapi;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -35,14 +38,14 @@ public class TestBot {
     private final String hashedName;
 
     private final AtomicBoolean isStopped = new AtomicBoolean();
-    private final Set<Update.Visitor> consumers = ConcurrentHashMap.newKeySet();
+    private final Map<Long, List<Update.Visitor>> consumers = new ConcurrentHashMap<>();
     private final BlockingQueue<Update> updates = new ArrayBlockingQueue<>(100);
     private final AtomicReference<Long> marker = new AtomicReference<>();
 
-    TestBot(TamTamClient botClient, boolean isTravis) throws APIException, ClientException {
+    TestBot(TamTamClient botClient, boolean isCi) throws APIException, ClientException {
         this.api = new TamTamBotAPI(botClient);
         this.me = api.getMyInfo().execute();
-        this.hashedName = isTravis ? TamTamIntegrationTest.randomText(16) : me.getName();
+        this.hashedName = isCi ? TamTamIntegrationTest.randomText(16) : me.getName();
         this.poller = new Thread(this::poll, "updates-poller-" + hashedName);
         this.consumerThread = new Thread(this::consumeUpdates, "updates-consumer-" + hashedName);
     }
@@ -68,7 +71,6 @@ public class TestBot {
     }
 
     public void start() {
-        flush();
         poller.start();
         consumerThread.start();
         LOG.info("Bot " + hashedName + " started");
@@ -89,16 +91,14 @@ public class TestBot {
         LOG.info("Bot " + hashedName + " stopped");
     }
 
-    public void addConsumer(Update.Visitor consumer) {
-        consumers.add(consumer);
+    public AutoCloseable addConsumer(long chatId, Update.Visitor consumer) {
+        List<Update.Visitor> chatConsumers = consumers.computeIfAbsent(chatId, k -> new CopyOnWriteArrayList<>());
+        chatConsumers.add(consumer);
+        return () -> removeConsumer(chatId, consumer);
     }
 
-    public void removeConsumer(Update.Visitor consumer) {
-        consumers.remove(consumer);
-    }
-
-    private void flush() {
-        marker.set(pollOnce(null));
+    public void removeConsumer(long chatId, Update.Visitor consumer) {
+        consumers.getOrDefault(chatId, Collections.emptyList()).remove(consumer);
     }
 
     private void consumeUpdates() {
@@ -115,7 +115,9 @@ public class TestBot {
                 return;
             }
 
-            for (Update.Visitor consumer : consumers) {
+            Long chatId = update.map(GetChatId.INSTANCE);
+            List<Update.Visitor> chatConsumers = consumers.getOrDefault(chatId, Collections.emptyList());
+            for (Update.Visitor consumer : chatConsumers) {
                 update.visit(consumer);
             }
         }
@@ -124,17 +126,22 @@ public class TestBot {
     private void poll() {
         do {
             marker.set(pollOnce(marker.get()));
-        } while (!Thread.currentThread().isInterrupted() && !isStopped.get());
+        } while (!isStopped.get());
     }
 
     private Long pollOnce(Long marker) {
         int error = 0;
         try {
             UpdateList updateList = api.getUpdates().marker(marker).timeout(5).execute();
+            if (Thread.currentThread().isInterrupted()) {
+                return updateList.getMarker();
+            }
+
             for (Update update : updateList.getUpdates()) {
                 updates.offer(update);
                 info("Bot " + hashedName + " got update: {}", update);
             }
+
             error = 0;
             return updateList.getMarker();
         } catch (APIException | ClientException e) {
@@ -143,7 +150,7 @@ public class TestBot {
             }
 
             error++;
-            LOG.error(e.getMessage(), e);
+            LOG.error("Failed to get updates, marker: {}", marker, e);
             try {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(Math.min(error, 5)));
             } catch (InterruptedException e1) {

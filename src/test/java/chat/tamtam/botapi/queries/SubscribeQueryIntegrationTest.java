@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
@@ -19,9 +20,9 @@ import chat.tamtam.botapi.model.SubscriptionRequestBody;
 import chat.tamtam.botapi.model.Update;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -29,9 +30,8 @@ import static org.junit.Assert.assertThat;
 public class SubscribeQueryIntegrationTest extends TamTamIntegrationTest {
     private String url;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() {
         url = "https://" + randomText(16) + ".com";
     }
 

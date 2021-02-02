@@ -27,7 +27,7 @@ import chat.tamtam.botapi.model.GetPinnedMessageResult;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GetPinnedMessageQueryTest extends UnitTestBase {
 
