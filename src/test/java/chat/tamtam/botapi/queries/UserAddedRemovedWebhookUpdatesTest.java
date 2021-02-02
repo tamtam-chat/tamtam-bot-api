@@ -1,10 +1,6 @@
 package chat.tamtam.botapi.queries;
 
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -14,13 +10,12 @@ import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 import chat.tamtam.botapi.model.NoopUpdateVisitor;
-import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -62,7 +57,7 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
             }
         });
 
-        bot2.addConsumer(new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor visitor = new FailByDefaultUpdateVisitor() {
             @Override
             public void visit(BotAddedToChatUpdate model) {
                 bot2added.countDown();
@@ -72,19 +67,20 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
             public void visit(BotRemovedFromChatUpdate model) {
                 bot2removed.countDown();
             }
-        });
+        };
 
-        bot1.addConsumer(new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
+        try (AutoCloseable ignored = bot2.addConsumer(commonChatId, visitor);
+             AutoCloseable ignored2 = bot1.addConsumer(bot1.getUserId() ^ bot3.getUserId(),
+                     new Bot1ToBot3RedirectingUpdateVisitor(bot3updates))) {
+            try {
+                addUser(client, commonChatId, bot2.getUserId());
+                await(bot2added);
+            } finally {
+                removeUser(client, commonChatId, bot2.getUserId());
+                await(bot2removed);
+            }
 
-        try {
-            addUser(client, commonChatId, bot2.getUserId());
-            await(bot2added);
-        } finally {
-            removeUser(client, commonChatId, bot2.getUserId());
-            await(bot2removed);
+            await(bot3expectedUpdates);
         }
-
-
-        await(bot3expectedUpdates);
     }
 }

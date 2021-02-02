@@ -50,7 +50,7 @@ import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.UserWithPhoto;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static spark.Spark.get;
 

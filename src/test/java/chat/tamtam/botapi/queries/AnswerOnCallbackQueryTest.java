@@ -28,7 +28,7 @@ import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AnswerOnCallbackQueryTest extends UnitTestBase {
 

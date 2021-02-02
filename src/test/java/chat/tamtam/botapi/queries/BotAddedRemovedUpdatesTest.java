@@ -15,8 +15,8 @@ import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
 import static chat.tamtam.botapi.Visitors.noDuplicates;
 import static chat.tamtam.botapi.Visitors.tracing;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -93,10 +93,10 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
             }
         }));
 
-        bot1.addConsumer(new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
-        bot2.addConsumer(bot2updates);
 
-        try {
+        try (AutoCloseable ignored = bot1.addConsumer(bot1.getUserId() ^ bot3.getUserId(),
+                new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
+             AutoCloseable ignore2 = bot2.addConsumer(commonChatId, bot2updates)) {
             addUser(client, commonChatId, bot2.getUserId());
             await(bot2removed);
 

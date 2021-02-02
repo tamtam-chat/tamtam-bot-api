@@ -19,7 +19,7 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin

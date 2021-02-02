@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.exceptions.APIException;
-import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.BotCommand;
 import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.BotPatch;
@@ -17,8 +16,8 @@ import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -29,12 +28,10 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
     private String newDescription;
     private ArrayList<BotCommand> commands;
     private PhotoAttachmentRequestPayload photo;
-    private AtomicReference<BotInfo> originalMe = new AtomicReference<>();
+    private final AtomicReference<BotInfo> originalMe = new AtomicReference<>();
 
-    @Override
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         originalMe.compareAndSet(null, bot1.getBotInfo());
         newName = "TT Integration Test Bot " + now();
         newUsername = randomText(16);

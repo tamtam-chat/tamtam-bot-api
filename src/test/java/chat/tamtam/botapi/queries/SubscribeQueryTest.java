@@ -29,7 +29,7 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.SubscriptionRequestBody;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SubscribeQueryTest extends UnitTestBase {
     

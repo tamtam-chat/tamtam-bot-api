@@ -7,8 +7,8 @@ import org.junit.Test;
 import chat.tamtam.botapi.model.BotStartedUpdate;
 import chat.tamtam.botapi.model.FailByDefaultUpdateVisitor;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -26,10 +26,12 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
             }
         };
 
-        bot1.addConsumer(consumer);
-        bot3.startAnotherBot(bot1.getUserId(), payload);
+        long chatId = bot1.getUserId() ^ bot3.getUserId();
 
-        await(updateReceived);
+        try (AutoCloseable ignored = bot1.addConsumer(chatId, consumer)) {
+            bot3.startAnotherBot(bot1.getUserId(), payload);
+            await(updateReceived);
+        }
     }
 
     @Test
@@ -45,9 +47,10 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
                     }
                 });
 
-        bot1.addConsumer(consumer);
-        bot3.startYourself(bot1.getUserId(), payload);
-
-        await(updateReceived, 10);
+        long chatId = bot1.getUserId() ^ bot3.getUserId();
+        try (AutoCloseable ignored = bot1.addConsumer(chatId, consumer)) {
+            bot3.startYourself(bot1.getUserId(), payload);
+            await(updateReceived, 10);
+        }
     }
 }

@@ -7,7 +7,7 @@ import chat.tamtam.botapi.UnitTest;
 import chat.tamtam.botapi.queries.UnitTestBase;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin
