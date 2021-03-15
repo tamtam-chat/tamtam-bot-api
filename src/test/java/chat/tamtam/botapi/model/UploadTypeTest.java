@@ -6,7 +6,7 @@ import org.junit.experimental.categories.Category;
 import chat.tamtam.botapi.UnitTest;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin
