@@ -93,7 +93,7 @@ public class MessageRemovedUpdateTest extends GetUpdatesIntegrationTest {
             String mid2 = result2.getMessage().getBody().getMid();
             // bot3 deletes bot2 message
             new DeleteMessageQuery(client3, mid2).execute();
-            MessageRemovedUpdate update2 = Objects.requireNonNull(bot1receivedUpdates.poll(2, TimeUnit.SECONDS),
+            MessageRemovedUpdate update2 = Objects.requireNonNull(bot1receivedUpdates.poll(30, TimeUnit.SECONDS),
                     "update2");
             assertThat(update2.getMessageId(), is(mid2));
             assertThat(update2.getChatId(), is(chatId));
@@ -103,7 +103,7 @@ public class MessageRemovedUpdateTest extends GetUpdatesIntegrationTest {
             String mid3 = result3.getMessage().getBody().getMid();
             // bot2 deletes bot1 message. bot3 should receive webhook-update
             new DeleteMessageQuery(client2, mid3).execute();
-            MessageRemovedUpdate bot3update2 = Objects.requireNonNull(bot3receivedUpdates.poll(2, TimeUnit.SECONDS),
+            MessageRemovedUpdate bot3update2 = Objects.requireNonNull(bot3receivedUpdates.poll(30, TimeUnit.SECONDS),
                     "bot3update1");
             assertThat(bot3update2.getMessageId(), is(mid3));
             assertThat(bot3update2.getChatId(), is(chatId));
