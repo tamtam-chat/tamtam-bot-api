@@ -1,6 +1,7 @@
 package chat.tamtam.botapi;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -422,6 +423,14 @@ public abstract class TamTamIntegrationTest {
         String uploadUrl = getUploadUrl(UploadType.IMAGE);
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
+        return new PhotoAttachmentRequest(payload);
+    }
+
+    @NotNull
+    protected PhotoAttachmentRequest getPhotoAttachmentRequest(InputStream stream) throws Exception {
+        String uploadUrl = getUploadUrl(UploadType.IMAGE);
+        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, randomText(16) + ".png", stream).execute();
         PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
         return new PhotoAttachmentRequest(payload);
     }
