@@ -77,13 +77,13 @@ public class MessageRemovedUpdateTest extends GetUpdatesIntegrationTest {
             // bot2 deletes its own message
             new DeleteMessageQuery(client2, mid1).execute();
             // bot1 received update
-            MessageRemovedUpdate update1 = Objects.requireNonNull(bot1receivedUpdates.poll(2, TimeUnit.SECONDS),
+            MessageRemovedUpdate update1 = Objects.requireNonNull(bot1receivedUpdates.poll(30, TimeUnit.SECONDS),
                     "update1");
             assertThat(update1.getMessageId(), is(mid1));
             assertThat(update1.getChatId(), is(chatId));
             assertThat(update1.getUserId(), is(bot2.getUserId()));
             // bot3 received webhook-update
-            MessageRemovedUpdate bot3update1 = Objects.requireNonNull(bot3receivedUpdates.poll(2, TimeUnit.SECONDS),
+            MessageRemovedUpdate bot3update1 = Objects.requireNonNull(bot3receivedUpdates.poll(30, TimeUnit.SECONDS),
                     "bot3update1");
             assertThat(bot3update1.getMessageId(), is(mid1));
             assertThat(bot3update1.getChatId(), is(chatId));
