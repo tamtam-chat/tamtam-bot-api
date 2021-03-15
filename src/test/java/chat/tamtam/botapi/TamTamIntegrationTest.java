@@ -375,11 +375,11 @@ public abstract class TamTamIntegrationTest {
                 .get(0);
     }
 
-    protected void await(CountDownLatch latch) throws InterruptedException {
-        await(latch, 3);
+    protected static void await(CountDownLatch latch) throws InterruptedException {
+        await(latch, IS_CI ? 30 : 3);
     }
 
-    protected void await(CountDownLatch latch, int seconds) throws InterruptedException {
+    protected static void await(CountDownLatch latch, int seconds) throws InterruptedException {
         if (!latch.await(seconds, TimeUnit.SECONDS)) {
             fail();
         }
