@@ -22,4 +22,5 @@ jobs:
           TAMTAM_BOTAPI_TOKEN: ${{ secrets.TAMTAM_BOTAPI_TOKEN }}
           TAMTAM_BOTAPI_TOKEN_2: ${{ secrets.TAMTAM_BOTAPI_TOKEN_2 }}
           TAMTAM_BOTAPI_TOKEN_3: ${{ secrets.TAMTAM_BOTAPI_TOKEN_3 }}
+          TAMTAM_BOTAPI_MASTER_ID: ${{ secrets.TAMTAM_BOTAPI_MASTER_ID }}
         run: mvn -B test -P stage --file pom.xml
