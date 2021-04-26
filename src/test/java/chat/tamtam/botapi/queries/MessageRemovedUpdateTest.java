@@ -47,7 +47,7 @@ public class MessageRemovedUpdateTest extends GetUpdatesIntegrationTest {
 
         ArrayBlockingQueue<MessageRemovedUpdate> bot1receivedUpdates = new ArrayBlockingQueue<>(2);
         ArrayBlockingQueue<MessageRemovedUpdate> bot3receivedUpdates = new ArrayBlockingQueue<>(2);
-        Update.Visitor bot3updatesConsumer = new FailByDefaultUpdateVisitor() {
+        Update.Visitor bot3updatesConsumer = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(MessageCreatedUpdate model) {
                 // ignore

@@ -45,7 +45,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends GetUpdatesIntegrationT
     @Test
     public void testInDialog() throws Exception {
         CountDownLatch done = new CountDownLatch(1);
-        FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(BotStartedUpdate model) {
                 // ignore
@@ -76,7 +76,7 @@ public class AnswerOnCallbackQueryIntegrationTest extends GetUpdatesIntegrationT
         bot3.startAnotherBot(bot1.getUserId(), null);
 
         ArrayBlockingQueue<Callback> callbacks = new ArrayBlockingQueue<>(1);
-        FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(MessageCallbackUpdate model) {
                 callbacks.add(model.getCallback());

@@ -45,7 +45,7 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
         CountDownLatch bot2removed = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);
 
-        VisitedUpdatesTracer bot2updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor() {
+        VisitedUpdatesTracer bot2updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(MessageCreatedUpdate model) {
                 Long senderId = model.getMessage().getSender().getUserId();
@@ -76,7 +76,7 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
             }
         }));
 
-        VisitedUpdatesTracer bot3updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor() {
+        VisitedUpdatesTracer bot3updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(BotAddedToChatUpdate model) {
                 LOG.info("Bot {} added to chat", model.getUser().getName());

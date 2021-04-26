@@ -19,6 +19,7 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.exceptions.ClientException;
 import chat.tamtam.botapi.model.BotInfo;
+import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.UpdateList;
 
@@ -83,6 +84,15 @@ public class TestBot {
 
     public void removeConsumer(long chatId, Update.Visitor consumer) {
         consumers.getOrDefault(chatId, Collections.emptyList()).remove(consumer);
+    }
+
+    public void sendToMaster(String message) {
+        NewMessageBody msg = new NewMessageBody(message, null, null);
+        try {
+            api.sendMessage(msg).userId(Long.valueOf(System.getenv("TAMTAM_BOTAPI_MASTER_ID"))).execute();
+        } catch (APIException | ClientException e) {
+            LOG.error("Failed to send message to master", e);
+        }
     }
 
     private void consumeUpdates() {

@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import chat.tamtam.botapi.TestBot;
 import chat.tamtam.botapi.model.BotAddedToChatUpdate;
 import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.BotStartedUpdate;
@@ -52,6 +53,7 @@ import chat.tamtam.botapi.model.UserWithPhoto;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 import static spark.Spark.get;
 
 public class GetUpdatesQueryTest extends UnitTestBase {
@@ -118,7 +120,7 @@ public class GetUpdatesQueryTest extends UnitTestBase {
         assertThat(response.getUpdates(), is(updates));
 
         for (Update update : updates) {
-            update.visit(new FailByDefaultUpdateVisitor() {
+            update.visit(new FailByDefaultUpdateVisitor(mock(TestBot.class)) {
                 @Override
                 public void visit(MessageCreatedUpdate model) {
                     assertThat(model, is(messageCreatedUpdate));

@@ -57,7 +57,7 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
             }
         });
 
-        FailByDefaultUpdateVisitor visitor = new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor visitor = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(BotAddedToChatUpdate model) {
                 bot2added.countDown();

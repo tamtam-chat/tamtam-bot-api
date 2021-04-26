@@ -45,7 +45,7 @@ public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
 
         CountDownLatch bot3added = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);
-        FailByDefaultUpdateVisitor bot1updates = new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor bot1updates = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(UserAddedToChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));

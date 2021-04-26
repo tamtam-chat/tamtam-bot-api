@@ -22,6 +22,7 @@ public class GetUpdatesIntegrationTest extends TamTamIntegrationTest {
         private final Update.Visitor bot3updates;
 
         Bot1ToBot3RedirectingUpdateVisitor(Update.Visitor bot3updates) {
+            super(bot1);
             this.bot3updates = bot3updates;
         }
 

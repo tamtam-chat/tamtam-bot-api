@@ -35,7 +35,7 @@ public class GetUpdatesQueryIntegrationTest extends TamTamIntegrationTest {
         List<Message> editedMessages = new CopyOnWriteArrayList<>();
         CountDownLatch sendFinished = new CountDownLatch(1);
 
-        AutoCloseable bot1consumer = bot1.addConsumer(commonChatId, new FailByDefaultUpdateVisitor() {
+        AutoCloseable bot1consumer = bot1.addConsumer(commonChatId, new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(MessageCreatedUpdate model) {
                 Message message1 = model.getMessage();

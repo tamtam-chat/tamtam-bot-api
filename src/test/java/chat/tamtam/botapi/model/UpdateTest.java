@@ -3,11 +3,13 @@ package chat.tamtam.botapi.model;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import chat.tamtam.botapi.TestBot;
 import chat.tamtam.botapi.UnitTest;
 import chat.tamtam.botapi.queries.UnitTestBase;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author alexandrchuprin
@@ -51,7 +53,7 @@ public class UpdateTest extends UnitTestBase {
     @Test
     public void shouldVisitDefault() {
         Update update = new Update(System.currentTimeMillis());
-        update.visit(new FailByDefaultUpdateVisitor() {
+        update.visit(new FailByDefaultUpdateVisitor(mock(TestBot.class)) {
             @Override
             public void visitDefault(Update model) {
                 assertThat(model, is(update));

@@ -18,7 +18,7 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
     public void shouldGetUpdate() throws Exception {
         String payload = randomText();
         CountDownLatch updateReceived = new CountDownLatch(1);
-        FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor consumer = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(BotStartedUpdate model) {
                 assertThat(model.getUser().getUserId(), is(bot3.getUserId()));
@@ -39,7 +39,7 @@ public class BotStartedUpdateIntegrationTest extends GetUpdatesIntegrationTest {
         String payload = randomText();
         CountDownLatch updateReceived = new CountDownLatch(1);
         Bot1ToBot3RedirectingUpdateVisitor consumer = new Bot1ToBot3RedirectingUpdateVisitor(
-                new FailByDefaultUpdateVisitor() {
+                new FailByDefaultUpdateVisitor(bot1) {
                     @Override
                     public void visit(BotStartedUpdate model) {
                         assertThat(model.getUser().getUserId(), is(bot1.getUserId()));
