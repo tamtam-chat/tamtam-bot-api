@@ -184,6 +184,7 @@
                             <groups>chat.tamtam.botapi.IntegrationTest</groups>
                             <excludedGroups>chat.tamtam.botapi.UnitTest</excludedGroups>
                             <skipAfterFailureCount>1</skipAfterFailureCount>
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                     </plugin>
                 </plugins>
