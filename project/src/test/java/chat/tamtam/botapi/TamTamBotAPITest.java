@@ -7,10 +7,8 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.client.TamTamSerializer;
 import chat.tamtam.botapi.client.TamTamTransportClient;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.same;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**

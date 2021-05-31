@@ -15,9 +15,8 @@ import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
 import static chat.tamtam.botapi.Visitors.noDuplicates;
 import static chat.tamtam.botapi.Visitors.tracing;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -47,7 +46,7 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
         CountDownLatch bot2removed = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);
 
-        VisitedUpdatesTracer bot2updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor() {
+        VisitedUpdatesTracer bot2updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(MessageCreatedUpdate model) {
                 Long senderId = model.getMessage().getSender().getUserId();
@@ -80,7 +79,7 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
             }
         }));
 
-        VisitedUpdatesTracer bot3updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor() {
+        VisitedUpdatesTracer bot3updates = tracing(noDuplicates(new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(BotAddedToChatUpdate model) {
                 LOG.info("Bot {} added to chat", model.getUser().getName());
@@ -99,10 +98,9 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
             }
         }));
 
-        bot1.addConsumer(new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
-        bot2.addConsumer(bot2updates);
 
-        try {
+        try (AutoCloseable ignored = addBot3Consumer(bot3updates);
+             AutoCloseable ignore2 = bot2.addConsumer(commonChatId, bot2updates)) {
             addUser(client, commonChatId, bot2.getUserId());
             await(bot2removed);
 

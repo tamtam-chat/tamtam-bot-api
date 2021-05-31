@@ -10,7 +10,7 @@ import chat.tamtam.botapi.model.BotCommand;
 import chat.tamtam.botapi.model.BotInfo;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin

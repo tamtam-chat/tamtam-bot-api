@@ -28,7 +28,7 @@ import chat.tamtam.botapi.model.ChatPatch;
 import chat.tamtam.botapi.model.PhotoAttachmentRequestPayload;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 public class EditChatQueryTest extends UnitTestBase {

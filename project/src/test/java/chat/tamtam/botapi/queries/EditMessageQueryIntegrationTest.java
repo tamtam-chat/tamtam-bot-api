@@ -36,7 +36,7 @@ import chat.tamtam.botapi.model.UploadType;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -49,7 +49,6 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         String uploadUrl = getUploadUrl(UploadType.IMAGE);
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
@@ -226,7 +225,7 @@ public class EditMessageQueryIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldEditMessageWithShareAttachment() throws Exception {
         ShareAttachmentPayload payload = new ShareAttachmentPayload();
-        payload.url("https://tt.me");
+        payload.url("https://tamtam.chat");
         AttachmentRequest attach = new ShareAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody(randomText(), Collections.singletonList(attach), null);
         List<Message> messages = send(newMessage, getChatsForSend());

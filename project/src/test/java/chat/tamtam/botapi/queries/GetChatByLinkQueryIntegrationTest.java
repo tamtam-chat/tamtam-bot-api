@@ -8,7 +8,7 @@ import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin
