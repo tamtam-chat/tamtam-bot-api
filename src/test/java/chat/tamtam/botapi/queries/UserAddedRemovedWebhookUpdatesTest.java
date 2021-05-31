@@ -14,8 +14,8 @@ import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -60,7 +60,7 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
             }
         });
 
-        bot2.addConsumer(new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor visitor = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(BotAddedToChatUpdate model) {
                 bot2added.countDown();
@@ -70,19 +70,19 @@ public class UserAddedRemovedWebhookUpdatesTest extends GetUpdatesIntegrationTes
             public void visit(BotRemovedFromChatUpdate model) {
                 bot2removed.countDown();
             }
-        });
+        };
 
-        bot1.addConsumer(new Bot1ToBot3RedirectingUpdateVisitor(bot3updates));
+        try (AutoCloseable ignored = bot2.addConsumer(commonChatId, visitor);
+             AutoCloseable ignored2 = addBot3Consumer(bot3updates)) {
+            try {
+                addUser(client, commonChatId, bot2.getUserId());
+                await(bot2added);
+            } finally {
+                removeUser(client, commonChatId, bot2.getUserId());
+                await(bot2removed);
+            }
 
-        try {
-            addUser(client, commonChatId, bot2.getUserId());
-            await(bot2added);
-        } finally {
-            removeUser(client, commonChatId, bot2.getUserId());
-            await(bot2removed);
+            await(bot3expectedUpdates);
         }
-
-
-        await(bot3expectedUpdates);
     }
 }

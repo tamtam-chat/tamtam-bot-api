@@ -1,6 +1,7 @@
 package chat.tamtam.botapi;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,11 +21,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.client.impl.JacksonSerializer;
@@ -84,11 +88,11 @@ import chat.tamtam.botapi.queries.SendMessageQuery;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /**
@@ -99,47 +103,66 @@ public abstract class TamTamIntegrationTest {
     protected static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     protected static final AtomicLong ID_COUNTER = new AtomicLong();
     private static final AtomicBoolean ONCE = new AtomicBoolean();
-    private static final boolean IS_TRAVIS = Boolean.parseBoolean(System.getenv("TRAVIS"));
+    private static final boolean IS_CI = Boolean.parseBoolean(System.getenv("CI"));
     private static final String TOKEN_1 = getToken("TAMTAM_BOTAPI_TOKEN");
     private static final String TOKEN_2 = getToken("TAMTAM_BOTAPI_TOKEN_2");
     private static final String TOKEN_3 = getToken("TAMTAM_BOTAPI_TOKEN_3");
     private static final ConcurrentHashMap<String, List<Chat>> CHATS_BY_CLIENT = new ConcurrentHashMap<>();
 
-    private final OkHttpTransportClient transportClient = new OkHttpTransportClient();
-    protected final JacksonSerializer serializer = new JacksonSerializer();
+    private static final OkHttpTransportClient transportClient = new OkHttpTransportClient();
+    protected static final JacksonSerializer serializer;
+    public static final long LAST_ACTIVITY_IGNORED = -1L;
 
-    protected TamTamClient client = new TamTamClient(TOKEN_1, transportClient, serializer);
-    protected TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
-    protected TamTamClient client3 = new TamTamClient(TOKEN_3, transportClient, serializer);
+    static {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(User.class, new UserTestDeserializer());
+        mapper.registerModule(module);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS);
+        serializer = new JacksonSerializer(mapper);
+    }
+
+    protected static TamTamClient client = new TamTamClient(TOKEN_1, transportClient, serializer);
+    protected static TamTamClient client2 = new TamTamClient(TOKEN_2, transportClient, serializer);
+    protected static TamTamClient client3 = new TamTamClient(TOKEN_3, transportClient, serializer);
     protected TamTamBotAPI botAPI = new TamTamBotAPI(client);
     protected TamTamUploadAPI uploadAPI = new TamTamUploadAPI(client);
 
-    protected TestBot bot1;
-    protected TestBot bot2;
-    protected TestBot3 bot3;
+    protected static TestBot bot1;
+    protected static TestBot bot2;
+    protected static TestBot3 bot3;
+
+    static {
+        try {
+            bot1 = new TestBot(client, IS_CI);
+            bot2 = new TestBot(client2, IS_CI);
+            bot3 = new TestBot3(client3, client, IS_CI);
+        } catch (APIException | ClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @BeforeClass
     public static void beforeClass() {
         info("Endpoint: {}", System.getenv("TAMTAM_BOTAPI_ENDPOINT"));
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        bot1 = new TestBot(client, IS_TRAVIS);
-        bot2 = new TestBot(client2, IS_TRAVIS);
-        bot3 = new TestBot3(client3, client, IS_TRAVIS);
-        if (!ONCE.getAndSet(true)) {
-            info("Bot 1: {}", bot1);
-            info("Bot 2: {}", bot2);
-            info("Bot 3: {}", bot3);
+        if (!ONCE.compareAndSet(false, true)) {
+            return;
         }
+
+        bot1.start();
+        bot2.start();
+
+        info("Bot 1: {}", bot1);
+        info("Bot 2: {}", bot2);
+        info("Bot 3: {}", bot3);
     }
 
     protected BotInfo getBot1() throws APIException, ClientException {
         return botAPI.getMyInfo().execute();
     }
 
-    protected List<Chat> getChats() throws APIException, ClientException {
+    protected List<Chat> getChats() {
         return getChats(client);
     }
 
@@ -184,10 +207,6 @@ public abstract class TamTamIntegrationTest {
                 .collect(Collectors.toList());
     }
 
-    protected static <T> T random(List<T> list) {
-        return list.get(ThreadLocalRandom.current().nextInt(list.size()));
-    }
-
     protected List<Message> send(NewMessageBody newMessage, List<Chat> toChats) throws Exception {
         List<Message> sent = new ArrayList<>();
         for (Chat c : toChats) {
@@ -216,7 +235,8 @@ public abstract class TamTamIntegrationTest {
                 try {
                     Thread.sleep(TimeUnit.SECONDS.toMillis(5));
                 } catch (InterruptedException e1) {
-                    e1.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    throw e;
                 }
             }
         } while (true);
@@ -371,18 +391,18 @@ public abstract class TamTamIntegrationTest {
                 .get(0);
     }
 
-    protected void await(CountDownLatch latch) throws InterruptedException {
-        await(latch, 10);
+    protected static void await(CountDownLatch latch) throws InterruptedException {
+        await(latch, IS_CI ? 30 : 3);
     }
 
-    protected void await(CountDownLatch latch, int seconds) throws InterruptedException {
+    protected static void await(CountDownLatch latch, int seconds) throws InterruptedException {
         if (!latch.await(seconds, TimeUnit.SECONDS)) {
             fail();
         }
     }
 
     protected static void info(String text, Object... objects) {
-        if (!IS_TRAVIS) {
+        if (!IS_CI) {
             LOG.info(text, objects);
         }
     }
@@ -419,6 +439,14 @@ public abstract class TamTamIntegrationTest {
         String uploadUrl = getUploadUrl(UploadType.IMAGE);
         File file = new File(getClass().getClassLoader().getResource("test.png").toURI());
         PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, file).execute();
+        PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
+        return new PhotoAttachmentRequest(payload);
+    }
+
+    @NotNull
+    protected PhotoAttachmentRequest getPhotoAttachmentRequest(InputStream stream) throws Exception {
+        String uploadUrl = getUploadUrl(UploadType.IMAGE);
+        PhotoTokens photoTokens = uploadAPI.uploadImage(uploadUrl, randomText(16) + ".png", stream).execute();
         PhotoAttachmentRequestPayload payload = new PhotoAttachmentRequestPayload().photos(photoTokens.getPhotos());
         return new PhotoAttachmentRequest(payload);
     }

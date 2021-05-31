@@ -23,7 +23,7 @@ public class MessageWithShareAttachIntegrationTest extends TamTamIntegrationTest
     @Test
     public void shouldSendMessageWithShareAttachment() throws Exception {
         ShareAttachmentPayload payload = new ShareAttachmentPayload();
-        payload.url("https://tt.me");
+        payload.url("https://tamtam.chat/");
         AttachmentRequest attach = new ShareAttachmentRequest(payload);
         NewMessageBody newMessage = new NewMessageBody(randomText(), Collections.singletonList(attach), null);
         List<Message> messages = send(newMessage, getChatsForSend());

@@ -25,7 +25,7 @@ import org.junit.Test;
 import chat.tamtam.botapi.model.BotInfo;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static spark.Spark.get;
 
 public class GetMyInfoQueryTest extends UnitTestBase {

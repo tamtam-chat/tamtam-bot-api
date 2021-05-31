@@ -86,7 +86,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -190,6 +190,7 @@
                             <groups>chat.tamtam.botapi.IntegrationTest</groups>
                             <excludedGroups>chat.tamtam.botapi.UnitTest</excludedGroups>
                             <skipAfterFailureCount>1</skipAfterFailureCount>
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                     </plugin>
                 </plugins>

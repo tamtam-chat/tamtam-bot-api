@@ -5,14 +5,17 @@ import java.util.concurrent.CountDownLatch;
 import org.junit.Test;
 
 import chat.tamtam.botapi.VisitedUpdatesTracer;
+import chat.tamtam.botapi.model.BotAddedToChatUpdate;
+import chat.tamtam.botapi.model.BotRemovedFromChatUpdate;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.NoopUpdateVisitor;
+import chat.tamtam.botapi.model.Update;
 import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -56,14 +59,31 @@ public class UserAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
             }
         });
 
-        bot2.addConsumer(bot2updates);
+        CountDownLatch bot3updates = new CountDownLatch(2);
+        Update.Visitor bot3updatesConsumer = new NoopUpdateVisitor() {
+            @Override
+            public void visit(BotAddedToChatUpdate model) {
+                bot3updates.countDown();
+            }
 
-        try {
-            addUser(client, commonChatId, bot3.getUserId());
-            await(bot3added);
-        } finally {
-            removeUser(client, commonChatId, bot3.getUserId());
-            await(bot3removed);
+            @Override
+            public void visit(BotRemovedFromChatUpdate model) {
+                bot3updates.countDown();
+            }
+        };
+
+        try (AutoCloseable ignored = bot2.addConsumer(commonChatId, bot2updates);
+             AutoCloseable ignored2 = addBot3Consumer(bot3updatesConsumer)) {
+            try {
+                addUser(client, commonChatId, bot3.getUserId());
+                await(bot3added);
+            } finally {
+                removeUser(client, commonChatId, bot3.getUserId());
+                await(bot3removed);
+            }
+
+            await(bot3updates);
         }
     }
+
 }

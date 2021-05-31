@@ -2,81 +2,90 @@ package chat.tamtam.botapi.model;
 
 import org.junit.Assert;
 
+import chat.tamtam.botapi.TestBot;
+
 /**
  * @author alexandrchuprin
  */
 public class FailByDefaultUpdateVisitor implements Update.Visitor {
+    private final TestBot testBot;
+
+    public FailByDefaultUpdateVisitor(TestBot testBot) {
+        this.testBot = testBot;
+    }
+
     @Override
     public void visit(MessageCreatedUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(MessageCallbackUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(MessageEditedUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(MessageRemovedUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(BotAddedToChatUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(BotRemovedFromChatUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(UserAddedToChatUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(UserRemovedFromChatUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(BotStartedUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(ChatTitleChangedUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(MessageConstructionRequest model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(MessageConstructedUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visit(MessageChatCreatedUpdate model) {
-        fail();
+        fail(model);
     }
 
     @Override
     public void visitDefault(Update model) {
-        fail();
+        fail(model);
     }
 
-    private static void fail() {
+    private void fail(Update update) {
+        testBot.sendToMaster("Unexpected update in test " + update);
         Assert.fail("Should not happens");
     }
 }

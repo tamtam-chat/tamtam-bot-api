@@ -36,7 +36,6 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
     private String plainText;
     private List<MarkupElement> expectedMarkup;
 
-    @Override
     @Before
     public void setUp() throws Exception {
         chat = getByTitle(getChats(), "SendMarkupIntegrationTest");

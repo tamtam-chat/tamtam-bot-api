@@ -20,13 +20,13 @@
 
 package chat.tamtam.botapi.queries;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import chat.tamtam.botapi.exceptions.RequiredParameterMissingException;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import spark.Spark;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class DeleteMessageQueryTest extends UnitTestBase {
@@ -43,7 +43,7 @@ public class DeleteMessageQueryTest extends UnitTestBase {
         String messageId = "mid.123";
         DeleteMessageQuery query = api.deleteMessage(messageId);
         SimpleQueryResult result = query.execute();
-        Assert.assertThat(result.isSuccess(), is(true));
+        assertThat(result.isSuccess(), is(true));
     }
 
     @Test(expected = RequiredParameterMissingException.class)

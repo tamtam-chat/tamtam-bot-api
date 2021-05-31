@@ -27,7 +27,7 @@ import chat.tamtam.botapi.model.Chat;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GetChatByLinkQueryTest extends UnitTestBase {
 

@@ -10,9 +10,9 @@ import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserAddedToChatUpdate;
 import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -46,7 +46,7 @@ public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
 
         CountDownLatch bot3added = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);
-        FailByDefaultUpdateVisitor bot1updates = new FailByDefaultUpdateVisitor() {
+        FailByDefaultUpdateVisitor bot1updates = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(UserAddedToChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
@@ -66,14 +66,14 @@ public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
             }
         };
 
-        bot1.addConsumer(bot1updates);
-
-        try {
-            bot3.joinChat(commonChat.getLink());
-            await(bot3added);
-        } finally {
-            bot3.leaveChat(commonChatId);
-            await(bot3removed);
+        try (AutoCloseable ignored = bot1.addConsumer(commonChatId, bot1updates)) {
+            try {
+                bot3.joinChat(commonChat.getLink());
+                await(bot3added);
+            } finally {
+                bot3.leaveChat(commonChatId);
+                await(bot3removed);
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -98,15 +98,14 @@ public class GetMessagesQueryIntegrationTest extends TamTamIntegrationTest {
         Chat dialog = getBy(chats, c -> c.getType() == ChatType.DIALOG && c.getChatId() != (bot1.getUserId() ^ bot3.getUserId()));
 
         List<String> posted = new ArrayList<>();
-        long start = now() - 1000;
+        Thread.sleep(1000);
+        long start = now();
         Long dialogChatId = dialog.getChatId();
         for (int i = 0; i < 30; i++) {
             String text = randomText();
             new SendMessageQuery(client, new NewMessageBody(text, null, null)).chatId(dialogChatId).execute();
             posted.add(text);
         }
-
-        Thread.sleep(5000);
 
         long from = now();
         List<String> fetched = new ArrayList<>();

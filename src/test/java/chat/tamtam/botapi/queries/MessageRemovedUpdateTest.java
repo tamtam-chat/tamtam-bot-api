@@ -14,8 +14,8 @@ import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.Update;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -47,7 +47,7 @@ public class MessageRemovedUpdateTest extends GetUpdatesIntegrationTest {
 
         ArrayBlockingQueue<MessageRemovedUpdate> bot1receivedUpdates = new ArrayBlockingQueue<>(2);
         ArrayBlockingQueue<MessageRemovedUpdate> bot3receivedUpdates = new ArrayBlockingQueue<>(2);
-        Update.Visitor bot3updatesConsumer = new FailByDefaultUpdateVisitor() {
+        Update.Visitor bot3updatesConsumer = new FailByDefaultUpdateVisitor(bot1) {
             @Override
             public void visit(MessageCreatedUpdate model) {
                 // ignore
@@ -71,39 +71,43 @@ public class MessageRemovedUpdateTest extends GetUpdatesIntegrationTest {
             }
         };
 
-        bot1.addConsumer(bot1updates);
+        try (AutoCloseable ignored = bot1.addConsumer(chatId, bot1updates)) {
+            SendMessageResult result = doSend(client2, new NewMessageBody(randomText(), null, null), chatId);
+            String mid1 = result.getMessage().getBody().getMid();
+            // bot2 deletes its own message
+            new DeleteMessageQuery(client2, mid1).execute();
+            // bot1 received update
+            MessageRemovedUpdate update1 = Objects.requireNonNull(bot1receivedUpdates.poll(30, TimeUnit.SECONDS),
+                    "update1");
+            assertThat(update1.getMessageId(), is(mid1));
+            assertThat(update1.getChatId(), is(chatId));
+            assertThat(update1.getUserId(), is(bot2.getUserId()));
+            // bot3 received webhook-update
+            MessageRemovedUpdate bot3update1 = Objects.requireNonNull(bot3receivedUpdates.poll(30, TimeUnit.SECONDS),
+                    "bot3update1");
+            assertThat(bot3update1.getMessageId(), is(mid1));
+            assertThat(bot3update1.getChatId(), is(chatId));
+            assertThat(bot3update1.getUserId(), is(bot2.getUserId()));
 
-        SendMessageResult result = doSend(client2, new NewMessageBody(randomText(), null, null), chatId);
-        String mid1 = result.getMessage().getBody().getMid();
-        // bot2 deletes its own message
-        new DeleteMessageQuery(client2, mid1).execute();
-        // bot1 received update
-        MessageRemovedUpdate update1 = Objects.requireNonNull(bot1receivedUpdates.poll(2, TimeUnit.SECONDS), "update1");
-        assertThat(update1.getMessageId(), is(mid1));
-        assertThat(update1.getChatId(), is(chatId));
-        assertThat(update1.getUserId(), is(bot2.getUserId()));
-        // bot3 received webhook-update
-        MessageRemovedUpdate bot3update1 = Objects.requireNonNull(bot3receivedUpdates.poll(2, TimeUnit.SECONDS), "bot3update1");
-        assertThat(bot3update1.getMessageId(), is(mid1));
-        assertThat(bot3update1.getChatId(), is(chatId));
-        assertThat(bot3update1.getUserId(), is(bot2.getUserId()));
+            SendMessageResult result2 = doSend(client2, new NewMessageBody(randomText(), null, null), chatId);
+            String mid2 = result2.getMessage().getBody().getMid();
+            // bot3 deletes bot2 message
+            new DeleteMessageQuery(client3, mid2).execute();
+            MessageRemovedUpdate update2 = Objects.requireNonNull(bot1receivedUpdates.poll(30, TimeUnit.SECONDS),
+                    "update2");
+            assertThat(update2.getMessageId(), is(mid2));
+            assertThat(update2.getChatId(), is(chatId));
+            assertThat(update2.getUserId(), is(bot3.getUserId()));
 
-        SendMessageResult result2 = doSend(client2, new NewMessageBody(randomText(), null, null), chatId);
-        String mid2 = result2.getMessage().getBody().getMid();
-        // bot3 deletes bot2 message
-        new DeleteMessageQuery(client3, mid2).execute();
-        MessageRemovedUpdate update2 = Objects.requireNonNull(bot1receivedUpdates.poll(2, TimeUnit.SECONDS), "update2");
-        assertThat(update2.getMessageId(), is(mid2));
-        assertThat(update2.getChatId(), is(chatId));
-        assertThat(update2.getUserId(), is(bot3.getUserId()));
-
-        SendMessageResult result3 = doSend(client, new NewMessageBody(randomText(), null, null), chatId);
-        String mid3 = result3.getMessage().getBody().getMid();
-        // bot2 deletes bot1 message. bot3 should receive webhook-update
-        new DeleteMessageQuery(client2, mid3).execute();
-        MessageRemovedUpdate bot3update2 = Objects.requireNonNull(bot3receivedUpdates.poll(2, TimeUnit.SECONDS), "bot3update1");
-        assertThat(bot3update2.getMessageId(), is(mid3));
-        assertThat(bot3update2.getChatId(), is(chatId));
-        assertThat(bot3update2.getUserId(), is(bot2.getUserId()));
+            SendMessageResult result3 = doSend(client, new NewMessageBody(randomText(), null, null), chatId);
+            String mid3 = result3.getMessage().getBody().getMid();
+            // bot2 deletes bot1 message. bot3 should receive webhook-update
+            new DeleteMessageQuery(client2, mid3).execute();
+            MessageRemovedUpdate bot3update2 = Objects.requireNonNull(bot3receivedUpdates.poll(30, TimeUnit.SECONDS),
+                    "bot3update1");
+            assertThat(bot3update2.getMessageId(), is(mid3));
+            assertThat(bot3update2.getChatId(), is(chatId));
+            assertThat(bot3update2.getUserId(), is(bot2.getUserId()));
+        }
     }
 }

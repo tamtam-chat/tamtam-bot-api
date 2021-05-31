@@ -10,10 +10,9 @@ import chat.tamtam.botapi.model.SimpleQueryResult;
 import chat.tamtam.botapi.model.UserIdsList;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
-import static org.junit.Assert.*;
 
 /**
  * @author alexandrchuprin
