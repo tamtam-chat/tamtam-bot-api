@@ -117,7 +117,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
 
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             BotInfo updatedMe = getBot1();
-            assertThat(botInfo, is(updatedMe));
+            assertUser(botInfo, updatedMe);
             assertThat(updatedMe.getName(), is(newName));
             assertThat(updatedMe.getUsername(), is(newUsername));
             assertThat(updatedMe.getDescription(), is(newDescription));

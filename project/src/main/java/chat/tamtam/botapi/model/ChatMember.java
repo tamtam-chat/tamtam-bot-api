@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -48,8 +49,8 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
     private final Set<@Valid ChatAdminPermission> permissions;
 
     @JsonCreator
-    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("is_admin") Boolean isAdmin, @JsonProperty("join_time") Long joinTime, @Nullable @JsonProperty("permissions") Set<ChatAdminPermission> permissions, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot) { 
-        super(userId, name, username, isBot);
+    public ChatMember(@JsonProperty("last_access_time") Long lastAccessTime, @JsonProperty("is_owner") Boolean isOwner, @JsonProperty("is_admin") Boolean isAdmin, @JsonProperty("join_time") Long joinTime, @Nullable @JsonProperty("permissions") Set<ChatAdminPermission> permissions, @JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot, @JsonProperty("last_activity_time") Long lastActivityTime) { 
+        super(userId, name, username, isBot, lastActivityTime);
         this.lastAccessTime = lastAccessTime;
         this.isOwner = isOwner;
         this.isAdmin = isAdmin;
@@ -58,6 +59,7 @@ public class ChatMember extends UserWithPhoto implements TamTamSerializable {
     }
 
     /**
+    * User last activity time in chat. Can be outdated for super chats and channels (equals to &#x60;join_time&#x60;)
     * @return lastAccessTime
     **/
     @JsonProperty("last_access_time")

@@ -24,9 +24,10 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.Chat;import chat.tamtam.botapi.model.ChatPatch;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class EditChatQuery extends TamTamQuery<Chat> { 
+public class EditChatQuery extends TamTamQuery<Chat> {
+    public static final String PATH_TEMPLATE = "/chats/{chatId}";
 
     public EditChatQuery(TamTamClient client, ChatPatch chatPatch, Long chatId) {
-        super(client, substitute("/chats/{chatId}", chatId), chatPatch, Chat.class, Method.PATCH);
+        super(client, substitute(PATH_TEMPLATE, chatId), chatPatch, Chat.class, Method.PATCH);
     }
 }

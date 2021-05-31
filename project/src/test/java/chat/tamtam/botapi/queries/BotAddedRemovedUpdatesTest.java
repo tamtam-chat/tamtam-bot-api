@@ -16,6 +16,7 @@ import chat.tamtam.botapi.model.UserRemovedFromChatUpdate;
 import static chat.tamtam.botapi.Visitors.noDuplicates;
 import static chat.tamtam.botapi.Visitors.tracing;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -24,23 +25,24 @@ import static org.junit.Assert.assertThat;
 public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
     @Test
     public void shouldGetUpdatesInChat() throws Exception {
-        test("test chat #8");
+        test("test chat #8", false);
     }
 
     @Test
     public void shouldGetUpdatesInPrivateChatWithLink() throws Exception {
-        test("BotAddedRemovedUpdatesTest#shouldGetUpdatesInPrivateChatWithLink");
+        test("BotAddedRemovedUpdatesTest#shouldGetUpdatesInPrivateChatWithLink", false);
     }
 
     @Test
     public void shouldGetUpdatesInChannel() throws Exception {
-        test("BotAddedRemovedUpdatesTest#shouldGetUpdatesInChannel");
+        test("BotAddedRemovedUpdatesTest#shouldGetUpdatesInChannel", true);
     }
 
-    private void test(String chatTitle) throws Exception {
+    private void test(String chatTitle, boolean isChannel) throws Exception {
         Chat commonChat = getByTitle(getChats(), chatTitle);
         Long commonChatId = commonChat.getChatId();
-        User bot1user = new User(bot1.getUserId(), bot1.getName(), bot1.getUsername(), true);
+        User bot1user = new User(bot1.getUserId(), bot1.getName(), bot1.getUsername(), true,
+                System.currentTimeMillis());
 
         CountDownLatch bot2removed = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);
@@ -60,13 +62,15 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
             public void visit(BotAddedToChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
                 assertThat(model.getUser().getUserId(), is(bot1.getUserId()));
+                assertThat(model.isChannel(), is(isChannel));
                 removeUser(client, commonChatId, bot2.getUserId());
             }
 
             @Override
             public void visit(BotRemovedFromChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
-                assertThat(model.getUser(), is(bot1user));
+                assertUser(model.getUser(), bot1user);
+                assertThat(model.isChannel(), is(isChannel));
                 bot2removed.countDown();
             }
 
@@ -82,13 +86,15 @@ public class BotAddedRemovedUpdatesTest extends GetUpdatesIntegrationTest {
                 LOG.info("Bot {} added to chat", model.getUser().getName());
                 assertThat(model.getChatId(), is(commonChatId));
                 assertThat(model.getUser().getUserId(), is(bot1.getUserId()));
+                assertThat(model.isChannel(), is(isChannel));
                 removeUser(client, commonChatId, bot3.getUserId());
             }
 
             @Override
             public void visit(BotRemovedFromChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
-                assertThat(model.getUser(), is(bot1user));
+                assertUser(model.getUser(), bot1user);
+                assertThat(model.isChannel(), is(isChannel));
                 bot3removed.countDown();
             }
         }));

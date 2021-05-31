@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <schema.version>0.3.0-SNAPSHOT</schema.version>
+        <schema.version>0.5.1-SNAPSHOT</schema.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -37,7 +37,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>3.3.3</version>
+                <version>4.3.0</version>
                 <configuration>
                     <inputSpec>schema.yaml</inputSpec>
                     <generatorName>tamtam-java</generatorName>
@@ -64,7 +64,7 @@
                     <dependency>
                         <groupId>chat.tamtam</groupId>
                         <artifactId>tamtam-bot-api-generator</artifactId>
-                        <version>0.0.13-SNAPSHOT</version>
+                        <version>0.0.14-SNAPSHOT</version>
                     </dependency>
                     <dependency>
                         <groupId>chat.tamtam</groupId>

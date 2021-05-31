@@ -24,14 +24,15 @@ import chat.tamtam.botapi.client.TamTamClient;
 import java.util.Set;import chat.tamtam.botapi.model.UpdateList;import java.util.Collection;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class GetUpdatesQuery extends TamTamQuery<UpdateList> { 
+public class GetUpdatesQuery extends TamTamQuery<UpdateList> {
+    public static final String PATH_TEMPLATE = "/updates";
     public final QueryParam<Integer> limit = new QueryParam<>("limit", this);
     public final QueryParam<Integer> timeout = new QueryParam<>("timeout", this);
     public final QueryParam<Long> marker = new QueryParam<>("marker", this);
     public final QueryParam<Collection<String>> types = new CollectionQueryParam<>("types", this);
 
     public GetUpdatesQuery(TamTamClient client) {
-        super(client, "/updates", null, UpdateList.class, Method.GET);
+        super(client, PATH_TEMPLATE, null, UpdateList.class, Method.GET);
     }
 
     public GetUpdatesQuery limit(Integer value) {

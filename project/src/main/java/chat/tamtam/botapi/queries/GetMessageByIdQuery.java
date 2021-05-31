@@ -24,9 +24,10 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.Message;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class GetMessageByIdQuery extends TamTamQuery<Message> { 
+public class GetMessageByIdQuery extends TamTamQuery<Message> {
+    public static final String PATH_TEMPLATE = "/messages/{messageId}";
 
     public GetMessageByIdQuery(TamTamClient client, String messageId) {
-        super(client, substitute("/messages/{messageId}", messageId), null, Message.class, Method.GET);
+        super(client, substitute(PATH_TEMPLATE, messageId), null, Message.class, Method.GET);
     }
 }

@@ -24,9 +24,10 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class UnpinMessageQuery extends TamTamQuery<SimpleQueryResult> { 
+public class UnpinMessageQuery extends TamTamQuery<SimpleQueryResult> {
+    public static final String PATH_TEMPLATE = "/chats/{chatId}/pin";
 
     public UnpinMessageQuery(TamTamClient client, Long chatId) {
-        super(client, substitute("/chats/{chatId}/pin", chatId), null, SimpleQueryResult.class, Method.DELETE);
+        super(client, substitute(PATH_TEMPLATE, chatId), null, SimpleQueryResult.class, Method.DELETE);
     }
 }

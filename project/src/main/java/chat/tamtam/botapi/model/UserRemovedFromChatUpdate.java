@@ -37,12 +37,15 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
     @NotNull
     private final @Valid User user;
     private @Valid Long adminId;
+    @NotNull
+    private final @Valid Boolean isChannel;
 
     @JsonCreator
-    public UserRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
+    public UserRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("is_channel") Boolean isChannel, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
         this.user = user;
+        this.isChannel = isChannel;
     }
 
     @Override
@@ -91,6 +94,15 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
         this.adminId = adminId;
     }
 
+    /**
+    * Indicates whether user has been removed from channel or not
+    * @return isChannel
+    **/
+    @JsonProperty("is_channel")
+    public Boolean isChannel() {
+        return isChannel;
+    }
+
     @JsonProperty("update_type")
     @Override
     public String getType() {
@@ -110,6 +122,7 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
         return Objects.equals(this.chatId, other.chatId) &&
             Objects.equals(this.user, other.user) &&
             Objects.equals(this.adminId, other.adminId) &&
+            Objects.equals(this.isChannel, other.isChannel) &&
             super.equals(o);
     }
 
@@ -119,6 +132,7 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (adminId != null ? adminId.hashCode() : 0);
+        result = 31 * result + (isChannel != null ? isChannel.hashCode() : 0);
         return result;
     }
 
@@ -128,6 +142,7 @@ public class UserRemovedFromChatUpdate extends Update implements TamTamSerializa
             + " chatId='" + chatId + '\''
             + " user='" + user + '\''
             + " adminId='" + adminId + '\''
+            + " isChannel='" + isChannel + '\''
             + '}';
     }
 }

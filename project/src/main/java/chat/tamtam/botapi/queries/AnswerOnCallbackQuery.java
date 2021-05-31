@@ -24,11 +24,12 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.CallbackAnswer;import chat.tamtam.botapi.model.SimpleQueryResult;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class AnswerOnCallbackQuery extends TamTamQuery<SimpleQueryResult> { 
+public class AnswerOnCallbackQuery extends TamTamQuery<SimpleQueryResult> {
+    public static final String PATH_TEMPLATE = "/answers";
     public final QueryParam<String> callbackId = new QueryParam<String>("callback_id", this).required();
 
     public AnswerOnCallbackQuery(TamTamClient client, CallbackAnswer callbackAnswer, String callbackId) {
-        super(client, "/answers", callbackAnswer, SimpleQueryResult.class, Method.POST);
+        super(client, PATH_TEMPLATE, callbackAnswer, SimpleQueryResult.class, Method.POST);
         this.callbackId.setValue(callbackId);
     }
 

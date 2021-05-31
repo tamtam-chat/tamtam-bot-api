@@ -36,12 +36,15 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
     private final @Valid Long chatId;
     @NotNull
     private final @Valid User user;
+    @NotNull
+    private final @Valid Boolean isChannel;
 
     @JsonCreator
-    public BotRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
+    public BotRemovedFromChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("is_channel") Boolean isChannel, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
         this.user = user;
+        this.isChannel = isChannel;
     }
 
     @Override
@@ -72,6 +75,15 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
         return user;
     }
 
+    /**
+    * Indicates whether bot has been removed from channel or not
+    * @return isChannel
+    **/
+    @JsonProperty("is_channel")
+    public Boolean isChannel() {
+        return isChannel;
+    }
+
     @JsonProperty("update_type")
     @Override
     public String getType() {
@@ -90,6 +102,7 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
         BotRemovedFromChatUpdate other = (BotRemovedFromChatUpdate) o;
         return Objects.equals(this.chatId, other.chatId) &&
             Objects.equals(this.user, other.user) &&
+            Objects.equals(this.isChannel, other.isChannel) &&
             super.equals(o);
     }
 
@@ -98,6 +111,7 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
         int result = super.hashCode();
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (isChannel != null ? isChannel.hashCode() : 0);
         return result;
     }
 
@@ -106,6 +120,7 @@ public class BotRemovedFromChatUpdate extends Update implements TamTamSerializab
         return "BotRemovedFromChatUpdate{"+ super.toString()
             + " chatId='" + chatId + '\''
             + " user='" + user + '\''
+            + " isChannel='" + isChannel + '\''
             + '}';
     }
 }

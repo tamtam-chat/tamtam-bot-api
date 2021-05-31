@@ -22,7 +22,7 @@ package chat.tamtam.botapi;
 
 public class Version {
     private static final int MAJOR = 0;
-    private static final int MINOR = 3;
+    private static final int MINOR = 5;
     private static final int BUILD = 0;
     private static final String VERSION = String.format("%d.%d.%d", MAJOR, MINOR, BUILD);
 

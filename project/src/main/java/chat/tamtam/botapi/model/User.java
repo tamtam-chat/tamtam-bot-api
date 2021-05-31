@@ -41,13 +41,16 @@ public class User implements TamTamSerializable {
     private final @Valid String username;
     @NotNull
     private final @Valid Boolean isBot;
+    @NotNull
+    private final @Valid Long lastActivityTime;
 
     @JsonCreator
-    public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot) { 
+    public User(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot, @JsonProperty("last_activity_time") Long lastActivityTime) { 
         this.userId = userId;
         this.name = name;
         this.username = username;
         this.isBot = isBot;
+        this.lastActivityTime = lastActivityTime;
     }
 
     /**
@@ -87,6 +90,15 @@ public class User implements TamTamSerializable {
         return isBot;
     }
 
+    /**
+    * Time of last user activity in TamTam (Unix timestamp in milliseconds). Can be outdated if user disabled its \&quot;online\&quot; status in settings
+    * @return lastActivityTime
+    **/
+    @JsonProperty("last_activity_time")
+    public Long getLastActivityTime() {
+        return lastActivityTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -100,7 +112,8 @@ public class User implements TamTamSerializable {
         return Objects.equals(this.userId, other.userId) &&
             Objects.equals(this.name, other.name) &&
             Objects.equals(this.username, other.username) &&
-            Objects.equals(this.isBot, other.isBot);
+            Objects.equals(this.isBot, other.isBot) &&
+            Objects.equals(this.lastActivityTime, other.lastActivityTime);
     }
 
     @Override
@@ -110,6 +123,7 @@ public class User implements TamTamSerializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (isBot != null ? isBot.hashCode() : 0);
+        result = 31 * result + (lastActivityTime != null ? lastActivityTime.hashCode() : 0);
         return result;
     }
 
@@ -120,6 +134,7 @@ public class User implements TamTamSerializable {
             + " name='" + name + '\''
             + " username='" + username + '\''
             + " isBot='" + isBot + '\''
+            + " lastActivityTime='" + lastActivityTime + '\''
             + '}';
     }
 }

@@ -51,7 +51,6 @@ import chat.tamtam.botapi.model.UserWithPhoto;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static spark.Spark.get;
 
 public class GetUpdatesQueryTest extends UnitTestBase {
@@ -60,8 +59,9 @@ public class GetUpdatesQueryTest extends UnitTestBase {
     public void getUpdatesTest() throws Exception {
         Chat randomChat = random(chats.values());
         long now = System.currentTimeMillis();
-        User user = new User(ID_COUNTER.incrementAndGet(), "user name", "username", false);
-        MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(randomChat.getChatId(), null), now);
+        User user = new User(ID_COUNTER.incrementAndGet(), "user name", "username", false, System.currentTimeMillis());
+        MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(randomChat.getChatId(), null),
+                now);
         MessageEditedUpdate messageEditedUpdate = new MessageEditedUpdate(message(randomChat.getChatId(), null), now);
         MessageRemovedUpdate messageRemovedUpdate = new MessageRemovedUpdate("mid." + ID_COUNTER.incrementAndGet(),
                 ID_COUNTER.incrementAndGet(), ID_COUNTER.incrementAndGet(), now);
@@ -69,20 +69,21 @@ public class GetUpdatesQueryTest extends UnitTestBase {
         MessageCallbackUpdate messageCallbackUpdate = new MessageCallbackUpdate(
                 callback, message(randomChat.getChatId(), null), now).userLocale("ru-RU");
         UserAddedToChatUpdate userAddedToChatUpdate = new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
-                user, System.currentTimeMillis()).inviterId(ID_COUNTER.incrementAndGet());
+                user, false, System.currentTimeMillis()).inviterId(ID_COUNTER.incrementAndGet());
         UserRemovedFromChatUpdate userRemovedFromChatUpdate = new UserRemovedFromChatUpdate(
-                ID_COUNTER.incrementAndGet(), user, System.currentTimeMillis()).adminId(ID_COUNTER.incrementAndGet());
+                ID_COUNTER.incrementAndGet(), user, false, System.currentTimeMillis()).adminId(ID_COUNTER.incrementAndGet());
         BotAddedToChatUpdate botAddedToChatUpdate = new BotAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
-                user,
+                user, true,
                 System.currentTimeMillis());
         BotRemovedFromChatUpdate botRemovedFromChatUpdate = new BotRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(),
-                user, System.currentTimeMillis());
+                user, false, System.currentTimeMillis());
         BotStartedUpdate botStartedUpdate = new BotStartedUpdate(ID_COUNTER.incrementAndGet(),
                 user, System.currentTimeMillis());
         ChatTitleChangedUpdate chatTitleChangedUpdate = new ChatTitleChangedUpdate(ID_COUNTER.incrementAndGet(),
                 user, "title", System.currentTimeMillis());
         MessageConstructionRequest messageConstructionRequest = new MessageConstructionRequest(
-                new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername(), false), "sessioId",
+                new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername(), false,
+                        System.currentTimeMillis()), "sessioId",
                 new CallbackConstructorInput("payload"), now);
         MessageConstructedUpdate messageConstructedUpdate = new MessageConstructedUpdate("sessionId",
                 new ConstructedMessage(now, message(ID_COUNTER.incrementAndGet(), now).getBody()).sender(user), now);

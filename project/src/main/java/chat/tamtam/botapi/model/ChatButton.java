@@ -47,7 +47,7 @@ public class ChatButton extends Button implements TamTamSerializable {
     private @Valid Integer uuid;
 
     @JsonCreator
-    public ChatButton(@JsonProperty("chat_title") String chatTitle, @JsonProperty("text") String text) {
+    public ChatButton(@JsonProperty("chat_title") String chatTitle, @JsonProperty("text") String text) { 
         super(text);
         this.chatTitle = chatTitle;
     }

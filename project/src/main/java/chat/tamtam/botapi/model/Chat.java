@@ -59,7 +59,7 @@ public class Chat implements TamTamSerializable {
     @Nullable
     private @Valid String link;
     @Nullable
-    private final @Valid Object description;
+    private final @Valid String description;
     @Nullable
     private @Valid UserWithPhoto dialogWithUser;
     @Nullable
@@ -70,7 +70,7 @@ public class Chat implements TamTamSerializable {
     private @Valid Message pinnedMessage;
 
     @JsonCreator
-    public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @Nullable @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") Object description) { 
+    public Chat(@JsonProperty("chat_id") Long chatId, @JsonProperty("type") ChatType type, @JsonProperty("status") ChatStatus status, @Nullable @JsonProperty("title") String title, @Nullable @JsonProperty("icon") Image icon, @JsonProperty("last_event_time") Long lastEventTime, @JsonProperty("participants_count") Integer participantsCount, @JsonProperty("is_public") Boolean isPublic, @Nullable @JsonProperty("description") String description) { 
         this.chatId = chatId;
         this.type = type;
         this.status = status;
@@ -101,7 +101,7 @@ public class Chat implements TamTamSerializable {
     }
 
     /**
-    * Chat status. One of:  - active: bot is active member of chat  - removed: bot was kicked  - left: bot intentionally left chat  - closed: chat was closed
+    * Chat status. One of:  - active: bot is active member of chat  - removed: bot was kicked  - left: bot intentionally left chat  - closed: chat was closed  - suspended: bot was stopped by user. *Only for dialogs*
     * @return status
     **/
     @JsonProperty("status")
@@ -209,7 +209,7 @@ public class Chat implements TamTamSerializable {
     }
 
     /**
-    * Link on chat if it is public
+    * Link on chat
     * @return link
     **/
     @Nullable
@@ -228,7 +228,7 @@ public class Chat implements TamTamSerializable {
     **/
     @Nullable
     @JsonProperty("description")
-    public Object getDescription() {
+    public String getDescription() {
         return description;
     }
 

@@ -24,11 +24,12 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class UnsubscribeQuery extends TamTamQuery<SimpleQueryResult> { 
+public class UnsubscribeQuery extends TamTamQuery<SimpleQueryResult> {
+    public static final String PATH_TEMPLATE = "/subscriptions";
     public final QueryParam<String> url = new QueryParam<String>("url", this).required();
 
     public UnsubscribeQuery(TamTamClient client, String url) {
-        super(client, "/subscriptions", null, SimpleQueryResult.class, Method.DELETE);
+        super(client, PATH_TEMPLATE, null, SimpleQueryResult.class, Method.DELETE);
         this.url.setValue(url);
     }
 

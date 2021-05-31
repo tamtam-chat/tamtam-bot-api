@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 @Category(UnitTest.class)
 public class UpdateTest extends UnitTestBase {
     long now = System.currentTimeMillis();
-    User user = new User(ID_COUNTER.incrementAndGet(), "user name", "username", false);
+    User user = new User(ID_COUNTER.incrementAndGet(), "user name", "username", false, System.currentTimeMillis());
     MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(message(ID_COUNTER.incrementAndGet(), null),
             now);
     MessageEditedUpdate messageEditedUpdate = new MessageEditedUpdate(message(ID_COUNTER.incrementAndGet(), null), now);
@@ -25,20 +25,21 @@ public class UpdateTest extends UnitTestBase {
     MessageCallbackUpdate messageCallbackUpdate = new MessageCallbackUpdate(
             callback, message(ID_COUNTER.incrementAndGet(), null), now).userLocale("ru-RU");
     UserAddedToChatUpdate userAddedToChatUpdate = new UserAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
-            user, System.currentTimeMillis()).inviterId(ID_COUNTER.incrementAndGet());
+            user, false, System.currentTimeMillis()).inviterId(ID_COUNTER.incrementAndGet());
     UserRemovedFromChatUpdate userRemovedFromChatUpdate = new UserRemovedFromChatUpdate(
-            ID_COUNTER.incrementAndGet(), user, System.currentTimeMillis()).adminId(ID_COUNTER.incrementAndGet());
+            ID_COUNTER.incrementAndGet(), user, false, System.currentTimeMillis()).adminId(
+            ID_COUNTER.incrementAndGet());
     BotAddedToChatUpdate botAddedToChatUpdate = new BotAddedToChatUpdate(ID_COUNTER.incrementAndGet(),
-            user,
+            user, true,
             System.currentTimeMillis());
     BotRemovedFromChatUpdate botRemovedFromChatUpdate = new BotRemovedFromChatUpdate(ID_COUNTER.incrementAndGet(),
-            user, System.currentTimeMillis());
+            user, false, System.currentTimeMillis());
     BotStartedUpdate botStartedUpdate = new BotStartedUpdate(ID_COUNTER.incrementAndGet(),
             user, System.currentTimeMillis());
     ChatTitleChangedUpdate chatTitleChangedUpdate = new ChatTitleChangedUpdate(ID_COUNTER.incrementAndGet(),
             user, "title", System.currentTimeMillis());
     MessageConstructionRequest messageConstructionRequest = new MessageConstructionRequest(
-            new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername(), false), "sessioId",
+            new UserWithPhoto(user.getUserId(), user.getName(), user.getUsername(), false, System.currentTimeMillis()), "sessioId",
             new CallbackConstructorInput("payload"), now);
     MessageConstructedUpdate messageConstructedUpdate = new MessageConstructedUpdate("sessionId",
             new ConstructedMessage(now, message(ID_COUNTER.incrementAndGet(), now).getBody()).sender(user), now);

@@ -114,7 +114,8 @@ public class TamTamService {
             ID_COUNTER.incrementAndGet(),
             "test bot",
             "testbot",
-            true
+            true,
+            ID_COUNTER.incrementAndGet()
     );
 
     {
@@ -302,7 +303,7 @@ public class TamTamService {
         boolean isOwner = ThreadLocalRandom.current().nextBoolean();
         return new ChatMember(ThreadLocalRandom.current().nextLong(), isOwner, false, System.currentTimeMillis(),
                 isOwner ? EnumSet.allOf(ChatAdminPermission.class) : null,
-                ID_COUNTER.incrementAndGet(), "name", null, false);
+                ID_COUNTER.incrementAndGet(), "name", null, false, System.currentTimeMillis());
     }
 
     private static OptionalInt getInt(Request request, String paramName) {
@@ -321,7 +322,7 @@ public class TamTamService {
 
     private User newUser() {
         long userId = ID_COUNTER.incrementAndGet();
-        return new User(userId, "user-" + userId, "username" + userId, false);
+        return new User(userId, "user-" + userId, "username" + userId, false, System.currentTimeMillis());
     }
 
     private Chat newChat() {

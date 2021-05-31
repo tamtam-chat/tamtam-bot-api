@@ -1,6 +1,7 @@
 build/
 deploy/
 target/
+out
 
 .idea
 *.iml

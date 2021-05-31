@@ -82,6 +82,10 @@ public class OkHttpTransportClient implements TamTamTransportClient {
         this.httpClient = httpClient;
     }
 
+    protected OkHttpClient getHttpClient() {
+        return httpClient;
+    }
+
     @Override
     public Future<ClientResponse> get(String url) {
         Request request = new Request.Builder().url(url).build();
@@ -191,9 +195,9 @@ public class OkHttpTransportClient implements TamTamTransportClient {
 
     @Override
     public void close() throws IOException {
-        httpClient.dispatcher().executorService().shutdown();
-        httpClient.connectionPool().evictAll();
-        Cache cache = httpClient.cache();
+        getHttpClient().dispatcher().executorService().shutdown();
+        getHttpClient().connectionPool().evictAll();
+        Cache cache = getHttpClient().cache();
         if (cache != null) {
             cache.close();
         }
@@ -227,7 +231,7 @@ public class OkHttpTransportClient implements TamTamTransportClient {
 
     private Future<ClientResponse> newCall(Request request) {
         CallbackFuture future = new CallbackFuture();
-        httpClient.newCall(request).enqueue(future);
+        getHttpClient().newCall(request).enqueue(future);
         return future;
     }
 

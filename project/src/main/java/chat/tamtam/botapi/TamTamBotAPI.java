@@ -446,7 +446,7 @@ public class TamTamBotAPI {
 
     /**
     * Send action
-    * Send bot action to chat
+    * Send bot action to chat.
     * @param actionRequestBody  (required)
     * @param chatId Chat identifier (required)
     * @return {@link SimpleQueryResult}

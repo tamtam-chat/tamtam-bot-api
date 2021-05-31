@@ -2,6 +2,7 @@ package chat.tamtam.botapi.queries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +24,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @author alexandrchuprin
@@ -133,5 +135,31 @@ public class GetMembersQueryIntegrationTest extends TamTamIntegrationTest {
         Chat chat = getByTitle(chats, "test channel #3");
         HashSet<Long> ids = new HashSet<>(Arrays.asList(bot1.getUserId(), bot2.getUserId()));
         new GetMembersQuery(client2, chat.getChatId()).userIds(ids).execute();
+    }
+
+    @Test
+    public void shouldReturnDeletedMember() throws Exception {
+        List<Chat> chats = getChats();
+        Chat chat = getByTitle(chats, "GetMembersQueryIntegrationTest#shouldReturnBlockedMember");
+        ChatMembersList membersList = botAPI.getMembers(chat.getChatId()).execute();
+        ChatMember deletedMember = null;
+        for (ChatMember member : membersList.getMembers()) {
+            if (member.getName().equals("DELETED USER")) {
+                deletedMember = member;
+                break;
+            }
+        }
+
+        if (deletedMember == null) {
+            fail("Deleted user not found");
+        }
+
+        assertThat(deletedMember.getLastActivityTime(), is(0L));
+        assertThat(deletedMember.getUsername(), is(nullValue()));
+
+        ChatMembersList membersById = botAPI.getMembers(chat.getChatId()).userIds(
+                Collections.singleton(deletedMember.getUserId())).execute();
+
+        assertThat(membersById.getMembers().get(0), is(deletedMember));
     }
 }

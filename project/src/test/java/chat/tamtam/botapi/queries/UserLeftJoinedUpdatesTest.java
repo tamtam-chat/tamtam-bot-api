@@ -20,28 +20,29 @@ import static org.junit.Assert.assertThat;
 public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
     @Test
     public void shouldGetUpdatesInChat() throws Exception {
-        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInChat");
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInChat", false);
     }
 
     @Test
     public void shouldGetUpdatesInPublicChat() throws Exception {
-        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPublicChat");
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPublicChat", false);
     }
 
     @Test
     public void shouldGetUpdatesInPrivateChannel() throws Exception {
-        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPrivateChannel");
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPrivateChannel", true);
     }
 
     @Test
     public void shouldGetUpdatesInPublicChannel() throws Exception {
-        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPublicChannel");
+        test("UserLeftJoinedUpdatesTest#shouldGetUpdatesInPublicChannel", true);
     }
 
-    private void test(String chatTitle) throws Exception {
+    private void test(String chatTitle, boolean isChanel) throws Exception {
         Chat commonChat = getByTitle(getChats(), chatTitle);
         Long commonChatId = commonChat.getChatId();
-        User bot3user = new User(bot3.getUserId(), bot3.getName(), bot3.getUsername(), true);
+        User bot3user = new User(bot3.getUserId(), bot3.getName(), bot3.getUsername(), true,
+                System.currentTimeMillis());
 
         CountDownLatch bot3added = new CountDownLatch(1);
         CountDownLatch bot3removed = new CountDownLatch(1);
@@ -50,7 +51,8 @@ public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
             public void visit(UserAddedToChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
                 assertThat(model.getInviterId(), is(nullValue()));
-                assertThat(model.getUser(), is(bot3user));
+                assertUser(model.getUser(), bot3user);
+                assertThat(model.isChannel(), is(isChanel));
                 bot3added.countDown();
             }
 
@@ -58,7 +60,8 @@ public class UserLeftJoinedUpdatesTest extends GetUpdatesIntegrationTest {
             public void visit(UserRemovedFromChatUpdate model) {
                 assertThat(model.getChatId(), is(commonChatId));
                 assertThat(model.getAdminId(), is(nullValue()));
-                assertThat(model.getUser(), is(bot3user));
+                assertUser(model.getUser(), bot3user);
+                assertThat(model.isChannel(), is(isChanel));
                 bot3removed.countDown();
             }
         };

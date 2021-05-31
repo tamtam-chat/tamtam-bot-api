@@ -24,7 +24,8 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.MessageList;import java.util.Set;import java.util.Collection;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class GetMessagesQuery extends TamTamQuery<MessageList> { 
+public class GetMessagesQuery extends TamTamQuery<MessageList> {
+    public static final String PATH_TEMPLATE = "/messages";
     public final QueryParam<Long> chatId = new QueryParam<>("chat_id", this);
     public final QueryParam<Collection<String>> messageIds = new CollectionQueryParam<>("message_ids", this);
     public final QueryParam<Long> from = new QueryParam<>("from", this);
@@ -32,7 +33,7 @@ public class GetMessagesQuery extends TamTamQuery<MessageList> {
     public final QueryParam<Integer> count = new QueryParam<>("count", this);
 
     public GetMessagesQuery(TamTamClient client) {
-        super(client, "/messages", null, MessageList.class, Method.GET);
+        super(client, PATH_TEMPLATE, null, MessageList.class, Method.GET);
     }
 
     public GetMessagesQuery chatId(Long value) {

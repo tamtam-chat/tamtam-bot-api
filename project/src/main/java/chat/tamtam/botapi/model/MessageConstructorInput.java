@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -35,10 +36,10 @@ import org.jetbrains.annotations.Nullable;
 public class MessageConstructorInput extends ConstructorInput implements TamTamSerializable {
 
     @Nullable
-    private final List<@Valid NewMessageBody> messages;
+    private final List<@Valid ConstructedMessageBody> messages;
 
     @JsonCreator
-    public MessageConstructorInput(@Nullable @JsonProperty("messages") List<NewMessageBody> messages) { 
+    public MessageConstructorInput(@Nullable @JsonProperty("messages") List<ConstructedMessageBody> messages) { 
         super();
         this.messages = messages;
     }
@@ -59,7 +60,7 @@ public class MessageConstructorInput extends ConstructorInput implements TamTamS
     **/
     @Nullable
     @JsonProperty("messages")
-    public List<NewMessageBody> getMessages() {
+    public List<ConstructedMessageBody> getMessages() {
         return messages;
     }
 
