@@ -28,7 +28,7 @@ To start using this client add it as Maven dependency:
 <dependency>
     <groupId>chat.tamtam</groupId>
     <artifactId>tamtam-bot-api</artifactId>
-    <version>0.3.0</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
