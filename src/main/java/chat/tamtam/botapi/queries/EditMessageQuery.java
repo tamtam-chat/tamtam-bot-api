@@ -24,11 +24,12 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.NewMessageBody;import chat.tamtam.botapi.model.SimpleQueryResult;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class EditMessageQuery extends TamTamQuery<SimpleQueryResult> { 
+public class EditMessageQuery extends TamTamQuery<SimpleQueryResult> {
+    public static final String PATH_TEMPLATE = "/messages";
     public final QueryParam<String> messageId = new QueryParam<String>("message_id", this).required();
 
     public EditMessageQuery(TamTamClient client, NewMessageBody newMessageBody, String messageId) {
-        super(client, "/messages", newMessageBody, SimpleQueryResult.class, Method.PUT);
+        super(client, PATH_TEMPLATE, newMessageBody, SimpleQueryResult.class, Method.PUT);
         this.messageId.setValue(messageId);
     }
 

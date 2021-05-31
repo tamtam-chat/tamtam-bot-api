@@ -71,6 +71,7 @@ import chat.tamtam.botapi.model.ShareAttachmentRequest;
 import chat.tamtam.botapi.model.StickerAttachment;
 import chat.tamtam.botapi.model.StickerAttachmentRequest;
 import chat.tamtam.botapi.model.UploadType;
+import chat.tamtam.botapi.model.User;
 import chat.tamtam.botapi.model.UserIdsList;
 import chat.tamtam.botapi.model.VideoAttachment;
 import chat.tamtam.botapi.model.VideoAttachmentRequest;
@@ -553,5 +554,12 @@ public abstract class TamTamIntegrationTest {
 
     private static void compareTokens(String token1, String token2) {
         assertThat(token1.substring(0, 21), is(token2.substring(0, 21)));
+    }
+
+    protected static void assertUser(User actual, User expected) {
+        assertThat(actual.getName(), is(expected.getName()));
+        assertThat(actual.getUserId(), is(expected.getUserId()));
+        assertThat(actual.getUsername(), is(expected.getUsername()));
+        assertThat(actual.getUsername(), is(expected.getUsername()));
     }
 }

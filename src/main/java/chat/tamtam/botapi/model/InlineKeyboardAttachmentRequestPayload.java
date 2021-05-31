@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -35,6 +36,7 @@ import javax.validation.constraints.NotNull;
 public class InlineKeyboardAttachmentRequestPayload implements TamTamSerializable {
 
     @NotNull
+    @Size(min = 1)
     private final List<List<@Valid Button>> buttons;
 
     @JsonCreator

@@ -24,9 +24,10 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.BotInfo;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class GetMyInfoQuery extends TamTamQuery<BotInfo> { 
+public class GetMyInfoQuery extends TamTamQuery<BotInfo> {
+    public static final String PATH_TEMPLATE = "/me";
 
     public GetMyInfoQuery(TamTamClient client) {
-        super(client, "/me", null, BotInfo.class, Method.GET);
+        super(client, PATH_TEMPLATE, null, BotInfo.class, Method.GET);
     }
 }

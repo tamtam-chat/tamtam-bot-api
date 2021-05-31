@@ -39,12 +39,15 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
     private final @Valid User user;
     @Nullable
     private @Valid Long inviterId;
+    @NotNull
+    private final @Valid Boolean isChannel;
 
     @JsonCreator
-    public UserAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
+    public UserAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("is_channel") Boolean isChannel, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
         this.user = user;
+        this.isChannel = isChannel;
     }
 
     @Override
@@ -94,6 +97,15 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
         this.inviterId = inviterId;
     }
 
+    /**
+    * Indicates whether user has been added to channel or not
+    * @return isChannel
+    **/
+    @JsonProperty("is_channel")
+    public Boolean isChannel() {
+        return isChannel;
+    }
+
     @JsonProperty("update_type")
     @Override
     public String getType() {
@@ -113,6 +125,7 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
         return Objects.equals(this.chatId, other.chatId) &&
             Objects.equals(this.user, other.user) &&
             Objects.equals(this.inviterId, other.inviterId) &&
+            Objects.equals(this.isChannel, other.isChannel) &&
             super.equals(o);
     }
 
@@ -122,6 +135,7 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (inviterId != null ? inviterId.hashCode() : 0);
+        result = 31 * result + (isChannel != null ? isChannel.hashCode() : 0);
         return result;
     }
 
@@ -131,6 +145,7 @@ public class UserAddedToChatUpdate extends Update implements TamTamSerializable 
             + " chatId='" + chatId + '\''
             + " user='" + user + '\''
             + " inviterId='" + inviterId + '\''
+            + " isChannel='" + isChannel + '\''
             + '}';
     }
 }

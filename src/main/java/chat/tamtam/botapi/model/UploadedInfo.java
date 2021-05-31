@@ -38,7 +38,7 @@ public class UploadedInfo implements TamTamSerializable {
     }
 
     /**
-    * Token is unique uploaded media identfier
+    * Token is unique uploaded media identifier
     * @return token
     **/
     @JsonProperty("token")

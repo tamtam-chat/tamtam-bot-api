@@ -23,6 +23,7 @@ package chat.tamtam.botapi.client;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.invoke.MethodHandles;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -43,11 +44,14 @@ import chat.tamtam.botapi.model.Error;
 import chat.tamtam.botapi.queries.QueryParam;
 import chat.tamtam.botapi.queries.TamTamQuery;
 import chat.tamtam.botapi.queries.upload.TamTamUploadQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author alexandrchuprin
  */
 public class TamTamClient implements Closeable {
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     static final String ENDPOINT_ENV_VAR_NAME = "TAMTAM_BOTAPI_ENDPOINT";
     private static final String ENDPOINT = "https://botapi.tamtam.chat";
     private final String accessToken;
@@ -87,8 +91,9 @@ public class TamTamClient implements Closeable {
 
     public <T> Future<T> newCall(TamTamUploadQuery<T> query) throws ClientException {
         try {
+            String url = buildURL(query);
             Future<ClientResponse> call = query.getUploadExec().newCall(getTransport());
-            return new FutureResult<>(call, rawResponse -> handleResponse(rawResponse, query.getResponseType()));
+            return new FutureResult<>(call, rawResponse -> handleResponse(rawResponse, query, url));
         } catch (InterruptedException e) {
             throw new ClientException(e);
         }
@@ -124,7 +129,7 @@ public class TamTamClient implements Closeable {
             throw new ClientException(e);
         }
 
-        return new FutureResult<>(call, rawResponse -> handleResponse(rawResponse, query.getResponseType()));
+        return new FutureResult<>(call, rawResponse -> handleResponse(rawResponse, query, url));
     }
 
     @Override
@@ -185,16 +190,25 @@ public class TamTamClient implements Closeable {
         return URLEncoder.encode(paramValue, StandardCharsets.UTF_8.name());
     }
 
-    private <T> T handleResponse(ClientResponse response, Class<T> type) throws ClientException, APIException {
+    private <T> T handleResponse(ClientResponse response, TamTamQuery<T> query, String url) throws ClientException, APIException {
         String responseBody = response.getBodyAsString();
         if (response.getStatusCode() == 503) {
+            LOG.error("Error 503 while executing query, query url: {}, query body: {}, responseBody: {}",
+                    url,
+                    query.getBody(),
+                    responseBody);
             throw new ServiceNotAvailableException(responseBody);
         }
 
         TamTamSerializer serializer = getSerializer();
         if (response.getStatusCode() / 100 == 2) {
-            return serializer.deserialize(responseBody, type);
+            return serializer.deserialize(responseBody, query.getResponseType());
         }
+
+        LOG.error("Error while executing query, query url: {}, query body: {}, responseBody: {}",
+                url,
+                query.getBody(),
+                responseBody);
 
         Error error;
         try {

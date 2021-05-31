@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
@@ -40,8 +41,8 @@ public class BotInfo extends UserWithPhoto implements TamTamSerializable {
     private List<@Valid BotCommand> commands;
 
     @JsonCreator
-    public BotInfo(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot) { 
-        super(userId, name, username, isBot);
+    public BotInfo(@JsonProperty("user_id") Long userId, @JsonProperty("name") String name, @Nullable @JsonProperty("username") String username, @JsonProperty("is_bot") Boolean isBot, @JsonProperty("last_activity_time") Long lastActivityTime) { 
+        super(userId, name, username, isBot, lastActivityTime);
     }
 
     public BotInfo commands(@Nullable List<BotCommand> commands) {

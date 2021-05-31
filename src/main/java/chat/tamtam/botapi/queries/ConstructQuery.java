@@ -24,11 +24,12 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.ConstructorAnswer;import chat.tamtam.botapi.model.SimpleQueryResult;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class ConstructQuery extends TamTamQuery<SimpleQueryResult> { 
+public class ConstructQuery extends TamTamQuery<SimpleQueryResult> {
+    public static final String PATH_TEMPLATE = "/answers/constructor";
     public final QueryParam<String> sessionId = new QueryParam<String>("session_id", this).required();
 
     public ConstructQuery(TamTamClient client, ConstructorAnswer constructorAnswer, String sessionId) {
-        super(client, "/answers/constructor", constructorAnswer, SimpleQueryResult.class, Method.POST);
+        super(client, PATH_TEMPLATE, constructorAnswer, SimpleQueryResult.class, Method.POST);
         this.sessionId.setValue(sessionId);
     }
 

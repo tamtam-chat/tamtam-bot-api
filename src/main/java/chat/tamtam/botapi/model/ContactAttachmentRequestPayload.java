@@ -62,7 +62,7 @@ public class ContactAttachmentRequestPayload implements TamTamSerializable {
     }
 
     /**
-    * Contact identifier if it is reigstered TamTam user
+    * Contact identifier if it is registered TamTam user
     * @return contactId
     **/
     @Nullable

@@ -24,12 +24,13 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.SimpleQueryResult;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class RemoveMemberQuery extends TamTamQuery<SimpleQueryResult> { 
+public class RemoveMemberQuery extends TamTamQuery<SimpleQueryResult> {
+    public static final String PATH_TEMPLATE = "/chats/{chatId}/members";
     public final QueryParam<Long> userId = new QueryParam<Long>("user_id", this).required();
     public final QueryParam<Boolean> block = new QueryParam<>("block", this);
 
     public RemoveMemberQuery(TamTamClient client, Long chatId, Long userId) {
-        super(client, substitute("/chats/{chatId}/members", chatId), null, SimpleQueryResult.class, Method.DELETE);
+        super(client, substitute(PATH_TEMPLATE, chatId), null, SimpleQueryResult.class, Method.DELETE);
         this.userId.setValue(userId);
     }
 

@@ -24,9 +24,10 @@ import chat.tamtam.botapi.client.TamTamClient;
 import chat.tamtam.botapi.model.GetPinnedMessageResult;
 import static chat.tamtam.botapi.client.TamTamTransportClient.Method;
 
-public class GetPinnedMessageQuery extends TamTamQuery<GetPinnedMessageResult> { 
+public class GetPinnedMessageQuery extends TamTamQuery<GetPinnedMessageResult> {
+    public static final String PATH_TEMPLATE = "/chats/{chatId}/pin";
 
     public GetPinnedMessageQuery(TamTamClient client, Long chatId) {
-        super(client, substitute("/chats/{chatId}/pin", chatId), null, GetPinnedMessageResult.class, Method.GET);
+        super(client, substitute(PATH_TEMPLATE, chatId), null, GetPinnedMessageResult.class, Method.GET);
     }
 }

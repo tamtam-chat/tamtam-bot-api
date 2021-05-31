@@ -60,7 +60,7 @@ public class Button implements TamTamSerializable {
     ));
 
     @NotNull
-    @Size(max = 128)
+    @Size(min = 1, max = 128)
     private final @Valid String text;
 
     @JsonCreator

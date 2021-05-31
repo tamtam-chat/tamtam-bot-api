@@ -84,7 +84,7 @@ public class TamTamQuery<T> {
         params.add(param);
     }
 
-    static String substitute(String pathTemplate, Object... substitutions) {
+    public static String substitute(String pathTemplate, Object... substitutions) {
         StringBuilder sb = new StringBuilder();
         int nextSubst = 0;
         char[] chars = pathTemplate.toCharArray();

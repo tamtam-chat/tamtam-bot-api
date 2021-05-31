@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ConstructorAnswer implements TamTamSerializable {
 
-    private List<@Valid NewMessageBody> messages;
+    private List<@Valid ConstructedMessageBody> messages;
     private @Valid Boolean allowUserInput;
     @Nullable
     private @Valid String hint;
@@ -45,7 +45,7 @@ public class ConstructorAnswer implements TamTamSerializable {
     @Nullable
     private @Valid String placeholder;
 
-    public ConstructorAnswer messages(List<NewMessageBody> messages) {
+    public ConstructorAnswer messages(List<ConstructedMessageBody> messages) {
         this.setMessages(messages);
         return this;
     }
@@ -55,11 +55,11 @@ public class ConstructorAnswer implements TamTamSerializable {
     * @return messages
     **/
     @JsonProperty("messages")
-    public List<NewMessageBody> getMessages() {
+    public List<ConstructedMessageBody> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<NewMessageBody> messages) {
+    public void setMessages(List<ConstructedMessageBody> messages) {
         this.messages = messages;
     }
 

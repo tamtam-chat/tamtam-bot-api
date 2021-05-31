@@ -36,12 +36,15 @@ public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
     private final @Valid Long chatId;
     @NotNull
     private final @Valid User user;
+    @NotNull
+    private final @Valid Boolean isChannel;
 
     @JsonCreator
-    public BotAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("timestamp") Long timestamp) { 
+    public BotAddedToChatUpdate(@JsonProperty("chat_id") Long chatId, @JsonProperty("user") User user, @JsonProperty("is_channel") Boolean isChannel, @JsonProperty("timestamp") Long timestamp) { 
         super(timestamp);
         this.chatId = chatId;
         this.user = user;
+        this.isChannel = isChannel;
     }
 
     @Override
@@ -72,6 +75,15 @@ public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
         return user;
     }
 
+    /**
+    * Indicates whether bot has been added to channel or not
+    * @return isChannel
+    **/
+    @JsonProperty("is_channel")
+    public Boolean isChannel() {
+        return isChannel;
+    }
+
     @JsonProperty("update_type")
     @Override
     public String getType() {
@@ -90,6 +102,7 @@ public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
         BotAddedToChatUpdate other = (BotAddedToChatUpdate) o;
         return Objects.equals(this.chatId, other.chatId) &&
             Objects.equals(this.user, other.user) &&
+            Objects.equals(this.isChannel, other.isChannel) &&
             super.equals(o);
     }
 
@@ -98,6 +111,7 @@ public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
         int result = super.hashCode();
         result = 31 * result + (chatId != null ? chatId.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (isChannel != null ? isChannel.hashCode() : 0);
         return result;
     }
 
@@ -106,6 +120,7 @@ public class BotAddedToChatUpdate extends Update implements TamTamSerializable {
         return "BotAddedToChatUpdate{"+ super.toString()
             + " chatId='" + chatId + '\''
             + " user='" + user + '\''
+            + " isChannel='" + isChannel + '\''
             + '}';
     }
 }

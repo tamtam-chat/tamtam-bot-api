@@ -43,6 +43,8 @@ public class MessageBody implements TamTamSerializable {
     private final @Valid String text;
     @Nullable
     private final List<@Valid Attachment> attachments;
+    @Nullable
+    private List<@Valid MarkupElement> markup;
 
     @JsonCreator
     public MessageBody(@JsonProperty("mid") String mid, @JsonProperty("seq") Long seq, @Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<Attachment> attachments) { 
@@ -90,6 +92,25 @@ public class MessageBody implements TamTamSerializable {
         return attachments;
     }
 
+    public MessageBody markup(@Nullable List<MarkupElement> markup) {
+        this.setMarkup(markup);
+        return this;
+    }
+
+    /**
+    * Message text markup. See [Formatting](#section/About/Text-formatting) section for more info
+    * @return markup
+    **/
+    @Nullable
+    @JsonProperty("markup")
+    public List<MarkupElement> getMarkup() {
+        return markup;
+    }
+
+    public void setMarkup(@Nullable List<MarkupElement> markup) {
+        this.markup = markup;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -103,7 +124,8 @@ public class MessageBody implements TamTamSerializable {
         return Objects.equals(this.mid, other.mid) &&
             Objects.equals(this.seq, other.seq) &&
             Objects.equals(this.text, other.text) &&
-            Objects.equals(this.attachments, other.attachments);
+            Objects.equals(this.attachments, other.attachments) &&
+            Objects.equals(this.markup, other.markup);
     }
 
     @Override
@@ -113,6 +135,7 @@ public class MessageBody implements TamTamSerializable {
         result = 31 * result + (seq != null ? seq.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
+        result = 31 * result + (markup != null ? markup.hashCode() : 0);
         return result;
     }
 
@@ -123,6 +146,7 @@ public class MessageBody implements TamTamSerializable {
             + " seq='" + seq + '\''
             + " text='" + text + '\''
             + " attachments='" + attachments + '\''
+            + " markup='" + markup + '\''
             + '}';
     }
 }

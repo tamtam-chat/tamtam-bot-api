@@ -43,6 +43,8 @@ public class NewMessageBody implements TamTamSerializable {
     @Nullable
     private final @Valid NewMessageLink link;
     private @Valid Boolean notify;
+    @Nullable
+    private @Valid TextFormat format;
 
     @JsonCreator
     public NewMessageBody(@Nullable @JsonProperty("text") String text, @Nullable @JsonProperty("attachments") List<AttachmentRequest> attachments, @Nullable @JsonProperty("link") NewMessageLink link) { 
@@ -99,6 +101,25 @@ public class NewMessageBody implements TamTamSerializable {
         this.notify = notify;
     }
 
+    public NewMessageBody format(@Nullable TextFormat format) {
+        this.setFormat(format);
+        return this;
+    }
+
+    /**
+    * If set, message text will be formated according to given markup
+    * @return format
+    **/
+    @Nullable
+    @JsonProperty("format")
+    public TextFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(@Nullable TextFormat format) {
+        this.format = format;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -112,7 +133,8 @@ public class NewMessageBody implements TamTamSerializable {
         return Objects.equals(this.text, other.text) &&
             Objects.equals(this.attachments, other.attachments) &&
             Objects.equals(this.link, other.link) &&
-            Objects.equals(this.notify, other.notify);
+            Objects.equals(this.notify, other.notify) &&
+            Objects.equals(this.format, other.format);
     }
 
     @Override
@@ -122,6 +144,7 @@ public class NewMessageBody implements TamTamSerializable {
         result = 31 * result + (attachments != null ? attachments.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (notify != null ? notify.hashCode() : 0);
+        result = 31 * result + (format != null ? format.hashCode() : 0);
         return result;
     }
 
@@ -132,6 +155,7 @@ public class NewMessageBody implements TamTamSerializable {
             + " attachments='" + attachments + '\''
             + " link='" + link + '\''
             + " notify='" + notify + '\''
+            + " format='" + format + '\''
             + '}';
     }
 }
