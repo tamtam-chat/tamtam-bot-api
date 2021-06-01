@@ -72,7 +72,7 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldParseMarkup() throws Exception {
         _shouldParse("markup.md", TextFormat.MARKDOWN);
-        _shouldParse("markup.html", TextFormat.HTML);
+//        _shouldParse("markup.html", TextFormat.HTML);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldParseOnEdit() throws Exception {
         _shouldParseOnEdit("markup.md", TextFormat.MARKDOWN);
-        _shouldParseOnEdit("markup.html", TextFormat.HTML);
+//        _shouldParseOnEdit("markup.html", TextFormat.HTML);
     }
 
     private void verify(TextFormat format, Message message) {
