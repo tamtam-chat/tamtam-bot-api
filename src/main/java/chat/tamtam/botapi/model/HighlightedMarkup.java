@@ -27,13 +27,13 @@ import javax.validation.constraints.NotNull;
 
 
 /**
- * Represents a monowidth string of code
+ * Represents a highlighted piece of text
  */
-public class CodeMarkup extends MarkupElement implements TamTamSerializable {
+public class HighlightedMarkup extends MarkupElement implements TamTamSerializable {
 
 
     @JsonCreator
-    public CodeMarkup(@JsonProperty("from") Integer from, @JsonProperty("length") Integer length) { 
+    public HighlightedMarkup(@JsonProperty("from") Integer from, @JsonProperty("length") Integer length) { 
         super(from, length);
     }
 
@@ -50,12 +50,12 @@ public class CodeMarkup extends MarkupElement implements TamTamSerializable {
     @JsonProperty("type")
     @Override
     public String getType() {
-        return MarkupElement.CODE;
+        return MarkupElement.HIGHLIGHTED;
     }
 
     @Override
     public String toString() {
-        return "CodeMarkup{"+ super.toString()
+        return "HighlightedMarkup{"+ super.toString()
             + '}';
     }
 }

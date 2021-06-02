@@ -45,7 +45,7 @@ import javax.validation.constraints.NotNull;
   @JsonSubTypes.Type(value = UnderlineMarkup.class, name = MarkupElement.UNDERLINE),
   @JsonSubTypes.Type(value = UserMentionMarkup.class, name = MarkupElement.USER_MENTION),
   @JsonSubTypes.Type(value = HeadingMarkup.class, name = MarkupElement.HEADING),
-  @JsonSubTypes.Type(value = CodeMarkup.class, name = MarkupElement.CODE),
+  @JsonSubTypes.Type(value = HighlightedMarkup.class, name = MarkupElement.HIGHLIGHTED),
 })
 @KnownInstance(ofClass = MarkupElement.class, discriminator = "type")
 public class MarkupElement implements TamTamSerializable {
@@ -57,7 +57,7 @@ public class MarkupElement implements TamTamSerializable {
     public static final String UNDERLINE = "underline";
     public static final String USER_MENTION = "user_mention";
     public static final String HEADING = "heading";
-    public static final String CODE = "code";
+    public static final String HIGHLIGHTED = "highlighted";
     public static final Set<String> TYPES = new HashSet<>(Arrays.asList(
         STRONG, 
         EMPHASIZED, 
@@ -67,7 +67,7 @@ public class MarkupElement implements TamTamSerializable {
         UNDERLINE, 
         USER_MENTION, 
         HEADING, 
-        CODE
+        HIGHLIGHTED
     ));
 
     @NotNull
@@ -153,7 +153,7 @@ public class MarkupElement implements TamTamSerializable {
         void visit(UnderlineMarkup model);
         void visit(UserMentionMarkup model);
         void visit(HeadingMarkup model);
-        void visit(CodeMarkup model);
+        void visit(HighlightedMarkup model);
         void visitDefault(MarkupElement model);
     }
 
@@ -166,7 +166,7 @@ public class MarkupElement implements TamTamSerializable {
         T map(UnderlineMarkup model);
         T map(UserMentionMarkup model);
         T map(HeadingMarkup model);
-        T map(CodeMarkup model);
+        T map(HighlightedMarkup model);
         T mapDefault(MarkupElement model);
     }
 }

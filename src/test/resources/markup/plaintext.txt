@@ -22,20 +22,20 @@ link
 
 link
 
-@vasya
+@chuprin
 
-@mention at text start
+@chuprin at text start
 
-mention at start @end
+mention at end @chuprin
 
-mention @inside text
+mention @chuprin text
 
-@vasya strong
+@chuprin strong
 
-strong @vasya and emphasized
+strong @chuprin and emphasized
 
-this is email@vasya.com, not mention
+this is email@chuprin.com, not mention
 
-mention in code span @vasya should be ignored
+mention in code span @chuprin should be ignored
 
 @mention in code should be ignored also
