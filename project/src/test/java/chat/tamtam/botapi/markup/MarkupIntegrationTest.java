@@ -12,7 +12,6 @@ import org.junit.Test;
 import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
-import chat.tamtam.botapi.model.CodeMarkup;
 import chat.tamtam.botapi.model.EmphasizedMarkup;
 import chat.tamtam.botapi.model.LinkMarkup;
 import chat.tamtam.botapi.model.MarkupElement;
@@ -22,10 +21,11 @@ import chat.tamtam.botapi.model.NewMessageBody;
 import chat.tamtam.botapi.model.SendMessageResult;
 import chat.tamtam.botapi.model.StrongMarkup;
 import chat.tamtam.botapi.model.TextFormat;
+import chat.tamtam.botapi.model.UserMentionMarkup;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author alexandrchuprin
@@ -35,32 +35,15 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
     private Chat dialog;
     private String plainText;
     private List<MarkupElement> expectedMarkup;
+    private List<MarkupElement> expectedDialogMarkup;
 
     @Before
     public void setUp() throws Exception {
         chat = getByTitle(getChats(), "SendMarkupIntegrationTest");
         dialog = getByType(getChats(), ChatType.DIALOG);
         plainText = readFile("plaintext.txt");
-        expectedMarkup = Arrays.asList(
-                new StrongMarkup(0, 11),
-                new EmphasizedMarkup(0, 11),
-                new StrongMarkup(13, 6),
-                new EmphasizedMarkup(13, 14),
-                new EmphasizedMarkup(29, 4),
-                new StrongMarkup(29, 14),
-                new CodeMarkup(45, 10),
-                new CodeMarkup(57, 3),
-                new CodeMarkup(66, 6),
-                new CodeMarkup(157, 5),
-                new CodeMarkup(209, 4),
-                new LinkMarkup("/uri", 215, 4),
-                new LinkMarkup("/uri", 221, 4),
-                new LinkMarkup("(foo)and(bar)", 233, 4),
-                new StrongMarkup(316, 6),
-                new StrongMarkup(338, 6),
-                new EmphasizedMarkup(338, 6),
-                new CodeMarkup(420, 6),
-                new MonospacedMarkup(446, 39));
+        expectedMarkup = expectedMarkup(false);
+        expectedDialogMarkup = expectedMarkup(true);
     }
 
     @Test
@@ -72,7 +55,7 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldParseMarkup() throws Exception {
         _shouldParse("markup.md", TextFormat.MARKDOWN);
-//        _shouldParse("markup.html", TextFormat.HTML);
+        _shouldParse("markup.html", TextFormat.HTML);
     }
 
     @Test
@@ -84,12 +67,13 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
     @Test
     public void shouldParseOnEdit() throws Exception {
         _shouldParseOnEdit("markup.md", TextFormat.MARKDOWN);
-//        _shouldParseOnEdit("markup.html", TextFormat.HTML);
+        _shouldParseOnEdit("markup.html", TextFormat.HTML);
     }
 
     private void verify(TextFormat format, Message message) {
         assertThat(format.getValue(), message.getBody().getText(), is(plainText));
-        assertThat(format.getValue(), message.getBody().getMarkup(), is(expectedMarkup));
+        assertThat(format.getValue(), message.getBody().getMarkup(),
+                is(isDialog ? expectedDialogMarkup : expectedMarkup));
     }
 
     private void _shouldParseOnEdit(String inputFile, TextFormat format) throws Exception {
@@ -106,7 +90,7 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
                     .execute();
 
             Message editedMessage = botAPI.getMessageById(messageId).execute();
-            verify(format, editedMessage);
+            verify(format, editedMessage, chat.getType() == ChatType.DIALOG);
         }
     }
 
@@ -137,7 +121,7 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
                     .chatId(chat.getChatId())
                     .execute();
 
-            verify(format, result.getMessage());
+            verify(format, result.getMessage(), chat.getType() == ChatType.DIALOG);
         }
     }
 
