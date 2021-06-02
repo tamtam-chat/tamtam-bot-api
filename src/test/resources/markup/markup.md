@@ -43,3 +43,5 @@ mention in code span `@chuprin` should be ignored
 ```
 @mention in code should be ignored also
 ```
+
+mention by user id [chuprin](tamtam://user/762619020)
