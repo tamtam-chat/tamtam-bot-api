@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <schema.version>0.5.1</schema.version>
+        <schema.version>0.5.2</schema.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

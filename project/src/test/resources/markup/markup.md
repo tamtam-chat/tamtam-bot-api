@@ -45,3 +45,5 @@ mention in code span `@chuprin` should be ignored
 ```
 
 mention by user id [chuprin](tamtam://user/762619020)
+
+this ^^text^^ is highlighted

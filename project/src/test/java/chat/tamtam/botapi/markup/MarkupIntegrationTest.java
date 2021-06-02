@@ -13,6 +13,7 @@ import chat.tamtam.botapi.TamTamIntegrationTest;
 import chat.tamtam.botapi.model.Chat;
 import chat.tamtam.botapi.model.ChatType;
 import chat.tamtam.botapi.model.EmphasizedMarkup;
+import chat.tamtam.botapi.model.HighlightedMarkup;
 import chat.tamtam.botapi.model.LinkMarkup;
 import chat.tamtam.botapi.model.MarkupElement;
 import chat.tamtam.botapi.model.Message;
@@ -107,7 +108,8 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
                 new EmphasizedMarkup(345, 8),
                 new MonospacedMarkup(431, 8),
                 new MonospacedMarkup(459, 39),
-                new UserMentionMarkup(519, 7).userId(762619020L));
+                new UserMentionMarkup(519, 7).userId(762619020L),
+                new HighlightedMarkup(533, 4));
     }
 
     private void verify(TextFormat format, Message message, boolean isDialog) {
