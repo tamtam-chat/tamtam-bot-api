@@ -70,7 +70,47 @@ public class MarkupIntegrationTest extends TamTamIntegrationTest {
         _shouldParseOnEdit("markup.html", TextFormat.HTML);
     }
 
-    private void verify(TextFormat format, Message message) {
+    private static UserMentionMarkup mentionMarkup(int from, boolean inDialog, int length) {
+        UserMentionMarkup markup = new UserMentionMarkup(from, length);
+        if (inDialog) {
+            markup.setUserLink("chuprin");
+        } else {
+            markup.setUserId(762619020L);
+        }
+        return markup;
+    }
+
+    private static List<MarkupElement> expectedMarkup(boolean inDialog) {
+        return Arrays.asList(
+                new StrongMarkup(0, 11),
+                new EmphasizedMarkup(0, 11),
+                new StrongMarkup(13, 6),
+                new EmphasizedMarkup(13, 14),
+                new EmphasizedMarkup(29, 4),
+                new StrongMarkup(29, 14),
+                new MonospacedMarkup(45, 10),
+                new MonospacedMarkup(57, 3),
+                new MonospacedMarkup(66, 6),
+                new MonospacedMarkup(157, 5),
+                new MonospacedMarkup(209, 4),
+                new LinkMarkup("/uri", 215, 4),
+                new LinkMarkup("/uri", 221, 4),
+                new LinkMarkup("(foo)and(bar)", 233, 4),
+                mentionMarkup(239, inDialog, 8),
+                mentionMarkup(249, inDialog, 8),
+                mentionMarkup(288, inDialog, 8),
+                mentionMarkup(306, inDialog, 8),
+                mentionMarkup(321, inDialog, 8),
+                new StrongMarkup(321, 8),
+                mentionMarkup(345, inDialog, 8),
+                new StrongMarkup(345, 8),
+                new EmphasizedMarkup(345, 8),
+                new MonospacedMarkup(431, 8),
+                new MonospacedMarkup(459, 39),
+                new UserMentionMarkup(519, 7).userId(762619020L));
+    }
+
+    private void verify(TextFormat format, Message message, boolean isDialog) {
         assertThat(format.getValue(), message.getBody().getText(), is(plainText));
         assertThat(format.getValue(), message.getBody().getMarkup(),
                 is(isDialog ? expectedDialogMarkup : expectedMarkup));
