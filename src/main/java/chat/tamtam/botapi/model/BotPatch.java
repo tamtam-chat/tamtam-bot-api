@@ -21,11 +21,9 @@
 package chat.tamtam.botapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.jetbrains.annotations.Nullable;
@@ -38,10 +36,6 @@ public class BotPatch implements TamTamSerializable {
     @Nullable
     @Size(min = 1, max = 64)
     private @Valid String name;
-    @Nullable
-    @Pattern(regexp = "[a-zA-Z]+[a-zA-Z0-9-_]*")
-    @Size(min = 4, max = 64)
-    private @Valid String username;
     @Nullable
     @Size(min = 1, max = 16000)
     private @Valid String description;
@@ -68,25 +62,6 @@ public class BotPatch implements TamTamSerializable {
 
     public void setName(@Nullable String name) {
         this.name = name;
-    }
-
-    public BotPatch username(@Nullable String username) {
-        this.setUsername(username);
-        return this;
-    }
-
-    /**
-    * Bot unique identifier. It can be any string 4-64 characters long containing any digit, letter or special symbols: \&quot;-\&quot; or \&quot;_\&quot;. It **must** starts with a letter
-    * @return username
-    **/
-    @Nullable
-    @JsonProperty("username")
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(@Nullable String username) {
-        this.username = username;
     }
 
     public BotPatch description(@Nullable String description) {
@@ -157,7 +132,6 @@ public class BotPatch implements TamTamSerializable {
 
         BotPatch other = (BotPatch) o;
         return Objects.equals(this.name, other.name) &&
-            Objects.equals(this.username, other.username) &&
             Objects.equals(this.description, other.description) &&
             Objects.equals(this.commands, other.commands) &&
             Objects.equals(this.photo, other.photo);
@@ -167,7 +141,6 @@ public class BotPatch implements TamTamSerializable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (commands != null ? commands.hashCode() : 0);
         result = 31 * result + (photo != null ? photo.hashCode() : 0);
@@ -178,7 +151,6 @@ public class BotPatch implements TamTamSerializable {
     public String toString() {
         return "BotPatch{"
             + " name='" + name + '\''
-            + " username='" + username + '\''
             + " description='" + description + '\''
             + " commands='" + commands + '\''
             + " photo='" + photo + '\''

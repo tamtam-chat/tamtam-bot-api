@@ -41,7 +41,7 @@ public class EditMyInfoQueryTest extends UnitTestBase {
     public void editMyInfoTest() throws Exception {
         patch("/me", (req, resp) -> {
             BotPatch patch = serializer.deserialize(req.body(), BotPatch.class);
-            BotInfo botInfo = new BotInfo(me.getUserId(), patch.getName(), patch.getUsername(), true,
+            BotInfo botInfo = new BotInfo(me.getUserId(), patch.getName(), "botusername", true,
                     System.currentTimeMillis());
             botInfo.commands(patch.getCommands());
             botInfo.description(patch.getDescription());
@@ -57,7 +57,6 @@ public class EditMyInfoQueryTest extends UnitTestBase {
                 .commands(commands)
                 .name(botname)
                 .description(description)
-                .username("botusername")
                 .photo(new PhotoAttachmentRequestPayload().url("patchurl"));
 
         EditMyInfoQuery query = api.editMyInfo(botPatch);
