@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import chat.tamtam.botapi.TamTamIntegrationTest;
-import chat.tamtam.botapi.exceptions.APIException;
 import chat.tamtam.botapi.model.BotCommand;
 import chat.tamtam.botapi.model.BotInfo;
 import chat.tamtam.botapi.model.BotPatch;
@@ -33,7 +32,6 @@ import static org.hamcrest.Matchers.is;
 public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
     private final AtomicReference<BotInfo> originalMe = new AtomicReference<>();
     private String newName;
-    private String newUsername;
     private String newDescription;
     private ArrayList<BotCommand> commands;
 
@@ -41,7 +39,6 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
     public void setUp() {
         originalMe.compareAndSet(null, bot1.getBotInfo());
         newName = "TT Integration Test Bot " + now();
-        newUsername = randomText(16);
         newDescription = randomText(64);
         commands = new ArrayList<>();
         commands.add(new BotCommand("command" + now()));
@@ -55,16 +52,6 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             assertThat(botInfo.getName(), is(newName));
             assertThat(getBot1().getName(), is(newName));
-        });
-    }
-
-    @Test
-    public void shouldEditUsername() throws Exception {
-        doEdit(() -> {
-            BotPatch patch = new BotPatch().username(newUsername);
-            BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
-            assertThat(botInfo.getUsername(), is(newUsername));
-            assertThat(getBot1().getUsername(), is(newUsername));
         });
     }
 
@@ -115,48 +102,16 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
                     .name(newName)
                     .description(newDescription)
                     .commands(commands)
-                    .photo(createAvatar())
-                    .username(newUsername);
+                    .photo(createAvatar());
 
             BotInfo botInfo = new EditMyInfoQuery(client, patch).execute();
             BotInfo updatedMe = getBot1();
             assertUser(botInfo, updatedMe);
             assertThat(updatedMe.getName(), is(newName));
-            assertThat(updatedMe.getUsername(), is(newUsername));
             assertThat(updatedMe.getDescription(), is(newDescription));
             assertThat(updatedMe.getAvatarUrl(), is(not(bot1.getAvatarUrl())));
             assertThat(updatedMe.getCommands(), is(commands));
         });
-    }
-
-    @Test(expected = APIException.class)
-    public void shouldThrowExceptionOnNotAvailableUsername() throws Exception {
-        BotPatch patch = new BotPatch().username(bot2.getUsername());
-        new EditMyInfoQuery(client, patch).execute();
-    }
-
-    @Test(expected = APIException.class)
-    public void shouldThrowExceptionOnShortUsername() throws Exception {
-        BotPatch patch = new BotPatch().username("xxx");
-        new EditMyInfoQuery(client, patch).execute();
-    }
-
-    @Test(expected = APIException.class)
-    public void shouldThrowExceptionOnInvalidSymbols() throws Exception {
-        BotPatch patch = new BotPatch().username("x*x*x*x");
-        new EditMyInfoQuery(client, patch).execute();
-    }
-
-    @Test(expected = APIException.class)
-    public void usernameShoulNotStartWithNonLetter() throws Exception {
-        BotPatch patch = new BotPatch().username("1xxxxx");
-        new EditMyInfoQuery(client, patch).execute();
-    }
-
-    @Test(expected = APIException.class)
-    public void shouldThrowExceptionWhenUsernameIsTooLong() throws Exception {
-        BotPatch patch = new BotPatch().username(randomText(65));
-        new EditMyInfoQuery(client, patch).execute();
     }
 
     private static byte[] generateAvatarImage() throws IOException {
@@ -199,8 +154,7 @@ public class EditMyInfoQueryIntegrationTest extends TamTamIntegrationTest {
         BotPatch patch = new BotPatch()
                 .name(originalMe.get().getName())
                 .description(originalMe.get().getDescription())
-                .commands(originalMe.get().getCommands())
-                .username(originalMe.get().getUsername());
+                .commands(originalMe.get().getCommands());
 
         new EditMyInfoQuery(client, patch).execute();
     }
